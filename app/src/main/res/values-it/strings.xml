@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WordsRemember</string>
+    <string name="add_translation">Aggiungi Traduzione</string>
+    <string name="add_word">Aggiungi Parola</string>
+    <string name="main_menu_help">Aiuto</string>
+    <string name="main_menu_manage_dictionary">Gestisci dizionario</string>
+    <string name="main_menu_settings">Impostazioni</string>
+    <string name="main_menu_start_training">Inizia Allenamento</string>
+    <string name="title_activity_main_menu">Menù Principale</string>
+    <string name="dictionary_title">Dizionario</string>
+</resources>
