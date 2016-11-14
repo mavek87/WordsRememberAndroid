@@ -9,7 +9,7 @@ public class TableDictionary {
     public static final String COLUMN_WORD_ID = "word_id";
     public static final String COLUMN_WORD_NAME = "word_name";
 
-    public static final String[] COLUMNS =
+    public static final String[] ALL_COLUMNS =
             {
                     COLUMN_WORD_ID,
                     COLUMN_WORD_NAME

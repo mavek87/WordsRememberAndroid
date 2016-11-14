@@ -1,34 +1,66 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
+
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.MenuItem;
 
+import com.matteoveroni.wordsremember.database.dao.DictionaryDao;
+import com.matteoveroni.wordsremember.database.tables.TableDictionary;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
-import com.matteoveroni.wordsremember.model.Dictionary;
 import com.matteoveroni.wordsremember.model.Word;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DictionaryManagementFragment extends ListFragment {
+public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = DictionaryManagementFragment.class.getName() + "DICTIONARY_MANAGEMENT_FRAGMENT";
+    public static final String TAG = "DICTIONARY_MANAGEMENT_FRAGMENT";
 
-    private Dictionary dictionary;
     private WordListViewAdapter dictionaryListViewAdapter;
+    private DictionaryDao dictionaryDao;
 
     public DictionaryManagementFragment() {
         // Required empty public constructor
     }
 
     @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        dictionaryDao = new DictionaryDao(getContext());
+        dictionaryDao.openDbConnection();
+        return new CursorLoader(this, null, TableDictionary.ALL_COLUMNS, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        setupDictionaryListViewAdapter();
+        setListShown(true);
+        dictionaryDao.closeDbConnection();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        setListShown(false);
+        setupDictionaryListViewAdapter();
+        setListShown(true);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        dictionary = new Dictionary("TestDictionary-ITA_ENG");
-        loadDictionary();
-        setupDictionaryListViewAdapter();
+
+        dictionaryDao.saveVocable(new Word("impaurire"));
+
+        setListShown(false);
+
+        // Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
+        getLoaderManager().initLoader(0, null, this);
+
         registerForContextMenu(getListView());
     }
 
@@ -37,38 +69,39 @@ public class DictionaryManagementFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadDictionary() {
-        addWordImpaurireToDictionary();
-        addWordCaneToDictionary();
-    }
-
     private void setupDictionaryListViewAdapter() {
-        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionary.getVocables());
+        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionaryDao.getAllVocables());
         setListAdapter(dictionaryListViewAdapter);
     }
 
-    private void addWordImpaurireToDictionary() {
-        Word wordImpaurire = new Word("impaurire");
-        Word wordFrighten = new Word("frighten");
-        Word wordScare = new Word("scare");
 
-        List<Word> translationsForWordImpaurire = new ArrayList<>();
-        translationsForWordImpaurire.add(wordScare);
-        translationsForWordImpaurire.add(wordFrighten);
-        dictionary.addTranslationsForVocable(translationsForWordImpaurire, wordImpaurire);
-    }
+//    private void loadDictionaryProgrammatically(){
+//        addWordImpaurireToDictionary();
+//        addWordCaneToDictionary();
+//    }
 
-    private void addWordCaneToDictionary() {
-        Word wordCane = new Word("cane");
-        Word wordDog = new Word("dog");
-
-        List<Word> translationsForWordCane = new ArrayList<>();
-        translationsForWordCane.add(wordDog);
-        dictionary.addTranslationsForVocable(translationsForWordCane, wordCane);
-
-
-        dictionary.removeVocable(wordDog);
-    }
+//    private void addWordImpaurireToDictionary() {
+//        Word wordImpaurire = new Word("impaurire");
+//        Word wordFrighten = new Word("frighten");
+//        Word wordScare = new Word("scare");
+//
+//        List<Word> translationsForWordImpaurire = new ArrayList<>();
+//        translationsForWordImpaurire.add(wordScare);
+//        translationsForWordImpaurire.add(wordFrighten);
+//        dictionary.addTranslationsForVocable(translationsForWordImpaurire, wordImpaurire);
+//    }
+//
+//    private void addWordCaneToDictionary() {
+//        Word wordCane = new Word("cane");
+//        Word wordDog = new Word("dog");
+//
+//        List<Word> translationsForWordCane = new ArrayList<>();
+//        translationsForWordCane.add(wordDog);
+//        dictionary.addTranslationsForVocable(translationsForWordCane, wordCane);
+//
+//
+//        dictionary.removeVocable(wordDog);
+//    }
 
 //    @Override
 //    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

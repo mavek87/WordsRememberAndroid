@@ -9,7 +9,7 @@ public class TableTranslations {
     public static final String COLUMN_TRANSLATION_ID = "translation_id";
     public static final String COLUMN_TRANSLATION_NAME = "translation_name";
 
-    public static final String[] COLUMNS =
+    public static final String[] ALL_COLUMNS =
             {
                     COLUMN_TRANSLATION_ID,
                     COLUMN_TRANSLATION_NAME

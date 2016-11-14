@@ -9,7 +9,7 @@ public class TableDictionaryTranslations {
     public static final String COLUMN_DICTIONARY_WORD_ID = "dictionary_word_id";
     public static final String COLUMN_TRANSLATION_WORD_ID = "translation_word_id";
 
-    public static final String[] COLUMNS =
+    public static final String[] ALL_COLUMNS =
             {
                     COLUMN_DICTIONARY_WORD_ID,
                     COLUMN_TRANSLATION_WORD_ID
