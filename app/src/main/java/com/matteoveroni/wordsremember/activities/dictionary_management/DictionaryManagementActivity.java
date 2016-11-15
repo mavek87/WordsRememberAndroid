@@ -1,16 +1,16 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.model.Word;
-
-import java.util.List;
+import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 
 public class DictionaryManagementActivity extends AppCompatActivity {
+
+    private static final String TAG = "DictMngmntActivity";
 
     private DictionaryManagementFragment dictionaryManagementFragment;
 
@@ -19,7 +19,20 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_management);
         dictionaryManagementFragment = new DictionaryManagementFragment();
-        loadDictionaryManagementFragment();
+
+        DictionaryDAO dictionaryDAO = new DictionaryDAO(getBaseContext());
+
+        Word vocable = new Word("test123");
+        dictionaryDAO.removeVocable(vocable);
+
+
+        printIfVocableIsPresent(vocable, dictionaryDAO);
+        printAllVocablesFromDB(dictionaryDAO);
+        dictionaryDAO.saveVocable(vocable);
+        printAllVocablesFromDB(dictionaryDAO);
+        printIfVocableIsPresent(vocable, dictionaryDAO);
+
+//        loadDictionaryManagementFragment();
     }
 
     private void loadDictionaryManagementFragment() {
@@ -29,18 +42,22 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 .commit();
     }
 
-    @Override
-    public Loader<List<Word>> onCreateLoader(int id, Bundle args) {
-        return null;
+    /**
+     * TODO: remove this test method
+     */
+    private void printAllVocablesFromDB(DictionaryDAO dictionaryDAO) {
+        for (Word vocable : dictionaryDAO.getAllVocablesList()) {
+            Log.i(TAG, vocable.getName());
+        }
     }
 
-    @Override
-    public void onLoadFinished(Loader<List<Word>> loader, List<Word> data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Word>> loader) {
-
+    private void printIfVocableIsPresent(Word vocable, DictionaryDAO dictionaryDAO) {
+        String logMessageVocablePresent = "Vocable " + vocable + " ";
+        if (dictionaryDAO.isVocablePresent(vocable)) {
+            logMessageVocablePresent += "is present";
+        } else {
+            logMessageVocablePresent += "is not present";
+        }
+        Log.i(TAG, logMessageVocablePresent);
     }
 }

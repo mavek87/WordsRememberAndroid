@@ -1,65 +1,69 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.view.MenuItem;
 
-import com.matteoveroni.wordsremember.database.dao.DictionaryDao;
-import com.matteoveroni.wordsremember.database.tables.TableDictionary;
+import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
 import com.matteoveroni.wordsremember.model.Word;
 
 import java.util.List;
 
-public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DictionaryManagementFragment extends ListFragment {
+//    public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = "DICTIONARY_MANAGEMENT_FRAGMENT";
 
     private WordListViewAdapter dictionaryListViewAdapter;
-    private DictionaryDao dictionaryDao;
+    private DictionaryDAO dictionaryDao;
 
     public DictionaryManagementFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        dictionaryDao = new DictionaryDao(getContext());
-        dictionaryDao.openDbConnection();
-        return new CursorLoader(this, null, TableDictionary.ALL_COLUMNS, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        setupDictionaryListViewAdapter();
-        setListShown(true);
-        dictionaryDao.closeDbConnection();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        setListShown(false);
-        setupDictionaryListViewAdapter();
-        setListShown(true);
-    }
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+//        dictionaryDao = new DictionaryDAO(getContext());
+//        dictionaryDao.openDbConnection();
+//        return new CursorLoader(this, null, DictionaryContract.ALL_COLUMNS, null, null, null);
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        setupDictionaryListViewAdapter();
+//        setListShown(true);
+//        dictionaryDao.closeDbConnection();
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> loader) {
+//        setListShown(false);
+//        setupDictionaryListViewAdapter();
+//        setListShown(true);
+//    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        dictionaryDao = new DictionaryDAO(getContext());
+
         dictionaryDao.saveVocable(new Word("impaurire"));
 
-        setListShown(false);
+        List<Word> vocables = dictionaryDao.getAllVocablesList();
+
+        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), 1, vocables);
+
+//        setListAdapter(new dictionaryListViewAdapter);
+
+//        setListShown(false);
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
-        getLoaderManager().initLoader(0, null, this);
+//        getLoaderManager().initLoader(0, null, this);
 
         registerForContextMenu(getListView());
     }
@@ -70,8 +74,8 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     private void setupDictionaryListViewAdapter() {
-        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionaryDao.getAllVocables());
-        setListAdapter(dictionaryListViewAdapter);
+//        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionaryDao.getAllVocables());
+//        setListAdapter(dictionaryListViewAdapter);
     }
 
 

@@ -1,25 +1,25 @@
-package com.matteoveroni.wordsremember.database.tables;
+package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.database.sqlite.SQLiteDatabase;
 
-public class TableDictionary {
+public class TableDictionaryTranslations {
 
-    public static final String NAME = "dictionary";
+    public static final String NAME = "dictionary_translations";
 
-    public static final String COLUMN_WORD_ID = "word_id";
-    public static final String COLUMN_WORD_NAME = "word_name";
+    public static final String COLUMN_DICTIONARY_WORD_ID = "dictionary_word_id";
+    public static final String COLUMN_TRANSLATION_WORD_ID = "translation_word_id";
 
     public static final String[] ALL_COLUMNS =
             {
-                    COLUMN_WORD_ID,
-                    COLUMN_WORD_NAME
+                    COLUMN_DICTIONARY_WORD_ID,
+                    COLUMN_TRANSLATION_WORD_ID
             };
 
     private static class Queries {
         private static final String CREATE_TABLE = "create table "
                 + NAME + " ( "
-                + COLUMN_WORD_ID + " integer primary key autoincrement, "
-                + COLUMN_WORD_NAME + " text not null"
+                + COLUMN_DICTIONARY_WORD_ID + " integer primary key, "
+                + COLUMN_TRANSLATION_WORD_ID + " integer primary key"
                 + " );";
 
         private static final String DROP_TABLE = "drop table if exists " + NAME;
