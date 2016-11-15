@@ -20,17 +20,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary_management);
         dictionaryManagementFragment = new DictionaryManagementFragment();
 
-        DictionaryDAO dictionaryDAO = new DictionaryDAO(getBaseContext());
-
-        Word vocable = new Word("test123");
-        dictionaryDAO.removeVocable(vocable);
-
-
-        printIfVocableIsPresent(vocable, dictionaryDAO);
-        printAllVocablesFromDB(dictionaryDAO);
-        dictionaryDAO.saveVocable(vocable);
-        printAllVocablesFromDB(dictionaryDAO);
-        printIfVocableIsPresent(vocable, dictionaryDAO);
+        testDb();
 
 //        loadDictionaryManagementFragment();
     }
@@ -43,8 +33,23 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO: remove this test method
+     * TODO: remove this test methods
      */
+    private void testDb() {
+        DictionaryDAO dictionaryDAO = new DictionaryDAO(getBaseContext());
+
+        Word vocable = new Word("test123");
+        dictionaryDAO.removeVocable(vocable);
+
+        printIfVocableIsPresent(vocable, dictionaryDAO);
+        printAllVocablesFromDB(dictionaryDAO);
+        dictionaryDAO.saveVocable(vocable);
+        printAllVocablesFromDB(dictionaryDAO);
+        printIfVocableIsPresent(vocable, dictionaryDAO);
+
+        dictionaryDAO.getDbManager().exportDBOnSD();
+    }
+
     private void printAllVocablesFromDB(DictionaryDAO dictionaryDAO) {
         for (Word vocable : dictionaryDAO.getAllVocablesList()) {
             Log.i(TAG, vocable.getName());
