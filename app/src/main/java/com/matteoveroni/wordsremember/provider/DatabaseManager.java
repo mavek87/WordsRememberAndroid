@@ -20,8 +20,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String NAME = "wordsremember.db";
     public static final int VERSION = 1;
 
-    private static DictionaryContract.DictionarySchema DICTIONARY_SCHEMA;
-    private static TranslationsContract.TranslationsSchema TRANSLATIONS_SCHEMA;
+    private static DictionaryContract.Schema DICTIONARY_SCHEMA;
+    private static TranslationsContract.Schema TRANSLATIONS_SCHEMA;
 
     private static final class SQL_QUERIES {
         private static final String CREATE_DICTIONARY_TABLE = "create table "
@@ -48,6 +48,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /**
      * DatabaseMaanager private constructor
+     *
      * @param context
      */
     private DatabaseManager(Context context) {
@@ -56,6 +57,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /**
      * Get or create a unique DatabaseManager instance using the singleton pattern
+     *
      * @param context
      * @return Unique DatabaseManager instance
      */
@@ -80,6 +82,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
         Log.i(TAG, "Updating db from old version " + oldVersion + " to new version " + newVersion);
         dropAllTables(db);
         createAllTables(db);
+    }
+
+    public void resetDatabase() {
+        SQLiteDatabase db = getWritableDatabase();
+        dropAllTables(db);
+        createAllTables(db);
+        db.close();
     }
 
     /**

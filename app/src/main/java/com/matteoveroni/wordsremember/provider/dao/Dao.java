@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.provider.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 

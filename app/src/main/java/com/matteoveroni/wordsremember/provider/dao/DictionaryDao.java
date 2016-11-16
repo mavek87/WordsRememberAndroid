@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.matteoveroni.wordsremember.model.Word;
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.DictionarySchema;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +30,12 @@ public class DictionaryDAO extends DAO {
             throw new NullPointerException(NULL_VOCABLE_POINTER_EXCEPTION);
         } else {
             boolean isVocablePresent;
-            final String[] usedColumns = {DictionarySchema.COLUMN_NAME};
-            final String selection = DictionarySchema.COLUMN_NAME + " =?";
+            final String[] usedColumns = {Schema.COLUMN_NAME};
+            final String selection = Schema.COLUMN_NAME + " =?";
             final String[] selectionArgs = {vocable.getName()};
             final String limit = "1";
 
-            Cursor cursor = openDbConnection().query(DictionarySchema.TABLE_NAME, usedColumns, selection, selectionArgs, null, null, null, limit);
+            Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, usedColumns, selection, selectionArgs, null, null, null, limit);
             isVocablePresent = (cursor.getCount() > 0);
             cursor.close();
             closeDbConnection();
@@ -48,9 +48,9 @@ public class DictionaryDAO extends DAO {
         long vocableId = -1;
         if (!isVocablePresent(vocable)) {
             ContentValues values = new ContentValues();
-            values.put(DictionarySchema.COLUMN_NAME, vocable.getName());
+            values.put(Schema.COLUMN_NAME, vocable.getName());
 
-            vocableId = openDbConnection().insert(DictionarySchema.TABLE_NAME, null, values);
+            vocableId = openDbConnection().insert(Schema.TABLE_NAME, null, values);
             closeDbConnection();
         }
         return vocableId;
@@ -58,7 +58,7 @@ public class DictionaryDAO extends DAO {
 
     public boolean removeVocable(Word vocable) throws NullPointerException {
         final SQLiteDatabase db = openDbConnection();
-        boolean recordDeleted = db.delete(DictionarySchema.TABLE_NAME, DictionarySchema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;
+        boolean recordDeleted = db.delete(Schema.TABLE_NAME, Schema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;
         closeDbConnection();
         return recordDeleted;
     }
@@ -70,13 +70,13 @@ public class DictionaryDAO extends DAO {
      * @return Cursor Cursor containing all the vocables found
      */
     public Cursor getAllVocables() {
-        return openDbConnection().query(DictionarySchema.TABLE_NAME, new String[]{DictionarySchema.COLUMN_NAME}, null, null, null, null, null);
+        return openDbConnection().query(Schema.TABLE_NAME, new String[]{Schema.COLUMN_NAME}, null, null, null, null, null);
     }
 
     public List<Word> getAllVocablesList() {
         List<Word> vocables = new ArrayList<>();
 
-        Cursor cursor = openDbConnection().query(DictionarySchema.TABLE_NAME, DictionarySchema.ALL_COLUMNS, null, null, null, null, null);
+        Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, Schema.ALL_COLUMNS, null, null, null, null, null);
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             vocables.add(cursorToVocable(cursor));
         }

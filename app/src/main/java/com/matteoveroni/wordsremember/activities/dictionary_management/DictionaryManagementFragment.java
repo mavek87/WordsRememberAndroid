@@ -1,71 +1,77 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
-
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.MenuItem;
 
-import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
+import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.WordsRememberContentProvider;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.model.Word;
+import com.matteoveroni.wordsremember.utilities.SimpleCursorLoader;
 
 import java.util.List;
 
-public class DictionaryManagementFragment extends ListFragment {
-//    public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = "DICTIONARY_MANAGEMENT_FRAGMENT";
+    public static final String TAG = "F_DICTIONARY_MANAGEMENT";
 
     private WordListViewAdapter dictionaryListViewAdapter;
-    private DictionaryDAO dictionaryDao;
+    //    private SimpleCursorAdapter simpleCursorAdapter;
+//    private DictionaryDAO dictionaryDao;
 
     public DictionaryManagementFragment() {
         // Required empty public constructor
     }
 
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        dictionaryDao = new DictionaryDAO(getContext());
-//        dictionaryDao.openDbConnection();
-//        return new CursorLoader(this, null, DictionaryContract.ALL_COLUMNS, null, null, null);
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        setupDictionaryListViewAdapter();
-//        setListShown(true);
-//        dictionaryDao.closeDbConnection();
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> loader) {
-//        setListShown(false);
-//        setupDictionaryListViewAdapter();
-//        setListShown(true);
-//    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        dictionaryDao = new DictionaryDAO(getContext());
+//        dictionaryDao = new DictionaryDAO(getContext());
 
-        dictionaryDao.saveVocable(new Word("impaurire"));
+        getLoaderManager().initLoader(0, null, this);
 
-        List<Word> vocables = dictionaryDao.getAllVocablesList();
+        setupDictionaryAdapter();
 
-        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), 1, vocables);
-
-//        setListAdapter(new dictionaryListViewAdapter);
-
-//        setListShown(false);
-
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
-//        getLoaderManager().initLoader(0, null, this);
+        setListShown(false);
 
         registerForContextMenu(getListView());
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader = new CursorLoader(
+                getActivity(),
+                DictionaryProvider.CONTENT_URI,
+                DictionaryContract.Schema.ALL_COLUMNS,
+                null,
+                null,
+                null
+        );
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        setListShown(true);
+        cursor.close();
+//        dictionaryDao.closeDbConnection();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        setListShown(false);
+        setupDictionaryAdapter();
+        setListShown(true);
     }
 
     @Override
@@ -73,9 +79,21 @@ public class DictionaryManagementFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupDictionaryListViewAdapter() {
+    private void setupDictionaryAdapter() {
 //        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionaryDao.getAllVocables());
-//        setListAdapter(dictionaryListViewAdapter);
+        setListAdapter(dictionaryListViewAdapter);
+
+//        String[] fromFields = new String[]{DictionaryContract.Schema.COLUMN_NAME};
+//        int[] toFields = new int[]{android.R.id.text1};
+//
+//        simpleCursorAdapter = new SimpleCursorAdapter(
+//                getActivity(),
+//                android.R.layout.simple_expandable_list_item_1,
+//                null,
+//                fromFields,
+//                toFields,
+//                0
+//        );
     }
 
 

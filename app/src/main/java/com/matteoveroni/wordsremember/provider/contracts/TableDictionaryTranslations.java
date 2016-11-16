@@ -6,7 +6,7 @@ public class TableDictionaryTranslations {
 
     public static final String NAME = "dictionary_translations";
 
-    public static final String COLUMN_DICTIONARY_WORD_ID = "dictionary_word_id";
+    public static final String COLUMN_DICTIONARY_WORD_ID = "_ID";
     public static final String COLUMN_TRANSLATION_WORD_ID = "translation_word_id";
 
     public static final String[] ALL_COLUMNS =

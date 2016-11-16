@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.model.Word;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 
 public class DictionaryManagementActivity extends AppCompatActivity {
@@ -20,9 +21,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary_management);
         dictionaryManagementFragment = new DictionaryManagementFragment();
 
-        testDb();
+//        testDb();
 
-//        loadDictionaryManagementFragment();
+        loadDictionaryManagementFragment();
     }
 
     private void loadDictionaryManagementFragment() {
@@ -39,7 +40,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         DictionaryDAO dictionaryDAO = new DictionaryDAO(getBaseContext());
 
         Word vocable = new Word("test123");
-        dictionaryDAO.removeVocable(vocable);
+//        dictionaryDAO.removeVocable(vocable);
 
         printIfVocableIsPresent(vocable, dictionaryDAO);
         printAllVocablesFromDB(dictionaryDAO);

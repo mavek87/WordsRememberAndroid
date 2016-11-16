@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.model;
 
-import com.matteoveroni.wordsremember.utilities.json.Json;
+import com.matteoveroni.wordsremember.utilities.Json;
 
 public class Word {
 

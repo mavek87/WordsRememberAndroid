@@ -1,6 +1,13 @@
-package com.matteoveroni.wordsremember.utilities.json;
+package com.matteoveroni.wordsremember.utilities;
 
 import com.google.gson.Gson;
+
+/**
+ * Singleton that wraps a Gson object instance
+ *
+ * @author Matteo Veroni
+ *
+ */
 
 public class Json {
     private volatile static Gson GSON;

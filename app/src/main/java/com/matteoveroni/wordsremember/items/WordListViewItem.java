@@ -32,7 +32,7 @@ public class WordListViewItem extends RelativeLayout {
     }
 
     public void draw(Word word) {
-        lbl_wordName.setText(word.getName());
+        draw(word.getName());
     }
 
     public void draw(String wordName) {

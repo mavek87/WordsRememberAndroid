@@ -23,5 +23,8 @@
         </activity>
         <activity android:name=".activities.dictionary_management.DictionaryManagementActivity"></activity>
     </application>
-
+    <provider
+        android:name=".provider.WordsRememberContentProvider"
+        android:authorities="com.matteoveroni.wordsremember.provider"
+        android:exported="false" />
 </manifest>
