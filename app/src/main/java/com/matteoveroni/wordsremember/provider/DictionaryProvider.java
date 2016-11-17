@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
@@ -16,35 +17,34 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
- *
  * Usefull resources on Content Providers:
- *
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
- *
  */
 
 public class DictionaryProvider extends ContentProvider {
+
+    public static final String TAG = "DICTIONARY_PROVIDER";
+
+    public static final String CONTENT_SCHEME = "content://";
 
     public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
     public static final String BASE_PATH = "dictionary";
 
-    public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY + "/" + BASE_PATH);
+    public static final Uri CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + BASE_PATH);
 
-    public static final String CONTENT_TYPE =
-            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + "vocables";
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE;
 
-    public static final String CONTENT_ITEM_TYPE =
-            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + "vocable";
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
-    private static final int VOCABLES = 10;
+    private static final int VOCABLES_ID = 10;
     private static final int VOCABLE_ID = 20;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH, VOCABLES);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH, VOCABLES_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH + "/#", VOCABLE_ID);
     }
 
@@ -59,22 +59,16 @@ public class DictionaryProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        checkColumnsExistence(projection);
 
-        // Uisng SQLiteQueryBuilder instead of query() method
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
-        // check if the caller has requested a column which does not exists
-        checkColumns(projection);
-
-        // Set the table
         queryBuilder.setTables(DictionaryContract.Schema.TABLE_NAME);
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case VOCABLES:
+            case VOCABLES_ID:
                 break;
             case VOCABLE_ID:
-                // adding the ID to the original query
                 selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
                 final String id = uri.getLastPathSegment();
                 selectionArgs = new String[]{id};
@@ -83,7 +77,7 @@ public class DictionaryProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        SQLiteDatabase db = databaseManager.getReadableDatabase();
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
@@ -96,7 +90,6 @@ public class DictionaryProvider extends ContentProvider {
 
         // make sure that potential listeners are getting notified
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
         return cursor;
     }
 
@@ -104,7 +97,7 @@ public class DictionaryProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
-            case VOCABLES:
+            case VOCABLES_ID:
                 return CONTENT_TYPE;
             case VOCABLE_ID:
                 return CONTENT_ITEM_TYPE;
@@ -117,12 +110,57 @@ public class DictionaryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        long id;
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
+
+        int uriType = URI_MATCHER.match(uri);
+        switch (uriType) {
+            case VOCABLES_ID:
+                id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Uri.parse(BASE_PATH + "/" + id);
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        int deletedRowsCounter;
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
+
+        int uriType = URI_MATCHER.match(uri);
+        switch (uriType) {
+            case VOCABLES_ID:
+                deletedRowsCounter = db.delete(DictionaryContract.Schema.TABLE_NAME, selection, selectionArgs);
+                break;
+            case VOCABLE_ID:
+                final String id = uri.getLastPathSegment();
+                deletedRowsCounter = db.delete(
+                        DictionaryContract.Schema.TABLE_NAME,
+                        DictionaryContract.Schema.COLUMN_ID + " = " + id +
+                                (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
+                        selectionArgs);
+                break;
+//                if (TextUtils.isEmpty(selection)) {
+//                    deletedRowsCounter = db.delete(
+//                            DictionaryContract.Schema.TABLE_NAME,
+//                            DictionaryContract.Schema.COLUMN_ID + " = ?",
+//                            new String[]{id}
+//                    );
+//                } else {
+//                    deletedRowsCounter = db.delete(
+//                            DictionaryContract.Schema.TABLE_NAME,
+//                            DictionaryContract.Schema.COLUMN_ID + " = " + id + " and " + selection,
+//                            selectionArgs
+//                    );
+//                }
+//                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return deletedRowsCounter;
     }
 
     @Override
@@ -130,7 +168,7 @@ public class DictionaryProvider extends ContentProvider {
         return 0;
     }
 
-    private void checkColumns(String[] projection) {
+    private void checkColumnsExistence(String[] projection) {
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
             HashSet<String> availableColumns = new HashSet<>(Arrays.asList(DictionaryContract.Schema.ALL_COLUMNS));
