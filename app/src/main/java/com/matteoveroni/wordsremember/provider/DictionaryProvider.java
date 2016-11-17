@@ -22,7 +22,7 @@ import java.util.HashSet;
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
  */
 
-public class DictionaryProvider extends ContentProvider {
+public class DictionaryProvider extends ExtendedContentProvider {
 
     public static final String TAG = "DICTIONARY_PROVIDER";
 
@@ -50,6 +50,20 @@ public class DictionaryProvider extends ContentProvider {
 
     private DatabaseManager databaseManager;
 
+    @Nullable
+    @Override
+    public String getType(Uri uri) {
+        switch ((URI_MATCHER.match(uri))) {
+            case VOCABLES_ID:
+                return CONTENT_TYPE;
+            case VOCABLE_ID:
+                return CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+
+        }
+    }
+
     @Override
     public boolean onCreate() {
         databaseManager = DatabaseManager.getInstance(getContext());
@@ -60,6 +74,8 @@ public class DictionaryProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         checkColumnsExistence(projection);
+
+        String limit = uri.getQueryParameter(QUERY_PARAMETER_LIMIT);
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DictionaryContract.Schema.TABLE_NAME);
@@ -85,26 +101,12 @@ public class DictionaryProvider extends ContentProvider {
                 selectionArgs,
                 null,
                 null,
-                sortOrder
+                sortOrder,
+                limit
         );
-
         // make sure that potential listeners are getting notified
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
-    }
-
-    @Nullable
-    @Override
-    public String getType(Uri uri) {
-        switch ((URI_MATCHER.match(uri))) {
-            case VOCABLES_ID:
-                return CONTENT_TYPE;
-            case VOCABLE_ID:
-                return CONTENT_ITEM_TYPE;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
-
-        }
     }
 
     @Nullable
@@ -113,23 +115,58 @@ public class DictionaryProvider extends ContentProvider {
         long id;
         SQLiteDatabase db = databaseManager.getWritableDatabase();
 
-        int uriType = URI_MATCHER.match(uri);
+        final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES_ID:
                 id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
-                return Uri.parse(BASE_PATH + "/" + id);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return Uri.parse(BASE_PATH + "/" + id);
     }
 
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        int updatedRowsCounter;
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
+
+        final int uriType = URI_MATCHER.match(uri);
+        switch (uriType) {
+            case VOCABLES_ID:
+                updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case VOCABLE_ID:
+                String id = uri.getLastPathSegment();
+                updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME,
+                        values,
+                        DictionaryContract.Schema.COLUMN_ID + " =" + id +
+                                (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
+                        selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return updatedRowsCounter;
+    }
+
+    /**
+     * TODO: check VOCABLE_ID case not sure it works
+     *
+     * @param uri
+     * @param selection
+     * @param selectionArgs
+     * @return
+     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int deletedRowsCounter;
         SQLiteDatabase db = databaseManager.getWritableDatabase();
 
-        int uriType = URI_MATCHER.match(uri);
+        final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES_ID:
                 deletedRowsCounter = db.delete(DictionaryContract.Schema.TABLE_NAME, selection, selectionArgs);
@@ -142,30 +179,11 @@ public class DictionaryProvider extends ContentProvider {
                                 (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
                         selectionArgs);
                 break;
-//                if (TextUtils.isEmpty(selection)) {
-//                    deletedRowsCounter = db.delete(
-//                            DictionaryContract.Schema.TABLE_NAME,
-//                            DictionaryContract.Schema.COLUMN_ID + " = ?",
-//                            new String[]{id}
-//                    );
-//                } else {
-//                    deletedRowsCounter = db.delete(
-//                            DictionaryContract.Schema.TABLE_NAME,
-//                            DictionaryContract.Schema.COLUMN_ID + " = " + id + " and " + selection,
-//                            selectionArgs
-//                    );
-//                }
-//                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return deletedRowsCounter;
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
     }
 
     private void checkColumnsExistence(String[] projection) {

@@ -10,10 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.matteoveroni.wordsremember.activities.dictionary_management.DictionaryManagementActivity">
 
+    <Button
+        android:id="@+id/dictionary_add_vocable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="Add Vocable" />
+
     <TextView
         android:id="@+id/dictionary_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/dictionary_add_vocable"
         android:text="@string/dictionary_title"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
