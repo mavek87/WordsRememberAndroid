@@ -6,30 +6,26 @@ import android.util.Log;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.model.Word;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 
 public class DictionaryManagementActivity extends AppCompatActivity {
 
-    private static final String TAG = "DictMngmntActivity";
-
-    private DictionaryManagementFragment dictionaryManagementFragment;
+    private static final String TAG = "A_Dictionary_Management";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_management);
-        dictionaryManagementFragment = new DictionaryManagementFragment();
-
-//        testDb();
-
-        loadDictionaryManagementFragment();
+        testDb();
+        if (savedInstanceState == null) {
+            loadDictionaryManagementFragment();
+        }
     }
 
     private void loadDictionaryManagementFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.dictionaryManagementContainer, dictionaryManagementFragment, DictionaryManagementFragment.TAG)
+                .add(R.id.dictionaryManagementContainer, new DictionaryManagementFragment(), DictionaryManagementFragment.TAG)
                 .commit();
     }
 
@@ -40,6 +36,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         DictionaryDAO dictionaryDAO = new DictionaryDAO(getBaseContext());
 
         Word vocable = new Word("test123");
+
+//        dictionaryDAO.getDbManager().resetDatabase();
 //        dictionaryDAO.removeVocable(vocable);
 
         printIfVocableIsPresent(vocable, dictionaryDAO);

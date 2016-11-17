@@ -13,6 +13,6 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:ellipsize="end"
-        android:text="ciao" />
+        android:text="" />
 
 </merge>

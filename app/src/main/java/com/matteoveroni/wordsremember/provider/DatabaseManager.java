@@ -84,6 +84,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
+    /**
+     * drop all the tables and their content and recreate them
+     */
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
         dropAllTables(db);

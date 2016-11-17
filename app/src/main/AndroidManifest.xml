@@ -11,6 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activities.main_menu.MainMenuActivity"
             android:label="@string/title_activity_main_menu"
@@ -22,9 +23,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.dictionary_management.DictionaryManagementActivity"></activity>
+
+        <provider
+            android:name="com.matteoveroni.wordsremember.provider.DictionaryProvider"
+            android:authorities="com.matteoveroni.wordsremember.provider"
+            android:exported="false" />
     </application>
-    <provider
-        android:name=".provider.WordsRememberContentProvider"
-        android:authorities="com.matteoveroni.wordsremember.provider"
-        android:exported="false" />
+
 </manifest>

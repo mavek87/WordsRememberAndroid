@@ -16,31 +16,36 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
+ *
+ * Usefull resources on Content Providers:
+ *
+ * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
+ *
  */
 
 public class DictionaryProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "com.matteoveroni.wordsremember.provider";
+    public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
     public static final String BASE_PATH = "dictionary";
 
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+    public static final Uri CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY + "/" + BASE_PATH);
 
     public static final String CONTENT_TYPE =
-            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + "dictionary";
+            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + "vocables";
 
     public static final String CONTENT_ITEM_TYPE =
             ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + "vocable";
 
+    private static final int VOCABLES = 10;
+    private static final int VOCABLE_ID = 20;
+
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int DICTIONARY = 10;
-    private static final int VOCABLE = 20;
-
     static {
-        URI_MATCHER.addURI(AUTHORITY, BASE_PATH, DICTIONARY);
-        URI_MATCHER.addURI(AUTHORITY, BASE_PATH + "/#", VOCABLE);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH, VOCABLES);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH + "/#", VOCABLE_ID);
     }
 
     private DatabaseManager databaseManager;
@@ -48,7 +53,7 @@ public class DictionaryProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         databaseManager = DatabaseManager.getInstance(getContext());
-        return false;
+        return true;
     }
 
     @Nullable
@@ -66,19 +71,28 @@ public class DictionaryProvider extends ContentProvider {
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case DICTIONARY:
+            case VOCABLES:
                 break;
-            case VOCABLE:
+            case VOCABLE_ID:
                 // adding the ID to the original query
-                queryBuilder.appendWhere(DictionaryContract.Schema.COLUMN_ID + "=" + uri.getLastPathSegment());
+                selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
+                final String id = uri.getLastPathSegment();
+                selectionArgs = new String[]{id};
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        SQLiteDatabase db = databaseManager.getReadableDatabase();
+        Cursor cursor = queryBuilder.query(
+                db,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
 
         // make sure that potential listeners are getting notified
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -89,7 +103,15 @@ public class DictionaryProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-        return null;
+        switch ((URI_MATCHER.match(uri))) {
+            case VOCABLES:
+                return CONTENT_TYPE;
+            case VOCABLE_ID:
+                return CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+
+        }
     }
 
     @Nullable

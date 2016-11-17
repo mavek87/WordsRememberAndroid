@@ -8,43 +8,37 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
-import com.matteoveroni.wordsremember.provider.WordsRememberContentProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
-import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.model.Word;
-import com.matteoveroni.wordsremember.utilities.SimpleCursorLoader;
-
-import java.util.List;
 
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = "F_DICTIONARY_MANAGEMENT";
+    public static final String TAG = "F_Dictionary_Management";
 
     private WordListViewAdapter dictionaryListViewAdapter;
-    //    private SimpleCursorAdapter simpleCursorAdapter;
-//    private DictionaryDAO dictionaryDao;
+    private SimpleCursorAdapter simpleCursorAdapter;
 
     public DictionaryManagementFragment() {
-        // Required empty public constructor
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-//        dictionaryDao = new DictionaryDAO(getContext());
-
-        getLoaderManager().initLoader(0, null, this);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dictionarymanagement, container, false);
         setupDictionaryAdapter();
+        return view;
+    }
 
-        setListShown(false);
-
-        registerForContextMenu(getListView());
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(0, null, this);
     }
 
     @Override
@@ -62,45 +56,34 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        setListShown(true);
-        cursor.close();
-//        dictionaryDao.closeDbConnection();
+        simpleCursorAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        setListShown(false);
-        setupDictionaryAdapter();
-        setListShown(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        simpleCursorAdapter.swapCursor(null);
     }
 
     private void setupDictionaryAdapter() {
-//        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), dictionaryDao.getAllVocables());
-        setListAdapter(dictionaryListViewAdapter);
+//        dictionaryListViewAdapter = new WordListViewAdapter(getContext());
+//        setListAdapter(dictionaryListViewAdapter);
 
-//        String[] fromFields = new String[]{DictionaryContract.Schema.COLUMN_NAME};
-//        int[] toFields = new int[]{android.R.id.text1};
-//
-//        simpleCursorAdapter = new SimpleCursorAdapter(
-//                getActivity(),
-//                android.R.layout.simple_expandable_list_item_1,
-//                null,
-//                fromFields,
-//                toFields,
-//                0
-//        );
+        String[] fromFields = new String[]{DictionaryContract.Schema.COLUMN_NAME};
+        int[] toFields = new int[]{android.R.id.text1};
+
+        getLoaderManager().initLoader(0, null, this);
+
+        simpleCursorAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                android.R.layout.simple_expandable_list_item_1,
+                null,
+                fromFields,
+                toFields,
+                0
+        );
+
+        setListAdapter(simpleCursorAdapter);
     }
-
-
-//    private void loadDictionaryProgrammatically(){
-//        addWordImpaurireToDictionary();
-//        addWordCaneToDictionary();
-//    }
 
 //    private void addWordImpaurireToDictionary() {
 //        Word wordImpaurire = new Word("impaurire");
