@@ -26,25 +26,22 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String NAME = "wordsremember.db";
     public static final int VERSION = 1;
 
-    private static DictionaryContract.Schema DICTIONARY_SCHEMA;
-    private static TranslationsContract.Schema TRANSLATIONS_SCHEMA;
-
     private static final class SQL_QUERIES {
-        private static final String CREATE_DICTIONARY_TABLE = "create table "
-                + DICTIONARY_SCHEMA.TABLE_NAME + " ( "
-                + DICTIONARY_SCHEMA.COLUMN_ID + " integer primary key autoincrement, "
-                + DICTIONARY_SCHEMA.COLUMN_NAME + " text not null"
+        private static final String CREATE_DICTIONARY_TABLE = "CREATE TABLE IF NOT EXISTS "
+                + DictionaryContract.Schema.TABLE_NAME + " ( "
+                + DictionaryContract.Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DictionaryContract.Schema.COLUMN_NAME + " TEXT NOT NULL"
                 + " );";
 
-        private static final String DROP_DICTIONARY_TABLE = "drop table if exists " + DICTIONARY_SCHEMA.TABLE_NAME;
+        private static final String DROP_DICTIONARY_TABLE = "DROP TABLE IF EXISTS " + DictionaryContract.Schema.TABLE_NAME;
 
-        private static final String CREATE_TRANSLATIONS_TABLE = "create table "
-                + TRANSLATIONS_SCHEMA.TABLE_NAME + " ( "
-                + TRANSLATIONS_SCHEMA.COLUMN_ID + " integer primary key autoincrement, "
-                + TRANSLATIONS_SCHEMA.COLUMN_NAME + " text not null"
+        private static final String CREATE_TRANSLATIONS_TABLE = "CREATE TABLE IF NOT EXISTS "
+                + DictionaryContract.Schema.TABLE_NAME + " ( "
+                + DictionaryContract.Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DictionaryContract.Schema.COLUMN_NAME + " TEXT NOT NULL"
                 + " );";
 
-        private static final String DROP_TRANSLATIONS_TABLE = "drop table if exists " + TRANSLATIONS_SCHEMA.TABLE_NAME;
+        private static final String DROP_TRANSLATIONS_TABLE = "DROP TABLE IF EXISTS " + DictionaryContract.Schema.TABLE_NAME;
     }
 
     /**
@@ -53,7 +50,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private volatile static DatabaseManager DB_MANAGER;
 
     /**
-     * DatabaseMaanager private constructor
+     * DatabaseManager private constructor
      *
      * @param context
      */
@@ -62,7 +59,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Get or create a unique DatabaseManager instance using the singleton pattern
+     * Get or create a unique DatabaseManager instance
      *
      * @param context
      * @return Unique DatabaseManager instance

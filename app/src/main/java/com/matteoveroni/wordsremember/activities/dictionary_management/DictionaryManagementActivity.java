@@ -62,7 +62,12 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      */
     private void testDictionaryDAOCRUDOperations() {
         Word newVocableToSave = new Word("test123");
-        dictionaryDAO.saveVocable(newVocableToSave);
+        long savedVocableId = dictionaryDAO.saveVocable(newVocableToSave);
+        if (savedVocableId < 0) {
+            Toast.makeText(this, "Vocable " + newVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Vocable " + newVocableToSave.getName() + " inserted. His ID in the database is => " + savedVocableId, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void exportDatabaseOnSd() {

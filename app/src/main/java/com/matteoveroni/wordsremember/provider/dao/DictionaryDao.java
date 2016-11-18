@@ -1,23 +1,31 @@
 package com.matteoveroni.wordsremember.provider.dao;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.matteoveroni.wordsremember.model.Word;
+import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * @author Matteo Veroni
+ */
+public class DictionaryDAO {
 
-public class DictionaryDAO extends DAO {
+    private final Context context;
+    private final ContentResolver contentResolver;
+
+    private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
 
     public DictionaryDAO(Context context) {
-        super(context);
+        this.context = context;
+        this.contentResolver = this.context.getContentResolver();
     }
 
-    private static final String NULL_VOCABLE_POINTER_EXCEPTION = "Vocable or Vocable Name are null";
+    private static final String VOCABLE_NULL_POINTER_EXCEPTION = "Vocable or Vocable Name are null";
 
     /**
      * Check whether a certain vocable passed was already inserted into the db system or not
@@ -27,64 +35,73 @@ public class DictionaryDAO extends DAO {
      */
     public boolean isVocablePresent(Word vocable) throws NullPointerException {
         if (!isVocableValid(vocable)) {
-            throw new NullPointerException(NULL_VOCABLE_POINTER_EXCEPTION);
+            throw new NullPointerException(VOCABLE_NULL_POINTER_EXCEPTION);
         } else {
             boolean isVocablePresent;
-            final String[] usedColumns = {Schema.COLUMN_NAME};
+            final String[] projection = {Schema.COLUMN_NAME};
             final String selection = Schema.COLUMN_NAME + " =?";
             final String[] selectionArgs = {vocable.getName()};
             final String limit = "1";
 
-            Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, usedColumns, selection, selectionArgs, null, null, null, limit);
+            Cursor cursor = contentResolver.query(
+                    CONTENT_PROVIDER_URI.buildUpon().appendQueryParameter(DictionaryProvider.QUERY_PARAMETER_LIMIT, limit).build(),
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+            );
             isVocablePresent = (cursor.getCount() > 0);
             cursor.close();
-            closeDbConnection();
-
             return isVocablePresent;
         }
     }
 
+
     public long saveVocable(Word vocable) throws NullPointerException {
-        long vocableId = -1;
+        long id = -1;
         if (!isVocablePresent(vocable)) {
             ContentValues values = new ContentValues();
             values.put(Schema.COLUMN_NAME, vocable.getName());
 
-            vocableId = openDbConnection().insert(Schema.TABLE_NAME, null, values);
-            closeDbConnection();
+            Uri createdRowUri = contentResolver.insert(CONTENT_PROVIDER_URI, values);
+            String createdRowId = createdRowUri.getLastPathSegment();
+
+            if (!createdRowId.isEmpty()) {
+                id = Long.valueOf(createdRowId);
+            }
         }
-        return vocableId;
+        return id;
     }
 
-    public boolean removeVocable(Word vocable) throws NullPointerException {
-        final SQLiteDatabase db = openDbConnection();
-        boolean recordDeleted = db.delete(Schema.TABLE_NAME, Schema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;
-        closeDbConnection();
-        return recordDeleted;
-    }
-
-    /**
-     * TODO: think how to close the db (if I close db here the cursor will not work outside)
-     * used for Cursor Loader Manager
-     *
-     * @return Cursor Cursor containing all the vocables found
-     */
-    public Cursor getAllVocables() {
-        return openDbConnection().query(Schema.TABLE_NAME, new String[]{Schema.COLUMN_NAME}, null, null, null, null, null);
-    }
-
-    public List<Word> getAllVocablesList() {
-        List<Word> vocables = new ArrayList<>();
-
-        Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, Schema.ALL_COLUMNS, null, null, null, null, null);
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            vocables.add(cursorToVocable(cursor));
-        }
-        cursor.close();
-        closeDbConnection();
-
-        return vocables;
-    }
+//    public boolean removeVocable(Word vocable) throws NullPointerException {
+//        final SQLiteDatabase db = openDbConnection();
+//        boolean recordDeleted = db.delete(Schema.TABLE_NAME, Schema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;
+//        closeDbConnection();
+//        return recordDeleted;
+//    }
+//
+//    /**
+//     * TODO: think how to close the db (if I close db here the cursor will not work outside)
+//     * used for Cursor Loader Manager
+//     *
+//     * @return Cursor Cursor containing all the vocables found
+//     */
+//    public Cursor getAllVocables() {
+//        return openDbConnection().query(Schema.TABLE_NAME, new String[]{Schema.COLUMN_NAME}, null, null, null, null, null);
+//    }
+//
+//    public List<Word> getAllVocablesList() {
+//        List<Word> vocables = new ArrayList<>();
+//
+//        Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, Schema.ALL_COLUMNS, null, null, null, null, null);
+//        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+//            vocables.add(cursorToVocable(cursor));
+//        }
+//        cursor.close();
+//        closeDbConnection();
+//
+//        return vocables;
+//    }
 
     private Word cursorToVocable(Cursor cursor) {
         return new Word(

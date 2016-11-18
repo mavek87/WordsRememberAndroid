@@ -65,7 +65,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 return CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
-
         }
     }
 
@@ -189,6 +188,11 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return deletedRowsCounter;
     }
 
+    /**
+     * TODO: test this method
+     *
+     * @param projection
+     */
     private void checkColumnsExistence(String[] projection) {
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));

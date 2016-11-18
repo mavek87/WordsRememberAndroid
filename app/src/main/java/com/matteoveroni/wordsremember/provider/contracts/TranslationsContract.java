@@ -2,9 +2,15 @@ package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.provider.BaseColumns;
 
+/**
+ * Contract class that defines Translations Table Schema
+ *
+ * @author Matteo Veroni
+ */
 public final class TranslationsContract {
 
-    private TranslationsContract() {}
+    private TranslationsContract() {
+    }
 
     public static final class Schema implements BaseColumns {
 

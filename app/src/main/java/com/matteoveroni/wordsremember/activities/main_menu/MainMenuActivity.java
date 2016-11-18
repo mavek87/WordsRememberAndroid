@@ -9,12 +9,13 @@ import android.widget.Button;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 /**
  * Activity that handles the Main Menu.
  *
  * @author Matteo Veroni
- * @version 0.0.1
+ * @version 0.0.2
  */
 public class MainMenuActivity extends AppCompatActivity {
     private Button btn_start;

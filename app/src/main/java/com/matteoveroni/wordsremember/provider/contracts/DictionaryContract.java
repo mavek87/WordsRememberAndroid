@@ -2,6 +2,11 @@ package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.provider.BaseColumns;
 
+/**
+ * Contract class that defines Dictionary Table Schema
+ *
+ * @author Matteo Veroni
+ */
 public final class DictionaryContract {
 
     private DictionaryContract() {

@@ -56,15 +56,17 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         simpleCursorAdapter.swapCursor(cursor);
+//        dictionaryListViewAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         simpleCursorAdapter.swapCursor(null);
+//        dictionaryListViewAdapter.swapCursor(null);
     }
 
     private void setupDictionaryAdapter() {
-//        dictionaryListViewAdapter = new WordListViewAdapter(getContext());
+//        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), null);
 //        setListAdapter(dictionaryListViewAdapter);
 
         String[] fromFields = new String[]{DictionaryContract.Schema.COLUMN_NAME};
