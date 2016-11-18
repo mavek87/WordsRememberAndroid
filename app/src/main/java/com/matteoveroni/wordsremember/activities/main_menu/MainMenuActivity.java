@@ -10,8 +10,13 @@ import android.widget.Button;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.DictionaryManagementActivity;
 
+/**
+ * Activity that handles the Main Menu.
+ *
+ * @author Matteo Veroni
+ * @version 0.0.1
+ */
 public class MainMenuActivity extends AppCompatActivity {
-
     private Button btn_start;
     private Button btn_manage_dictionary;
     private Button btn_settings;

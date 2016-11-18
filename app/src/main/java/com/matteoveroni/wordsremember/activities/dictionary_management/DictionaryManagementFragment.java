@@ -2,14 +2,12 @@ package com.matteoveroni.wordsremember.activities.dictionary_management;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +29,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionarymanagement, container, false);
+        getLoaderManager().initLoader(0, null, this);
         setupDictionaryAdapter();
         return view;
     }
@@ -70,8 +69,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
         String[] fromFields = new String[]{DictionaryContract.Schema.COLUMN_NAME};
         int[] toFields = new int[]{android.R.id.text1};
-
-        getLoaderManager().initLoader(0, null, this);
 
         simpleCursorAdapter = new SimpleCursorAdapter(
                 getActivity(),

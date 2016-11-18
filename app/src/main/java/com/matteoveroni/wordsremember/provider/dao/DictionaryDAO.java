@@ -4,16 +4,15 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * @author Matteo Veroni
+ */
 public class DictionaryDAO {
 
     private final Context context;
@@ -57,18 +56,23 @@ public class DictionaryDAO {
         }
     }
 
-//    public long saveVocable(Word vocable) throws NullPointerException {
-//        long vocableId = -1;
-//        if (!isVocablePresent(vocable)) {
-//            ContentValues values = new ContentValues();
-//            values.put(Schema.COLUMN_NAME, vocable.getName());
-//
-//            vocableId = openDbConnection().insert(Schema.TABLE_NAME, null, values);
-//            closeDbConnection();
-//        }
-//        return vocableId;
-//    }
-//
+
+    public long saveVocable(Word vocable) throws NullPointerException {
+        long id = -1;
+        if (!isVocablePresent(vocable)) {
+            ContentValues values = new ContentValues();
+            values.put(Schema.COLUMN_NAME, vocable.getName());
+
+            Uri createdRowUri = contentResolver.insert(CONTENT_PROVIDER_URI, values);
+            String createdRowId = createdRowUri.getLastPathSegment();
+
+            if (!createdRowId.isEmpty()) {
+                id = Long.valueOf(createdRowId);
+            }
+        }
+        return id;
+    }
+
 //    public boolean removeVocable(Word vocable) throws NullPointerException {
 //        final SQLiteDatabase db = openDbConnection();
 //        boolean recordDeleted = db.delete(Schema.TABLE_NAME, Schema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;

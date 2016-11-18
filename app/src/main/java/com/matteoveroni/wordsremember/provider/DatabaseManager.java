@@ -15,6 +15,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+/**
+ * Singleton class that manages SQLite Database creation, reset, export and upgrade operations
+ * and which contains db attributes
+ *
+ * @author Matteo Veroni
+ */
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = "DatabaseManager";
     public static final String NAME = "wordsremember.db";
@@ -85,7 +91,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * drop all the tables and their content and recreate them
+     * Method that drops all the tables and their content and recreate them
      */
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
@@ -95,7 +101,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * TODO: test this method
+     * Method that exports the database to the SD (/storage/emulated/legacy/)
      */
     public void exportDBOnSD() {
         File sd = Environment.getExternalStorageDirectory();

@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.provider;
 
-import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -17,12 +16,18 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
+ * Content Provider for the dictionary.
+ * <p>
  * Usefull resources on Content Providers:
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
+ * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
+ * http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
+ *
+ * @author Matteo Veroni
  */
 
-public class DictionaryProvider extends ExtendedContentProvider {
+public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String TAG = "DICTIONARY_PROVIDER";
 
@@ -75,8 +80,6 @@ public class DictionaryProvider extends ExtendedContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         checkColumnsExistence(projection);
 
-        String limit = uri.getQueryParameter(QUERY_PARAMETER_LIMIT);
-
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(DictionaryContract.Schema.TABLE_NAME);
 
@@ -102,7 +105,7 @@ public class DictionaryProvider extends ExtendedContentProvider {
                 null,
                 null,
                 sortOrder,
-                limit
+                getQueryParameterLimitValue(uri)
         );
         // make sure that potential listeners are getting notified
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
