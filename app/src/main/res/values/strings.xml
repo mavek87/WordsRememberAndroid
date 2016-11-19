@@ -12,4 +12,6 @@
     <string name="main_menu_help">Help</string>
 
     <string name="dictionary_title">Dictionary</string>
+
+    <string name="create_vocable">Create vocable</string>
 </resources>

@@ -15,6 +15,12 @@ import com.matteoveroni.wordsremember.items.WordListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
+/**
+ * List Fragment that shows all the vocables in the dictionary and allows to manage the
+ * dictionary adding, editing or removing new vocables.
+ *
+ * @author Matteo Veroni
+ */
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = "F_Dictionary_Management";
@@ -22,6 +28,16 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     private WordListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment.
+     *
+     * @return A new instance of fragment DictionaryManagementFragment.
+     */
+    public static DictionaryManagementFragment getInstance() {
+        return new DictionaryManagementFragment();
     }
 
     @Override
