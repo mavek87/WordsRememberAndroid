@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,9 +14,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryFragmentFactory;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryVocableManipulationFragment;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.utilities.GraphicsUtil;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
  * Activity for handling the dictionary management.
@@ -43,14 +51,20 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         setupView();
 
         if (savedInstanceState == null) {
-            dictionaryCreateVocableFragment = DictionaryVocableManipulationFragment.getInstance();
-            dictionaryManagementFragment = DictionaryManagementFragment.getInstance();
+            dictionaryCreateVocableFragment =
+                    DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
+            dictionaryManagementFragment =
+                    DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
 
             dictionaryDAO = new DictionaryDAO(getBaseContext());
             menuInflater = getMenuInflater();
 
             testDictionaryDAOCRUDOperations();
             exportDatabaseOnSd();
+
+            Display display = getWindowManager().getDefaultDisplay();
+            GraphicsUtil.getDisplayHeigthPx(display);
+            GraphicsUtil.getDisplayWidthPx(display);
 
             loadFragment(dictionaryManagementFragment);
 

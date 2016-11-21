@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management;
+package com.matteoveroni.wordsremember.activities.dictionary_management.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,29 +16,23 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 /**
- * List Fragment that shows all the vocables in the dictionary and allows to manage the
- * dictionary adding, editing or removing new vocables.
+ * List Fragment that shows all the vocables in the dictionary and allows to edit them
+ * using a long press touch.
  *
  * @author Matteo Veroni
  */
-public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DictionaryManagementFragment
+        extends ListFragment
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = "F_Dictionary_Management";
+    public static final String TAG = "F_DICTIONARY_MANAGEMENT";
 
     private WordListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment DictionaryManagementFragment.
-     */
-    public static DictionaryManagementFragment getInstance() {
-        return new DictionaryManagementFragment();
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

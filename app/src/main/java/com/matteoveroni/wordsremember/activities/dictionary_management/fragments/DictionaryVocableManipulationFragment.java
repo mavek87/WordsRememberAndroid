@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management;
+package com.matteoveroni.wordsremember.activities.dictionary_management.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,16 +17,6 @@ public class DictionaryVocableManipulationFragment extends Fragment {
     public static final String TAG = "F_DICTIONARY_CREATE";
 
     public DictionaryVocableManipulationFragment() {
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment.
-     *
-     * @return A new instance of fragment DictionaryVocableManipulationFragment.
-     */
-    public static DictionaryVocableManipulationFragment getInstance() {
-        return new DictionaryVocableManipulationFragment();
     }
 
     @Override
