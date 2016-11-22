@@ -8,5 +8,5 @@
     <string name="main_menu_settings">Impostazioni</string>
     <string name="main_menu_start_training">Inizia Allenamento</string>
     <string name="title_activity_main_menu">Menù Principale</string>
-    <string name="dictionary_title">Dizionario</string>
+    <string name="dictionary_management_container_title">Dizionario</string>
 </resources>

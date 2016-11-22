@@ -28,10 +28,27 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <FrameLayout
-        android:id="@+id/dictionaryManagementContainer"
+        android:id="@+id/dictionary_management_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dictionary_management_container_title"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:id="@+id/dictionary_manipulation_container_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dictionary_management_container"
+        android:layout_marginTop="30dp"
+        android:text="@string/dictionary_manipulation_container_title"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <FrameLayout
+        android:id="@+id/dictionaryManipulationContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dictionary_manipulation_container_title"
         android:layout_marginTop="30dp" />
 
 </RelativeLayout>
