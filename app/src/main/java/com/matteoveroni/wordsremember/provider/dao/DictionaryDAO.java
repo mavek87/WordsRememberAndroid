@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Sche
 
 /**
  * @author Matteo Veroni
+ *
  */
 public class DictionaryDAO {
 
