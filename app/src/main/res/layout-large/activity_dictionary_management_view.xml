@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_dictionary_management_large"
+    android:id="@+id/activity_dictionary_management_large"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,15 +13,19 @@
     <FrameLayout
         android:id="@+id/dictionary_management_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/dictionary_add_vocable"
-        android:layout_marginTop="@dimen/large_vertical_margin" />
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/dictionary_splitter_large_land" />
+
+    <View
+        android:id="@+id/dictionary_splitter_large_land"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/separator_dimension"
+        android:layout_centerVertical="true" />
 
     <FrameLayout
         android:id="@+id/dictionary_manipulation_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/dictionary_management_container"
-        android:layout_marginTop="@dimen/large_vertical_margin"></FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/dictionary_splitter_large_land" />
 
 </RelativeLayout>

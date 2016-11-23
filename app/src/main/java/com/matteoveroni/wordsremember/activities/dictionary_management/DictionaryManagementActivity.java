@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
@@ -20,9 +17,7 @@ import com.matteoveroni.wordsremember.activities.dictionary_management.fragments
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.utilities.GraphicsUtil;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
@@ -44,15 +39,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private Fragment dictionaryCreateVocableFragment;
     private Fragment dictionaryManagementFragment;
 
-    private RelativeLayout dictionaryManagementSmartphoneLayout;
-    private RelativeLayout dictionaryManagementLargeLayout;
-    private RelativeLayout dictionaryManagementLargeLandLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupView();
+        setContentView(R.layout.activity_dictionary_management_view);
 
         if (savedInstanceState == null) {
             dictionaryCreateVocableFragment = DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
@@ -65,25 +56,20 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             exportDatabaseOnSd();
         }
 
-//        loadView();
+        loadFragmentsInView();
     }
 
-
-//    private void loadView() {
-//        // Tablet with large screen
-//        if (GraphicsUtil.isTablet(getApplicationContext())) {
-//            if (GraphicsUtil.getOrientation(getApplicationContext()) == ORIENTATION_LANDSCAPE) {
-//                loadFragment(dictionaryManagementFragment, R.id.dictionary_two_columns_management_container_large_land);
-//                loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_two_columns_manipulation_container_large_land);
-//            } else {
-//                loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
-//                loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_manipulation_container);
-//            }
-//            // Smartphone
-//        } else {
-//            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
-//        }
-//    }
+    private void loadFragmentsInView() {
+        // Tablet with large screen
+        if (getResources().getBoolean(R.bool.LARGE_SCREEN)) {
+            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
+            loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_manipulation_container);
+        }
+        // Smartphone
+        else{
+            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,7 +81,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-                clearViews();
                 loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_container_smartphone);
                 return true;
         }
@@ -132,27 +117,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
         currentFragment = fragment;
-    }
-
-    private void setupView() {
-        setContentView(R.layout.activity_dictionary_management_view);
-
-        dictionaryManagementSmartphoneLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_smartphone);
-        dictionaryManagementLargeLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_large);
-        dictionaryManagementLargeLandLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_large_land);
-
-    }
-
-    private void clearViews() {
-        if (dictionaryManagementSmartphoneLayout != null) {
-            dictionaryManagementSmartphoneLayout.removeAllViews();
-        }
-        if (dictionaryManagementLargeLayout != null) {
-            dictionaryManagementLargeLayout.removeAllViews();
-        }
-        if (dictionaryManagementLargeLandLayout != null) {
-            dictionaryManagementLargeLandLayout.removeAllViews();
-        }
     }
 
     /**
