@@ -5,12 +5,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
@@ -44,6 +44,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private Fragment dictionaryCreateVocableFragment;
     private Fragment dictionaryManagementFragment;
 
+    private RelativeLayout dictionaryManagementSmartphoneLayout;
+    private RelativeLayout dictionaryManagementLargeLayout;
+    private RelativeLayout dictionaryManagementLargeLandLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,26 +55,35 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         setupView();
 
         if (savedInstanceState == null) {
-            dictionaryCreateVocableFragment =
-                    DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
-            dictionaryManagementFragment =
-                    DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
+            dictionaryCreateVocableFragment = DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
+            dictionaryManagementFragment = DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
 
-            dictionaryDAO = new DictionaryDAO(getBaseContext());
+            dictionaryDAO = new DictionaryDAO(this);
             menuInflater = getMenuInflater();
 
             testDictionaryDAOCRUDOperations();
             exportDatabaseOnSd();
-
-            Display display = getWindowManager().getDefaultDisplay();
-            GraphicsUtil.getDisplayHeigthPx(display);
-            GraphicsUtil.getDisplayWidthPx(display);
-
-            loadFragment(dictionaryManagementFragment);
-
-//            loadDictionaryManagementFragment();
         }
+
+//        loadView();
     }
+
+
+//    private void loadView() {
+//        // Tablet with large screen
+//        if (GraphicsUtil.isTablet(getApplicationContext())) {
+//            if (GraphicsUtil.getOrientation(getApplicationContext()) == ORIENTATION_LANDSCAPE) {
+//                loadFragment(dictionaryManagementFragment, R.id.dictionary_two_columns_management_container_large_land);
+//                loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_two_columns_manipulation_container_large_land);
+//            } else {
+//                loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
+//                loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_manipulation_container);
+//            }
+//            // Smartphone
+//        } else {
+//            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,13 +95,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-                loadFragment(dictionaryCreateVocableFragment);
+                clearViews();
+                loadFragment(dictionaryCreateVocableFragment, R.id.dictionary_container_smartphone);
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, int containerID) {
         String fragmentToLoadTAG;
 
         if (fragment instanceof DictionaryVocableManipulationFragment) {
@@ -104,13 +118,13 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         if (currentFragment == null) {
             fragmentTransaction
                     .add(
-                            R.id.dictionaryManagementContainer,
+                            containerID,
                             fragment,
                             fragmentToLoadTAG
                     );
         } else {
             fragmentTransaction.replace(
-                    R.id.dictionaryManagementContainer,
+                    containerID,
                     fragment,
                     fragmentToLoadTAG
             );
@@ -121,16 +135,24 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     private void setupView() {
-        setContentView(R.layout.activity_dictionary_management);
+        setContentView(R.layout.activity_dictionary_management_view);
 
-        Button btn_addDictionaryVocable = (Button) findViewById(R.id.dictionary_add_vocable);
-        btn_addDictionaryVocable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isVocablePresent = dictionaryDAO.isVocablePresent(new Word("test123"));
-                Toast.makeText(getBaseContext(), "isVocablePresent? => " + isVocablePresent, Toast.LENGTH_LONG).show();
-            }
-        });
+        dictionaryManagementSmartphoneLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_smartphone);
+        dictionaryManagementLargeLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_large);
+        dictionaryManagementLargeLandLayout = (RelativeLayout) findViewById(R.id.layout_dictionary_management_large_land);
+
+    }
+
+    private void clearViews() {
+        if (dictionaryManagementSmartphoneLayout != null) {
+            dictionaryManagementSmartphoneLayout.removeAllViews();
+        }
+        if (dictionaryManagementLargeLayout != null) {
+            dictionaryManagementLargeLayout.removeAllViews();
+        }
+        if (dictionaryManagementLargeLandLayout != null) {
+            dictionaryManagementLargeLandLayout.removeAllViews();
+        }
     }
 
     /**

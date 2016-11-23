@@ -11,8 +11,8 @@
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_help">Help</string>
 
-    <string name="dictionary_management_container_title">Dictionary</string>
-    <string name="dictionary_manipulation_container_title"></string>
+    <string name="fragment_dictionary_management_title">Dictionary</string>
+    <string name="fragment_dictionary_manipulation_title"></string>
 
     <string name="create_vocable">Create vocable</string>
 </resources>

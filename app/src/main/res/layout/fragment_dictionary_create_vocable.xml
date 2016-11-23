@@ -1,13 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryVocableManipulationFragment">
+    android:orientation="vertical"
+    tools:context=".activities.dictionary_management.fragments.DictionaryVocableManipulationFragment">
+
+    <TextView
+        android:id="@+id/fragment_dictionary_manipulation_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/fragment_dictionary_manipulation_title"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/hello_blank_fragment"
+        android:textAlignment="center" />
 
-</FrameLayout>
+</LinearLayout>
