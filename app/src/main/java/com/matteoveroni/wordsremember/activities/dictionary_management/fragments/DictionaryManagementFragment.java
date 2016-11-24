@@ -9,11 +9,16 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventDictionaryItemSelected;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
+import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * List Fragment that shows all the vocables in the dictionary and allows to edit them
@@ -31,8 +36,6 @@ public class DictionaryManagementFragment
 
     public DictionaryManagementFragment() {
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +74,12 @@ public class DictionaryManagementFragment
         dictionaryListViewAdapter.swapCursor(null);
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        EventBus.getDefault().post(new EventDictionaryItemSelected(id));
+    }
+
     private void setupDictionaryAdapter() {
         dictionaryListViewAdapter = new WordListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
@@ -97,11 +106,7 @@ public class DictionaryManagementFragment
 //        return super.onContextItemSelected(item);
 //    }
 //
-//    @Override
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-//        launchNoteDetailActivity(FragmentToLaunch.VIEW, position);
-//    }
+
 //
 //    private void launchNoteDetailActivity(FragmentToLaunch fragment, int position) {
 //        Note selectedNote = (Note) getListAdapter().getItem(position);

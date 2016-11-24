@@ -12,7 +12,6 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Sche
 
 /**
  * @author Matteo Veroni
- *
  */
 public class DictionaryDAO {
 
@@ -57,7 +56,6 @@ public class DictionaryDAO {
         }
     }
 
-
     public long saveVocable(Word vocable) throws NullPointerException {
         long id = -1;
         if (!isVocablePresent(vocable)) {
@@ -72,6 +70,32 @@ public class DictionaryDAO {
             }
         }
         return id;
+    }
+
+    public Word getVocableById(long id) {
+        String str_idColumn = String.valueOf(id);
+
+        final String[] projection = {Schema.COLUMN_NAME};
+        final String selection = Schema.COLUMN_ID + " =?";
+        final String[] selectionArgs = {str_idColumn};
+
+        Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        Cursor cursor = contentResolver.query(
+                vocableUri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        final Word vocable;
+        if (cursor.getCount() == 1) {
+            vocable = cursorToVocable(cursor);
+        } else {
+            throw new RuntimeException("duplicated ids for different vocables");
+        }
+        return vocable;
     }
 
 //    public boolean removeVocable(Word vocable) throws NullPointerException {
@@ -105,13 +129,10 @@ public class DictionaryDAO {
 //    }
 
     private Word cursorToVocable(Cursor cursor) {
-        return new Word(
-                cursor.getString(1)
-        );
+        return new Word(cursor.getString(1));
     }
 
     private boolean isVocableValid(Word vocable) {
         return vocable != null && vocable.getName() != null;
     }
-
 }

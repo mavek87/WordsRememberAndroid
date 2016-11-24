@@ -1,6 +1,9 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management.fragments;
+package com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory;
 
 import android.support.v4.app.Fragment;
+
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
 
 /**
  * @author Matteo Veroni
@@ -23,7 +26,7 @@ public class DictionaryFragmentFactory {
             case MANAGEMENT:
                 return new DictionaryManagementFragment();
             case MANIPULATION:
-                return new DictionaryVocableManipulationFragment();
+                return new DictionaryManipulationFragment();
             default:
                 throw new IllegalArgumentException("Unknown DictionaryFragmentType");
         }
