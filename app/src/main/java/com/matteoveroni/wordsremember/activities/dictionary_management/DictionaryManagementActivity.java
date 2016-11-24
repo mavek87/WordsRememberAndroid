@@ -2,21 +2,18 @@ package com.matteoveroni.wordsremember.activities.dictionary_management;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventDictionaryItemSelected;
-import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventInformObserversOfItemSelected;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
@@ -48,7 +45,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private DictionaryManipulationFragment dictionaryManipulationFragment;
 
     private FrameLayout dictionaryManagementContainer;
-    private FrameLayout getDictionaryManipulationContainer;
+    private FrameLayout dictionaryManipulationContainer;
+
+    private boolean isVocableSelected = false;
 
     private static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
@@ -68,27 +67,27 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDictionaryItemSelected(EventDictionaryItemSelected event) {
+    public void onDictionaryItemSelected(EventVocableSelected event) {
 
-        long itemSelectedID = event.getDictionaryItemIDSelected();
+        Word selectedVocable = null;
+        long selectedVocableID = event.getSelectedVocableID();
 
-        if (itemSelectedID >= 0) {
-            // scarico tutti i fragments in tutti i placeholders (o meglio solo quelli inutili)
-
-            if (getResources().getBoolean(R.bool.LARGE_SCREEN)) {
-                loadFragment(dictionaryManipulationFragment, R.id.dictionary_manipulation_container);
-            }
-
-            // TODO: Should I use another thread? Probably an Async Thread... maybe yes even if
-            // every dao make use of content resolvers... (Search google => content resolvers async
-            // thread for long queries )
-            Word wordSelected = dictionaryDAO.getVocableById(itemSelectedID);
-
-            // Send vocable selected to all the listening fragments
-            EventBus.getDefault().postSticky(new EventInformObserversOfItemSelected(wordSelected));
+        if (selectedVocableID >= 0) {
+            isVocableSelected = true;
+//            // TODO: Async Task???
+//            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
+        } else {
+            isVocableSelected = false;
+            selectedVocable = null;
         }
-    }
+        Toast.makeText(this, "isVocableSelected " + isVocableSelected, Toast.LENGTH_SHORT).show();
 
+
+        // Send vocable selected to all the listening fragments
+        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
+
+        updateViewAndLayout();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +95,12 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_dictionary_management_view);
 
-        dictionaryManagementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
-        getDictionaryManipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
-
         if (savedInstanceState == null) {
+            Toast.makeText(this, "savedInstanceState == null", Toast.LENGTH_SHORT).show();
+
+            dictionaryManagementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
+            dictionaryManipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
+
             menuInflater = getMenuInflater();
 
             dictionaryManagementFragment =
@@ -112,7 +113,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             testDictionaryDAOCRUDOperations();
             exportDatabaseOnSd();
 
-            loadFragment(dictionaryManagementFragment, dictionaryManagementContainer.getId());
+            addFragment(dictionaryManagementContainer, dictionaryManagementFragment);
+
+//            getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//                public void onBackStackChanged() {
+////                    loadFragmentsInsideView();
+////                    getSupportFragmentManager().beginTransaction().remove(dictionaryManipulationFragment).commit();
+////                    getSupportFragmentManager().executePendingTransactions();
+//                    dictionaryManipulationContainer.removeAllViews();
+//
+//                }
+//            });
+            updateViewAndLayout();
+
         }
     }
 
@@ -130,7 +143,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-                loadFragment(dictionaryManipulationFragment, R.id.dictionary_management_container);
+                addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -138,22 +151,59 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**********************************************************************************************/
 
-    private void loadFragments() {
-        if (!dictionaryManagementFragment.isAdded()) {
-        }
-
-
+    private void updateViewAndLayout() {
+        loadFragmentsInsideView();
+        drawActivityViewLayout();
     }
 
-    private void loadFragment(Fragment fragment, int containerID) {
+    private void loadFragmentsInsideView() {
+        if (!dictionaryManagementFragment.isAdded())
+            addFragment(dictionaryManagementContainer, dictionaryManagementFragment);
 
-        String fragmentToLoadTAG;
+        if (isLargeScreenDevice() && isVocableSelected) {
+            // LARGE SCREEN
+            if (!dictionaryManipulationFragment.isAdded())
+                addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
 
-        if (!removeContainerContent(containerID)) {
-            Toast.makeText(this, "Impossible to remove content of fragment container. New fragment cannot be added.", Toast.LENGTH_SHORT).show();
-            return;
+        } else {
+            // NOT LARGE SCREEN
+            if (dictionaryManipulationFragment.isAdded()) {
+                removeFragment(dictionaryManipulationFragment);
+                setSingleLayout();
+            }
         }
+    }
 
+    private void drawActivityViewLayout() {
+        if (isVocableSelected) {
+            if (isLargeScreenDevice()) {
+                // LARGE SCREEN
+                if (isLandscapeOrientation()) {
+                    // LANDSCAPE
+                    setLayoutTwoColumnsHorizontal();
+                    return;
+                } else {
+                    // NOT LANDSCAPE
+                    setLayoutTwoColumnsVertical();
+                    return;
+                }
+            }
+        }
+        setSingleLayout();
+    }
+
+    private void addFragment(FrameLayout container, Fragment fragment) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager
+                .beginTransaction()
+                .add(container.getId(), fragment, getFragmentTag(fragment))
+                .addToBackStack(null)
+                .commit();
+        fragmentManager.executePendingTransactions();
+    }
+
+    private String getFragmentTag(Fragment fragment) {
+        String fragmentToLoadTAG;
         if (fragment instanceof DictionaryManagementFragment) {
             fragmentToLoadTAG = DictionaryManagementFragment.TAG;
         } else if (fragment instanceof DictionaryManipulationFragment) {
@@ -161,28 +211,58 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         } else {
             throw new RuntimeException("Something goes wrong. Fragment to load not recognized");
         }
+        return fragmentToLoadTAG;
+    }
 
+    private void removeFragment(Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        if (!fragment.isInLayout()) {
-            fragmentTransaction.add(containerID, fragment, fragmentToLoadTAG);
-        } else {
-            fragmentTransaction.replace(containerID, fragment, fragmentToLoadTAG);
-        }
-        fragmentTransaction.commit();
+        fragmentManager
+                .beginTransaction()
+                .remove(fragment)
+                .commit();
         fragmentManager.executePendingTransactions();
     }
 
-    private boolean removeContainerContent(int containerID) {
-        try {
-            ViewGroup view = (ViewGroup) findViewById(containerID);
-            view.removeAllViews();
-        } catch (Exception ex) {
-            Log.e(TAG, "" + ex);
-            return false;
-        }
-        return true;
+    private boolean isLargeScreenDevice() {
+        return getResources().getBoolean(R.bool.LARGE_SCREEN);
+    }
+
+    private boolean isLandscapeOrientation() {
+        return getResources().getBoolean(R.bool.LANDSCAPE);
+    }
+
+    private void setLayoutTwoColumnsHorizontal() {
+        // Make the dictionaryManagementContainer take 1/2 of the layout's width
+        dictionaryManagementContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(0, MATCH_PARENT, 1f)
+        );
+
+        // Make the dictionaryManipulationContainer take 1/2 of the layout's width
+        dictionaryManipulationContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(0, MATCH_PARENT, 1f)
+        );
+    }
+
+    private void setLayoutTwoColumnsVertical() {
+        // Make the dictionaryManagementContainer take 1/2 of the layout's height
+        dictionaryManagementContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f)
+        );
+
+        // Make the dictionaryManipulationContainer take 1/2 of the layout's height
+        dictionaryManipulationContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f)
+        );
+    }
+
+    private void setSingleLayout() {
+        dictionaryManagementContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        );
+
+        dictionaryManipulationContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(0, 0)
+        );
     }
 
     private void testDictionaryDAOCRUDOperations() {
@@ -198,4 +278,5 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void exportDatabaseOnSd() {
         DatabaseManager.getInstance(getBaseContext()).exportDBOnSD();
     }
+
 }

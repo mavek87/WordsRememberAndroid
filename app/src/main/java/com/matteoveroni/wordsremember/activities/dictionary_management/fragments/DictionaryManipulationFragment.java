@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventInformObserversOfItemSelected;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.model.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,13 +54,17 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onEventInformObserversOfItemSelected(EventInformObserversOfItemSelected event) {
-        Word selectedVocable = event.getItemSelected();
+    public void onEventInformObserversOfItemSelected(EventNotifySelectedVocableToObservers event) {
+        Word selectedVocable = event.getSelectedVocable();
         populateViewUsingData(selectedVocable);
     }
 
     private void populateViewUsingData(Word vocable) {
-        txt_vocableName.setText(vocable.getName());
+        if (vocable != null) {
+            txt_vocableName.setText(vocable.getName());
+        } else {
+            txt_vocableName.setText("");
+        }
     }
 
 }

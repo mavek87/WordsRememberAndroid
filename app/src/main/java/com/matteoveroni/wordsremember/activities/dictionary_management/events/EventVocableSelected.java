@@ -6,15 +6,15 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.events;
  * @author Matteo Veroni
  */
 
-public class EventDictionaryItemSelected {
+public class EventVocableSelected {
 
     private final long dictionaryItemIDSelected;
 
-    public EventDictionaryItemSelected(long dictionaryItemIDSelected) {
+    public EventVocableSelected(long dictionaryItemIDSelected) {
         this.dictionaryItemIDSelected = dictionaryItemIDSelected;
     }
 
-    public long getDictionaryItemIDSelected() {
+    public long getSelectedVocableID() {
         return dictionaryItemIDSelected;
     }
 }

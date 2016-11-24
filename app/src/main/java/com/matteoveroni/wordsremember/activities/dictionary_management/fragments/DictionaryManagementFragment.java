@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventDictionaryItemSelected;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
-import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
@@ -34,6 +34,8 @@ public class DictionaryManagementFragment
     public static final String TAG = "F_DICTIONARY_MANAGEMENT";
 
     private WordListViewAdapter dictionaryListViewAdapter;
+
+    private long lastSelectedVocableID = -1;
 
     public DictionaryManagementFragment() {
     }
@@ -85,15 +87,22 @@ public class DictionaryManagementFragment
 
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onListItemClick(ListView l, View v, int position, long selectedVocableID) {
+        super.onListItemClick(l, v, position, selectedVocableID);
 
-        dictionaryListViewAdapter.setSelected(position, !dictionaryListViewAdapter.isSelected(position));
+        if (selectedVocableID >= 0) {
+            if (selectedVocableID != lastSelectedVocableID) {
+                dictionaryListViewAdapter.setSelected(position, true);
+                lastSelectedVocableID = selectedVocableID;
+            } else {
+                dictionaryListViewAdapter.setSelected(position, false);
+                lastSelectedVocableID = -1;
+            }
+            Toast.makeText(getActivity(), "lastSelectedVocableID " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
 
-
-        EventBus.getDefault().post(new EventDictionaryItemSelected(id));
-
-        dictionaryListViewAdapter.notifyDataSetChanged();
+            EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
+            dictionaryListViewAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setupDictionaryAdapter() {
