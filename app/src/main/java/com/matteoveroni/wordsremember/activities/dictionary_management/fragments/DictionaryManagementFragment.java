@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.fragment
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -75,55 +76,30 @@ public class DictionaryManagementFragment
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Set the list choice mode to allow only one selection at a time
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    }
+
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
+        dictionaryListViewAdapter.setSelected(position, !dictionaryListViewAdapter.isSelected(position));
+
+
         EventBus.getDefault().post(new EventDictionaryItemSelected(id));
+
+        dictionaryListViewAdapter.notifyDataSetChanged();
     }
 
     private void setupDictionaryAdapter() {
         dictionaryListViewAdapter = new WordListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
     }
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater menuInflater = getActivity().getMenuInflater();
-//        menuInflater.inflate(R.menu.long_press_menu, menu);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//
-//        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//        int position = contextMenuInfo.position;
-//
-//        switch (item.getItemId()) {
-//            case R.id.edit:
-//                launchNoteDetailActivity(FragmentToLaunch.EDIT, position);
-//                return true;
-//        }
-//        return super.onContextItemSelected(item);
-//    }
-//
-
-//
-//    private void launchNoteDetailActivity(FragmentToLaunch fragment, int position) {
-//        Note selectedNote = (Note) getListAdapter().getItem(position);
-//
-//        Intent launchNodeDetail = new Intent(getContext(), NoteDetailActivity.class);
-//        launchNodeDetail.putExtra(NOTE_KEY, selectedNote.toString());
-//
-//        switch (fragment) {
-//            case VIEW:
-//                launchNodeDetail.putExtra(NOTE_DETAIL_FRAGMENT_TO_START_KEY, FragmentToLaunch.VIEW);
-//                break;
-//            case EDIT:
-//                launchNodeDetail.putExtra(NOTE_DETAIL_FRAGMENT_TO_START_KEY, FragmentToLaunch.EDIT);
-//                break;
-//        }
-//        startActivity(launchNodeDetail);
-//    }
 }
 
 

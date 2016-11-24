@@ -5,9 +5,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
@@ -43,6 +47,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private DictionaryManagementFragment dictionaryManagementFragment;
     private DictionaryManipulationFragment dictionaryManipulationFragment;
 
+    private FrameLayout dictionaryManagementContainer;
+    private FrameLayout getDictionaryManipulationContainer;
+
+    private static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
+
     public DictionaryManagementActivity() {
     }
 
@@ -66,8 +75,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         if (itemSelectedID >= 0) {
             // scarico tutti i fragments in tutti i placeholders (o meglio solo quelli inutili)
 
-            // load all fragments needed
-            loadFragmentsInView();
+            if (getResources().getBoolean(R.bool.LARGE_SCREEN)) {
+                loadFragment(dictionaryManipulationFragment, R.id.dictionary_manipulation_container);
+            }
 
             // TODO: Should I use another thread? Probably an Async Thread... maybe yes even if
             // every dao make use of content resolvers... (Search google => content resolvers async
@@ -77,14 +87,17 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             // Send vocable selected to all the listening fragments
             EventBus.getDefault().postSticky(new EventInformObserversOfItemSelected(wordSelected));
         }
-
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_management_view);
+
+        dictionaryManagementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
+        getDictionaryManipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
 
         if (savedInstanceState == null) {
             menuInflater = getMenuInflater();
@@ -99,9 +112,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             testDictionaryDAOCRUDOperations();
             exportDatabaseOnSd();
 
-            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
+            loadFragment(dictionaryManagementFragment, dictionaryManagementContainer.getId());
         }
-
     }
 
     /***********************************************************************************************
@@ -118,7 +130,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-                loadFragment(dictionaryManipulationFragment, R.id.dictionary_container_smartphone);
+                loadFragment(dictionaryManipulationFragment, R.id.dictionary_management_container);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -126,20 +138,21 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**********************************************************************************************/
 
-    private void loadFragmentsInView() {
-        // Tablet with large screen
-        if (getResources().getBoolean(R.bool.LARGE_SCREEN)) {
-            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
-            loadFragment(dictionaryManipulationFragment, R.id.dictionary_manipulation_container);
+    private void loadFragments() {
+        if (!dictionaryManagementFragment.isAdded()) {
         }
-        // Smartphone
-        else {
-            loadFragment(dictionaryManagementFragment, R.id.dictionary_management_container);
-        }
+
+
     }
 
     private void loadFragment(Fragment fragment, int containerID) {
+
         String fragmentToLoadTAG;
+
+        if (!removeContainerContent(containerID)) {
+            Toast.makeText(this, "Impossible to remove content of fragment container. New fragment cannot be added.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (fragment instanceof DictionaryManagementFragment) {
             fragmentToLoadTAG = DictionaryManagementFragment.TAG;
@@ -151,7 +164,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        if (currentFragment == null) {
+
         if (!fragment.isInLayout()) {
             fragmentTransaction.add(containerID, fragment, fragmentToLoadTAG);
         } else {
@@ -159,6 +172,17 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
+    }
+
+    private boolean removeContainerContent(int containerID) {
+        try {
+            ViewGroup view = (ViewGroup) findViewById(containerID);
+            view.removeAllViews();
+        } catch (Exception ex) {
+            Log.e(TAG, "" + ex);
+            return false;
+        }
+        return true;
     }
 
     private void testDictionaryDAOCRUDOperations() {
