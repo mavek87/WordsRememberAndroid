@@ -5,13 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 /**
+ * Class that offers CRUD operations on dictionary data using a content resolver to comunicate with
+ * the dictionary content provider
+ *
  * @author Matteo Veroni
  */
 
@@ -32,8 +34,8 @@ public class DictionaryDAO {
     /**
      * Check whether a certain vocable passed was already inserted into the db system or not
      *
-     * @param vocable Vocable for presence check
-     * @return true if the vocable passed is present or false if the case is the opposite
+     * @param vocable Vocable for check presence
+     * @return true if the vocable passed is present or false if it's not
      */
     public boolean isVocablePresent(Word vocable) throws NullPointerException {
         if (!isVocableValid(vocable)) {
@@ -75,7 +77,7 @@ public class DictionaryDAO {
     }
 
     public Word getVocableById(long id) {
-        String str_idColumn = String.valueOf(id);
+        final String str_idColumn = String.valueOf(id);
 
         final String[] projection = {Schema.COLUMN_NAME};
         final String selection = Schema.COLUMN_ID + " = ?";

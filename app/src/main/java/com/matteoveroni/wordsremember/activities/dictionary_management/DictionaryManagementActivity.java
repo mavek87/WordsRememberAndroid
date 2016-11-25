@@ -35,6 +35,8 @@ import static com.matteoveroni.wordsremember.activities.dictionary_management.fr
 
 public class DictionaryManagementActivity extends AppCompatActivity {
 
+    // ATTRIBUTES
+
     private static final String TAG = "A_DICTIONARY_MANAGE";
 
     private DictionaryDAO dictionaryDAO;
@@ -51,43 +53,45 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     private static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
+    /**********************************************************************************************/
+
+    // CONSTRUCTORS
+
+    /**
+     * Empty constructor
+     */
     public DictionaryManagementActivity() {
     }
 
+    /**********************************************************************************************/
+
+    // ANDROID LIFECYCLE METHODS
+
+    /**
+     * Method called when activity lifecycle starts
+     * This activity is registered to the event bus as a listener
+     */
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * Method called when activity lifecycle stops
+     * Before activity is destroyed it is unregistered from the event bus
+     */
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDictionaryItemSelected(EventVocableSelected event) {
-
-        Word selectedVocable = null;
-        long selectedVocableID = event.getSelectedVocableID();
-
-        if (selectedVocableID >= 0) {
-            isVocableSelected = true;
-//            // TODO: Async Task???
-            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
-        } else {
-            isVocableSelected = false;
-//            selectedVocable = null;
-        }
-        Toast.makeText(this, "isVocableSelected " + isVocableSelected, Toast.LENGTH_SHORT).show();
-
-        // Send vocable selected to all the listening fragments
-        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
-
-        updateViewAndLayout();
-    }
-
+    /**
+     * Method called when the activity creation starts
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +131,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         }
     }
 
-
     // ANDROID LIFECYCLE METHODS - MENU
 
     @Override
@@ -148,47 +151,97 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**********************************************************************************************/
 
-    private void updateViewAndLayout() {
-        loadFragmentsInsideView();
-        drawActivityViewLayout();
+    // EVENTS
+
+    /**
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDictionaryItemSelected(EventVocableSelected event) {
+        Word selectedVocable;
+        long selectedVocableID = event.getSelectedVocableID();
+
+        if (selectedVocableID >= 0) {
+            // A vocable is selected
+            isVocableSelected = true;
+
+            // TODO: Async Task???
+            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
+        } else {
+            // No vocable selected
+            isVocableSelected = false;
+            selectedVocable = null;
+        }
+
+        // Send selected vocable to all the listeners (fragments)
+        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
+
+        updateViewAndLayout();
     }
 
+    /**********************************************************************************************/
+
+    // HELPER METHODS
+
+    /**
+     *
+     */
+    private void updateViewAndLayout() {
+        loadFragmentsInsideView();
+        setViewLayout();
+    }
+
+    /**
+     * Load required fragments into the view depending on the size of the display and his orientation
+     */
     private void loadFragmentsInsideView() {
+        // Add management fragment if it's not added yet in any case
         if (!dictionaryManagementFragment.isAdded())
             addFragment(dictionaryManagementContainer, dictionaryManagementFragment);
 
         if (isLargeScreenDevice() && isVocableSelected) {
-            // LARGE SCREEN
+            // LARGE SCREEN and A VOCABLE SELECTED
+            // so load the manipulation fragment inside the view together with the management fragment
             if (!dictionaryManipulationFragment.isAdded())
                 addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
 
         } else {
-            // NOT LARGE SCREEN
-            if (dictionaryManipulationFragment.isAdded()) {
+            // NOT LARGE SCREEN or NO VOCABLE SELECTED
+            // so if it's present the manipulation fragment in the view remove it
+            if (dictionaryManipulationFragment.isAdded())
                 removeFragment(dictionaryManipulationFragment);
-                setSingleLayout();
-            }
+//                useSingleLayout();
         }
     }
 
-    private void drawActivityViewLayout() {
+    /**
+     * Set the layout of the view
+     */
+    private void setViewLayout() {
         if (isVocableSelected) {
+            // VOCABLE SELECTED
             if (isLargeScreenDevice()) {
                 // LARGE SCREEN
                 if (isLandscapeOrientation()) {
-                    // LANDSCAPE
-                    setLayoutTwoColumnsHorizontal();
+                    // LANDSCAPE MODE
+                    useLayoutTwoHorizontalColumns();
                     return;
                 } else {
-                    // NOT LANDSCAPE
-                    setLayoutTwoColumnsVertical();
+                    // NOT IN LANDSCAPE MODE
+                    useLayoutTwoVerticalRows();
                     return;
                 }
             }
         }
-        setSingleLayout();
+        useSingleLayout();
     }
 
+    /**
+     * Add a fragment inside a frame layout container
+     *
+     * @param container
+     * @param fragment
+     */
     private void addFragment(FrameLayout container, Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
@@ -199,6 +252,12 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         fragmentManager.executePendingTransactions();
     }
 
+    /**
+     * Retrieve fragment TAG from fragment
+     *
+     * @param fragment
+     * @return retrieved fragment TAG string
+     */
     private String getFragmentTag(Fragment fragment) {
         String fragmentToLoadTAG;
         if (fragment instanceof DictionaryManagementFragment) {
@@ -211,6 +270,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         return fragmentToLoadTAG;
     }
 
+    /**
+     * Remove a fragment from the view
+     *
+     * @param fragment
+     */
     private void removeFragment(Fragment fragment) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
@@ -220,15 +284,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         fragmentManager.executePendingTransactions();
     }
 
-    private boolean isLargeScreenDevice() {
-        return getResources().getBoolean(R.bool.LARGE_SCREEN);
-    }
-
-    private boolean isLandscapeOrientation() {
-        return getResources().getBoolean(R.bool.LANDSCAPE);
-    }
-
-    private void setLayoutTwoColumnsHorizontal() {
+    /**
+     * Use a layout with two horizontal columns that hosts managment and manipulation fragments
+     */
+    private void useLayoutTwoHorizontalColumns() {
         // Make the dictionaryManagementContainer take 1/2 of the layout's width
         dictionaryManagementContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(0, MATCH_PARENT, 1f)
@@ -240,7 +299,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         );
     }
 
-    private void setLayoutTwoColumnsVertical() {
+    /**
+     * Use a layout with two vertical rows that hosts managment and manipulation fragments
+     */
+    private void useLayoutTwoVerticalRows() {
         // Make the dictionaryManagementContainer take 1/2 of the layout's height
         dictionaryManagementContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f)
@@ -252,7 +314,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         );
     }
 
-    private void setSingleLayout() {
+    /**
+     * Use a single layout with only the management fragment visible
+     */
+    private void useSingleLayout() {
         dictionaryManagementContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
         );
@@ -260,6 +325,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         dictionaryManipulationContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(0, 0)
         );
+    }
+
+    private boolean isLargeScreenDevice() {
+        return getResources().getBoolean(R.bool.LARGE_SCREEN);
+    }
+
+    private boolean isLandscapeOrientation() {
+        return getResources().getBoolean(R.bool.LANDSCAPE);
     }
 
     private void testDictionaryDAOCRUDOperations() {
@@ -276,4 +349,5 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         DatabaseManager.getInstance(getBaseContext()).exportDBOnSD();
     }
 
+    /**********************************************************************************************/
 }
