@@ -28,7 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
- * Activity for handling the dictionary management.
+ * Activity for handling dictionary management operations
  *
  * @author Matteo Veroni
  */
@@ -69,13 +69,13 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDictionaryItemSelected(EventVocableSelected event) {
 
-        Word selectedVocable = new Word("ciaone");
+        Word selectedVocable = null;
         long selectedVocableID = event.getSelectedVocableID();
 
         if (selectedVocableID >= 0) {
             isVocableSelected = true;
 //            // TODO: Async Task???
-//            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
+            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
         } else {
             isVocableSelected = false;
 //            selectedVocable = null;
@@ -124,13 +124,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 //                }
 //            });
             updateViewAndLayout();
-
         }
     }
 
-    /***********************************************************************************************
-     * MENU
-     **********************************************************************************************/
+
+    // ANDROID LIFECYCLE METHODS - MENU
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

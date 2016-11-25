@@ -18,41 +18,86 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 /**
+ * Fragment designed to manage CRUD operations on single vocables in a dictionary
+ *
  * @author Matteo Veroni
  */
 
 public class DictionaryManipulationFragment extends Fragment {
 
+    // ATTRIBUTES
+
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
     private TextView lbl_vocableName;
 
+    /**********************************************************************************************/
+
+    // CONSTRUCTORS
+
+    /**
+     * Empty Constructor
+     */
     public DictionaryManipulationFragment() {
     }
 
+    /**********************************************************************************************/
+
+    // ANDROID LIFECYCLE METHODS
+
+    /**
+     * Method called when this fragment is attached to an activity
+     *
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * Method called when this fragment is detached from an activity
+     */
     @Override
     public void onDetach() {
         EventBus.getDefault().unregister(this);
         super.onDetach();
     }
 
+    /**
+     * Method called during the view creation
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
     }
 
+    /**
+     * Method called when view creation is done
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lbl_vocableName = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_lbl_vocable_name);
+
+        //TODO: load a title dynamically
+        TextView lbl_title = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_title);
+        lbl_title.setText("Manipulate Vocable");
     }
 
+    /**********************************************************************************************/
+
+    // EVENTS
+
+    /**
+     * Capture event notified when when a vocable is selected/deselected
+     *
+     * @param event
+     */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventInformObserversOfItemSelected(EventNotifySelectedVocableToObservers event) {
 
@@ -68,6 +113,10 @@ public class DictionaryManipulationFragment extends Fragment {
             EventBus.getDefault().removeStickyEvent(event);
         }
     }
+
+    /**********************************************************************************************/
+
+    // HELPER METHODS
 
     /**
      * Helper method to populate view using data
@@ -85,4 +134,6 @@ public class DictionaryManipulationFragment extends Fragment {
     private boolean isViewCreated() {
         return lbl_vocableName != null;
     }
+
+    /**********************************************************************************************/
 }

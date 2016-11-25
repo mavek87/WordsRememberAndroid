@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
@@ -13,6 +14,7 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Sche
 /**
  * @author Matteo Veroni
  */
+
 public class DictionaryDAO {
 
     private final Context context;
@@ -76,7 +78,7 @@ public class DictionaryDAO {
         String str_idColumn = String.valueOf(id);
 
         final String[] projection = {Schema.COLUMN_NAME};
-        final String selection = Schema.COLUMN_ID + " =?";
+        final String selection = Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_idColumn};
 
         Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
@@ -89,13 +91,12 @@ public class DictionaryDAO {
                 null
         );
 
-        final Word vocable;
         if (cursor.getCount() == 1) {
-            vocable = cursorToVocable(cursor);
+            cursor.moveToFirst();
+            return cursorToVocable(cursor);
         } else {
             throw new RuntimeException("duplicated ids for different vocables");
         }
-        return vocable;
     }
 
 //    public boolean removeVocable(Word vocable) throws NullPointerException {
@@ -129,7 +130,7 @@ public class DictionaryDAO {
 //    }
 
     private Word cursorToVocable(Cursor cursor) {
-        return new Word(cursor.getString(1));
+        return new Word(cursor.getString(0));
     }
 
     private boolean isVocableValid(Word vocable) {
