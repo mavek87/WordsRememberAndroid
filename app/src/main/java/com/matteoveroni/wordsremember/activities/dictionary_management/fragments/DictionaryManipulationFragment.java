@@ -25,7 +25,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
-    private TextView txt_vocableName;
+    private TextView lbl_vocableName;
 
     public DictionaryManipulationFragment() {
     }
@@ -44,26 +44,29 @@ public class DictionaryManipulationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dictionary_create_vocable, container, false);
+        return inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        txt_vocableName = (TextView) getActivity().findViewById(R.id.lbl_wordName);
+        lbl_vocableName = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_lbl_vocable_name);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEventInformObserversOfItemSelected(EventNotifySelectedVocableToObservers event) {
-        Word selectedVocable = event.getSelectedVocable();
-        populateViewUsingData(selectedVocable);
+        if (lbl_vocableName != null) {
+            Word selectedVocable = event.getSelectedVocable();
+            populateViewUsingData(selectedVocable);
+            EventBus.getDefault().removeStickyEvent(event);
+        }
     }
 
     private void populateViewUsingData(Word vocable) {
         if (vocable != null) {
-            txt_vocableName.setText(vocable.getName());
+            lbl_vocableName.setText(vocable.getName());
         } else {
-            txt_vocableName.setText("");
+            lbl_vocableName.setText("");
         }
     }
 
