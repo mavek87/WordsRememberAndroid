@@ -69,7 +69,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDictionaryItemSelected(EventVocableSelected event) {
 
-        Word selectedVocable = null;
+        Word selectedVocable = new Word("ciaone");
         long selectedVocableID = event.getSelectedVocableID();
 
         if (selectedVocableID >= 0) {
@@ -78,10 +78,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 //            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
         } else {
             isVocableSelected = false;
-            selectedVocable = null;
+//            selectedVocable = null;
         }
         Toast.makeText(this, "isVocableSelected " + isVocableSelected, Toast.LENGTH_SHORT).show();
-
 
         // Send vocable selected to all the listening fragments
         EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));

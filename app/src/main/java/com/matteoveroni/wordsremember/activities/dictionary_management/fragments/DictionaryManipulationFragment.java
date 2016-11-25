@@ -53,21 +53,36 @@ public class DictionaryManipulationFragment extends Fragment {
         lbl_vocableName = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_lbl_vocable_name);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventInformObserversOfItemSelected(EventNotifySelectedVocableToObservers event) {
-        if (lbl_vocableName != null) {
+
+        if (isViewCreated()) {
+
+            // Get data from event
             Word selectedVocable = event.getSelectedVocable();
+
+            // Populate view with data
             populateViewUsingData(selectedVocable);
+
+            // Consume the event
             EventBus.getDefault().removeStickyEvent(event);
         }
     }
 
+    /**
+     * Helper method to populate view using data
+     *
+     * @param vocable
+     */
     private void populateViewUsingData(Word vocable) {
-        if (vocable != null) {
+        if (vocable != null && vocable.getName() != null) {
             lbl_vocableName.setText(vocable.getName());
         } else {
             lbl_vocableName.setText("");
         }
     }
 
+    private boolean isViewCreated() {
+        return lbl_vocableName != null;
+    }
 }
