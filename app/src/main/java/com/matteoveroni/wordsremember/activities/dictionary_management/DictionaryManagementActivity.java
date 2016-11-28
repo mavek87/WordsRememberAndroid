@@ -153,10 +153,13 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 } else {
                     dictionaryManagementContainer.removeAllViews();
                     removeFragment(dictionaryManagementFragment);
-                    setLayout(0, 0, MATCH_PARENT, MATCH_PARENT);
+
+                    useSingleLayout(DictionaryManipulationFragment.TAG);
                     addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
-                    EventBus.getDefault().postSticky(new EventCreateVocable());
+
                 }
+
+                EventBus.getDefault().postSticky(new EventCreateVocable());
 
                 return true;
         }
@@ -247,7 +250,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 }
             }
         }
-        useSingleLayout();
+        useSingleLayout(DictionaryManagementFragment.TAG);
     }
 
     /**
@@ -317,8 +320,15 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**
      * Use a single layout with only the management fragment visible
      */
-    private void useSingleLayout() {
-        setLayout(MATCH_PARENT, MATCH_PARENT, 0, 0);
+    private void useSingleLayout(String fragmentTAG) {
+        switch (fragmentTAG) {
+            case DictionaryManagementFragment.TAG:
+                setLayout(MATCH_PARENT, MATCH_PARENT, 0, 0);
+                break;
+            case DictionaryManipulationFragment.TAG:
+                setLayout(0, 0, MATCH_PARENT, MATCH_PARENT);
+                break;
+        }
     }
 
     private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
