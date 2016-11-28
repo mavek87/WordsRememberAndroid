@@ -117,7 +117,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                     (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
 
             dictionaryDAO = new DictionaryDAO(this);
-            testDictionaryDAOCRUDOperations();
+            populateDB();
             exportDatabaseOnSd();
 
             loadFragmentsInsideView(true, false);
@@ -181,7 +181,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         final long selectedVocableID = event.getVocableIDToManipulate();
         switch (event.getTypeOfManipulation()) {
             case EDIT:
-
+//                loadFragmentsInsideView(true, true);
                 break;
             case REMOVE:
                 if (dictionaryDAO.removeVocable(selectedVocableID)) {
@@ -249,7 +249,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      * @param container
      * @param fragment
      */
-
     private void addFragmentToView(FrameLayout container, Fragment fragment) {
         if (!fragment.isAdded()) {
             final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -360,13 +359,22 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         return getResources().getBoolean(R.bool.LANDSCAPE);
     }
 
-    private void testDictionaryDAOCRUDOperations() {
-        Word newVocableToSave = new Word("test123");
-        long savedVocableId = dictionaryDAO.saveVocable(newVocableToSave);
-        if (savedVocableId < 0) {
-            Toast.makeText(this, "Vocable " + newVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
+    // TODO: Remove this test method that populates vocables into the database
+    private void populateDB() {
+        Word firstVocableToSave = new Word("test123");
+        long firstSavedVocableId = dictionaryDAO.saveVocable(firstVocableToSave);
+        if (firstSavedVocableId < 0) {
+            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Vocable " + newVocableToSave.getName() + " inserted. His ID in the database is => " + savedVocableId, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " inserted. His ID in the database is => " + firstSavedVocableId, Toast.LENGTH_SHORT).show();
+        }
+
+        Word secondVocableToSave = new Word("second vocable");
+        long secondSavedVocableId = dictionaryDAO.saveVocable(secondVocableToSave);
+        if (secondSavedVocableId < 0) {
+            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " inserted. His ID in the database is => " + secondSavedVocableId, Toast.LENGTH_SHORT).show();
         }
     }
 

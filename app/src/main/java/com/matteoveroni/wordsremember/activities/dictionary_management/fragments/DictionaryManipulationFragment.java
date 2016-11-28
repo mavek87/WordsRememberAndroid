@@ -36,7 +36,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private ManipulationMode mode;
 
     private enum ManipulationMode {
-        CREATE, UPDATE, READONLY_VIEW;
+        CREATE, UPDATE;
     }
 
     /**********************************************************************************************/
