@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
@@ -24,6 +25,7 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBusException;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -52,7 +54,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private FrameLayout dictionaryManipulationContainer;
 
     private boolean isVocableSelected = false;
-    private boolean is
 
     private static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
@@ -154,6 +155,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                     removeFragment(dictionaryManagementFragment);
                     setLayout(0, 0, MATCH_PARENT, MATCH_PARENT);
                     addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
+                    EventBus.getDefault().postSticky(new EventCreateVocable());
                 }
 
                 return true;
