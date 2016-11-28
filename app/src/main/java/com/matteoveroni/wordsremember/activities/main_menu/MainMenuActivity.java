@@ -21,7 +21,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private Button btn_start;
     private Button btn_manage_dictionary;
     private Button btn_settings;
-    private Button btn_help;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

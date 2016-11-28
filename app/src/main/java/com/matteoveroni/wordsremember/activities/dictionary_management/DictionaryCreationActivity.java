@@ -1,11 +1,9 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,11 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventNotifySelectedVocableToObservers;
-import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
@@ -30,16 +28,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
- * Activity for handling dictionary management operations
+ * Activity for handling creation of new vocables in the dictionary
  *
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity {
+public class DictionaryCreationActivity extends AppCompatActivity {
 
     // ATTRIBUTES
 
-    private static final String TAG = "A_DICTIONARY_MANAGE";
+    private static final String TAG = "A_DICTIONARY_CREATE";
 
     private DictionaryDAO dictionaryDAO;
 
@@ -63,7 +61,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**
      * Empty constructor
      */
-    public DictionaryManagementActivity() {
+    public DictionaryCreationActivity() {
     }
 
     /**********************************************************************************************/
