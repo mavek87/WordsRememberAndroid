@@ -11,51 +11,59 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.matteoveroni.wordsremember.activities.main_menu.MainMenuActivity"
+    tools:context=".activities.main_menu.MainMenuActivity"
     tools:showIn="@layout/activity_main_menu">
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:width="200dp"
-        android:height="60dp"
-        android:text="@string/main_menu_start_training" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-    <Button
-        android:id="@+id/btn_manage_dictionary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_start"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:width="200dp"
-        android:height="60dp"
-        android:text="@string/main_menu_manage_dictionary" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_settings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_manage_dictionary"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:width="200dp"
-        android:height="60dp"
-        android:text="@string/main_menu_settings" />
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:width="200dp"
+                android:text="@string/main_menu_start_training" />
 
-    <Button
-        android:id="@+id/btn_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_settings"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:width="200dp"
-        android:height="60dp"
-        android:text="@string/main_menu_help" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+            <Button
+                android:id="@+id/btn_manage_dictionary"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@+id/btn_start"
+                android:layout_centerHorizontal="true"
+                android:width="200dp"
+                android:text="@string/main_menu_manage_dictionary" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+            <Button
+                android:id="@+id/btn_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_below="@+id/btn_manage_dictionary"
+                android:layout_centerHorizontal="true"
+                android:width="200dp"
+                android:text="@string/main_menu_settings" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
 
 </RelativeLayout>

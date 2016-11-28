@@ -32,7 +32,7 @@ import java.security.InvalidParameterException;
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
- * Activity for handling dictionary management operations
+ * Activity that handles dictionary management operations
  *
  * @author Matteo Veroni
  */
@@ -47,11 +47,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     private MenuInflater menuInflater;
 
-    private DictionaryManagementFragment dictionaryManagementFragment;
-    private DictionaryManipulationFragment dictionaryManipulationFragment;
+    private DictionaryManagementFragment managementFragment;
+    private DictionaryManipulationFragment manipulationFragment;
 
-    private FrameLayout dictionaryManagementContainer;
-    private FrameLayout dictionaryManipulationContainer;
+    private FrameLayout managementContainer;
+    private FrameLayout manipulationContainer;
 
     private boolean isVocableSelected = false;
 
@@ -102,22 +102,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_dictionary_management_view);
 
-        dictionaryManagementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
-        dictionaryManipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
+        managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
+        manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
 
         if (savedInstanceState == null) {
             Toast.makeText(this, "savedInstanceState == null", Toast.LENGTH_SHORT).show();
 
             menuInflater = getMenuInflater();
 
-            dictionaryManagementFragment =
-                    (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
-
-            dictionaryManipulationFragment =
-                    (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
+            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
+            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
 
             dictionaryDAO = new DictionaryDAO(this);
-            populateDB();
+            populateDatabase();
             exportDatabaseOnSd();
 
             loadFragmentsInsideView(true, false);
@@ -181,7 +178,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         final long selectedVocableID = event.getVocableIDToManipulate();
         switch (event.getTypeOfManipulation()) {
             case EDIT:
-//                loadFragmentsInsideView(true, true);
                 break;
             case REMOVE:
                 if (dictionaryDAO.removeVocable(selectedVocableID)) {
@@ -207,12 +203,12 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void loadFragmentsInsideView(boolean useManagementFragment, boolean useManipulationFragment) {
         if (useManagementFragment && useManipulationFragment) {
             // Add management fragment if it's not added yet in any case
-            addFragmentToView(dictionaryManagementContainer, dictionaryManagementFragment);
+            addFragmentToView(managementContainer, managementFragment);
 
             if (isLargeScreenDevice() && isVocableSelected) {
                 // LARGE SCREEN and A VOCABLE SELECTED
                 // so load the manipulation fragment inside the view together with the management fragment
-                addFragmentToView(dictionaryManipulationContainer, dictionaryManipulationFragment);
+                addFragmentToView(manipulationContainer, manipulationFragment);
 
                 if (isLandscapeOrientation()) {
                     // LANDSCAPE MODE
@@ -224,19 +220,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             } else {
                 // NOT LARGE SCREEN or NO VOCABLE SELECTED
                 // so if it's present the manipulation fragment in the view remove it
-                dictionaryManipulationContainer.removeAllViews();
-                removeFragmentFromView(dictionaryManipulationFragment);
+                manipulationContainer.removeAllViews();
+                removeFragmentFromView(manipulationFragment);
                 useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
             }
         } else if (useManagementFragment) {
-            dictionaryManipulationContainer.removeAllViews();
-            removeFragmentFromView(dictionaryManipulationFragment);
-            addFragmentToView(dictionaryManagementContainer, dictionaryManagementFragment);
+            manipulationContainer.removeAllViews();
+            removeFragmentFromView(manipulationFragment);
+            addFragmentToView(managementContainer, managementFragment);
             useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
         } else if (useManipulationFragment) {
-            dictionaryManagementContainer.removeAllViews();
-            removeFragmentFromView(dictionaryManagementFragment);
-            addFragmentToView(dictionaryManipulationContainer, dictionaryManipulationFragment);
+            managementContainer.removeAllViews();
+            removeFragmentFromView(managementFragment);
+            addFragmentToView(manipulationContainer, manipulationFragment);
             useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
         }
     }
@@ -324,11 +320,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
-        dictionaryManagementContainer.setLayoutParams(
+        managementContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight)
         );
 
-        dictionaryManipulationContainer.setLayoutParams(
+        manipulationContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight)
         );
     }
@@ -341,11 +337,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             int manipulationContainerHeight,
             float manipulationContainerWeight) {
 
-        dictionaryManagementContainer.setLayoutParams(
+        managementContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight, managementContainerWeight)
         );
 
-        dictionaryManipulationContainer.setLayoutParams(
+        manipulationContainer.setLayoutParams(
                 new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight, manipulationContainerWeight)
         );
     }
@@ -360,7 +356,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     // TODO: Remove this test method that populates vocables into the database
-    private void populateDB() {
+    private void populateDatabase() {
         Word firstVocableToSave = new Word("test123");
         long firstSavedVocableId = dictionaryDAO.saveVocable(firstVocableToSave);
         if (firstSavedVocableId < 0) {
