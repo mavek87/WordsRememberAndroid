@@ -15,4 +15,7 @@
     <string name="fragment_dictionary_manipulation_title"></string>
 
     <string name="create_vocable">Create vocable</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+
 </resources>

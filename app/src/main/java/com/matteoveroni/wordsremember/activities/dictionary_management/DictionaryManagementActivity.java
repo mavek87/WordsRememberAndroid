@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
@@ -25,6 +26,8 @@ import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.security.InvalidParameterException;
 
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
@@ -155,8 +158,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         if (selectedVocableID >= 0) {
             // A vocable is selected
             isVocableSelected = true;
-
-            // TODO: Async Task???
             selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
         } else {
             // No vocable selected
@@ -170,12 +171,36 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         loadFragmentsInsideView(true, true);
     }
 
+    /**
+     * Method called when a manipulation operation on a vocable (update or remove) is required
+     *
+     * @param event The event for manipulating a vocable
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDictionaryItemManipulationRequested(EventManipulateVocable event) {
+        final long selectedVocableID = event.getVocableIDToManipulate();
+        switch (event.getTypeOfManipulation()) {
+            case EDIT:
+
+                break;
+            case REMOVE:
+                if (dictionaryDAO.removeVocable(selectedVocableID)) {
+                    isVocableSelected = false;
+                    // Send selected vocable to all the listeners (fragments)
+                    EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
+                    loadFragmentsInsideView(true, false);
+                }
+                break;
+            default:
+                throw new InvalidParameterException("Internal error, something goes wrong! - Invalid vocable manipulation operation");
+        }
+    }
+
     /**********************************************************************************************/
 
     // HELPER METHODS
 
     /**
-     *
      * @param useManagementFragment
      * @param useManipulationFragment
      */
@@ -256,7 +281,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     }
 
     /**
-     * Remove a fragment from the view
+     * Remove a fragment from the view if it's present
      *
      * @param fragment
      */

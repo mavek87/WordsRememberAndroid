@@ -36,7 +36,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private ManipulationMode mode;
 
     private enum ManipulationMode {
-        CREATION, UPDATE, VIEW_READONLY;
+        CREATE, UPDATE, READONLY_VIEW;
     }
 
     /**********************************************************************************************/
@@ -82,7 +82,7 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     /**
-     * Method called when view creation is done
+     * Method called when view is created
      *
      * @param view
      * @param savedInstanceState
@@ -128,7 +128,7 @@ public class DictionaryManipulationFragment extends Fragment {
             // Change fragment's title
             lbl_title.setText("Create new vocable");
             // Set fragment's mode
-            mode = ManipulationMode.CREATION;
+            mode = ManipulationMode.CREATE;
             // Consume the event
             EventBus.getDefault().removeStickyEvent(event);
         }

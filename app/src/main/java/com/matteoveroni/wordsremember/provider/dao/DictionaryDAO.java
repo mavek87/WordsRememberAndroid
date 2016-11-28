@@ -11,25 +11,115 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 /**
- * Class that offers CRUD operations on dictionary data using a content resolver to comunicate with
- * the dictionary content provider
+ * Class that offers CRUD operations on dictionary data using a content resolver to communicate with
+ * the dictionary content provider.
  *
  * @author Matteo Veroni
  */
 
 public class DictionaryDAO {
 
-    private final Context context;
     private final ContentResolver contentResolver;
 
     private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
 
     public DictionaryDAO(Context context) {
-        this.context = context;
-        this.contentResolver = this.context.getContentResolver();
+        this.contentResolver = context.getContentResolver();
     }
 
     private static final String VOCABLE_NULL_POINTER_EXCEPTION = "Vocable or Vocable Name are null";
+
+    /**
+     * Insert a vocable into the dictionary if it's not present
+     *
+     * @param vocable The vocable to insert into the dictionary
+     * @return A long number that is negative if an error occurred during the insertion operation or
+     * is positive and corresponds to the inserted vocable id if the operation was successful.
+     * @throws NullPointerException
+     */
+    public long saveVocable(Word vocable) throws NullPointerException {
+        long id = -1;
+        if (!isVocablePresent(vocable)) {
+            final Uri createdRowUri = contentResolver.insert(CONTENT_PROVIDER_URI, vocableToContentValues(vocable));
+
+            if (createdRowUri != null) {
+                final String createdRowId = createdRowUri.getLastPathSegment();
+
+                if (!createdRowId.isEmpty()) {
+                    id = Long.valueOf(createdRowId);
+                }
+            }
+        }
+        return id;
+    }
+
+    public boolean updateVocable(long vocableID, Word newVocable) {
+        final String str_idColumn = String.valueOf(vocableID);
+
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        int updatedRecords = contentResolver.update(vocableUri, vocableToContentValues(newVocable), selection, selectionArgs);
+
+        return updatedRecords > 0;
+    }
+
+    /**
+     * Retrieve and get a vocable from the db using his ID
+     *
+     * @param id The vocable ID to search into the database
+     * @return The vocable corresponding to the searched ID or null if the database doesn't contain any
+     * vocable with that ID.
+     */
+    public Word getVocableById(long id) {
+        final String str_idColumn = String.valueOf(id);
+
+        final String[] projection = {Schema.COLUMN_NAME};
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        Cursor cursor = contentResolver.query(
+                vocableUri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null && cursor.getCount() == 1) {
+            cursor.moveToFirst();
+            return cursorToVocable(cursor);
+        } else {
+            throw new RuntimeException("duplicated ids for different vocables");
+        }
+    }
+
+    /**
+     * Remove a vocable from the dictionary using the vocable ID
+     *
+     * @param vocableID The vocable ID
+     * @return True if the vocable has been removed and false in the other case
+     */
+    public boolean removeVocable(long vocableID) {
+        final String str_idColumn = String.valueOf(vocableID);
+
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        final int recordDeleted = contentResolver.delete(
+                vocableUri,
+                selection,
+                selectionArgs
+        );
+
+        return recordDeleted > 0;
+    }
 
     /**
      * Check whether a certain vocable passed was already inserted into the db system or not
@@ -37,13 +127,12 @@ public class DictionaryDAO {
      * @param vocable Vocable for check presence
      * @return true if the vocable passed is present or false if it's not
      */
-    public boolean isVocablePresent(Word vocable) throws NullPointerException {
-        if (!isVocableValid(vocable)) {
-            throw new NullPointerException(VOCABLE_NULL_POINTER_EXCEPTION);
-        } else {
-            boolean isVocablePresent;
+    private boolean isVocablePresent(Word vocable) throws NullPointerException {
+        if (isVocableValid(vocable)) {
+            boolean isVocablePresent = false;
+
             final String[] projection = {Schema.COLUMN_NAME};
-            final String selection = Schema.COLUMN_NAME + " =?";
+            final String selection = Schema.COLUMN_NAME + " = ?";
             final String[] selectionArgs = {vocable.getName()};
             final String limit = "1";
 
@@ -54,85 +143,24 @@ public class DictionaryDAO {
                     selectionArgs,
                     null
             );
-            isVocablePresent = (cursor.getCount() > 0);
-            cursor.close();
-            return isVocablePresent;
-        }
-    }
-
-    public long saveVocable(Word vocable) throws NullPointerException {
-        long id = -1;
-        if (!isVocablePresent(vocable)) {
-            ContentValues values = new ContentValues();
-            values.put(Schema.COLUMN_NAME, vocable.getName());
-
-            Uri createdRowUri = contentResolver.insert(CONTENT_PROVIDER_URI, values);
-            String createdRowId = createdRowUri.getLastPathSegment();
-
-            if (!createdRowId.isEmpty()) {
-                id = Long.valueOf(createdRowId);
+            if (cursor != null) {
+                isVocablePresent = (cursor.getCount() > 0);
+                cursor.close();
             }
-        }
-        return id;
-    }
-
-    public Word getVocableById(long id) {
-        final String str_idColumn = String.valueOf(id);
-
-        final String[] projection = {Schema.COLUMN_NAME};
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
-
-        Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-        Cursor cursor = contentResolver.query(
-                vocableUri,
-                projection,
-                selection,
-                selectionArgs,
-                null
-        );
-
-        if (cursor.getCount() == 1) {
-            cursor.moveToFirst();
-            return cursorToVocable(cursor);
+            return isVocablePresent;
         } else {
-            throw new RuntimeException("duplicated ids for different vocables");
+            throw new NullPointerException(VOCABLE_NULL_POINTER_EXCEPTION);
         }
     }
-
-//    public boolean removeVocable(Word vocable) throws NullPointerException {
-//        final SQLiteDatabase db = openDbConnection();
-//        boolean recordDeleted = db.delete(Schema.TABLE_NAME, Schema.COLUMN_NAME + " = ?", new String[]{vocable.getName()}) > 0;
-//        closeDbConnection();
-//        return recordDeleted;
-//    }
-//
-//    /**
-//     * TODO: think how to close the db (if I close db here the cursor will not work outside)
-//     * used for Cursor Loader Manager
-//     *
-//     * @return Cursor Cursor containing all the vocables found
-//     */
-//    public Cursor getAllVocables() {
-//        return openDbConnection().query(Schema.TABLE_NAME, new String[]{Schema.COLUMN_NAME}, null, null, null, null, null);
-//    }
-//
-//    public List<Word> getAllVocablesList() {
-//        List<Word> vocables = new ArrayList<>();
-//
-//        Cursor cursor = openDbConnection().query(Schema.TABLE_NAME, Schema.ALL_COLUMNS, null, null, null, null, null);
-//        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-//            vocables.add(cursorToVocable(cursor));
-//        }
-//        cursor.close();
-//        closeDbConnection();
-//
-//        return vocables;
-//    }
 
     private Word cursorToVocable(Cursor cursor) {
         return new Word(cursor.getString(0));
+    }
+
+    private ContentValues vocableToContentValues(Word vocable) {
+        final ContentValues values = new ContentValues();
+        values.put(Schema.COLUMN_NAME, vocable.getName());
+        return values;
     }
 
     private boolean isVocableValid(Word vocable) {

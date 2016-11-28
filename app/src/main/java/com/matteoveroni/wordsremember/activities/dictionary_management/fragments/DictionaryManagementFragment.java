@@ -7,15 +7,21 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.items.WordListViewAdapter;
+import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
@@ -49,6 +55,14 @@ public class DictionaryManagementFragment
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Set the list choice mode to allow only one selection at a time
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        registerForContextMenu(getListView());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
@@ -78,13 +92,30 @@ public class DictionaryManagementFragment
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Set the list choice mode to allow only one selection at a time
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_dictionary_management_long_press, menu);
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = contextMenuInfo.position;
+
+        long targetVocableID = dictionaryListViewAdapter.getItemId(position);
+
+        switch (item.getItemId()) {
+            case R.id.menu_dictionary_management_long_press_edit:
+                EventBus.getDefault().postSticky(new EventManipulateVocable(targetVocableID, EventManipulateVocable.TypeOfManipulation.EDIT));
+                return true;
+            case R.id.menu_dictionary_management_long_press_remove:
+                EventBus.getDefault().postSticky(new EventManipulateVocable(targetVocableID, EventManipulateVocable.TypeOfManipulation.REMOVE));
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long selectedVocableID) {
