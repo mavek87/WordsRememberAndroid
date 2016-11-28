@@ -1,11 +1,9 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,7 +23,6 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.EventBusException;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -120,18 +117,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             testDictionaryDAOCRUDOperations();
             exportDatabaseOnSd();
 
-            addFragment(dictionaryManagementContainer, dictionaryManagementFragment);
-
-//            getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//                public void onBackStackChanged() {
-////                    loadFragmentsInsideView();
-////                    getSupportFragmentManager().beginTransaction().remove(dictionaryManipulationFragment).commit();
-////                    getSupportFragmentManager().executePendingTransactions();
-//                    dictionaryManipulationContainer.removeAllViews();
-//
-//                }
-//            });
-            updateViewAndLayout();
+            loadFragmentsInsideView(true, false);
         }
     }
 
@@ -147,20 +133,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-
-                if (isLargeScreenDevice()) {
-                    loadFragmentsInsideView();
-                } else {
-                    dictionaryManagementContainer.removeAllViews();
-                    removeFragment(dictionaryManagementFragment);
-
-                    useSingleLayout(DictionaryManipulationFragment.TAG);
-                    addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
-
-                }
-
+                loadFragmentsInsideView(false, true);
                 EventBus.getDefault().postSticky(new EventCreateVocable());
-
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -193,7 +167,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         // Send selected vocable to all the listeners (fragments)
         EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
 
-        updateViewAndLayout();
+        loadFragmentsInsideView(true, true);
     }
 
     /**********************************************************************************************/
@@ -202,56 +176,47 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**
      *
+     * @param useManagementFragment
+     * @param useManipulationFragment
      */
-    private void updateViewAndLayout() {
-        loadFragmentsInsideView();
-        setViewLayout();
-    }
+    private void loadFragmentsInsideView(boolean useManagementFragment, boolean useManipulationFragment) {
+        if (useManagementFragment && useManipulationFragment) {
+            // Add management fragment if it's not added yet in any case
+            addFragmentToView(dictionaryManagementContainer, dictionaryManagementFragment);
 
-    /**
-     * Load required fragments into the view depending on the size of the display and his orientation
-     */
-    private void loadFragmentsInsideView() {
-        // Add management fragment if it's not added yet in any case
-        if (!dictionaryManagementFragment.isAdded())
-            addFragment(dictionaryManagementContainer, dictionaryManagementFragment);
+            if (isLargeScreenDevice() && isVocableSelected) {
+                // LARGE SCREEN and A VOCABLE SELECTED
+                // so load the manipulation fragment inside the view together with the management fragment
+                addFragmentToView(dictionaryManipulationContainer, dictionaryManipulationFragment);
 
-        if (isLargeScreenDevice() && isVocableSelected) {
-            // LARGE SCREEN and A VOCABLE SELECTED
-            // so load the manipulation fragment inside the view together with the management fragment
-            if (!dictionaryManipulationFragment.isAdded())
-                addFragment(dictionaryManipulationContainer, dictionaryManipulationFragment);
-
-        } else {
-            // NOT LARGE SCREEN or NO VOCABLE SELECTED
-            // so if it's present the manipulation fragment in the view remove it
-            if (dictionaryManipulationFragment.isAdded())
-                removeFragment(dictionaryManipulationFragment);
-//                useSingleLayout();
-        }
-    }
-
-    /**
-     * Set the layout of the view
-     */
-    private void setViewLayout() {
-        if (isVocableSelected) {
-            // VOCABLE SELECTED
-            if (isLargeScreenDevice()) {
-                // LARGE SCREEN
                 if (isLandscapeOrientation()) {
                     // LANDSCAPE MODE
                     useLayoutTwoHorizontalColumns();
-                    return;
                 } else {
                     // NOT IN LANDSCAPE MODE
                     useLayoutTwoVerticalRows();
-                    return;
                 }
+            } else {
+                // NOT LARGE SCREEN or NO VOCABLE SELECTED
+                // so if it's present the manipulation fragment in the view remove it
+                dictionaryManipulationContainer.removeAllViews();
+                removeFragmentFromView(dictionaryManipulationFragment);
+                useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
             }
+        } else if (useManagementFragment) {
+            dictionaryManipulationContainer.removeAllViews();
+            removeFragmentFromView(dictionaryManipulationFragment);
+            addFragmentToView(dictionaryManagementContainer, dictionaryManagementFragment);
+            useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
+        } else if (useManipulationFragment) {
+            dictionaryManagementContainer.removeAllViews();
+            removeFragmentFromView(dictionaryManagementFragment);
+            addFragmentToView(dictionaryManipulationContainer, dictionaryManipulationFragment);
+            useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
         }
-        useSingleLayout(DictionaryManagementFragment.TAG);
     }
+
+    /**********************************************************************************************/
 
     /**
      * Add a fragment inside a frame layout container
@@ -259,14 +224,17 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      * @param container
      * @param fragment
      */
-    private void addFragment(FrameLayout container, Fragment fragment) {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
-                .add(container.getId(), fragment, getFragmentTag(fragment))
-                .addToBackStack(null)
-                .commit();
-        fragmentManager.executePendingTransactions();
+
+    private void addFragmentToView(FrameLayout container, Fragment fragment) {
+        if (!fragment.isAdded()) {
+            final FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .add(container.getId(), fragment, getFragmentTag(fragment))
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+        }
     }
 
     /**
@@ -292,7 +260,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      *
      * @param fragment
      */
-    private void removeFragment(Fragment fragment) {
+    private void removeFragmentFromView(Fragment fragment) {
         if (fragment.isAdded()) {
             final FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager
@@ -320,7 +288,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**
      * Use a single layout with only the management fragment visible
      */
-    private void useSingleLayout(String fragmentTAG) {
+    private void useSingleLayoutForFragment(String fragmentTAG) {
         switch (fragmentTAG) {
             case DictionaryManagementFragment.TAG:
                 setLayout(MATCH_PARENT, MATCH_PARENT, 0, 0);
