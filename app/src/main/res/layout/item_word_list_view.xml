@@ -9,9 +9,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:ellipsize="end"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:text=""
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
         android:textAlignment="center" />
+
+    <!--android:background="@drawable/list_item_selector"-->
 
 </merge>

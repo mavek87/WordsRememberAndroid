@@ -145,22 +145,18 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
-    public void onListItemClick(ListView listView, View view, int position, long selectedVocableID) {
-        super.onListItemClick(listView, view, position, selectedVocableID);
-
-        if (selectedVocableID != lastSelectedVocableID) {
-//                dictionaryListViewAdapter.setSelected(position, true);
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        super.onListItemClick(listView, view, position, id);
+        if (id != lastSelectedVocableID) {
 //                view.setActivated(true);
-            lastSelectedVocableID = selectedVocableID;
+//            dictionaryListViewAdapter.setSelected(position, true);
+            lastSelectedVocableID = id;
         } else {
-//                dictionaryListViewAdapter.setSelected(position, false);
-            view.setActivated(false);
+//            view.setActivated(false);
+//            dictionaryListViewAdapter.setSelected(position, false);
             lastSelectedVocableID = -1;
         }
-        Toast.makeText(getActivity(), "lastSelectedVocableID " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
         EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
-
-//        dictionaryListViewAdapter.notifyDataSetChanged();
     }
 
     public boolean isItemSelected() {
