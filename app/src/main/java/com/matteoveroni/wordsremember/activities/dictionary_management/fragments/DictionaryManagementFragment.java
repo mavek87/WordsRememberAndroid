@@ -33,9 +33,9 @@ import org.greenrobot.eventbus.EventBus;
  *
  * @author Matteo Veroni
  */
-public class DictionaryManagementFragment
-        extends ListFragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    // ATTRIBUTES
 
     public static final String TAG = "F_DICTIONARY_MANAGEMENT";
 
@@ -43,9 +43,28 @@ public class DictionaryManagementFragment
 
     private long lastSelectedVocableID = -1;
 
+    /**********************************************************************************************/
+
+    // CONSTRUCTORS
+
+    /**
+     * Empty constructor
+     */
     public DictionaryManagementFragment() {
     }
 
+    /**********************************************************************************************/
+
+    // ANDROID LIFECYCLE METHODS
+
+    /**
+     * Method called when the view creation starts.
+     *
+     * @param inflater           The layout inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
@@ -62,15 +81,11 @@ public class DictionaryManagementFragment
         registerForContextMenu(getListView());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getLoaderManager().restartLoader(0, null, this);
-    }
+    // ANDROID LIFECYCLE METHODS - LOADER MANAGER for CURSOR MANAGEMENT
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader cursorLoader = new CursorLoader(
+        return new CursorLoader(
                 getActivity(),
                 DictionaryProvider.CONTENT_URI,
                 DictionaryContract.Schema.ALL_COLUMNS,
@@ -78,7 +93,6 @@ public class DictionaryManagementFragment
                 null,
                 null
         );
-        return cursorLoader;
     }
 
     @Override
@@ -90,6 +104,14 @@ public class DictionaryManagementFragment
     public void onLoaderReset(Loader<Cursor> loader) {
         dictionaryListViewAdapter.swapCursor(null);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    // ANDROID LIFECYCLE METHODS - MENU
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -136,10 +158,15 @@ public class DictionaryManagementFragment
         }
     }
 
+    /**********************************************************************************************/
+
+    // HELPER METHODS
     private void setupDictionaryAdapter() {
         dictionaryListViewAdapter = new WordListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
     }
+
+    /**********************************************************************************************/
 }
 
 

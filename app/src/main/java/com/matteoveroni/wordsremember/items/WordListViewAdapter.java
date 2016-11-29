@@ -38,7 +38,7 @@ public class WordListViewAdapter extends CursorAdapter {
         selectionArray.put(position, isSelected);
     }
 
-    public boolean isSelected(int position){
+    public boolean isSelected(int position) {
         return selectionArray.get(position);
     }
 

@@ -43,6 +43,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
+    // TODO: searching how the id's in a content provider works (auto generated id ????)
     private static final int VOCABLES_ID = 10;
     private static final int VOCABLE_ID = 20;
 
@@ -129,6 +130,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return Uri.parse(BASE_PATH + "/" + id);
     }
 
+    // TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int updatedRowsCounter;
@@ -141,7 +143,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 String id = uri.getLastPathSegment();
-                updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME,
+                updatedRowsCounter = db.update(
+                        DictionaryContract.Schema.TABLE_NAME,
                         values,
                         DictionaryContract.Schema.COLUMN_ID + " =" + id +
                                 (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
@@ -157,6 +160,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     /**
      * TODO: check VOCABLE_ID case not sure it works
+     * TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
      *
      * @param uri
      * @param selection

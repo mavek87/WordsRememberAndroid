@@ -47,15 +47,18 @@ public class WordListViewItem extends RelativeLayout implements Checkable {
         lbl_wordName.setText(wordName);
     }
 
+    @Override
     public boolean isChecked() {
         return isChecked;
     }
 
+    @Override
     public void setChecked(boolean isChecked) {
         this.isChecked = isChecked;
         changeColor(isChecked);
     }
 
+    @Override
     public void toggle() {
         this.isChecked = !this.isChecked;
         changeColor(this.isChecked);
