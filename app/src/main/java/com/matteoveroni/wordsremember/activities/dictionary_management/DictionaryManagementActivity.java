@@ -53,8 +53,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
 
-    private boolean isVocableSelected = false;
-
     private static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
     /**********************************************************************************************/
@@ -152,15 +150,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         Word selectedVocable;
         long selectedVocableID = event.getSelectedVocableID();
 
-        if (selectedVocableID >= 0) {
-            // A vocable is selected
-            isVocableSelected = true;
-            selectedVocable = dictionaryDAO.getVocableById(selectedVocableID);
-        } else {
-            // No vocable selected
-            isVocableSelected = false;
-            selectedVocable = null;
-        }
+        selectedVocable = (selectedVocableID >= 0) ? dictionaryDAO.getVocableById(selectedVocableID) : null;
 
         // Send selected vocable to all the listeners (fragments)
         EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
@@ -181,7 +171,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 break;
             case REMOVE:
                 if (dictionaryDAO.removeVocable(selectedVocableID)) {
-                    isVocableSelected = false;
                     // Send selected vocable to all the listeners (fragments)
                     EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
                     loadFragmentsInsideView(true, false);
@@ -205,7 +194,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             // Add management fragment if it's not added yet in any case
             addFragmentToView(managementContainer, managementFragment);
 
-            if (isLargeScreenDevice() && isVocableSelected) {
+            if (isLargeScreenDevice() && (managementFragment != null && managementFragment.isItemSelected())) {
                 // LARGE SCREEN and A VOCABLE SELECTED
                 // so load the manipulation fragment inside the view together with the management fragment
                 addFragmentToView(manipulationContainer, manipulationFragment);

@@ -20,8 +20,7 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.items.WordListViewAdapter;
-import com.matteoveroni.wordsremember.model.Word;
+import com.matteoveroni.wordsremember.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
@@ -39,7 +38,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     public static final String TAG = "F_DICTIONARY_MANAGEMENT";
 
-    private WordListViewAdapter dictionaryListViewAdapter;
+    private WordsListViewAdapter dictionaryListViewAdapter;
 
     private long lastSelectedVocableID = -1;
 
@@ -58,7 +57,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     // ANDROID LIFECYCLE METHODS
 
     /**
-     * Method called when the view creation starts.
+     * Method called when the creation of view starts.
      *
      * @param inflater           The layout inflater
      * @param container
@@ -69,15 +68,21 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         getLoaderManager().initLoader(0, null, this);
-        setupDictionaryAdapter();
+        dictionaryListViewAdapter = new WordsListViewAdapter(getContext(), null);
+        setListAdapter(dictionaryListViewAdapter);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // Set the list choice mode to allow only one selection at a time
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Set the list choice mode to allow only one selection at a time
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         registerForContextMenu(getListView());
     }
 
@@ -140,33 +145,30 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long selectedVocableID) {
-        super.onListItemClick(l, v, position, selectedVocableID);
+    public void onListItemClick(ListView listView, View view, int position, long selectedVocableID) {
+        super.onListItemClick(listView, view, position, selectedVocableID);
 
-        if (selectedVocableID >= 0) {
-            if (selectedVocableID != lastSelectedVocableID) {
-                dictionaryListViewAdapter.setSelected(position, true);
-                lastSelectedVocableID = selectedVocableID;
-            } else {
-                dictionaryListViewAdapter.setSelected(position, false);
-                lastSelectedVocableID = -1;
-            }
-            Toast.makeText(getActivity(), "lastSelectedVocableID " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
-
-            EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
-            dictionaryListViewAdapter.notifyDataSetChanged();
+        if (selectedVocableID != lastSelectedVocableID) {
+//                dictionaryListViewAdapter.setSelected(position, true);
+//                view.setActivated(true);
+            lastSelectedVocableID = selectedVocableID;
+        } else {
+//                dictionaryListViewAdapter.setSelected(position, false);
+            view.setActivated(false);
+            lastSelectedVocableID = -1;
         }
+        Toast.makeText(getActivity(), "lastSelectedVocableID " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
+        EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
+
+//        dictionaryListViewAdapter.notifyDataSetChanged();
     }
 
-    /**********************************************************************************************/
-
-    // HELPER METHODS
-    private void setupDictionaryAdapter() {
-        dictionaryListViewAdapter = new WordListViewAdapter(getContext(), null);
-        setListAdapter(dictionaryListViewAdapter);
+    public boolean isItemSelected() {
+        return lastSelectedVocableID >= 0;
     }
 
-    /**********************************************************************************************/
+
+/**********************************************************************************************/
 }
 
 
