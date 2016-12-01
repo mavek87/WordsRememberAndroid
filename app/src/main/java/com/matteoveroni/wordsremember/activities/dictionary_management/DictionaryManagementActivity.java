@@ -4,11 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.security.InvalidParameterException;
+import java.util.EmptyStackException;
 
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
@@ -49,24 +50,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private DictionaryManagementFragment managementFragment;
     private DictionaryManipulationFragment manipulationFragment;
 
+    private DictionaryManagementActivityLayoutManager activityLayoutManager;
+
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
-
-    /**
-     * Inner class that hosts all the data related to the layout of the view
-     */
-    private static final class ViewLayout {
-        static final String TAG = "ViewLayoutTag";
-
-        static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
-
-        enum Type {
-            SINGLE, TWO_COLUMNS, TWO_ROWS
-        }
-    }
-
-    private ViewLayout.Type viewLayoutType;
-
 
     /**********************************************************************************************/
 
@@ -117,7 +104,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        // Initialize If the app is created for the first time
         if (savedInstanceState == null) {
             initMemberAttributesInstances();
             populateDatabase();
@@ -134,10 +120,10 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        // save inside the savedInstanceStateBundle every value to restore when the activity is recreated
         fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
         fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-        savedInstanceState.putSerializable(ViewLayout.TAG, viewLayoutType);
+        savedInstanceState.putSerializable(DictionaryManagementActivityLayoutManager.TAG, activityLayoutManager);
+//        savedInstanceState.putSerializable(ActivityViewLayout.TAG, activityLayoutType);
     }
 
     /**
@@ -147,45 +133,30 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        boolean wasManagementFragmentSaved = savedInstanceState.containsKey(DictionaryManagementFragment.TAG);
-        boolean wasManipulationFragmentSaved = savedInstanceState.containsKey(DictionaryManipulationFragment.TAG);
+        managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
+        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
 
-        if (!wasManagementFragmentSaved && !wasManipulationFragmentSaved) {
-            throw new RuntimeException("Error! No fragment was saved before the activity was stopped.");
-        }
-
-        if (wasManagementFragmentSaved) {
-            managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
-            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-        }
-
-        if (wasManipulationFragmentSaved) {
-            manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
-            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-        }
+        manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
+        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
         // Restore saved layout instance
-        viewLayoutType = (ViewLayout.Type) savedInstanceState.getSerializable(ViewLayout.TAG);
+        activityLayoutManager = (DictionaryManagementActivityLayoutManager) savedInstanceState.getSerializable(DictionaryManagementActivityLayoutManager.TAG);
 
-        // Re-apply saved layout to the view
-        if (viewLayoutType != null) {
-            switch (viewLayoutType) {
-                case SINGLE:
-                    useSingleLayoutForFragment(managementFragment != null ? DictionaryManagementFragment.TAG : DictionaryManipulationFragment.TAG);
-                    break;
-                case TWO_COLUMNS:
-                    useLayoutTwoHorizontalColumns();
-                    break;
-                case TWO_ROWS:
-                    useLayoutTwoVerticalRows();
-                    break;
-            }
-        } else {
-            throw new RuntimeException("Error! Cannot retrieve any viewLayoutType saved into the saveInstanceState bundle");
+        ActivityViewLayout layoutToRestore = activityLayoutManager.readLayoutInUse();
+
+        switch (layoutToRestore.getActivityLayoutType()) {
+            case SINGLE:
+                useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
+                break;
+            case TWO_COLUMNS:
+                useLayoutTwoHorizontalColumns();
+                break;
+            case TWO_ROWS:
+                useLayoutTwoVerticalRows();
+                break;
+            default:
+                throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
         }
-
-        Toast.makeText(this, "management fragment null = " + (managementFragment == null), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "manipulation fragment null = " + (manipulationFragment == null), Toast.LENGTH_SHORT).show();
     }
 
     // ANDROID LIFECYCLE METHODS - MENU
@@ -202,16 +173,11 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-
-//                removeFragmentFromView(managementFragment);
-//                addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
                 useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-
                 EventBus.getDefault().postSticky(new EventCreateVocable());
                 return true;
         }
@@ -275,7 +241,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void initMemberAttributesInstances() {
         managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
         manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
-
+        activityLayoutManager = DictionaryManagementActivityLayoutManager.getInstance();
         dictionaryDAO = new DictionaryDAO(this);
     }
 
@@ -283,10 +249,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
         useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
-        viewLayoutType = ViewLayout.Type.SINGLE;
     }
 
-//    /**
+    //    /**
 //     * @param useManagementFragment
 //     * @param useManipulationFragment
 //     */
@@ -327,6 +292,31 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 //        }
 //    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            try {
+//                ActivityViewLayout previousLayout = activityLayoutManager.discardCurrentLayoutAndGetPreviousOne();
+//                switch (previousLayout.getActivityLayoutType()) {
+//                    case SINGLE:
+//                        useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
+//                        break;
+//                    case TWO_COLUMNS:
+//                        useLayoutTwoHorizontalColumns();
+//                        break;
+//                    case TWO_ROWS:
+//                        useLayoutTwoVerticalRows();
+//                        break;
+//                    default:
+//                        throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
+//                }
+//                return true;
+//            } catch (EmptyStackException noPreviousLayoutExceptionSoSkipCustomizedManagementOfBack) {
+//            }
+//        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
      * Add a fragment to the view
      *
@@ -340,7 +330,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             fragmentManager
                     .beginTransaction()
                     .add(container.getId(), fragment, fragmentTAG)
-                    .addToBackStack(null)
+//                    .addToBackStack(null)
                     .commit();
             fragmentManager.executePendingTransactions();
             return true;
@@ -370,14 +360,16 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      * Use a layout with two horizontal columns that hosts managment and manipulation fragments
      */
     private void useLayoutTwoHorizontalColumns() {
-        setLayout(0, ViewLayout.MATCH_PARENT, 1f, 0, ViewLayout.MATCH_PARENT, 1f);
+        setLayout(0, ActivityViewLayout.MATCH_PARENT, 1f, 0, ActivityViewLayout.MATCH_PARENT, 1f);
+        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.TWO_COLUMNS, null));
     }
 
     /**
      * Use a layout with two vertical rows that hosts managment and manipulation fragments
      */
     private void useLayoutTwoVerticalRows() {
-        setLayout(ViewLayout.MATCH_PARENT, 0, 1f, ViewLayout.MATCH_PARENT, 0, 1f);
+        setLayout(ActivityViewLayout.MATCH_PARENT, 0, 1f, ActivityViewLayout.MATCH_PARENT, 0, 1f);
+        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.TWO_ROWS, null));
     }
 
     /**
@@ -386,12 +378,13 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void useSingleLayoutForFragment(String fragmentTAG) {
         switch (fragmentTAG) {
             case DictionaryManagementFragment.TAG:
-                setLayout(ViewLayout.MATCH_PARENT, ViewLayout.MATCH_PARENT, 0, 0);
+                setLayout(ActivityViewLayout.MATCH_PARENT, ActivityViewLayout.MATCH_PARENT, 0, 0);
                 break;
             case DictionaryManipulationFragment.TAG:
-                setLayout(0, 0, ViewLayout.MATCH_PARENT, ViewLayout.MATCH_PARENT);
+                setLayout(0, 0, ActivityViewLayout.MATCH_PARENT, ActivityViewLayout.MATCH_PARENT);
                 break;
         }
+        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.SINGLE, fragmentTAG));
     }
 
     private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
@@ -421,7 +414,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         );
     }
 
-
     private boolean isLargeScreenDevice() {
         return getResources().getBoolean(R.bool.LARGE_SCREEN);
     }
@@ -442,11 +434,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         Word secondVocableToSave = new Word("second vocable");
         long secondSavedVocableId = dictionaryDAO.saveVocable(secondVocableToSave);
-//        if (secondSavedVocableId < 0) {
-//            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " inserted. His ID in the database is => " + secondSavedVocableId, Toast.LENGTH_SHORT).show();
-//        }
     }
 
     private void exportDatabaseOnSd() {
