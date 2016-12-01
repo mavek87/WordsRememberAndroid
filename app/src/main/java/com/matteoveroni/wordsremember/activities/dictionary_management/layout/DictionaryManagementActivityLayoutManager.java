@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management;
+package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import java.io.Serializable;
 import java.util.EmptyStackException;

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management;
+package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import android.widget.LinearLayout;
 
@@ -8,18 +8,18 @@ import android.widget.LinearLayout;
  * @author Matteo Veroni
  */
 
-class ActivityViewLayout {
+public class ActivityViewLayout {
     public static final String TAG = "ActivityViewLayoutTag";
-    static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
+    public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
     private Type activityLayoutType;
     private String mainFragmentTAG;
 
-    enum Type {
+    public enum Type {
         SINGLE, TWO_COLUMNS, TWO_ROWS
     }
 
-    ActivityViewLayout(Type activityLayoutType, String mainFragmentTAG) {
+    public ActivityViewLayout(Type activityLayoutType, String mainFragmentTAG) {
         this.activityLayoutType = activityLayoutType;
         this.mainFragmentTAG = mainFragmentTAG;
     }

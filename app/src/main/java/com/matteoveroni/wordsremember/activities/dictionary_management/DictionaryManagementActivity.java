@@ -18,6 +18,8 @@ import com.matteoveroni.wordsremember.activities.dictionary_management.events.Ev
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.activities.dictionary_management.layout.ActivityViewLayout;
+import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
@@ -294,26 +296,26 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            try {
-//                ActivityViewLayout previousLayout = activityLayoutManager.discardCurrentLayoutAndGetPreviousOne();
-//                switch (previousLayout.getActivityLayoutType()) {
-//                    case SINGLE:
-//                        useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
-//                        break;
-//                    case TWO_COLUMNS:
-//                        useLayoutTwoHorizontalColumns();
-//                        break;
-//                    case TWO_ROWS:
-//                        useLayoutTwoVerticalRows();
-//                        break;
-//                    default:
-//                        throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
-//                }
-//                return true;
-//            } catch (EmptyStackException noPreviousLayoutExceptionSoSkipCustomizedManagementOfBack) {
-//            }
-//        }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            try {
+                ActivityViewLayout previousLayout = activityLayoutManager.discardCurrentLayoutAndGetPreviousOne();
+                switch (previousLayout.getActivityLayoutType()) {
+                    case SINGLE:
+                        useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
+                        break;
+                    case TWO_COLUMNS:
+                        useLayoutTwoHorizontalColumns();
+                        break;
+                    case TWO_ROWS:
+                        useLayoutTwoVerticalRows();
+                        break;
+                    default:
+                        throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
+                }
+                return true;
+            } catch (EmptyStackException noPreviousLayoutExceptionSoSkipCustomizedManagementOfBack) {
+            }
+        }
         return super.onKeyDown(keyCode, event);
     }
 
