@@ -129,8 +129,8 @@ public class DictionaryManipulationFragment extends Fragment {
             lbl_title.setText("Create new vocable");
             // Set fragment's mode
             mode = ManipulationMode.CREATE;
-            // Consume the event
-            EventBus.getDefault().removeStickyEvent(event);
+//            // Consume the event
+//            EventBus.getDefault().removeStickyEvent(event);
         }
     }
 

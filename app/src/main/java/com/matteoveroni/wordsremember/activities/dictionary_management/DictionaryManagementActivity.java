@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
 import java.security.InvalidParameterException;
 
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
@@ -53,14 +52,16 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
 
-
+    /**
+     * Inner class that hosts all the data related to the layout of the view
+     */
     private static final class ViewLayout {
-        public static final String TAG = "ViewLayoutTag";
+        static final String TAG = "ViewLayoutTag";
 
-        public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
+        static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
-        public enum Type {
-            SINGLE, TWO_COLUMNS, TWO_ROWS;
+        enum Type {
+            SINGLE, TWO_COLUMNS, TWO_ROWS
         }
     }
 
@@ -104,7 +105,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**
      * Method called when the activity creation starts
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Saved instance state bundle
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +147,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**
      * Method called when the activity is restored after device settings modifications (restore data from savedInstanceBundle).
      *
-     * @param savedInstanceState
+     * @param savedInstanceState Saved instance state bundle
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -171,36 +172,46 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         viewLayoutType = (ViewLayout.Type) savedInstanceState.getSerializable(ViewLayout.TAG);
 
         // Re-apply saved layout to the view
-        switch (viewLayoutType) {
-            case SINGLE:
-                useSingleLayoutForFragment(managementFragment != null ? managementFragment.TAG : manipulationFragment.TAG);
-                break;
-            case TWO_COLUMNS:
-                useLayoutTwoHorizontalColumns();
-                break;
-            case TWO_ROWS:
-                useLayoutTwoVerticalRows();
-                break;
+        if (viewLayoutType != null) {
+            switch (viewLayoutType) {
+                case SINGLE:
+                    useSingleLayoutForFragment(managementFragment != null ? DictionaryManagementFragment.TAG : DictionaryManipulationFragment.TAG);
+                    break;
+                case TWO_COLUMNS:
+                    useLayoutTwoHorizontalColumns();
+                    break;
+                case TWO_ROWS:
+                    useLayoutTwoVerticalRows();
+                    break;
+            }
+        } else {
+            throw new RuntimeException("Error! Cannot retrieve any viewLayoutType saved into the saveInstanceState bundle");
         }
     }
 
     // ANDROID LIFECYCLE METHODS - MENU
 
+    /**
+     * Method called when the options menu is created
+     *
+     * @param menu The menu to inflate
+     * @return True if the options menu was inflated successfully
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dictionary_management, menu);
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-//                loadFragmentsInsideView(false, true);
 
-//                removeFragmentFromView(managementFragment);
-//                addFragmentToView(manipulationContainer, manipulationFragment);
-//                useSingleLayoutForFragment(manipulationFragment);
+                removeFragmentFromView(managementFragment);
+                addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+                useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
 
                 EventBus.getDefault().postSticky(new EventCreateVocable());
                 return true;
