@@ -135,12 +135,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         // save inside the savedInstanceStateBundle every value to restore when the activity is recreated
-        if (managementFragment != null && managementFragment.isAdded()) {
-            fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
-        }
-        if (manipulationFragment != null && manipulationFragment.isAdded()) {
-            fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-        }
+        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
+        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
         savedInstanceState.putSerializable(ViewLayout.TAG, viewLayoutType);
     }
 
@@ -152,7 +148,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         boolean wasManagementFragmentSaved = savedInstanceState.containsKey(DictionaryManagementFragment.TAG);
-        boolean wasManipulationFragmentSaved = savedInstanceState.containsKey(DictionaryManagementFragment.TAG);
+        boolean wasManipulationFragmentSaved = savedInstanceState.containsKey(DictionaryManipulationFragment.TAG);
 
         if (!wasManagementFragmentSaved && !wasManipulationFragmentSaved) {
             throw new RuntimeException("Error! No fragment was saved before the activity was stopped.");
@@ -187,6 +183,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         } else {
             throw new RuntimeException("Error! Cannot retrieve any viewLayoutType saved into the saveInstanceState bundle");
         }
+
+        Toast.makeText(this, "management fragment null = " + (managementFragment == null), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "manipulation fragment null = " + (manipulationFragment == null), Toast.LENGTH_SHORT).show();
     }
 
     // ANDROID LIFECYCLE METHODS - MENU
@@ -209,8 +208,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
 
-                removeFragmentFromView(managementFragment);
-                addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+//                removeFragmentFromView(managementFragment);
+//                addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
                 useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
 
                 EventBus.getDefault().postSticky(new EventCreateVocable());
@@ -282,6 +281,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     private void initViewLayout() {
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
         useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
         viewLayoutType = ViewLayout.Type.SINGLE;
     }
@@ -434,19 +434,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void populateDatabase() {
         Word firstVocableToSave = new Word("test123");
         long firstSavedVocableId = dictionaryDAO.saveVocable(firstVocableToSave);
-        if (firstSavedVocableId < 0) {
-            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " inserted. His ID in the database is => " + firstSavedVocableId, Toast.LENGTH_SHORT).show();
-        }
+//        if (firstSavedVocableId < 0) {
+//            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " inserted. His ID in the database is => " + firstSavedVocableId, Toast.LENGTH_SHORT).show();
+//        }
 
         Word secondVocableToSave = new Word("second vocable");
         long secondSavedVocableId = dictionaryDAO.saveVocable(secondVocableToSave);
-        if (secondSavedVocableId < 0) {
-            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " inserted. His ID in the database is => " + secondSavedVocableId, Toast.LENGTH_SHORT).show();
-        }
+//        if (secondSavedVocableId < 0) {
+//            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(this, "Vocable " + secondVocableToSave.getName() + " inserted. His ID in the database is => " + secondSavedVocableId, Toast.LENGTH_SHORT).show();
+//        }
     }
 
     private void exportDatabaseOnSd() {
