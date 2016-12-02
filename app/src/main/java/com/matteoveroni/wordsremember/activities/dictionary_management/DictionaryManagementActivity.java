@@ -134,29 +134,34 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
         managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
 
         manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
-        // Restore saved layout instance
         activityLayoutManager = (DictionaryManagementActivityLayoutManager) savedInstanceState.getSerializable(DictionaryManagementActivityLayoutManager.TAG);
 
-        ActivityViewLayout layoutToRestore = activityLayoutManager.readLayoutInUse();
+        try {
+            ActivityViewLayout layoutToRestore = activityLayoutManager.readLayoutInUse();
 
-        switch (layoutToRestore.getType()) {
-            case SINGLE:
-                useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
-                break;
-            case TWO_COLUMNS:
-                useLayoutTwoHorizontalColumns();
-                break;
-            case TWO_ROWS:
-                useLayoutTwoVerticalRows();
-                break;
-            default:
-                throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
+            switch (layoutToRestore.getType()) {
+                case SINGLE:
+                    useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
+                    break;
+                case TWO_COLUMNS:
+                    useLayoutTwoHorizontalColumns();
+                    break;
+                case TWO_ROWS:
+                    useLayoutTwoVerticalRows();
+                    break;
+            }
+        } catch (EmptyStackException ex) {
+            throw new RuntimeException("Error! No previous activity view layout saved to restore!");
+        } catch (NullPointerException ex) {
+            throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
         }
     }
 
@@ -224,7 +229,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                     EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
 
 //                    loadFragmentsInsideView(true, false);
-
                 }
                 break;
             default:
@@ -312,7 +316,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                         throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
                 }
                 return true;
-            } catch (EmptyStackException noPreviousLayoutExceptionSoSkipCustomizedManagementOfBack) {
+            } catch (EmptyStackException noPreviousLayoutException) {
             }
         }
         return super.onKeyDown(keyCode, event);
