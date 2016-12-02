@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
-import com.matteoveroni.wordsremember.activities.dictionary_management.layout.ActivityViewLayout;
-import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementActivityLayoutManager;
+import android.widget.FrameLayout;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,7 +13,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Matteo Veroni
@@ -23,18 +21,23 @@ public class DictionaryManagementActivityLayoutManagerTest {
 
     private DictionaryManagementActivityLayoutManager layoutManager;
 
-    private static ActivityViewLayout VIEW_LAYOUT;
-    private static ActivityViewLayout SECOND_VIEW_LAYOUT;
-    private static ActivityViewLayout THIRD_VIEW_LAYOUT;
+    private static DictionaryManagementViewLayout VIEW_LAYOUT;
+    private static DictionaryManagementViewLayout SECOND_VIEW_LAYOUT;
+    private static DictionaryManagementViewLayout THIRD_VIEW_LAYOUT;
+
+    private static FrameLayout MANGEMENT_CONTAINER, MANIPULATION_CONTAINER;
 
     /**
      * Executed only the first time
      */
     @BeforeClass
     public static void createMockLayouts() {
-        VIEW_LAYOUT = mock(ActivityViewLayout.class);
-        SECOND_VIEW_LAYOUT = mock(ActivityViewLayout.class);
-        THIRD_VIEW_LAYOUT = mock(ActivityViewLayout.class);
+        VIEW_LAYOUT = mock(DictionaryManagementViewLayout.class);
+        SECOND_VIEW_LAYOUT = mock(DictionaryManagementViewLayout.class);
+        THIRD_VIEW_LAYOUT = mock(DictionaryManagementViewLayout.class);
+
+        MANGEMENT_CONTAINER = mock(FrameLayout.class);
+        MANIPULATION_CONTAINER = mock(FrameLayout.class);
     }
 
     /**
@@ -42,7 +45,7 @@ public class DictionaryManagementActivityLayoutManagerTest {
      */
     @Before
     public void init() {
-        layoutManager = DictionaryManagementActivityLayoutManager.getInstance();
+        layoutManager = new DictionaryManagementActivityLayoutManager(MANGEMENT_CONTAINER, MANIPULATION_CONTAINER);
     }
 
     @Test(expected = EmptyStackException.class)
@@ -71,9 +74,9 @@ public class DictionaryManagementActivityLayoutManagerTest {
     public void testDiscardCurrentLayoutAndGetPreviousOneIfTwoLayoutWasSaved() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(SECOND_VIEW_LAYOUT);
-        final ActivityViewLayout previousActivityViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
-        assertEquals(VIEW_LAYOUT, previousActivityViewLayout);
-        assertNotEquals(SECOND_VIEW_LAYOUT, previousActivityViewLayout);
+        final DictionaryManagementViewLayout previousDictionaryManagementViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
+        assertEquals(VIEW_LAYOUT, previousDictionaryManagementViewLayout);
+        assertNotEquals(SECOND_VIEW_LAYOUT, previousDictionaryManagementViewLayout);
     }
 
     @Test(expected = EmptyStackException.class)
@@ -90,14 +93,14 @@ public class DictionaryManagementActivityLayoutManagerTest {
         layoutManager.saveLayoutInUse(SECOND_VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(THIRD_VIEW_LAYOUT);
 
-        final ActivityViewLayout previousActivityViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
-        assertNotEquals(THIRD_VIEW_LAYOUT, previousActivityViewLayout);
-        assertEquals(SECOND_VIEW_LAYOUT, previousActivityViewLayout);
-        assertNotEquals(VIEW_LAYOUT, previousActivityViewLayout);
+        final DictionaryManagementViewLayout previousViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
+        assertNotEquals(THIRD_VIEW_LAYOUT, previousViewLayout);
+        assertEquals(SECOND_VIEW_LAYOUT, previousViewLayout);
+        assertNotEquals(VIEW_LAYOUT, previousViewLayout);
 
-        final ActivityViewLayout firstActivityViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
-        assertNotEquals(THIRD_VIEW_LAYOUT, firstActivityViewLayout);
-        assertNotEquals(SECOND_VIEW_LAYOUT, firstActivityViewLayout);
-        assertEquals(VIEW_LAYOUT, firstActivityViewLayout);
+        final DictionaryManagementViewLayout firstViewLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
+        assertNotEquals(THIRD_VIEW_LAYOUT, firstViewLayout);
+        assertNotEquals(SECOND_VIEW_LAYOUT, firstViewLayout);
+        assertEquals(VIEW_LAYOUT, firstViewLayout);
     }
 }

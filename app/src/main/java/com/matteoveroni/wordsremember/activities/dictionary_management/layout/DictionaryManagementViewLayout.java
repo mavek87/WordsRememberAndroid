@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
  * @author Matteo Veroni
  */
 
-public class ActivityViewLayout {
+public class DictionaryManagementViewLayout {
     public static final String TAG = "ActivityViewLayoutTag";
     public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
@@ -19,7 +19,7 @@ public class ActivityViewLayout {
     private Type type;
     private String mainFragmentTAG;
 
-    public ActivityViewLayout(Type type, String mainFragmentTAG) {
+    public DictionaryManagementViewLayout(Type type, String mainFragmentTAG) {
         this.type = type;
         this.mainFragmentTAG = mainFragmentTAG;
     }
@@ -35,9 +35,9 @@ public class ActivityViewLayout {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ActivityViewLayout)) return false;
+        if (!(o instanceof DictionaryManagementViewLayout)) return false;
 
-        ActivityViewLayout that = (ActivityViewLayout) o;
+        DictionaryManagementViewLayout that = (DictionaryManagementViewLayout) o;
 
         if (getType() != that.getType()) return false;
         return getMainFragmentTAG() != null ? getMainFragmentTAG().equals(that.getMainFragmentTAG()) : that.getMainFragmentTAG() == null;

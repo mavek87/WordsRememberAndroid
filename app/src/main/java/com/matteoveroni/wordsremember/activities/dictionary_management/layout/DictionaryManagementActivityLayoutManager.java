@@ -1,5 +1,11 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
+
 import java.io.Serializable;
 import java.util.EmptyStackException;
 import java.util.Stack;
@@ -11,34 +17,101 @@ public class DictionaryManagementActivityLayoutManager implements Serializable {
 
     public static final String TAG = "DMA_LAYOUT_MANAGER";
 
-    private final Stack<ActivityViewLayout> layoutHistory = new Stack<>();
+    private final Stack<DictionaryManagementViewLayout> layoutHistory = new Stack<>();
 
-    private DictionaryManagementActivityLayoutManager() {
+    private FrameLayout managementContainer;
+    private FrameLayout manipulationContainer;
+
+    public DictionaryManagementActivityLayoutManager(FrameLayout managementContainer, FrameLayout manipulationContainer) {
+        this.managementContainer = managementContainer;
+        this.manipulationContainer = manipulationContainer;
     }
 
-    public static DictionaryManagementActivityLayoutManager getInstance() {
-        return new DictionaryManagementActivityLayoutManager();
+    public void setManagementContainer(FrameLayout managementContainer) {
+        this.managementContainer = managementContainer;
     }
 
-    public void saveLayoutInUse(ActivityViewLayout layoutToSave) {
+    public void setManipulationContainer(FrameLayout manipulationContainer) {
+        this.manipulationContainer = manipulationContainer;
+    }
+
+    public void saveLayoutInUse(DictionaryManagementViewLayout layoutToSave) {
         if (!isLayoutToSaveEqualsToCurrentLayout(layoutToSave)) {
             layoutHistory.push(layoutToSave);
         }
     }
 
-    public ActivityViewLayout readLayoutInUse() throws EmptyStackException {
+    public DictionaryManagementViewLayout readLayoutInUse() throws EmptyStackException {
         return layoutHistory.peek();
     }
 
-    public ActivityViewLayout discardCurrentLayoutAndGetPreviousOne() throws EmptyStackException {
+    public DictionaryManagementViewLayout discardCurrentLayoutAndGetPreviousOne() throws EmptyStackException {
         layoutHistory.pop();
         return layoutHistory.peek();
     }
 
-    private boolean isLayoutToSaveEqualsToCurrentLayout(ActivityViewLayout layoutToSave) {
+    /**
+     * Use a layout with two horizontal columns that hosts managment and manipulation fragments
+     */
+    public void useLayoutTwoHorizontalColumns() {
+        setLayout(0, DictionaryManagementViewLayout.MATCH_PARENT, 1f, 0, DictionaryManagementViewLayout.MATCH_PARENT, 1f);
+        saveLayoutInUse(new DictionaryManagementViewLayout(DictionaryManagementViewLayout.Type.TWO_COLUMNS, null));
+    }
+
+    /**
+     * Use a layout with two vertical rows that hosts managment and manipulation fragments
+     */
+    public void useLayoutTwoVerticalRows() {
+        setLayout(DictionaryManagementViewLayout.MATCH_PARENT, 0, 1f, DictionaryManagementViewLayout.MATCH_PARENT, 0, 1f);
+        saveLayoutInUse(new DictionaryManagementViewLayout(DictionaryManagementViewLayout.Type.TWO_ROWS, null));
+    }
+
+    /**
+     * Use a single layout with only the management fragment visible
+     */
+    public void useSingleLayoutForFragment(String fragmentTAG) {
+        switch (fragmentTAG) {
+            case DictionaryManagementFragment.TAG:
+                setLayout(DictionaryManagementViewLayout.MATCH_PARENT, DictionaryManagementViewLayout.MATCH_PARENT, 0, 0);
+                break;
+            case DictionaryManipulationFragment.TAG:
+                setLayout(0, 0, DictionaryManagementViewLayout.MATCH_PARENT, DictionaryManagementViewLayout.MATCH_PARENT);
+                break;
+        }
+        saveLayoutInUse(new DictionaryManagementViewLayout(DictionaryManagementViewLayout.Type.SINGLE, fragmentTAG));
+    }
+
+    private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
+        managementContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight)
+        );
+
+        manipulationContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight)
+        );
+    }
+
+    private void setLayout(
+            int managementContainerWidth,
+            int managementContainerHeight,
+            float managementContainerWeight,
+            int manipulationContainerWidth,
+            int manipulationContainerHeight,
+            float manipulationContainerWeight) {
+
+        managementContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight, managementContainerWeight)
+        );
+
+        manipulationContainer.setLayoutParams(
+                new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight, manipulationContainerWeight)
+        );
+    }
+
+    private boolean isLayoutToSaveEqualsToCurrentLayout(DictionaryManagementViewLayout layoutToSave) {
         if (!layoutHistory.empty()) {
-            ActivityViewLayout currentActivityViewLayout = layoutHistory.peek();
-            return currentActivityViewLayout.equals(layoutToSave);
+            DictionaryManagementViewLayout currentDictionaryManagementViewLayout = layoutHistory.peek();
+            return currentDictionaryManagementViewLayout.equals(layoutToSave);
         }
         return false;
     }

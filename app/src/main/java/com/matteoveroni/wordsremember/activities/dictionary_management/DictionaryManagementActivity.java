@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
@@ -18,7 +17,7 @@ import com.matteoveroni.wordsremember.activities.dictionary_management.events.Ev
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.activities.dictionary_management.layout.ActivityViewLayout;
+import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementViewLayout;
 import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
@@ -52,7 +51,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private DictionaryManagementFragment managementFragment;
     private DictionaryManipulationFragment manipulationFragment;
 
-    private DictionaryManagementActivityLayoutManager activityLayoutManager;
+    private DictionaryManagementActivityLayoutManager layoutManager;
 
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
@@ -70,32 +69,18 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**********************************************************************************************/
 
     // ANDROID LIFECYCLE METHODS
-
-    /**
-     * Method called when activity lifecycle starts. This activity is registered to the event bus
-     * as a listener.
-     */
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
-    /**
-     * Method called when activity lifecycle stops. Before activity is destroyed it is unregistered
-     * from the event bus.
-     */
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
 
-    /**
-     * Method called when the activity creation starts
-     *
-     * @param savedInstanceState Saved instance state bundle
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,24 +99,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Method called when the activity is going to be stopped.
-     *
-     * @param savedInstanceState Saved instance state bundle
-     */
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
         fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-        savedInstanceState.putSerializable(DictionaryManagementActivityLayoutManager.TAG, activityLayoutManager);
+        savedInstanceState.putSerializable(DictionaryManagementActivityLayoutManager.TAG, layoutManager);
     }
 
-    /**
-     * Method called when the activity is restored after device settings modifications (restore data from savedInstanceBundle).
-     *
-     * @param savedInstanceState Saved instance state bundle
-     */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -142,20 +117,22 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
-        activityLayoutManager = (DictionaryManagementActivityLayoutManager) savedInstanceState.getSerializable(DictionaryManagementActivityLayoutManager.TAG);
+        layoutManager = (DictionaryManagementActivityLayoutManager) savedInstanceState.getSerializable(DictionaryManagementActivityLayoutManager.TAG);
+        layoutManager.setManagementContainer(managementContainer);
+        layoutManager.setManipulationContainer(manipulationContainer);
 
         try {
-            ActivityViewLayout layoutToRestore = activityLayoutManager.readLayoutInUse();
+            DictionaryManagementViewLayout layoutToRestore = layoutManager.readLayoutInUse();
 
             switch (layoutToRestore.getType()) {
                 case SINGLE:
-                    useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
+                    layoutManager.useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
                     break;
                 case TWO_COLUMNS:
-                    useLayoutTwoHorizontalColumns();
+                    layoutManager.useLayoutTwoHorizontalColumns();
                     break;
                 case TWO_ROWS:
-                    useLayoutTwoVerticalRows();
+                    layoutManager.useLayoutTwoVerticalRows();
                     break;
             }
         } catch (EmptyStackException ex) {
@@ -167,12 +144,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     // ANDROID LIFECYCLE METHODS - MENU
 
-    /**
-     * Method called when the options menu is created
-     *
-     * @param menu The menu to inflate
-     * @return True if the options menu was inflated successfully
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dictionary_management, menu);
@@ -183,7 +154,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_vocable:
-                useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
                 EventBus.getDefault().postSticky(new EventCreateVocable());
                 return true;
         }
@@ -246,14 +217,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private void initMemberAttributesInstances() {
         managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
         manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
-        activityLayoutManager = DictionaryManagementActivityLayoutManager.getInstance();
+        layoutManager = new DictionaryManagementActivityLayoutManager(managementContainer, manipulationContainer);
         dictionaryDAO = new DictionaryDAO(this);
     }
 
     private void initViewLayout() {
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-        useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
+        layoutManager.useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
     }
 
     //    /**
@@ -301,22 +272,22 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             try {
-                ActivityViewLayout previousLayout = activityLayoutManager.discardCurrentLayoutAndGetPreviousOne();
+                DictionaryManagementViewLayout previousLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
                 switch (previousLayout.getType()) {
                     case SINGLE:
-                        useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
+                        layoutManager.useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
                         break;
                     case TWO_COLUMNS:
-                        useLayoutTwoHorizontalColumns();
+                        layoutManager.useLayoutTwoHorizontalColumns();
                         break;
                     case TWO_ROWS:
-                        useLayoutTwoVerticalRows();
+                        layoutManager.useLayoutTwoVerticalRows();
                         break;
-                    default:
-                        throw new RuntimeException("Error! Cannot retrieve any activityLayoutType saved into the saveInstanceState bundle");
                 }
                 return true;
-            } catch (EmptyStackException noPreviousLayoutException) {
+            } catch (NullPointerException ex) {
+                throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
+            }  catch (EmptyStackException ex) {
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -359,64 +330,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Use a layout with two horizontal columns that hosts managment and manipulation fragments
-     */
-    private void useLayoutTwoHorizontalColumns() {
-        setLayout(0, ActivityViewLayout.MATCH_PARENT, 1f, 0, ActivityViewLayout.MATCH_PARENT, 1f);
-        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.TWO_COLUMNS, null));
-    }
-
-    /**
-     * Use a layout with two vertical rows that hosts managment and manipulation fragments
-     */
-    private void useLayoutTwoVerticalRows() {
-        setLayout(ActivityViewLayout.MATCH_PARENT, 0, 1f, ActivityViewLayout.MATCH_PARENT, 0, 1f);
-        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.TWO_ROWS, null));
-    }
-
-    /**
-     * Use a single layout with only the management fragment visible
-     */
-    private void useSingleLayoutForFragment(String fragmentTAG) {
-        switch (fragmentTAG) {
-            case DictionaryManagementFragment.TAG:
-                setLayout(ActivityViewLayout.MATCH_PARENT, ActivityViewLayout.MATCH_PARENT, 0, 0);
-                break;
-            case DictionaryManipulationFragment.TAG:
-                setLayout(0, 0, ActivityViewLayout.MATCH_PARENT, ActivityViewLayout.MATCH_PARENT);
-                break;
-        }
-        activityLayoutManager.saveLayoutInUse(new ActivityViewLayout(ActivityViewLayout.Type.SINGLE, fragmentTAG));
-    }
-
-    private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
-        managementContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight)
-        );
-
-        manipulationContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight)
-        );
-    }
-
-    private void setLayout(
-            int managementContainerWidth,
-            int managementContainerHeight,
-            float managementContainerWeight,
-            int manipulationContainerWidth,
-            int manipulationContainerHeight,
-            float manipulationContainerWeight) {
-
-        managementContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight, managementContainerWeight)
-        );
-
-        manipulationContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight, manipulationContainerWeight)
-        );
     }
 
     private boolean isLargeScreenDevice() {
