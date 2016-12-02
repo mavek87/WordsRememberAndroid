@@ -156,6 +156,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 //            dictionaryListViewAdapter.setSelected(position, false);
             lastSelectedVocableID = -1;
         }
+        Toast.makeText(getActivity(), "lastSelectedVocableID = " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
         EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
     }
 

@@ -34,6 +34,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
 
     private TextView lbl_vocableName;
+    private final static String VOCABLE_NAME_CONTENT_KEY = "VOCABLE_NAME_KEY";
 
     private ManipulationMode mode;
 
@@ -82,6 +83,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(TITLE_CONTENT_KEY, lbl_title.getText().toString());
+        savedInstanceState.putString(VOCABLE_NAME_CONTENT_KEY, lbl_vocableName.getText().toString());
     }
 
     @Override
@@ -90,6 +92,9 @@ public class DictionaryManipulationFragment extends Fragment {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(TITLE_CONTENT_KEY)) {
                 lbl_title.setText(savedInstanceState.getString(TITLE_CONTENT_KEY));
+            }
+            if (savedInstanceState.containsKey(VOCABLE_NAME_CONTENT_KEY)) {
+                lbl_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
             }
         }
     }
@@ -104,26 +109,24 @@ public class DictionaryManipulationFragment extends Fragment {
      * @param event
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventInformObserversOfItemSelected(EventNotifySelectedVocableToObservers event) {
+    public void onEventVocableSelected(EventNotifySelectedVocableToObservers event) {
         if (isViewCreated()) {
             // Get data from event
             Word selectedVocable = event.getSelectedVocable();
             // Populate view with data
-            populateViewUsingData(selectedVocable);
+            populateViewUsingData("Edit Vocable", selectedVocable);
         }
     }
 
     /**
-     * Set the fragment to handle vocable creation use case
+     * Method for handling vocable creation use case
      *
      * @param event
      */
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventInformObserversOfItemSelected(EventCreateVocable event) {
+    public void onEventCreateVocable(EventCreateVocable event) {
         if (isViewCreated()) {
-            // Change fragment's title
-            lbl_title.setText("Create new vocable");
-            // Set fragment's mode
+            populateViewUsingData("Create Vocable", null);
             mode = ManipulationMode.CREATE;
         }
     }
@@ -137,7 +140,8 @@ public class DictionaryManipulationFragment extends Fragment {
      *
      * @param vocable
      */
-    private void populateViewUsingData(Word vocable) {
+    private void populateViewUsingData(String viewTitle, Word vocable) {
+        lbl_title.setText(viewTitle);
         if (vocable != null && vocable.getName() != null) {
             lbl_vocableName.setText(vocable.getName());
         } else {

@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.matteoveroni.wordsremember.R;
@@ -56,6 +59,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
 
+    private FloatingActionButton floatingActionButton;
+
     /**********************************************************************************************/
 
     // CONSTRUCTORS
@@ -88,6 +93,15 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dictionary_management_view);
         managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
         manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
+
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.dictionary_management_floating_action_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+                EventBus.getDefault().postSticky(new EventCreateVocable());
+            }
+        });
 
         fragmentManager = getSupportFragmentManager();
 
@@ -144,22 +158,22 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     // ANDROID LIFECYCLE METHODS - MENU
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_management, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_create_vocable:
-                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-                EventBus.getDefault().postSticky(new EventCreateVocable());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_dictionary_management, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_create_vocable:
+//                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+//                EventBus.getDefault().postSticky(new EventCreateVocable());
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     /**********************************************************************************************/
 
@@ -180,6 +194,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         // Send selected vocable to all the listeners (fragments)
         EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
 
+        // TODO: works only in signle layout for now...
+        layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
 //        loadFragmentsInsideView(true, true);
     }
 
@@ -286,7 +302,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 return true;
             } catch (NullPointerException ex) {
                 throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
-            }  catch (EmptyStackException ex) {
+            } catch (EmptyStackException ex) {
             }
         }
         return super.onKeyDown(keyCode, event);
