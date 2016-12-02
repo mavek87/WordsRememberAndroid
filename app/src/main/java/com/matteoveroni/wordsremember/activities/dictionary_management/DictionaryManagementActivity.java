@@ -198,7 +198,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
                 if (dictionaryDAO.removeVocable(selectedVocableID)) {
                     // Send selected vocable to all the listeners (fragments)
                     EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
-
 //                    loadFragmentsInsideView(true, false);
                 }
                 break;

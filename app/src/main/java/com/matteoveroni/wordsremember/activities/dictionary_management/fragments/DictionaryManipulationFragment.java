@@ -31,6 +31,8 @@ public class DictionaryManipulationFragment extends Fragment {
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
     private TextView lbl_title;
+    private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
+
     private TextView lbl_vocableName;
 
     private ManipulationMode mode;
@@ -52,48 +54,44 @@ public class DictionaryManipulationFragment extends Fragment {
     /**********************************************************************************************/
 
     // ANDROID LIFECYCLE METHODS
-
-    /**
-     * Method called when this fragment is attached to an activity
-     *
-     * @param context
-     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         EventBus.getDefault().register(this);
     }
 
-    /**
-     * Method called when this fragment is detached from an activity
-     */
     @Override
     public void onDetach() {
         EventBus.getDefault().unregister(this);
         super.onDetach();
     }
 
-    /**
-     * Method called during the view creation
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
     }
 
-    /**
-     * Method called when view is created
-     *
-     * @param view
-     * @param savedInstanceState
-     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         lbl_title = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_title);
         lbl_vocableName = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_lbl_vocable_name);
+    }
 
-        lbl_title.setText("Manipulate Vocable");
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(TITLE_CONTENT_KEY, lbl_title.getText().toString());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(TITLE_CONTENT_KEY)) {
+                lbl_title.setText(savedInstanceState.getString(TITLE_CONTENT_KEY));
+            }
+        }
     }
 
     /**********************************************************************************************/
@@ -112,8 +110,6 @@ public class DictionaryManipulationFragment extends Fragment {
             Word selectedVocable = event.getSelectedVocable();
             // Populate view with data
             populateViewUsingData(selectedVocable);
-            // Consume the event
-            EventBus.getDefault().removeStickyEvent(event);
         }
     }
 
@@ -129,8 +125,6 @@ public class DictionaryManipulationFragment extends Fragment {
             lbl_title.setText("Create new vocable");
             // Set fragment's mode
             mode = ManipulationMode.CREATE;
-//            // Consume the event
-//            EventBus.getDefault().removeStickyEvent(event);
         }
     }
 
@@ -153,6 +147,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     /**
      * Checks whether the view is created or not
+     *
      * @return isViewCreated boolean
      */
     private boolean isViewCreated() {
