@@ -12,15 +12,15 @@ public class ActivityViewLayout {
     public static final String TAG = "ActivityViewLayoutTag";
     public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
-    private Type activityLayoutType;
-    private String mainFragmentTAG;
-
     public enum Type {
         SINGLE, TWO_COLUMNS, TWO_ROWS
     }
 
-    public ActivityViewLayout(Type activityLayoutType, String mainFragmentTAG) {
-        this.activityLayoutType = activityLayoutType;
+    private Type type;
+    private String mainFragmentTAG;
+
+    public ActivityViewLayout(Type type, String mainFragmentTAG) {
+        this.type = type;
         this.mainFragmentTAG = mainFragmentTAG;
     }
 
@@ -28,15 +28,26 @@ public class ActivityViewLayout {
         return mainFragmentTAG;
     }
 
-    public void setMainFragmentTAG(String mainFragmentTAG) {
-        this.mainFragmentTAG = mainFragmentTAG;
+    public Type getType() {
+        return type;
     }
 
-    public Type getActivityLayoutType() {
-        return activityLayoutType;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActivityViewLayout)) return false;
+
+        ActivityViewLayout that = (ActivityViewLayout) o;
+
+        if (getType() != that.getType()) return false;
+        return getMainFragmentTAG() != null ? getMainFragmentTAG().equals(that.getMainFragmentTAG()) : that.getMainFragmentTAG() == null;
+
     }
 
-    public void setActivityLayoutType(Type activityLayoutType) {
-        this.activityLayoutType = activityLayoutType;
+    @Override
+    public int hashCode() {
+        int result = getType().hashCode();
+        result = 31 * result + (getMainFragmentTAG() != null ? getMainFragmentTAG().hashCode() : 0);
+        return result;
     }
 }

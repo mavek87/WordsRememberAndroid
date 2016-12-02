@@ -125,7 +125,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
         fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
         savedInstanceState.putSerializable(DictionaryManagementActivityLayoutManager.TAG, activityLayoutManager);
-//        savedInstanceState.putSerializable(ActivityViewLayout.TAG, activityLayoutType);
     }
 
     /**
@@ -146,7 +145,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
         ActivityViewLayout layoutToRestore = activityLayoutManager.readLayoutInUse();
 
-        switch (layoutToRestore.getActivityLayoutType()) {
+        switch (layoutToRestore.getType()) {
             case SINGLE:
                 useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
                 break;
@@ -299,7 +298,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             try {
                 ActivityViewLayout previousLayout = activityLayoutManager.discardCurrentLayoutAndGetPreviousOne();
-                switch (previousLayout.getActivityLayoutType()) {
+                switch (previousLayout.getType()) {
                     case SINGLE:
                         useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
                         break;
