@@ -1,14 +1,11 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -20,11 +17,10 @@ import com.matteoveroni.wordsremember.activities.dictionary_management.events.Ev
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.activities.dictionary_management.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementViewLayout;
 import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.provider.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.activities.dictionary_management.dao.DictionaryDAO;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -47,7 +43,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     private static final String TAG = "A_DICTIONARY_MANAGE";
 
-    private DictionaryDAO dictionaryDAO;
+    private DictionaryModel model;
 
     private FragmentManager fragmentManager;
 
@@ -136,19 +132,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         layoutManager.setManipulationContainer(manipulationContainer);
 
         try {
-            DictionaryManagementViewLayout layoutToRestore = layoutManager.readLayoutInUse();
-
-            switch (layoutToRestore.getType()) {
-                case SINGLE:
-                    layoutManager.useSingleLayoutForFragment(layoutToRestore.getMainFragmentTAG());
-                    break;
-                case TWO_COLUMNS:
-                    layoutManager.useLayoutTwoHorizontalColumns();
-                    break;
-                case TWO_ROWS:
-                    layoutManager.useLayoutTwoVerticalRows();
-                    break;
-            }
+            layoutManager.restoreLayout(DictionaryManagementActivityLayoutManager.LayoutChronology.CURRENT);
         } catch (EmptyStackException ex) {
             throw new RuntimeException("Error! No previous activity view layout saved to restore!");
         } catch (NullPointerException ex) {
@@ -186,10 +170,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDictionaryItemSelected(EventVocableSelected event) {
-        Word selectedVocable;
         long selectedVocableID = event.getSelectedVocableID();
-
-        selectedVocable = (selectedVocableID >= 0) ? dictionaryDAO.getVocableById(selectedVocableID) : null;
+        Word selectedVocable = (selectedVocableID >= 0) ? model.getVocableById(selectedVocableID) : null;
 
         // Send selected vocable to all the listeners (fragments)
         EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
@@ -211,7 +193,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             case EDIT:
                 break;
             case REMOVE:
-                if (dictionaryDAO.removeVocable(selectedVocableID)) {
+                if (model.removeVocable(selectedVocableID)) {
                     // Send selected vocable to all the listeners (fragments)
                     EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
 //                    loadFragmentsInsideView(true, false);
@@ -233,7 +215,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
         manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
         layoutManager = new DictionaryManagementActivityLayoutManager(managementContainer, manipulationContainer);
-        dictionaryDAO = new DictionaryDAO(this);
+        model = new DictionaryDAO(this);
     }
 
     private void initViewLayout() {
@@ -287,18 +269,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             try {
-                DictionaryManagementViewLayout previousLayout = layoutManager.discardCurrentLayoutAndGetPreviousOne();
-                switch (previousLayout.getType()) {
-                    case SINGLE:
-                        layoutManager.useSingleLayoutForFragment(previousLayout.getMainFragmentTAG());
-                        break;
-                    case TWO_COLUMNS:
-                        layoutManager.useLayoutTwoHorizontalColumns();
-                        break;
-                    case TWO_ROWS:
-                        layoutManager.useLayoutTwoVerticalRows();
-                        break;
-                }
+                layoutManager.restoreLayout(DictionaryManagementActivityLayoutManager.LayoutChronology.PREVIOUS);
                 return true;
             } catch (NullPointerException ex) {
                 throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
@@ -321,7 +292,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             fragmentManager
                     .beginTransaction()
                     .add(container.getId(), fragment, fragmentTAG)
-//                    .addToBackStack(null)
                     .commit();
             fragmentManager.executePendingTransactions();
             return true;
@@ -358,7 +328,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     // TODO: Remove this test method that populates vocables into the database
     private void populateDatabase() {
         Word firstVocableToSave = new Word("test123");
-        long firstSavedVocableId = dictionaryDAO.saveVocable(firstVocableToSave);
+        long firstSavedVocableId = model.saveVocable(firstVocableToSave);
 //        if (firstSavedVocableId < 0) {
 //            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
 //        } else {
@@ -366,7 +336,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 //        }
 
         Word secondVocableToSave = new Word("second vocable");
-        long secondSavedVocableId = dictionaryDAO.saveVocable(secondVocableToSave);
+        long secondSavedVocableId = model.saveVocable(secondVocableToSave);
     }
 
     private void exportDatabaseOnSd() {

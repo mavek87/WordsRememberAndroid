@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.provider.dao;
+package com.matteoveroni.wordsremember.activities.dictionary_management.dao;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.activities.dictionary_management.DictionaryModel;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
@@ -17,7 +18,7 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Sche
  * @author Matteo Veroni
  */
 
-public class DictionaryDAO {
+public class DictionaryDAO implements DictionaryModel {
 
     private final ContentResolver contentResolver;
 
@@ -37,6 +38,7 @@ public class DictionaryDAO {
      * is positive and corresponds to the inserted vocable id if the operation was successful.
      * @throws NullPointerException
      */
+    @Override
     public long saveVocable(Word vocable) throws NullPointerException {
         long id = -1;
         if (!isVocablePresent(vocable)) {
@@ -53,6 +55,7 @@ public class DictionaryDAO {
         return id;
     }
 
+    @Override
     public boolean updateVocable(long vocableID, Word newVocable) {
         final String str_idColumn = String.valueOf(vocableID);
 
@@ -73,6 +76,7 @@ public class DictionaryDAO {
      * @return The vocable corresponding to the searched ID or null if the database doesn't contain any
      * vocable with that ID.
      */
+    @Override
     public Word getVocableById(long id) {
         final String str_idColumn = String.valueOf(id);
 
@@ -104,6 +108,7 @@ public class DictionaryDAO {
      * @param vocableID The vocable ID
      * @return True if the vocable has been removed and false in the other case
      */
+    @Override
     public boolean removeVocable(long vocableID) {
         final String str_idColumn = String.valueOf(vocableID);
 
