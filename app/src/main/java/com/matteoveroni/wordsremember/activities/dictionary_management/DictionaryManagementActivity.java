@@ -157,7 +157,18 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         Word selectedVocable = null;
         if (selectedVocableID >= 0) {
             selectedVocable = model.getVocableById(selectedVocableID);
-            layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+
+            if (isLargeScreenDevice()) {
+                if (isLandscapeOrientation()) {
+                    layoutManager.useLayoutTwoHorizontalColumns();
+                } else {
+                    layoutManager.useLayoutTwoVerticalRows();
+                }
+            } else {
+//                manipulationContainer.removeAllViews();
+                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+            }
+
             EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
         }
     }
