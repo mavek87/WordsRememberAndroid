@@ -18,7 +18,7 @@ public class DictionaryManagementActivityLayoutManager implements Serializable {
     public static final String TAG = "DMA_LAYOUT_MANAGER";
 
     private final Stack<DictionaryManagementViewLayout> layoutHistory = new Stack<>();
-    
+
     private FrameLayout managementContainer;
     private FrameLayout manipulationContainer;
 
@@ -27,12 +27,17 @@ public class DictionaryManagementActivityLayoutManager implements Serializable {
         this.manipulationContainer = manipulationContainer;
     }
 
-    public void setManagementContainer(FrameLayout managementContainer) {
+    public void resyncWithNewViewElements(FrameLayout managementContainer, FrameLayout manipulationContainer){
         this.managementContainer = managementContainer;
+        this.manipulationContainer = manipulationContainer;
     }
 
-    public void setManipulationContainer(FrameLayout manipulationContainer) {
-        this.manipulationContainer = manipulationContainer;
+    /**
+     * Called to avoid possible memory leaks
+     */
+    public void dispose() {
+        managementContainer = null;
+        manipulationContainer = null;
     }
 
     public void saveLayoutInUse(DictionaryManagementViewLayout layoutToSave) {
@@ -49,14 +54,14 @@ public class DictionaryManagementActivityLayoutManager implements Serializable {
         layoutHistory.pop();
         return layoutHistory.peek();
     }
-    
+
     public enum LayoutChronology {
         CURRENT, PREVIOUS;
     }
 
     public void restoreLayout(LayoutChronology layoutChronology) throws NullPointerException, EmptyStackException {
         DictionaryManagementViewLayout restoreLayout = null;
-        switch (layoutChronology){
+        switch (layoutChronology) {
             case CURRENT:
                 restoreLayout = readLayoutInUse();
                 break;

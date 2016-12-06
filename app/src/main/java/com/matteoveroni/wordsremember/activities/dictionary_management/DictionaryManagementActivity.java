@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
@@ -20,7 +21,7 @@ import com.matteoveroni.wordsremember.activities.dictionary_management.fragments
 import com.matteoveroni.wordsremember.activities.dictionary_management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.model.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.activities.dictionary_management.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.activities.dictionary_management.model.DictionaryDAO;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,11 +40,9 @@ import static com.matteoveroni.wordsremember.activities.dictionary_management.fr
 
 public class DictionaryManagementActivity extends AppCompatActivity {
 
-    // ATTRIBUTES
+    public static final String TAG = "A_DICTIONARY_MANAGE";
 
-    private static final String TAG = "A_DICTIONARY_MANAGE";
-
-    private DictionaryModel model;
+    private DictionaryDAO model;
 
     private FragmentManager fragmentManager;
 
@@ -59,11 +58,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**********************************************************************************************/
 
-    // CONSTRUCTORS
-
-    /**
-     * Empty constructor
-     */
+    // CONSTRUCTOR
     public DictionaryManagementActivity() {
     }
 
@@ -79,6 +74,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
+        layoutManager.dispose();
         super.onStop();
     }
 
@@ -86,26 +82,23 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_dictionary_management_view);
-        managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
-        manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
-
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.dictionary_management_floating_action_button);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-                EventBus.getDefault().postSticky(new EventCreateVocable());
-            }
-        });
+        setupView();
 
         fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
-            initMemberAttributesInstances();
+            model = new DictionaryDAO(this);
+
+            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
+            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
+            layoutManager = new DictionaryManagementActivityLayoutManager(managementContainer, manipulationContainer);
+
+            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+            layoutManager.useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
+
             populateDatabase();
             exportDatabaseOnSd();
-            initViewLayout();
         }
     }
 
@@ -115,11 +108,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
         fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
         savedInstanceState.putSerializable(DictionaryManagementActivityLayoutManager.TAG, layoutManager);
+        savedInstanceState.putSerializable(DictionaryDAO.TAG, model);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        model = (DictionaryDAO) savedInstanceState.getSerializable(DictionaryDAO.TAG);
 
         managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
@@ -128,8 +124,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
         layoutManager = (DictionaryManagementActivityLayoutManager) savedInstanceState.getSerializable(DictionaryManagementActivityLayoutManager.TAG);
-        layoutManager.setManagementContainer(managementContainer);
-        layoutManager.setManipulationContainer(manipulationContainer);
+        layoutManager.resyncWithNewViewElements(managementContainer, manipulationContainer);
 
         try {
             layoutManager.restoreLayout(DictionaryManagementActivityLayoutManager.LayoutChronology.CURRENT);
@@ -139,25 +134,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
         }
     }
-
-    // ANDROID LIFECYCLE METHODS - MENU
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_dictionary_management, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_create_vocable:
-//                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-//                EventBus.getDefault().postSticky(new EventCreateVocable());
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     /**********************************************************************************************/
 
@@ -169,16 +145,15 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      * @param event Event that occurs when a vocable is selected
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDictionaryItemSelected(EventVocableSelected event) {
+    public void onVocableSelected(EventVocableSelected event) {
         long selectedVocableID = event.getSelectedVocableID();
-        Word selectedVocable = (selectedVocableID >= 0) ? model.getVocableById(selectedVocableID) : null;
 
-        // Send selected vocable to all the listeners (fragments)
-        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
-
-        // TODO: works only in signle layout for now...
-        layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-//        loadFragmentsInsideView(true, true);
+        Word selectedVocable = null;
+        if (selectedVocableID >= 0) {
+            selectedVocable = model.getVocableById(selectedVocableID);
+            layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+            EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
+        }
     }
 
     /**
@@ -187,7 +162,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      * @param event The event for manipulating a vocable
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDictionaryItemManipulationRequested(EventManipulateVocable event) {
+    public void onVocableManipulationRequest(EventManipulateVocable event) {
         final long selectedVocableID = event.getVocableIDToManipulate();
         switch (event.getTypeOfManipulation()) {
             case EDIT:
@@ -207,21 +182,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**********************************************************************************************/
 
     // HELPER METHODS
+    private void setupView() {
+        setContentView(R.layout.activity_dictionary_management_view);
+        managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
+        manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
 
-    /**
-     * Private method called by onCreate (only the first time) that init all the member attributes instances.
-     */
-    private void initMemberAttributesInstances() {
-        managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
-        manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
-        layoutManager = new DictionaryManagementActivityLayoutManager(managementContainer, manipulationContainer);
-        model = new DictionaryDAO(this);
-    }
-
-    private void initViewLayout() {
-        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-        layoutManager.useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.dictionary_management_floating_action_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+                EventBus.getDefault().postSticky(new EventCreateVocable());
+            }
+        });
     }
 
     //    /**
@@ -270,10 +243,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             try {
                 layoutManager.restoreLayout(DictionaryManagementActivityLayoutManager.LayoutChronology.PREVIOUS);
+//                EventBus.getDefault().postSticky(new EventResetSelection());
                 return true;
-            } catch (NullPointerException ex) {
-                throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
-            } catch (EmptyStackException ex) {
+            } catch (Exception ex) {
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -299,24 +271,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         return false;
     }
 
-    /**
-     * Remove a fragment from the view if it's present
-     *
-     * @param fragment
-     * @return true if the fragment was successfully removed from the view, false otherwise
-     */
-    private boolean removeFragmentFromView(Fragment fragment) {
-        if (fragment != null && fragment.isAdded()) {
-            fragmentManager
-                    .beginTransaction()
-                    .remove(fragment)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-            return true;
-        }
-        return false;
-    }
-
     private boolean isLargeScreenDevice() {
         return getResources().getBoolean(R.bool.LARGE_SCREEN);
     }
@@ -325,18 +279,12 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         return getResources().getBoolean(R.bool.LANDSCAPE);
     }
 
-    // TODO: Remove this test method that populates vocables into the database
     private void populateDatabase() {
         Word firstVocableToSave = new Word("test123");
-        long firstSavedVocableId = model.saveVocable(firstVocableToSave);
-//        if (firstSavedVocableId < 0) {
-//            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " not inserted.", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(this, "Vocable " + firstVocableToSave.getName() + " inserted. His ID in the database is => " + firstSavedVocableId, Toast.LENGTH_SHORT).show();
-//        }
+        model.saveVocable(firstVocableToSave);
 
         Word secondVocableToSave = new Word("second vocable");
-        long secondSavedVocableId = model.saveVocable(secondVocableToSave);
+        model.saveVocable(secondVocableToSave);
     }
 
     private void exportDatabaseOnSd() {

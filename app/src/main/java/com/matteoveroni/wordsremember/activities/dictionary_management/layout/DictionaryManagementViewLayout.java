@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
  */
 
 public class DictionaryManagementViewLayout {
-    public static final String TAG = "ActivityViewLayoutTag";
+    public static final String TAG = "ActivityViewLayout";
     public static final int MATCH_PARENT = LinearLayout.LayoutParams.MATCH_PARENT;
 
     public enum Type {
@@ -41,7 +41,6 @@ public class DictionaryManagementViewLayout {
 
         if (getType() != that.getType()) return false;
         return getMainFragmentTAG() != null ? getMainFragmentTAG().equals(that.getMainFragmentTAG()) : that.getMainFragmentTAG() == null;
-
     }
 
     @Override

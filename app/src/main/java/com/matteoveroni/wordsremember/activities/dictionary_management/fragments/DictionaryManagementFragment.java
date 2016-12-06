@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.activities.dictionary_management.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,34 +37,19 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     // ATTRIBUTES
 
-    public static final String TAG = "F_DICTIONARY_MANAGEMENT";
+    public static final String TAG = "F_dictionaryManagement";
 
     private WordsListViewAdapter dictionaryListViewAdapter;
 
-    private long lastSelectedVocableID = -1;
-
     /**********************************************************************************************/
 
-    // CONSTRUCTORS
-
-    /**
-     * Empty constructor
-     */
+    // CONSTRUCTOR
     public DictionaryManagementFragment() {
     }
 
     /**********************************************************************************************/
 
     // ANDROID LIFECYCLE METHODS
-
-    /**
-     * Method called when the creation of view starts.
-     *
-     * @param inflater           The layout inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
@@ -76,7 +62,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Set the list choice mode to allow only one selection at a time
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
@@ -147,23 +132,17 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        if (id != lastSelectedVocableID) {
-//                view.setActivated(true);
-//            dictionaryListViewAdapter.setSelected(position, true);
-            lastSelectedVocableID = id;
-        } else {
-//            view.setActivated(false);
-//            dictionaryListViewAdapter.setSelected(position, false);
-            lastSelectedVocableID = -1;
-        }
-        Toast.makeText(getActivity(), "lastSelectedVocableID = " + lastSelectedVocableID, Toast.LENGTH_SHORT).show();
-        EventBus.getDefault().post(new EventVocableSelected(lastSelectedVocableID));
+//        if (id != lastSelectedVocableID) {
+////                view.setActivated(true);
+////            dictionaryListViewAdapter.setSelected(position, true);
+//            lastSelectedVocableID = id;
+//        } else {
+////            view.setActivated(false);
+////            dictionaryListViewAdapter.setSelected(position, false);
+//            lastSelectedVocableID = -1;
+//        }
+        EventBus.getDefault().post(new EventVocableSelected(id));
     }
-
-    public boolean isItemSelected() {
-        return lastSelectedVocableID >= 0;
-    }
-
 
 /**********************************************************************************************/
 }
