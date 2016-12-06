@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.events.EventCreateVocable;
@@ -82,7 +81,8 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupView();
+        setContentView(R.layout.activity_dictionary_management_view);
+        findViewElementsReferences();
 
         fragmentManager = getSupportFragmentManager();
 
@@ -93,13 +93,19 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
             layoutManager = new DictionaryManagementActivityLayoutManager(managementContainer, manipulationContainer);
 
-            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-            layoutManager.useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
+            setupFirstView();
 
             populateDatabase();
             exportDatabaseOnSd();
         }
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+                EventBus.getDefault().postSticky(new EventCreateVocable());
+            }
+        });
     }
 
     @Override
@@ -182,19 +188,17 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**********************************************************************************************/
 
     // HELPER METHODS
-    private void setupView() {
-        setContentView(R.layout.activity_dictionary_management_view);
+    private void findViewElementsReferences() {
         managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
         manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
-
         floatingActionButton = (FloatingActionButton) findViewById(R.id.dictionary_management_floating_action_button);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-                EventBus.getDefault().postSticky(new EventCreateVocable());
-            }
-        });
+    }
+
+
+    private void setupFirstView() {
+        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+        layoutManager.useSingleLayoutForFragment(DictionaryManagementFragment.TAG);
     }
 
     //    /**
