@@ -40,6 +40,11 @@ import static com.matteoveroni.wordsremember.ui.fragments.factories.DictionaryFr
  * @author Matteo Veroni
  */
 
+/**
+ *
+ * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
+ *
+ */
 public class DictionaryManagementActivity extends AppCompatActivity {
 
     public static final String TAG = "A_DICTIONARY_MANAGE";
