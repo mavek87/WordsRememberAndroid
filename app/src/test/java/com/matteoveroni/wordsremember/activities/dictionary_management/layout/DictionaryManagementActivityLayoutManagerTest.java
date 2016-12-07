@@ -2,6 +2,9 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import android.widget.FrameLayout;
 
+import com.matteoveroni.wordsremember.models.layout.DictionaryManagementActivityLayoutManager;
+import com.matteoveroni.wordsremember.models.layout.DictionaryManagementViewLayout;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

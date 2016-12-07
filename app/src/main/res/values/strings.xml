@@ -17,5 +17,6 @@
     <string name="create_vocable">Create vocable</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
+    <string name="title_activity_dictionary_manipulation">DictionaryManipulationActivity</string>
 
 </resources>
