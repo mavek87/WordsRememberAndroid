@@ -17,7 +17,7 @@ import butterknife.OnClick;
  * Activity that handles the Main Menu.
  *
  * @author Matteo Veroni
- * @version 0.0.4
+ * @version 0.0.5
  */
 public class MainMenuActivity extends AppCompatActivity {
     @BindView(R.id.main_menu_btn_start)
@@ -40,6 +40,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.main_menu_btn_manage_dictionary)
     public void onButtonManageDictionaryClicked(){
         Intent intentStartDictionary = new Intent(getBaseContext(), DictionaryManagementActivity.class);

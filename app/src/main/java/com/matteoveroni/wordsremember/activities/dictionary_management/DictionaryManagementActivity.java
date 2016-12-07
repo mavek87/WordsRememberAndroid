@@ -144,9 +144,9 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**********************************************************************************************/
 
     // EVENTS - ACTIVITY VIEW EVENTS
-
+    @SuppressWarnings("unused")
     @OnClick(R.id.dictionary_management_floating_action_button)
-    public void onFloatingActionButtonClicked(){
+    public void onFloatingActionButtonClicked() {
         layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
         EventBus.getDefault().postSticky(new EventCreateVocable());
     }
@@ -158,6 +158,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      *
      * @param event Event that occurs when a vocable is selected
      */
+    @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onVocableSelected(EventVocableSelected event) {
         long selectedVocableID = event.getSelectedVocableID();
@@ -186,6 +187,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
      *
      * @param event The event for manipulating a vocable
      */
+    @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onVocableManipulationRequest(EventManipulateVocable event) {
         final long selectedVocableID = event.getVocableIDToManipulate();
