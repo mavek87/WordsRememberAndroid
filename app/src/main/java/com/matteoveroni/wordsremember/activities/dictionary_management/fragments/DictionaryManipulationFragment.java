@@ -18,6 +18,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Fragment designed to manage CRUD operations on single vocables in a dictionary
  *
@@ -26,21 +30,24 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class DictionaryManipulationFragment extends Fragment {
 
-    // ATTRIBUTES
-
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
-    private TextView lbl_title;
     private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
-
-    private TextView lbl_vocableName;
     private final static String VOCABLE_NAME_CONTENT_KEY = "VOCABLE_NAME_KEY";
+
+    @BindView(R.id.fragment_dictionary_manipulation_title)
+    TextView lbl_title;
+
+    @BindView(R.id.fragment_dictionary_manipulation_lbl_vocable_name)
+    TextView lbl_vocableName;
 
     private ManipulationMode mode;
 
     private enum ManipulationMode {
         CREATE, UPDATE;
     }
+
+    private Unbinder viewInjector;
 
     /**********************************************************************************************/
 
@@ -69,14 +76,15 @@ public class DictionaryManipulationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
+        View view = inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
+        viewInjector = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        lbl_title = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_title);
-        lbl_vocableName = (TextView) getActivity().findViewById(R.id.fragment_dictionary_manipulation_lbl_vocable_name);
+    public void onDestroyView() {
+        viewInjector.unbind();
+        super.onDestroyView();
     }
 
     @Override
@@ -108,6 +116,7 @@ public class DictionaryManipulationFragment extends Fragment {
      *
      * @param event
      */
+    @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventVocableSelected(EventNotifySelectedVocableToObservers event) {
         if (isViewCreated()) {
@@ -123,6 +132,7 @@ public class DictionaryManipulationFragment extends Fragment {
      *
      * @param event
      */
+    @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onEventCreateVocable(EventCreateVocable event) {
         if (isViewCreated()) {
