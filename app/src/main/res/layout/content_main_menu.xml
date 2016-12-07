@@ -27,7 +27,7 @@
             android:layout_weight="0.5" />
 
         <Button
-            android:id="@+id/btn_start"
+            android:id="@+id/main_menu_btn_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="80dp"
@@ -40,7 +40,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/btn_manage_dictionary"
+            android:id="@+id/main_menu_btn_manage_dictionary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="80dp"
@@ -53,7 +53,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/btn_settings"
+            android:id="@+id/main_menu_btn_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="80dp"

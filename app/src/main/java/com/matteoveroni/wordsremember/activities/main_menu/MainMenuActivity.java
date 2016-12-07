@@ -4,37 +4,45 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Button;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.activities.dictionary_management.DictionaryManagementActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Activity that handles the Main Menu.
  *
  * @author Matteo Veroni
- * @version 0.0.3
+ * @version 0.0.4
  */
 public class MainMenuActivity extends AppCompatActivity {
-    private Button btn_start;
-    private Button btn_manage_dictionary;
-    private Button btn_settings;
+    @BindView(R.id.main_menu_btn_start)
+    Button btn_start;
+
+    @BindView(R.id.main_menu_btn_manage_dictionary)
+    Button btn_manage_dictionary;
+
+    @BindView(R.id.main_menu_btn_settings)
+    Button btn_settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_menu);
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
 
-        btn_manage_dictionary = (Button) findViewById(R.id.btn_manage_dictionary);
-        btn_manage_dictionary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentStartDictionary = new Intent(getBaseContext(), DictionaryManagementActivity.class);
-                startActivity(intentStartDictionary);
-            }
-        });
+    @OnClick(R.id.main_menu_btn_manage_dictionary)
+    public void onButtonManageDictionaryClicked(){
+        Intent intentStartDictionary = new Intent(getBaseContext(), DictionaryManagementActivity.class);
+        startActivity(intentStartDictionary);
     }
 }

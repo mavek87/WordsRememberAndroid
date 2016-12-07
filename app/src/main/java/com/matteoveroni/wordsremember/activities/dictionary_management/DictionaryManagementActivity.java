@@ -29,6 +29,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.security.InvalidParameterException;
 import java.util.EmptyStackException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static com.matteoveroni.wordsremember.activities.dictionary_management.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
@@ -50,10 +54,14 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     private DictionaryManagementActivityLayoutManager layoutManager;
 
-    private FrameLayout managementContainer;
-    private FrameLayout manipulationContainer;
+    @BindView(R.id.dictionary_management_container)
+    FrameLayout managementContainer;
 
-    private FloatingActionButton floatingActionButton;
+    @BindView(R.id.dictionary_manipulation_container)
+    FrameLayout manipulationContainer;
+
+    @BindView(R.id.dictionary_management_floating_action_button)
+    FloatingActionButton floatingActionButton;
 
     /**********************************************************************************************/
 
@@ -82,7 +90,7 @@ public class DictionaryManagementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_management_view);
-        findViewElementsReferences();
+        ButterKnife.bind(this);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -98,14 +106,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
             populateDatabase();
             exportDatabaseOnSd();
         }
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
-                EventBus.getDefault().postSticky(new EventCreateVocable());
-            }
-        });
     }
 
     @Override
@@ -143,7 +143,15 @@ public class DictionaryManagementActivity extends AppCompatActivity {
 
     /**********************************************************************************************/
 
-    // EVENTS
+    // EVENTS - ACTIVITY VIEW EVENTS
+
+    @OnClick(R.id.dictionary_management_floating_action_button)
+    public void onFloatingActionButtonClicked(){
+        layoutManager.useSingleLayoutForFragment(DictionaryManipulationFragment.TAG);
+        EventBus.getDefault().postSticky(new EventCreateVocable());
+    }
+
+    // EVENTS - EXTERNAL EVENTS
 
     /**
      * Observer method launched when a EventVocableSelected is posted on the app event bus
@@ -199,13 +207,6 @@ public class DictionaryManagementActivity extends AppCompatActivity {
     /**********************************************************************************************/
 
     // HELPER METHODS
-    private void findViewElementsReferences() {
-        managementContainer = (FrameLayout) findViewById(R.id.dictionary_management_container);
-        manipulationContainer = (FrameLayout) findViewById(R.id.dictionary_manipulation_container);
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.dictionary_management_floating_action_button);
-    }
-
-
     private void setupFirstView() {
         addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
