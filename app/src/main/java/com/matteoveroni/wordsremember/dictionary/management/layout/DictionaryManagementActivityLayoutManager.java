@@ -1,10 +1,10 @@
-package com.matteoveroni.wordsremember.models.layout;
+package com.matteoveroni.wordsremember.dictionary.management.layout;
 
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
 
 import java.io.Serializable;
 import java.util.EmptyStackException;

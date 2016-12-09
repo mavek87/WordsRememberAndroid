@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models.layout;
+package com.matteoveroni.wordsremember.dictionary.management.layout;
 
 import android.widget.LinearLayout;
 

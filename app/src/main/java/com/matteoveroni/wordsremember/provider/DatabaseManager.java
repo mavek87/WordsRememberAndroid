@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models.provider;
+package com.matteoveroni.wordsremember.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.matteoveroni.wordsremember.models.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import java.io.File;
 import java.io.FileInputStream;

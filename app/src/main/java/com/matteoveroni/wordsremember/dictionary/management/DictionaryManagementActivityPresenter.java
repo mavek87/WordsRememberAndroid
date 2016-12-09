@@ -1,8 +1,10 @@
-package com.matteoveroni.wordsremember.models;
+package com.matteoveroni.wordsremember.dictionary.management;
 
 import android.view.View;
 
-import com.matteoveroni.wordsremember.ui.DictionaryManagementActivityView;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementActivityView;
+import com.matteoveroni.wordsremember.models.NullObjectProxy;
 
 import java.lang.reflect.Proxy;
 
@@ -20,7 +22,7 @@ public class DictionaryManagementActivityPresenter {
         this.view = (View) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
                 new Class[]{View.class},
-                new ProxyNoOpIfNullObject(view));
+                new NullObjectProxy(view));
     }
 
 

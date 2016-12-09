@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models.provider.contracts;
+package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.database.sqlite.SQLiteDatabase;
 

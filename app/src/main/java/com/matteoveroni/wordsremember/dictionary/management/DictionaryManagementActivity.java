@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.activities;
+package com.matteoveroni.wordsremember.dictionary.management;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,13 +13,12 @@ import com.matteoveroni.wordsremember.events.EventCreateVocable;
 import com.matteoveroni.wordsremember.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
-import com.matteoveroni.wordsremember.ui.fragments.factories.DictionaryFragmentFactory;
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.models.layout.DictionaryManagementActivityLayoutManager;
+import com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory;
+import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.dictionary.management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.models.Word;
-import com.matteoveroni.wordsremember.models.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.models.DictionaryDAO;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.matteoveroni.wordsremember.ui.fragments.factories.DictionaryFragmentFactory.DictionaryFragmentType;
+import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
  * Activity that handles dictionary management operations

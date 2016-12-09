@@ -6,7 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.matteoveroni.wordsremember.models.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 public class WordsListViewAdapter extends CursorAdapter {
 

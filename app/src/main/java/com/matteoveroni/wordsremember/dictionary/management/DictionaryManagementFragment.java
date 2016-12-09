@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.fragments;
+package com.matteoveroni.wordsremember.dictionary.management;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,8 +20,8 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
-import com.matteoveroni.wordsremember.models.provider.DictionaryProvider;
-import com.matteoveroni.wordsremember.models.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.MainMenuActivity"
+            android:name=".main_menu.MainMenuActivity"
             android:label="@string/title_activity_main_menu"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,15 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.DictionaryManagementActivity" />
+        <activity android:name=".dictionary.management.DictionaryManagementActivity" />
 
         <provider
-            android:name=".models.provider.DictionaryProvider"
-            android:authorities="com.matteoveroni.wordsremember.models.provider"
+            android:name=".provider.DictionaryProvider"
+            android:authorities="com.matteoveroni.wordsremember.provider"
             android:exported="false" />
 
         <activity
-            android:name=".ui.activities.DictionaryManipulationActivity"
+            android:name=".dictionary.manipulation.DictionaryManipulationActivity"
             android:label="@string/title_activity_dictionary_manipulation"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

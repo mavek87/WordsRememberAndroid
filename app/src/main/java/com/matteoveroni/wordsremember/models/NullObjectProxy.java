@@ -4,11 +4,11 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class ProxyNoOpIfNullObject implements InvocationHandler {
+public class NullObjectProxy implements InvocationHandler {
 
     private WeakReference<Object> object;
 
-    public ProxyNoOpIfNullObject(Object object) {
+    public NullObjectProxy(Object object) {
         this.object = new WeakReference<>(object);
     }
 

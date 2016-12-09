@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.ui.fragments.factories;
+package com.matteoveroni.wordsremember.dictionary.factories;
 
 import android.support.v4.app.Fragment;
 
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.ui.fragments.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
 
 /**
  * @author Matteo Veroni

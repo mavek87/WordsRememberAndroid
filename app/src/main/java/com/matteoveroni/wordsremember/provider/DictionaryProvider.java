@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models.provider;
+package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.models.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,7 +33,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String CONTENT_SCHEME = "content://";
 
-    public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.models.provider";
+    public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
     public static final String BASE_PATH = "dictionary";
 

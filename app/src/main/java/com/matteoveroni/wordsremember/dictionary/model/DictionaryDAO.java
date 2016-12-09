@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models;
+package com.matteoveroni.wordsremember.dictionary.model;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -6,8 +6,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.models.provider.DictionaryProvider;
-import com.matteoveroni.wordsremember.models.provider.contracts.DictionaryContract.Schema;
+import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 import java.io.Serializable;
 

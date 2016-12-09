@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.activities;
+package com.matteoveroni.wordsremember.dictionary.manipulation;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

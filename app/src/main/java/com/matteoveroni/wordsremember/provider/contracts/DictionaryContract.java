@@ -1,20 +1,20 @@
-package com.matteoveroni.wordsremember.models.provider.contracts;
+package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.provider.BaseColumns;
 
 /**
- * Contract class that defines Translations Table Schema
+ * Contract class that defines Dictionary Table Schema
  *
  * @author Matteo Veroni
  */
-public final class TranslationsContract {
+public final class DictionaryContract {
 
-    private TranslationsContract() {
+    private DictionaryContract() {
     }
 
     public static final class Schema implements BaseColumns {
 
-        public static final String TABLE_NAME = "translations";
+        public static final String TABLE_NAME = "dictionary";
 
         public static final String COLUMN_ID = BaseColumns._ID;
         public static final String COLUMN_NAME = "name";

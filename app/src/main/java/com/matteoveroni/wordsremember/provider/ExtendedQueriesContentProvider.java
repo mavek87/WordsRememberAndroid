@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models.provider;
+package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentProvider;
 import android.net.Uri;
