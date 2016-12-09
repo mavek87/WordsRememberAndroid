@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management;
+package com.matteoveroni.wordsremember.dictionary.management.activity;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,13 +9,14 @@ import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.management.activity.layout.DictionaryManagementActivityLayoutManager;
+import com.matteoveroni.wordsremember.dictionary.management.fragment.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.events.EventCreateVocable;
 import com.matteoveroni.wordsremember.events.EventManipulateVocable;
 import com.matteoveroni.wordsremember.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.dictionary.management.layout.DictionaryManagementActivityLayoutManager;
 import com.matteoveroni.wordsremember.models.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;

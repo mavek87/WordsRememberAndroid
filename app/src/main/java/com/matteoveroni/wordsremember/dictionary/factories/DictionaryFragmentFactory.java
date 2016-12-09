@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.factories;
 
 import android.support.v4.app.Fragment;
 
-import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.management.fragment.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
 
 /**

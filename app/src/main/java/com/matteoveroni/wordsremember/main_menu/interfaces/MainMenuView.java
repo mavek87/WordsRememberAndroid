@@ -1,5 +1,5 @@
 package com.matteoveroni.wordsremember.main_menu.interfaces;
 
-public interface MainMenuActivityView {
+public interface MainMenuView {
     void startDictionaryManagement();
 }

@@ -10,10 +10,10 @@ import android.widget.Button;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementActivity;
-import com.matteoveroni.wordsremember.main_menu.factory.MainMenuActivityPresenterFactory;
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuActivityPresenter;
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuActivityView;
+import com.matteoveroni.wordsremember.dictionary.management.activity.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
+import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
+import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,10 +26,10 @@ import butterknife.OnClick;
  * @version 0.0.5
  */
 public class MainMenuActivity extends AppCompatActivity
-        implements MainMenuActivityView, LoaderManager.LoaderCallbacks<MainMenuActivityPresenter> {
+        implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
 
     private static final int PRESENTER_LOADER_ID = 1;
-    private MainMenuActivityPresenter presenter;
+    private MainMenuPresenter presenter;
 
     @BindView(R.id.main_menu_btn_start)
     Button btn_start;
@@ -39,6 +39,12 @@ public class MainMenuActivity extends AppCompatActivity
 
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.main_menu_btn_manage_dictionary)
+    public void onButtonManageDictionaryClicked() {
+        presenter.onButtonManageDictionaryClicked();
+    }
 
     @Override
     protected void onStart() {
@@ -66,25 +72,20 @@ public class MainMenuActivity extends AppCompatActivity
     }
 
     @Override
-    public Loader<MainMenuActivityPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new MainMenuActivityPresenterFactory());
+    public Loader<MainMenuPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new MainMenuPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<MainMenuActivityPresenter> loader, MainMenuActivityPresenter presenter) {
+    public void onLoadFinished(Loader<MainMenuPresenter> loader, MainMenuPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<MainMenuActivityPresenter> loader) {
+    public void onLoaderReset(Loader<MainMenuPresenter> loader) {
         presenter = null;
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.main_menu_btn_manage_dictionary)
-    public void onButtonManageDictionaryClicked() {
-        presenter.onButtonManageDictionaryClicked();
-    }
 
     @Override
     public void startDictionaryManagement() {

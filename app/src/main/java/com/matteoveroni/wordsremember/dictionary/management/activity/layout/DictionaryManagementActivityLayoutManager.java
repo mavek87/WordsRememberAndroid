@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.dictionary.management.layout;
+package com.matteoveroni.wordsremember.dictionary.management.activity.layout;
 
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.management.fragment.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.manipulation.DictionaryManipulationFragment;
 
 import java.io.Serializable;

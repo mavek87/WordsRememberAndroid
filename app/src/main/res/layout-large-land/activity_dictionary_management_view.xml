@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dictionary.management.DictionaryManagementActivity">
+    tools:context=".dictionary.management.activity.DictionaryManagementActivity">
 
     <LinearLayout
         android:id="@+id/activity_dictionary_management_smartphone"
@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:context=".dictionary.management.DictionaryManagementActivity">
+        tools:context=".dictionary.management.activity.DictionaryManagementActivity">
 
         <FrameLayout
             android:id="@+id/dictionary_management_container"

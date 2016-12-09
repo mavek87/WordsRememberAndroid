@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.main_menu;
 
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuActivityPresenter;
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuActivityView;
+import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
+import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
 import com.matteoveroni.wordsremember.models.NullObjectProxy;
 
 import java.lang.reflect.Proxy;
@@ -12,15 +12,15 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.y0b4pwra1
  */
 
-public class MainMenuActivityConcretePresenter implements MainMenuActivityPresenter {
+public class MainMenuConcretePresenter implements MainMenuPresenter {
 
-    private MainMenuActivityView view;
+    private MainMenuView view;
 
     @Override
     public void onViewAttached(Object view) {
-        this.view = (MainMenuActivityView) Proxy.newProxyInstance(
+        this.view = (MainMenuView) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
-                new Class[]{MainMenuActivityView.class},
+                new Class[]{MainMenuView.class},
                 new NullObjectProxy(view)
         );
     }

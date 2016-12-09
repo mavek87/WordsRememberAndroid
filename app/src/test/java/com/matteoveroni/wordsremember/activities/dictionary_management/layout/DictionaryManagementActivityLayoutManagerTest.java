@@ -2,8 +2,8 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import android.widget.FrameLayout;
 
-import com.matteoveroni.wordsremember.dictionary.management.layout.DictionaryManagementActivityLayoutManager;
-import com.matteoveroni.wordsremember.dictionary.management.layout.DictionaryManagementViewLayout;
+import com.matteoveroni.wordsremember.dictionary.management.activity.layout.DictionaryManagementActivityLayoutManager;
+import com.matteoveroni.wordsremember.dictionary.management.activity.layout.DictionaryManagementViewLayout;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
