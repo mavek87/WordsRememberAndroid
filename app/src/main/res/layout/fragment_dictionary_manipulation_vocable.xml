@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dictionary.manipulation.DictionaryManipulationFragment">
+    tools:context=".dictionary.fragments.DictionaryManipulationFragment">
 
     <TextView
         android:id="@+id/fragment_dictionary_manipulation_title"

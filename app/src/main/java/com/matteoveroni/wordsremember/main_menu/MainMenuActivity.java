@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.management.activity.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
@@ -85,7 +85,6 @@ public class MainMenuActivity extends AppCompatActivity
     public void onLoaderReset(Loader<MainMenuPresenter> loader) {
         presenter = null;
     }
-
 
     @Override
     public void startDictionaryManagement() {

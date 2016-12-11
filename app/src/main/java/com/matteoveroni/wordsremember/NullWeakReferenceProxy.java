@@ -1,14 +1,14 @@
-package com.matteoveroni.wordsremember.models;
+package com.matteoveroni.wordsremember;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-public class NullObjectProxy implements InvocationHandler {
+public class NullWeakReferenceProxy implements InvocationHandler {
 
     private WeakReference<Object> object;
 
-    public NullObjectProxy(Object object) {
+    public NullWeakReferenceProxy(Object object) {
         this.object = new WeakReference<>(object);
     }
 

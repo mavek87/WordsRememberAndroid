@@ -5,5 +5,5 @@ public interface Presenter<V> {
 
     void onViewDetached();
 
-    void onDestroyed();
+    void onViewDestroyed();
 }

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management.fragment;
+package com.matteoveroni.wordsremember.dictionary.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;

@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.main_menu;
 
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
-import com.matteoveroni.wordsremember.models.NullObjectProxy;
+import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 
 import java.lang.reflect.Proxy;
 
@@ -21,7 +21,7 @@ public class MainMenuConcretePresenter implements MainMenuPresenter {
         this.view = (MainMenuView) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
                 new Class[]{MainMenuView.class},
-                new NullObjectProxy(view)
+                new NullWeakReferenceProxy(view)
         );
     }
 
@@ -31,7 +31,7 @@ public class MainMenuConcretePresenter implements MainMenuPresenter {
     }
 
     @Override
-    public void onDestroyed() {
+    public void onViewDestroyed() {
         onViewDetached();
     }
 
