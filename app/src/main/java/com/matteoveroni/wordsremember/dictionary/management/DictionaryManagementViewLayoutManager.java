@@ -1,6 +1,8 @@
-package com.matteoveroni.wordsremember.dictionary.management.layout;
+package com.matteoveroni.wordsremember.dictionary.management;
 
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
@@ -8,39 +10,29 @@ import java.util.Stack;
 /**
  * @author Matteo Veroni
  */
-public class DictionaryManagementViewLayoutManager {
+public class DictionaryManagementViewLayoutManager implements ViewLayoutManager {
 
     public static final String TAG = "DMA_LAYOUT_MANAGER";
 
     private final Stack<ViewLayout> viewLayoutHistory = new Stack<>();
 
+    @Override
     public void saveLayoutInUse(ViewLayout layoutToSave) {
         if (!isLayoutToSaveEqualsToCurrentLayout(layoutToSave)) {
             viewLayoutHistory.push(layoutToSave);
         }
     }
 
-    public ViewLayout readLayoutInUse() throws EmptyStackException {
-        return viewLayoutHistory.peek();
-    }
-
-    public ViewLayout discardCurrentLayoutAndGetPreviousOne() throws EmptyStackException {
-        viewLayoutHistory.pop();
-        return viewLayoutHistory.peek();
-    }
-
-    public enum LayoutChronology {
-        CURRENT, PREVIOUS;
-    }
-
-    public ViewLayout getViewLayout(LayoutChronology layoutChronology) throws NullPointerException, EmptyStackException {
+    @Override
+    public ViewLayout getViewLayout(ViewLayoutChronology viewLayoutChronology) throws NullPointerException, EmptyStackException {
         ViewLayout viewLayout = null;
-        switch (layoutChronology) {
-            case CURRENT:
-                viewLayout = readLayoutInUse();
+        switch (viewLayoutChronology) {
+            case CURRENT_LAYOUT:
+                viewLayout = viewLayoutHistory.peek();
                 break;
-            case PREVIOUS:
-                viewLayout = discardCurrentLayoutAndGetPreviousOne();
+            case PREVIOUS_LAYOUT:
+                viewLayoutHistory.pop();
+                viewLayout = viewLayoutHistory.peek();
                 break;
         }
         return viewLayout;

@@ -7,4 +7,6 @@ public interface DictionaryManagementPresenter extends Presenter {
     void onViewCreatedForTheFirstTime();
 
     void onViewRestored();
+
+    boolean onKeyBackPressedRestorePreviousLayout();
 }

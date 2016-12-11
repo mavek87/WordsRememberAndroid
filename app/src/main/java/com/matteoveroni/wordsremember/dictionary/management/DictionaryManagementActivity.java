@@ -77,7 +77,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
-//        layoutManager.dispose();
         presenter.onViewDetached();
         super.onStop();
     }
@@ -97,13 +96,50 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
             managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
             manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
-//            layoutManager = new DictionaryManagementViewLayoutManager(managementContainer, manipulationContainer);
 
             addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
             addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
             presenter.onViewCreatedForTheFirstTime();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
+        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
+        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+
+        manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
+        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+
+        presenter.onViewRestored();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(presenter.onKeyBackPressedRestorePreviousLayout()){
+                return  true;
+            }
+//
+//            try {
+//                presenter.onKeyBackPressedRestorePreviousLayout();
+////                layoutManager.getViewLayout(DictionaryManagementViewLayoutManager.ViewLayoutChronology.PREVIOUS_LAYOUT);
+////                EventBus.getDefault().postSticky(new EventResetSelection());
+//                return true;
+//            } catch (Exception ex) {
+//            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -143,49 +179,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         viewLayout = new ViewLayout(ViewLayoutType.TWO_ROWS_LAYOUT);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
-        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
-        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-
-        manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
-        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-
-        presenter.onViewRestored();
-
-//        layoutManager = (DictionaryManagementViewLayoutManager) savedInstanceState.getSerializable(DictionaryManagementViewLayoutManager.TAG);
-//        layoutManager.resyncWithNewViewElements(managementContainer, manipulationContainer);
-//
-//        try {
-//            layoutManager.getViewLayout(DictionaryManagementViewLayoutManager.LayoutChronology.CURRENT);
-//        } catch (EmptyStackException ex) {
-//            throw new RuntimeException("Error! No previous activity view layout saved to restore!");
-//        } catch (NullPointerException ex) {
-//            throw new RuntimeException("Error! Previous activity view layout malformed. No activityLayoutType set");
-//        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            try {
-//                layoutManager.getViewLayout(DictionaryManagementViewLayoutManager.LayoutChronology.PREVIOUS);
-//                EventBus.getDefault().postSticky(new EventResetSelection());
-                return true;
-            } catch (Exception ex) {
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     @Override
     public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {

@@ -3,15 +3,14 @@ package com.matteoveroni.wordsremember.dictionary.management;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
-import com.matteoveroni.wordsremember.dictionary.management.layout.DictionaryManagementViewLayoutManager;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.models.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
 
 import java.lang.reflect.Proxy;
-import java.util.EmptyStackException;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
@@ -44,6 +43,18 @@ public class DictionaryManagementConcretePresenter implements DictionaryManageme
     }
 
     @Override
+    public boolean onKeyBackPressedRestorePreviousLayout() {
+        boolean previousLayoutRestored;
+        try {
+            layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+            previousLayoutRestored = true;
+        } catch (Exception ex) {
+            previousLayoutRestored = false;
+        }
+        return previousLayoutRestored;
+    }
+
+    @Override
     public void onViewCreatedForTheFirstTime() {
         view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
         layoutManager.saveLayoutInUse(view.getViewLayout());
@@ -67,7 +78,7 @@ public class DictionaryManagementConcretePresenter implements DictionaryManageme
 
     private void restoreSavedLayoutIfPresent() {
         try {
-            ViewLayout viewLayout = layoutManager.readLayoutInUse();
+            ViewLayout viewLayout = layoutManager.getViewLayout(ViewLayoutChronology.CURRENT_LAYOUT);
             switch (viewLayout.getViewLayoutType()) {
                 case SINGLE_LAYOUT:
                     view.useSingleLayoutWithFragment(viewLayout.getMainFragmentTAG());
