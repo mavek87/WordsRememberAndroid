@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.view.Display;
 
+import com.matteoveroni.wordsremember.R;
+
 /**
  * @author Matteo Veroni
  */
@@ -25,20 +27,21 @@ public class GraphicsUtil {
         return height;
     }
 
-    /**
-     * Method that returns orientation (either ORIENTATION_LANDSCAPE, ORIENTATION_PORTRAIT)
-     *
-     * @param context
-     * @return Orientation Landscape int
-     */
-    public static final int getOrientation(Context context) {
-        int orientation = context.getResources().getConfiguration().orientation;
-        return orientation;
-    }
+//    /**
+//     * Method that returns orientation (either ORIENTATION_LANDSCAPE, ORIENTATION_PORTRAIT)
+//     *
+//     * @param context
+//     * @return Orientation Landscape int
+//     */
+//    public static final int getOrientation(Context context) {
+//        return context.getResources().getConfiguration().orientation;
+//    }
+//
+//    public static boolean isTablet(Context context) {
+//        return (context.getResources().getConfiguration().screenLayout
+//                & Configuration.SCREENLAYOUT_SIZE_MASK)
+//                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+//    }
 
-    public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
+
 }

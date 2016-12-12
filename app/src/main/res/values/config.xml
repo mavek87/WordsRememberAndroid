@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<item layoutType="bool" name="LARGE_SCREEN">false</item>-->
-    <!--<item layoutType="bool" name="LANDSCAPE">false</item>-->
+    <bool name="LARGE_SCREEN">false</bool>
+    <bool name="LANDSCAPE_MODE">false</bool>
 </resources>
 

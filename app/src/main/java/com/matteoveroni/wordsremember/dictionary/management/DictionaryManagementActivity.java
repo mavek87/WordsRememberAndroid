@@ -49,8 +49,8 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
     private ViewLayout viewLayout;
 
+    private LoaderManager presenterLoaderManager;
     private FragmentManager fragmentManager;
-
     private DictionaryManagementFragment managementFragment;
     private DictionaryManipulationFragment manipulationFragment;
 
@@ -89,8 +89,9 @@ public class DictionaryManagementActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         fragmentManager = getSupportFragmentManager();
+        presenterLoaderManager = getSupportLoaderManager();
 
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        presenterLoaderManager.initLoader(PRESENTER_LOADER_ID, null, this);
 
         if (savedInstanceState == null) {
 
@@ -127,17 +128,10 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(presenter.onKeyBackPressedRestorePreviousLayout()){
-                return  true;
+            if (presenter.onKeyBackPressedRestorePreviousState()) {
+//                EventBus.getDefault().postSticky(new EventResetSelection());
+                return true;
             }
-//
-//            try {
-//                presenter.onKeyBackPressedRestorePreviousLayout();
-////                layoutManager.getViewLayout(DictionaryManagementViewLayoutManager.ViewLayoutChronology.PREVIOUS_LAYOUT);
-////                EventBus.getDefault().postSticky(new EventResetSelection());
-//                return true;
-//            } catch (Exception ex) {
-//            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -179,6 +173,15 @@ public class DictionaryManagementActivity extends AppCompatActivity
         viewLayout = new ViewLayout(ViewLayoutType.TWO_ROWS_LAYOUT);
     }
 
+    @Override
+    public boolean isViewLarge() {
+        return getResources().getBoolean(R.bool.LARGE_SCREEN);
+    }
+
+    @Override
+    public boolean isViewLandscape() {
+        return getResources().getBoolean(R.bool.LANDSCAPE_MODE);
+    }
 
     @Override
     public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
@@ -194,7 +197,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
         presenter = null;
     }
-
 
     /**********************************************************************************************/
 
@@ -222,8 +224,8 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //        if (selectedVocableID >= 0) {
 //            selectedVocable = model.getVocableById(selectedVocableID);
 //
-//            if (isLargeScreenDevice()) {
-//                if (isLandscapeOrientation()) {
+//            if (isViewLarge()) {
+//                if (isViewLandscape()) {
 //                    layoutManager.useTwoHorizontalColumnsLayout();
 //                } else {
 //                    layoutManager.useTwoVerticalRowsLayout();
@@ -274,12 +276,12 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //            // Add management fragment if it's not added yet in any case
 //            addFragmentToView(managementContainer, managementFragment);
 //
-//            if (isLargeScreenDevice() && (managementFragment != null && managementFragment.isItemSelected())) {
+//            if (isViewLarge() && (managementFragment != null && managementFragment.isItemSelected())) {
 //                // LARGE SCREEN and A VOCABLE SELECTED
 //                // so load the manipulation fragment inside the view together with the management fragment
 //                addFragmentToView(manipulationContainer, manipulationFragment);
 //
-//                if (isLandscapeOrientation()) {
+//                if (isViewLandscape()) {
 //                    // LANDSCAPE MODE
 //                    useTwoHorizontalColumnsLayout();
 //                } else {
@@ -316,14 +318,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         }
         return false;
     }
-//
-//    private boolean isLargeScreenDevice() {
-//        return getResources().getBoolean(R.bool.LARGE_SCREEN);
-//    }
-//
-//    private boolean isLandscapeOrientation() {
-//        return getResources().getBoolean(R.bool.LANDSCAPE);
-//    }
 
     private void setLayout(int managementContainerWidth, int managementContainerHeight, int manipulationContainerWidth, int manipulationContainerHeight) {
         managementContainer.setLayoutParams(

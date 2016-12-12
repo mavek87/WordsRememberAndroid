@@ -8,5 +8,5 @@ public interface DictionaryManagementPresenter extends Presenter {
 
     void onViewRestored();
 
-    boolean onKeyBackPressedRestorePreviousLayout();
+    boolean onKeyBackPressedRestorePreviousState();
 }

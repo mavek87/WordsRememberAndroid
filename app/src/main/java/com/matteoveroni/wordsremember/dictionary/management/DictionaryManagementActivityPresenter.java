@@ -16,7 +16,7 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  */
 
-public class DictionaryManagementConcretePresenter implements DictionaryManagementPresenter {
+public class DictionaryManagementActivityPresenter implements DictionaryManagementPresenter {
 
     private DictionaryManagementView view;
     private DictionaryDAO model;
@@ -43,7 +43,7 @@ public class DictionaryManagementConcretePresenter implements DictionaryManageme
     }
 
     @Override
-    public boolean onKeyBackPressedRestorePreviousLayout() {
+    public boolean onKeyBackPressedRestorePreviousState() {
         boolean previousLayoutRestored;
         try {
             layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);

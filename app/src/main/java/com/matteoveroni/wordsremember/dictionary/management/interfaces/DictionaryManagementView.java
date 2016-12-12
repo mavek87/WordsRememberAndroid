@@ -15,4 +15,8 @@ public interface DictionaryManagementView {
     void useTwoHorizontalColumnsLayout();
 
     void useTwoVerticalRowsLayout();
+
+    boolean isViewLarge();
+
+    boolean isViewLandscape();
 }

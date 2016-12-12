@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<item layoutType="bool" name="LARGE_SCREEN">true</item>-->
-    <!--<item layoutType="bool" name="LANDSCAPE">true</item>-->
+    <bool name="LARGE_SCREEN">true</bool>
+    <bool name="LANDSCAPE_MODE">true</bool>
 </resources>
