@@ -35,7 +35,6 @@ public class MainMenuConcretePresenter implements MainMenuPresenter {
         onViewDetached();
     }
 
-
     @Override
     public void onButtonManageDictionaryClicked() {
         view.startDictionaryManagement();

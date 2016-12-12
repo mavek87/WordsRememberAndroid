@@ -7,13 +7,18 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dependency_injection.AppDependencies;
 import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +35,9 @@ public class MainMenuActivity extends AppCompatActivity
 
     private static final int PRESENTER_LOADER_ID = 1;
     private MainMenuPresenter presenter;
+
+    @Inject
+    DictionaryManagementPresenter presenterToTest;
 
     @BindView(R.id.main_menu_btn_start)
     Button btn_start;
@@ -63,12 +71,21 @@ public class MainMenuActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_menu);
+
         ButterKnife.bind(this);
+        AppDependencies.getInjectorForApp(this).getPresentersComponent().inject(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+
+//        ((AppDependencies) getApplication()).getPresentersComponent().inject(this);
+//        AppDependencies.getPresentersComponent(this).inject(this);
+
+        if (presenterToTest != null) {
+            Toast.makeText(this, "non è nullo", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
