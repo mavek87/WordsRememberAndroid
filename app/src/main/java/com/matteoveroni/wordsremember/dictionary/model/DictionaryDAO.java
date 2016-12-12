@@ -12,6 +12,8 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Sche
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 /**
  * Class that offers CRUD operations on dictionary data using a content resolver to communicate with
  * the dictionary content provider.
@@ -19,7 +21,7 @@ import java.io.Serializable;
  * @author Matteo Veroni
  */
 
-public class DictionaryDAO implements Serializable{
+public class DictionaryDAO implements Serializable {
 
     public static final String TAG = "DictionaryDAO";
 
@@ -27,6 +29,7 @@ public class DictionaryDAO implements Serializable{
 
     private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
 
+    @Inject
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
     }

@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dependency_injection.AppDependencies;
 import com.matteoveroni.wordsremember.dictionary.management.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
@@ -24,6 +26,8 @@ import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import org.greenrobot.eventbus.EventBus;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,13 +74,13 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         presenter.onViewAttached(this);
     }
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
         presenter.onViewDetached();
         super.onStop();
     }
@@ -86,6 +90,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_management_view);
+
         ButterKnife.bind(this);
 
         fragmentManager = getSupportFragmentManager();
@@ -100,8 +105,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
             addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
             addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-
-            presenter.onViewCreatedForTheFirstTime();
         }
     }
 
@@ -123,6 +126,22 @@ public class DictionaryManagementActivity extends AppCompatActivity
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
         presenter.onViewRestored();
+    }
+
+    @Override
+    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
+        this.presenter = presenter;
+        this.presenter.onViewCreatedForTheFirstTime();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
+        presenter = null;
     }
 
     @Override
@@ -181,21 +200,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public boolean isViewLandscape() {
         return getResources().getBoolean(R.bool.LANDSCAPE_MODE);
-    }
-
-    @Override
-    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
-        presenter = null;
     }
 
     /**********************************************************************************************/
