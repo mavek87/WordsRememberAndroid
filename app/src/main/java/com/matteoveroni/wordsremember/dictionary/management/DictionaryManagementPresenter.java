@@ -2,12 +2,10 @@ package com.matteoveroni.wordsremember.dictionary.management;
 
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.dependency_injection.AppDependencies;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
+import com.matteoveroni.wordsremember.Presenter;
+import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.models.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
@@ -15,22 +13,20 @@ import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
 
 import java.lang.reflect.Proxy;
 
-import javax.inject.Inject;
-
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  */
 
-public class DictionaryManagementActivityPresenter implements DictionaryManagementPresenter {
+public class DictionaryManagementPresenter implements Presenter {
 
     private DictionaryManagementView view;
 
-    //    @Inject
-    DictionaryDAO model;
+    private final DictionaryDAO model;
+    private final DictionaryManagementViewLayoutManager layoutManager;
 
-    private DictionaryManagementViewLayoutManager layoutManager;
-
-    public DictionaryManagementActivityPresenter() {
+    public DictionaryManagementPresenter(DictionaryDAO model, DictionaryManagementViewLayoutManager layoutManager) {
+        this.model = model;
+        this.layoutManager = layoutManager;
     }
 
     @Override
@@ -40,23 +36,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
                 new Class[]{DictionaryManagementView.class},
                 new NullWeakReferenceProxy(viewAttached));
 
-        if (layoutManager == null) {
-            layoutManager = new DictionaryManagementViewLayoutManager();
-        }
-
-        if (model == null) {
-            try {
-                model = new DictionaryDAO(view.getContext());
-            } catch (Exception ex) {
-            }
-        }
-
-        Toast.makeText(view.getContext(), "modelloNullo = " + (model == null), Toast.LENGTH_SHORT).show();
-
-//        try {
-//            AppDependencies.getInjectorForApp(view.getContext()).getModelsComponent().inject(this);
-//        } catch (Exception ex) {
-//        }
+        Toast.makeText(view.getContext(), "modelloNullo = " + (model == null) + " TAG = " + model.TAG, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -69,7 +49,6 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         view = null;
     }
 
-    @Override
     public boolean onKeyBackPressedRestorePreviousState() {
         boolean previousLayoutRestored;
         try {
@@ -81,13 +60,11 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         return previousLayoutRestored;
     }
 
-    @Override
     public void onViewCreatedForTheFirstTime() {
-        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-        layoutManager.saveLayoutInUse(view.getViewLayout());
+//        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
+//        injectedLayoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
-    @Override
     public void onViewRestored() {
         restoreSavedLayoutIfPresent();
     }
@@ -112,7 +89,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         }
     }
 
-    private void populateDatabase() {
+    private void populateDatabaseForTestPurposes() {
         Word firstVocableToSave = new Word("test123");
         model.saveVocable(firstVocableToSave);
 

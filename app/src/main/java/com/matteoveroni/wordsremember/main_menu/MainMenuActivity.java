@@ -11,14 +11,10 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dependency_injection.AppDependencies;
 import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementActivity;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,12 +24,13 @@ import butterknife.OnClick;
  * Activity that handles the Main Menu.
  *
  * @author Matteo Veroni
- * @version 0.0.6
+ * @version 0.0.7
  */
 public class MainMenuActivity extends AppCompatActivity
         implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
 
     private static final int PRESENTER_LOADER_ID = 1;
+
     private MainMenuPresenter presenter;
 
     @BindView(R.id.main_menu_btn_start)
@@ -45,10 +42,20 @@ public class MainMenuActivity extends AppCompatActivity
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
 
+    @OnClick(R.id.main_menu_btn_start)
     @SuppressWarnings("unused")
+    public void onButtonStartClicked() {
+    }
+
     @OnClick(R.id.main_menu_btn_manage_dictionary)
+    @SuppressWarnings("unused")
     public void onButtonManageDictionaryClicked() {
         presenter.onButtonManageDictionaryClicked();
+    }
+
+    @OnClick(R.id.main_menu_btn_settings)
+    @SuppressWarnings("unused")
+    public void onButtonSettingsClicked() {
     }
 
     @Override

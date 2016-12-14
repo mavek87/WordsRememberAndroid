@@ -29,7 +29,6 @@ public class DictionaryDAO implements Serializable {
 
     private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
 
-    @Inject
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
     }

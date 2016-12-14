@@ -1,24 +1,22 @@
 package com.matteoveroni.wordsremember.dependency_injection.modules;
 
-import android.app.Application;
+import android.content.Context;
 
-import javax.inject.Singleton;
+import com.matteoveroni.wordsremember.dependency_injection.MyApp;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 public class AppModule {
-//
-//    Application app;
-//
-//    public AppModule(Application application) {
-//        app = application;
-//    }
-//
-//    @Provides
-//    @Singleton
-//    Application providesApplication() {
-//        return app;
-//    }
+    private MyApp app;
+
+    public AppModule(MyApp app) {
+        this.app = app;
+    }
+
+    @Provides
+    Context provideApplicationContext() {
+        return app.getApplicationContext();
+    }
 }

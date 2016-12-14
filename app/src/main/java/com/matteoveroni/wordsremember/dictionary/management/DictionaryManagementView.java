@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management.interfaces;
+package com.matteoveroni.wordsremember.dictionary.management;
 
 import android.content.Context;
 

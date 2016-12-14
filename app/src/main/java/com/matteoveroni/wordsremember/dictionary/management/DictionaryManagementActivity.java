@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,19 +14,11 @@ import android.widget.LinearLayout;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dependency_injection.AppDependencies;
-import com.matteoveroni.wordsremember.dictionary.management.factories.DictionaryManagementPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
-
-import org.greenrobot.eventbus.EventBus;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -208,7 +199,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //    @SuppressWarnings("unused")
 //    @OnClick(R.id.dictionary_management_floating_action_button)
 //    public void onFloatingActionButtonClicked() {
-//        layoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
+//        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
 //        EventBus.getDefault().postSticky(new EventCreateVocable());
 //    }
 //
@@ -230,13 +221,13 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //
 //            if (isViewLarge()) {
 //                if (isViewLandscape()) {
-//                    layoutManager.useTwoHorizontalColumnsLayout();
+//                    injectedLayoutManager.useTwoHorizontalColumnsLayout();
 //                } else {
-//                    layoutManager.useTwoVerticalRowsLayout();
+//                    injectedLayoutManager.useTwoVerticalRowsLayout();
 //                }
 //            } else {
 ////                manipulationContainer.removeAllViews();
-//                layoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
+//                injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
 //            }
 //
 //            EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
