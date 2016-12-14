@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
-import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +17,9 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 import static com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
- * Activity that handles dictionary management operations
+ * Dictionary Management Activity
  *
  * @author Matteo Veroni
  */
@@ -42,12 +43,11 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
     public static final String TAG = "A_DICTIONARY_MANAGE";
 
+    private ViewLayout viewLayout;
     private DictionaryManagementPresenter presenter;
     private static final int PRESENTER_LOADER_ID = 1;
-
-    private ViewLayout viewLayout;
-
     private LoaderManager presenterLoaderManager;
+
     private FragmentManager fragmentManager;
     private DictionaryManagementFragment managementFragment;
     private DictionaryManipulationFragment manipulationFragment;
@@ -130,7 +130,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
         this.presenter = presenter;
-        this.presenter.onViewCreatedForTheFirstTime();
+//        this.presenter.onViewCreatedForTheFirstTime();
     }
 
     @Override

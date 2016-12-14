@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.events;
 
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.pojo.Word;
 
 /**
  * @author Matteo Veroni

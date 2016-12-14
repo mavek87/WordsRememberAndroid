@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models;
+package com.matteoveroni.wordsremember.pojo;
 
 import com.matteoveroni.wordsremember.utilities.Json;
 

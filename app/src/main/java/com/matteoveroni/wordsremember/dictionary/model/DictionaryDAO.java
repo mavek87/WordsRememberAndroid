@@ -1,13 +1,12 @@
 package com.matteoveroni.wordsremember.dictionary.model;
 
-import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
@@ -29,8 +28,6 @@ public class DictionaryDAO {
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
     }
-
-    private static final String VOCABLE_NULL_POINTER_EXCEPTION = "Vocable or Vocable Name are null";
 
     /**
      * Insert a vocable into the dictionary if it's not present
@@ -58,7 +55,7 @@ public class DictionaryDAO {
     public void asyncSaveVocable(Word vocable) {
         // TODO: search a way to avoid to call isVocablePresent synchronous method
         if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
-            AsyncSaveVocableInsertHandler asyncInsertHandler = new AsyncSaveVocableInsertHandler(contentResolver);
+            AsyncSaveVocableHandler asyncInsertHandler = new AsyncSaveVocableHandler(contentResolver);
             asyncInsertHandler.startInsert(
                     1,
                     null,
@@ -79,6 +76,25 @@ public class DictionaryDAO {
         int updatedRecords = contentResolver.update(vocableUri, vocableToContentValues(newVocable), selection, selectionArgs);
 
         return updatedRecords > 0;
+    }
+
+    public void asyncUpdateVocable(long vocableID, Word newVocable) {
+        final String str_idColumn = String.valueOf(vocableID);
+
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        AsyncUpdateVocableHandler asyncUpdateHandler = new AsyncUpdateVocableHandler(contentResolver);
+        asyncUpdateHandler.startUpdate(
+                1,
+                null,
+                vocableUri,
+                vocableToContentValues(newVocable),
+                selection,
+                selectionArgs
+        );
     }
 
     /**
@@ -122,7 +138,7 @@ public class DictionaryDAO {
 
         final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-        AsyncGetVocableByIdQueryHandler asyncQueryHandler = new AsyncGetVocableByIdQueryHandler(contentResolver);
+        AsyncGetVocableByIdHandler asyncQueryHandler = new AsyncGetVocableByIdHandler(contentResolver);
         asyncQueryHandler.startQuery(
                 1,
                 null,
@@ -140,22 +156,43 @@ public class DictionaryDAO {
      * @param vocableID The vocable ID
      * @return True if the vocable has been removed and false in the other case
      */
-
     public boolean removeVocable(long vocableID) {
-        final String str_idColumn = String.valueOf(vocableID);
+        int recordDeleted = 0;
+        if (vocableID > 0) {
+            final String str_idColumn = String.valueOf(vocableID);
 
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
+            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_idColumn};
 
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+            final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-        final int recordDeleted = contentResolver.delete(
-                vocableUri,
-                selection,
-                selectionArgs
-        );
-
+            recordDeleted = contentResolver.delete(
+                    vocableUri,
+                    selection,
+                    selectionArgs
+            );
+        }
         return recordDeleted > 0;
+    }
+
+    public void asyncRemoveVocable(long vocableID) {
+        if (vocableID > 0) {
+            final String str_idColumn = String.valueOf(vocableID);
+
+            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_idColumn};
+
+            final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+            AsyncDeleteVocableHandler asyncDeleteHandler = new AsyncDeleteVocableHandler(contentResolver);
+            asyncDeleteHandler.startDelete(
+                    1,
+                    null,
+                    vocableUri,
+                    selection,
+                    selectionArgs
+            );
+        }
     }
 
     public static Word cursorToVocable(Cursor cursor) {
@@ -190,7 +227,7 @@ public class DictionaryDAO {
             }
             return isVocablePresent;
         } else {
-            throw new NullPointerException(VOCABLE_NULL_POINTER_EXCEPTION);
+            throw new NullPointerException("Vocable or Vocable Name are null");
         }
     }
 

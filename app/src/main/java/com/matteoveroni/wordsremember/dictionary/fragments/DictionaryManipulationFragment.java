@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.events.EventCreateVocable;
 import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

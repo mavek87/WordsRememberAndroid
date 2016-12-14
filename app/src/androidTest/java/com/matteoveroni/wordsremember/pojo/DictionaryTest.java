@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.models;
+package com.matteoveroni.wordsremember.pojo;
 
 import static junit.framework.Assert.*;
 

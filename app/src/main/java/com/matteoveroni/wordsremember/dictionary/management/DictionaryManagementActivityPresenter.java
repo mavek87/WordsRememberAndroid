@@ -1,15 +1,14 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
-import android.os.Looper;
-import android.util.Log;
-
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
-import com.matteoveroni.wordsremember.Presenter;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableSuccessful;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.events.EventAsyncGetVocableByIdSuccessful;
-import com.matteoveroni.wordsremember.events.EventAsyncSaveVocableSuccessful;
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdSuccessful;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableSuccessful;
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
 
@@ -22,7 +21,7 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  */
 
-public class DictionaryManagementPresenter implements Presenter {
+public class DictionaryManagementActivityPresenter implements DictionaryManagementPresenter {
 
     public static final String TAG = "DictManagePresenter";
 
@@ -31,7 +30,7 @@ public class DictionaryManagementPresenter implements Presenter {
     private final DictionaryDAO model;
     private final DictionaryManagementViewLayoutManager layoutManager;
 
-    public DictionaryManagementPresenter(DictionaryDAO model, DictionaryManagementViewLayoutManager layoutManager) {
+    public DictionaryManagementActivityPresenter(DictionaryDAO model, DictionaryManagementViewLayoutManager layoutManager) {
         this.model = model;
         this.layoutManager = layoutManager;
     }
@@ -44,12 +43,45 @@ public class DictionaryManagementPresenter implements Presenter {
                 new NullWeakReferenceProxy(viewAttached));
 
         EventBus.getDefault().register(this);
+    }
 
-        if (Looper.getMainLooper().equals(Looper.myLooper())) {
-            Log.i(TAG, "UI THREAD");
-        } else {
-            Log.i(TAG, "NO UI THREAD");
+    @Override
+    public void onViewDetached() {
+        view = null;
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onViewDestroyed() {
+        onViewDetached();
+    }
+
+    @Override
+    public void onViewRestored() {
+        restoreSavedLayoutIfPresent();
+    }
+
+    @Override
+    public boolean onKeyBackPressedRestorePreviousState() {
+        boolean previousLayoutRestored;
+        model.asyncGetVocableById(1);
+        try {
+            layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+            previousLayoutRestored = true;
+        } catch (Exception ex) {
+            previousLayoutRestored = false;
         }
+        return previousLayoutRestored;
+    }
+
+    @Override
+    public void onCreateVocableRequest(Word vocable) {
+        model.asyncSaveVocable(vocable);
+    }
+
+    public void onViewCreatedForTheFirstTime() {
+//        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
+//        injectedLayoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
     @Subscribe(sticky = true)
@@ -66,44 +98,15 @@ public class DictionaryManagementPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onAsyncSaveVocableSuccessful(EventAsyncSaveVocableSuccessful event) {
         long savedVocableId = event.getIdOfInsertedVocable();
-        view.showMessage("salvato con id " + savedVocableId);
+        view.showMessage("saved with id " + savedVocableId);
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Override
-    public void onViewDetached() {
-        view = null;
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        view = null;
-    }
-
-    public boolean onKeyBackPressedRestorePreviousState() {
-        boolean previousLayoutRestored;
-        model.asyncGetVocableById(1);
-        try {
-            layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
-            previousLayoutRestored = true;
-        } catch (Exception ex) {
-            previousLayoutRestored = false;
-        }
-        return previousLayoutRestored;
-    }
-
-    public void onViewCreatedForTheFirstTime() {
-//        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-//        injectedLayoutManager.saveLayoutInUse(view.getViewLayout());
-    }
-
-    public void onCreateVocableRequest(Word vocable) {
-        model.asyncSaveVocable(vocable);
-    }
-
-    public void onViewRestored() {
-        restoreSavedLayoutIfPresent();
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocableSuccessful event) {
+        view.showMessage("updated");
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private void restoreSavedLayoutIfPresent() {

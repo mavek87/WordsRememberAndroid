@@ -4,13 +4,13 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.events.EventAsyncSaveVocableFailed;
-import com.matteoveroni.wordsremember.events.EventAsyncSaveVocableSuccessful;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableFailed;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableSuccessful;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class AsyncSaveVocableInsertHandler extends AsyncQueryHandler {
-    public AsyncSaveVocableInsertHandler(ContentResolver contentResolver) {
+public class AsyncSaveVocableHandler extends AsyncQueryHandler {
+    public AsyncSaveVocableHandler(ContentResolver contentResolver) {
         super(contentResolver);
     }
 

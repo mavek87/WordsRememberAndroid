@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.events;
+package com.matteoveroni.wordsremember.dictionary.events;
 
 public class EventAsyncSaveVocableSuccessful {
     private final long insertedVocableId;

@@ -4,15 +4,15 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
 
-import com.matteoveroni.wordsremember.events.EventAsyncGetVocableByIdFailed;
-import com.matteoveroni.wordsremember.events.EventAsyncGetVocableByIdSuccessful;
-import com.matteoveroni.wordsremember.models.Word;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdFailed;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdSuccessful;
+import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
 
-public class AsyncGetVocableByIdQueryHandler extends AsyncQueryHandler {
+public class AsyncGetVocableByIdHandler extends AsyncQueryHandler {
 
-    public AsyncGetVocableByIdQueryHandler(ContentResolver contentResolver) {
+    public AsyncGetVocableByIdHandler(ContentResolver contentResolver) {
         super(contentResolver);
     }
 
