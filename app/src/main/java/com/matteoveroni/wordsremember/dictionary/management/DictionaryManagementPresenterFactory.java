@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.dependency_injection.MyApp;
+import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import javax.inject.Inject;

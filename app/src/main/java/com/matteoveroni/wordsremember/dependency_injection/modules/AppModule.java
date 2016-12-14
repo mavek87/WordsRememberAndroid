@@ -2,7 +2,9 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.dependency_injection.MyApp;
+import com.matteoveroni.wordsremember.MyApp;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -16,6 +18,7 @@ public class AppModule {
     }
 
     @Provides
+    @Singleton
     Context provideApplicationContext() {
         return app.getApplicationContext();
     }

@@ -10,18 +10,14 @@ import com.matteoveroni.wordsremember.models.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
-import java.io.Serializable;
-
-import javax.inject.Inject;
-
 /**
- * Class that offers CRUD operations on dictionary data using a content resolver to communicate with
+ * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
  * the dictionary content provider.
  *
  * @author Matteo Veroni
  */
 
-public class DictionaryDAO implements Serializable {
+public class DictionaryDAO {
 
     public static final String TAG = "DictionaryDAO";
 

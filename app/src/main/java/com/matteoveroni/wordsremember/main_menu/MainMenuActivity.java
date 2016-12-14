@@ -21,10 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Activity that handles the Main Menu.
- *
- * @author Matteo Veroni
- * @version 0.0.7
+ * Main Menu Activity
  */
 public class MainMenuActivity extends AppCompatActivity
         implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {

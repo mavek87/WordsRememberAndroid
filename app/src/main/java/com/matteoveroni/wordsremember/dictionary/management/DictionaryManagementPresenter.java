@@ -36,7 +36,7 @@ public class DictionaryManagementPresenter implements Presenter {
                 new Class[]{DictionaryManagementView.class},
                 new NullWeakReferenceProxy(viewAttached));
 
-        Toast.makeText(view.getContext(), "modelloNullo = " + (model == null) + " TAG = " + model.TAG, Toast.LENGTH_SHORT).show();
+        Toast.makeText(view.getContext(), "modelloNullo = " + (model == null) + " TAG = " + model.ID, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dependency_injection;
+package com.matteoveroni.wordsremember;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +8,13 @@ import com.matteoveroni.wordsremember.dependency_injection.components.ModelCompo
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
 
+/**
+ * Class which extends Application
+ * Dagger2 components for dependency injection are built here
+ *
+ * @author Matteo Veroni
+ * @version 0.0.7
+ */
 public class MyApp extends Application {
 
     private static ModelComponent modelComponent;
@@ -16,9 +23,9 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Dagger%COMPONENT_NAME%
-//        presentersComponent = DaggerPresentersComponent.builder().presentersModule(new PresentersModule()).build();
-
+        /**
+         * Dagger2 component. Used for injecting models to each class specified by ModelComponent interface.
+         */
         modelComponent = DaggerModelComponent
                 .builder()
                 .appModule(new AppModule(this))
@@ -30,10 +37,6 @@ public class MyApp extends Application {
         //  mNetComponent = com.codepath.dagger.components.DaggerNetComponent.create();
     }
 
-//    public PresentersComponent getPresentersComponent() {
-//        return presentersComponent;
-//    }
-
     public static ModelComponent getModelComponent() {
         return modelComponent;
     }
@@ -41,8 +44,4 @@ public class MyApp extends Application {
     public static MyApp getInjectorsForApp(Context context) {
         return (MyApp) context.getApplicationContext();
     }
-
-//    public static PresentersComponent getPresentersComponent(Context context) {
-//        return ((MyApp) context.getApplicationContext()).presentersComponent;
-//    }
 }
