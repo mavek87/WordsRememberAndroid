@@ -6,8 +6,6 @@ import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
 public interface DictionaryManagementView {
 
-    Context getContext();
-
     ViewLayout getViewLayout();
 
     void useSingleLayoutWithFragment(String fragmentTAG);
@@ -19,4 +17,6 @@ public interface DictionaryManagementView {
     boolean isViewLarge();
 
     boolean isViewLandscape();
+
+    void showMessage(String message);
 }

@@ -1,15 +1,20 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
-import android.widget.Toast;
+import android.os.Looper;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.events.EventAsyncGetVocableByIdSuccessful;
+import com.matteoveroni.wordsremember.events.EventAsyncSaveVocableSuccessful;
 import com.matteoveroni.wordsremember.models.Word;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 
@@ -18,6 +23,8 @@ import java.lang.reflect.Proxy;
  */
 
 public class DictionaryManagementPresenter implements Presenter {
+
+    public static final String TAG = "DictManagePresenter";
 
     private DictionaryManagementView view;
 
@@ -36,12 +43,37 @@ public class DictionaryManagementPresenter implements Presenter {
                 new Class[]{DictionaryManagementView.class},
                 new NullWeakReferenceProxy(viewAttached));
 
-        Toast.makeText(view.getContext(), "modelloNullo = " + (model == null) + " TAG = " + model.ID, Toast.LENGTH_SHORT).show();
+        EventBus.getDefault().register(this);
+
+        if (Looper.getMainLooper().equals(Looper.myLooper())) {
+            Log.i(TAG, "UI THREAD");
+        } else {
+            Log.i(TAG, "NO UI THREAD");
+        }
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onAsyncGetVocableByIdSuccessful(EventAsyncGetVocableByIdSuccessful event) {
+        Word retrievedVocable = event.getVocableRetrieved();
+        if (retrievedVocable != null) {
+            view.showMessage(retrievedVocable.toString());
+        }
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onAsyncSaveVocableSuccessful(EventAsyncSaveVocableSuccessful event) {
+        long savedVocableId = event.getIdOfInsertedVocable();
+        view.showMessage("salvato con id " + savedVocableId);
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override
     public void onViewDetached() {
         view = null;
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -51,6 +83,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     public boolean onKeyBackPressedRestorePreviousState() {
         boolean previousLayoutRestored;
+        model.asyncGetVocableById(1);
         try {
             layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
             previousLayoutRestored = true;
@@ -63,6 +96,10 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onViewCreatedForTheFirstTime() {
 //        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
 //        injectedLayoutManager.saveLayoutInUse(view.getViewLayout());
+    }
+
+    public void onCreateVocableRequest(Word vocable) {
+        model.asyncSaveVocable(vocable);
     }
 
     public void onViewRestored() {
@@ -97,9 +134,9 @@ public class DictionaryManagementPresenter implements Presenter {
         model.saveVocable(secondVocableToSave);
     }
 
-    private void exportDatabaseOnSd() {
-        if (this.view.getContext() != null) {
-            DatabaseManager.getInstance(this.view.getContext()).exportDBOnSD();
-        }
-    }
+//    private void exportDatabaseOnSd() {
+//        if (MyApp.getContext() != null) {
+//            DatabaseManager.getInstance(this.view.getContext()).exportDBOnSD();
+//        }
+//    }
 }

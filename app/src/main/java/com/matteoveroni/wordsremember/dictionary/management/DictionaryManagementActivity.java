@@ -11,17 +11,20 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
+import com.matteoveroni.wordsremember.models.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
 
@@ -147,11 +150,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     }
 
     @Override
-    public Context getContext() {
-        return getApplicationContext();
-    }
-
-    @Override
     public ViewLayout getViewLayout() {
         return this.viewLayout;
     }
@@ -193,15 +191,22 @@ public class DictionaryManagementActivity extends AppCompatActivity
         return getResources().getBoolean(R.bool.LANDSCAPE_MODE);
     }
 
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     /**********************************************************************************************/
 
 //    // EVENTS - ACTIVITY VIEW EVENTS
-//    @SuppressWarnings("unused")
-//    @OnClick(R.id.dictionary_management_floating_action_button)
-//    public void onFloatingActionButtonClicked() {
+    @OnClick(R.id.dictionary_management_floating_action_button)
+    @SuppressWarnings("unused")
+    public void onFloatingActionButtonClicked() {
 //        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
 //        EventBus.getDefault().postSticky(new EventCreateVocable());
-//    }
+        Word vocableToCreate = new Word("provaCreazione");
+        presenter.onCreateVocableRequest(vocableToCreate);
+    }
 //
 //    // EVENTS - EXTERNAL EVENTS
 //
@@ -217,7 +222,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //
 //        Word selectedVocable = null;
 //        if (selectedVocableID >= 0) {
-//            selectedVocable = model.getVocableById(selectedVocableID);
+//            selectedVocable = model.asyncGetVocableById(selectedVocableID);
 //
 //            if (isViewLarge()) {
 //                if (isViewLandscape()) {
