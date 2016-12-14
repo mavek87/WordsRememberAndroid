@@ -18,7 +18,7 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
 
     @Override
     public void saveLayoutInUse(ViewLayout layoutToSave) {
-        if (!isLayoutToSaveEqualsToCurrentLayout(layoutToSave)) {
+        if (layoutToSave!=null && !isLayoutToSaveEqualsToCurrentLayout(layoutToSave)) {
             viewLayoutHistory.push(layoutToSave);
         }
     }

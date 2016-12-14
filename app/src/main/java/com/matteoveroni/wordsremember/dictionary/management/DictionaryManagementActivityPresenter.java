@@ -79,9 +79,10 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         model.asyncSaveVocable(vocable);
     }
 
+    @Override
     public void onViewCreatedForTheFirstTime() {
-//        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-//        injectedLayoutManager.saveLayoutInUse(view.getViewLayout());
+        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
+        layoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
     @Subscribe(sticky = true)

@@ -68,13 +68,11 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-//        EventBus.getDefault().register(this);
         presenter.onViewAttached(this);
     }
 
     @Override
     protected void onStop() {
-//        EventBus.getDefault().unregister(this);
         presenter.onViewDetached();
         super.onStop();
     }
@@ -101,6 +99,8 @@ public class DictionaryManagementActivity extends AppCompatActivity
             addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
         }
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
@@ -130,7 +130,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
         this.presenter = presenter;
-//        this.presenter.onViewCreatedForTheFirstTime();
     }
 
     @Override
@@ -142,7 +141,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (presenter.onKeyBackPressedRestorePreviousState()) {
-//                EventBus.getDefault().postSticky(new EventResetSelection());
                 return true;
             }
         }
