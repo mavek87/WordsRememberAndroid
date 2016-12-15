@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutBackupChronology;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,31 +45,31 @@ public class DictionaryManagementViewLayoutManagerTest {
 
     @Test(expected = EmptyStackException.class)
     public void testReadLayoutInUseIfLayoutNotSetThrowsEmptyStackException() {
-        layoutManager.getViewLayout(ViewLayoutChronology.CURRENT_LAYOUT);
+        layoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT);
     }
 
     @Test
     public void testReadTheSavedLayoutInUseWorks() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
-        assertEquals(VIEW_LAYOUT, layoutManager.getViewLayout(ViewLayoutChronology.CURRENT_LAYOUT));
+        assertEquals(VIEW_LAYOUT, layoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT));
     }
 
     @Test(expected = EmptyStackException.class)
     public void testDiscardCurrentLayoutAndGetPreviousOneThrowsEmptyStackExceptionIfAnyLayoutWasSaved() {
-        layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
     @Test(expected = EmptyStackException.class)
     public void testDiscardCurrentLayoutAndGetPreviousOneThrowsEmptyStackExceptionIfOnlyOneLayoutWasSaved() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
-        layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
     @Test
     public void testDiscardCurrentLayoutAndGetPreviousOneIfTwoLayoutWasSaved() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(SECOND_VIEW_LAYOUT);
-        final ViewLayout previousDictionaryManagementViewLayout = layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        final ViewLayout previousDictionaryManagementViewLayout = layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
         assertEquals(VIEW_LAYOUT, previousDictionaryManagementViewLayout);
         assertNotEquals(SECOND_VIEW_LAYOUT, previousDictionaryManagementViewLayout);
     }
@@ -79,7 +79,7 @@ public class DictionaryManagementViewLayoutManagerTest {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
-        layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
     @Test
@@ -88,12 +88,12 @@ public class DictionaryManagementViewLayoutManagerTest {
         layoutManager.saveLayoutInUse(SECOND_VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(THIRD_VIEW_LAYOUT);
 
-        final ViewLayout previousViewLayout = layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        final ViewLayout previousViewLayout = layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
         assertNotEquals(THIRD_VIEW_LAYOUT, previousViewLayout);
         assertEquals(SECOND_VIEW_LAYOUT, previousViewLayout);
         assertNotEquals(VIEW_LAYOUT, previousViewLayout);
 
-        final ViewLayout firstViewLayout = layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
+        final ViewLayout firstViewLayout = layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
         assertNotEquals(THIRD_VIEW_LAYOUT, firstViewLayout);
         assertNotEquals(SECOND_VIEW_LAYOUT, firstViewLayout);
         assertEquals(VIEW_LAYOUT, firstViewLayout);

@@ -235,7 +235,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //     */
 //    @SuppressWarnings("unused")
 //    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onVocableSelected(EventVocableSelected event) {
+//    public void onEventVocableSelected(EventVocableSelected event) {
 //        long selectedVocableID = event.getSelectedVocableID();
 //
 //        Word selectedVocable = null;

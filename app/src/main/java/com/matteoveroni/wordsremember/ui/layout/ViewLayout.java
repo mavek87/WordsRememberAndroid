@@ -29,7 +29,6 @@ public class ViewLayout {
         if (!(o instanceof ViewLayout)) return false;
 
         ViewLayout that = (ViewLayout) o;
-
         return getViewLayoutType() == that.getViewLayoutType() && (viewLayoutMainFragmentTAG != null ? viewLayoutMainFragmentTAG.equals(that.viewLayoutMainFragmentTAG) : that.viewLayoutMainFragmentTAG == null);
     }
 
@@ -44,7 +43,7 @@ public class ViewLayout {
         private final ViewLayoutType viewLayoutType;
         private String viewLayoutMainFragmentTAG;
 
-        public static ViewLayoutBuilder viewLayoutType(ViewLayoutType viewLayoutType){
+        public static ViewLayoutBuilder viewLayoutType(ViewLayoutType viewLayoutType) {
             return new ViewLayoutBuilder(viewLayoutType);
         }
 

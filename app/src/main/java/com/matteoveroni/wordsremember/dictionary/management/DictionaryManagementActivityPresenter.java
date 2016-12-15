@@ -1,8 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
-import android.util.Log;
-import android.view.View;
-
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableSuccessful;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
@@ -17,10 +14,8 @@ import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObserve
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
-import static com.matteoveroni.wordsremember.ui.layout.ViewLayout.ViewLayoutBuilder;
-
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutBackupChronology;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,26 +63,19 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Override
     public void onViewRestored() {
-        restoreSavedLayoutIfPresent();
+        restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.LAST_LAYOUT);
     }
 
     @Override
     public void onViewCreatedForTheFirstTime() {
         view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
         layoutManager.saveLayoutInUse(view.getViewLayout());
+        populateDatabaseForTestPurposes();
     }
 
     @Override
     public boolean onKeyBackPressedRestorePreviousState() {
-        boolean previousLayoutRestored;
-        model.asyncGetVocableById(1);
-        try {
-            layoutManager.getViewLayout(ViewLayoutChronology.PREVIOUS_LAYOUT);
-            previousLayoutRestored = true;
-        } catch (Exception ex) {
-            previousLayoutRestored = false;
-        }
-        return previousLayoutRestored;
+        return restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
     @Override
@@ -97,7 +85,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onVocableSelected(EventVocableSelected event) {
+    public void onEventVocableSelected(EventVocableSelected event) {
         long selectedVocableID = event.getSelectedVocableID();
         model.asyncGetVocableById(selectedVocableID);
         EventBus.getDefault().removeStickyEvent(event);
@@ -105,29 +93,18 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onAsyncGetVocableByIdSuccessful(EventAsyncGetVocableByIdSuccessful event) {
+    public void onEventAsyncGetVocableByIdSuccessful(EventAsyncGetVocableByIdSuccessful event) {
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
-            view.showMessage(retrievedVocable.toString());
-
-            if (view.isViewLarge()) {
-                if (view.isViewLandscape()) {
-                    view.useTwoHorizontalColumnsLayout();
-                } else {
-                    view.useTwoVerticalRowsLayout();
-                }
-            } else {
-                view.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
-            }
+            setLayoutForView(DictionaryManipulationFragment.TAG);
+            EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(retrievedVocable));
         }
-        layoutManager.saveLayoutInUse(view.getViewLayout());
         EventBus.getDefault().removeStickyEvent(event);
-        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(retrievedVocable));
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onAsyncSaveVocableSuccessful(EventAsyncSaveVocableSuccessful event) {
+    public void onEventAsyncSaveVocableSuccessful(EventAsyncSaveVocableSuccessful event) {
         long savedVocableId = event.getIdOfInsertedVocable();
         view.showMessage("saved with id " + savedVocableId);
         EventBus.getDefault().removeStickyEvent(event);
@@ -135,17 +112,21 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocableSuccessful event) {
+    public void onEventAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocableSuccessful event) {
         view.showMessage("updated");
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    private void restoreSavedLayoutIfPresent() {
+    private boolean restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology viewLayoutBackupChronology) {
+        ViewLayout viewLayoutRestored = null;
         try {
-            ViewLayout viewLayout = layoutManager.getViewLayout(ViewLayoutChronology.CURRENT_LAYOUT);
-            switch (viewLayout.getViewLayoutType()) {
+            viewLayoutRestored = layoutManager.getViewLayout(viewLayoutBackupChronology);
+        } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
+        }
+        if (viewLayoutRestored != null) {
+            switch (viewLayoutRestored.getViewLayoutType()) {
                 case SINGLE_LAYOUT:
-                    view.useSingleLayoutWithFragment(viewLayout.getMainFragmentTAG());
+                    view.useSingleLayoutWithFragment(viewLayoutRestored.getMainFragmentTAG());
                     break;
                 case TWO_COLUMNS_LAYOUT:
                     view.useTwoHorizontalColumnsLayout();
@@ -154,10 +135,22 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
                     view.useTwoVerticalRowsLayout();
                     break;
             }
-        } catch (Exception ex) {
-            view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-            layoutManager.saveLayoutInUse(this.view.getViewLayout());
+            return true;
         }
+        return false;
+    }
+
+    private void setLayoutForView(String fragmentTAG) {
+        if (view.isViewLarge()) {
+            if (view.isViewLandscape()) {
+                view.useTwoHorizontalColumnsLayout();
+            } else {
+                view.useTwoVerticalRowsLayout();
+            }
+        } else {
+            view.useSingleLayoutWithFragment(fragmentTAG);
+        }
+        layoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
     private void populateDatabaseForTestPurposes() {
@@ -173,4 +166,6 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 //            DatabaseManager.create(this.view.getContext()).exportDBOnSD();
 //        }
 //    }
+
+
 }

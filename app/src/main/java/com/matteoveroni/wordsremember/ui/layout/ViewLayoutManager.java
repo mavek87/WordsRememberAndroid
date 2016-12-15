@@ -6,7 +6,12 @@ public interface ViewLayoutManager {
 
     void saveLayoutInUse(ViewLayout layoutToSave);
 
-    ViewLayout getViewLayout(ViewLayoutChronology layoutChronology) throws
-            NullPointerException, EmptyStackException;
+    ViewLayout getViewLayout(ViewLayoutBackupChronology layoutChronology) throws NoViewLayoutFoundException;
 
+    enum ViewLayoutBackupChronology {
+        LAST_LAYOUT, PREVIOUS_LAYOUT;
+    }
+
+    class NoViewLayoutFoundException extends EmptyStackException {
+    }
 }
