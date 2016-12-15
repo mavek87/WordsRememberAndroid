@@ -7,7 +7,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -15,19 +17,22 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory;
+import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
+
+import static com.matteoveroni.wordsremember.ui.layout.ViewLayout.ViewLayoutBuilder;
+
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.matteoveroni.wordsremember.dictionary.fragments.factory.DictionaryFragmentFactory.DictionaryFragmentType;
+import static com.matteoveroni.wordsremember.dictionary.fragments.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
  * Dictionary Management Activity
@@ -52,6 +57,8 @@ public class DictionaryManagementActivity extends AppCompatActivity
     private DictionaryManagementFragment managementFragment;
     private DictionaryManipulationFragment manipulationFragment;
 
+    private boolean isActivityCreatedForTheFirstTime;
+
     @BindView(R.id.dictionary_management_container)
     FrameLayout managementContainer;
 
@@ -64,22 +71,12 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public DictionaryManagementActivity() {
     }
 
-    // ANDROID LIFECYCLE METHODS
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.onViewAttached(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.onViewDetached();
-        super.onStop();
-    }
+    // ANDROID LIFECYCLE METHOD
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
 
         setContentView(R.layout.activity_dictionary_management_view);
 
@@ -91,16 +88,33 @@ public class DictionaryManagementActivity extends AppCompatActivity
         presenterLoaderManager.initLoader(PRESENTER_LOADER_ID, null, this);
 
         if (savedInstanceState == null) {
+            isActivityCreatedForTheFirstTime = true;
 
-            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANAGEMENT);
-            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.getInstance(DictionaryFragmentType.MANIPULATION);
+            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANAGEMENT);
+            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANIPULATION);
 
             addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
             addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+        } else {
+            isActivityCreatedForTheFirstTime = false;
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onViewAttached(this);
+        if (isActivityCreatedForTheFirstTime) {
+            presenter.onViewCreatedForTheFirstTime();
+        }
+        Log.i(TAG, "onStart");
+    }
 
+    @Override
+    protected void onStop() {
+        presenter.onViewDetached();
+        super.onStop();
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
@@ -130,6 +144,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
         this.presenter = presenter;
+        Log.i(TAG, "onLoadFinished");
     }
 
     @Override
@@ -162,21 +177,26 @@ public class DictionaryManagementActivity extends AppCompatActivity
                 setLayout(0, 0, ViewLayout.MATCH_PARENT, ViewLayout.MATCH_PARENT);
                 break;
         }
-        ViewLayout viewLayoutToUse = new ViewLayout(ViewLayoutType.SINGLE_LAYOUT);
-        viewLayoutToUse.setMainFragmentTAG(fragmentTAG);
-        viewLayout = viewLayoutToUse;
+        viewLayout = ViewLayoutBuilder
+                .viewLayoutType(ViewLayoutType.SINGLE_LAYOUT)
+                .mainFragmentTag(fragmentTAG)
+                .build();
     }
 
     @Override
     public void useTwoHorizontalColumnsLayout() {
         setLayout(0, ViewLayout.MATCH_PARENT, 1f, 0, ViewLayout.MATCH_PARENT, 1f);
-        viewLayout = new ViewLayout(ViewLayoutType.TWO_COLUMNS_LAYOUT);
+        viewLayout = ViewLayoutBuilder
+                .viewLayoutType(ViewLayoutType.TWO_COLUMNS_LAYOUT)
+                .build();
     }
 
     @Override
     public void useTwoVerticalRowsLayout() {
         setLayout(ViewLayout.MATCH_PARENT, 0, 1f, ViewLayout.MATCH_PARENT, 0, 1f);
-        viewLayout = new ViewLayout(ViewLayoutType.TWO_ROWS_LAYOUT);
+        viewLayout = ViewLayoutBuilder
+                .viewLayoutType(ViewLayoutType.TWO_ROWS_LAYOUT)
+                .build();
     }
 
     @Override

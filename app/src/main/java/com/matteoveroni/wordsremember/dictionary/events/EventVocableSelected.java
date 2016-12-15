@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.events;
+package com.matteoveroni.wordsremember.dictionary.events;
 
 /**
  * Event used when a dictionary item is selected in a fragment, to inform the main activity

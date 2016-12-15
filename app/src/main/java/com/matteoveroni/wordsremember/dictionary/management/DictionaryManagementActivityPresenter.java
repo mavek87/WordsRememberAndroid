@@ -1,16 +1,26 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
+import android.util.Log;
+import android.view.View;
+
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableSuccessful;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
+import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdSuccessful;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableSuccessful;
+import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
+
+import static com.matteoveroni.wordsremember.ui.layout.ViewLayout.ViewLayoutBuilder;
+
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,6 +72,12 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     }
 
     @Override
+    public void onViewCreatedForTheFirstTime() {
+        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
+        layoutManager.saveLayoutInUse(view.getViewLayout());
+    }
+
+    @Override
     public boolean onKeyBackPressedRestorePreviousState() {
         boolean previousLayoutRestored;
         model.asyncGetVocableById(1);
@@ -79,10 +95,12 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         model.asyncSaveVocable(vocable);
     }
 
-    @Override
-    public void onViewCreatedForTheFirstTime() {
-        view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-        layoutManager.saveLayoutInUse(view.getViewLayout());
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onVocableSelected(EventVocableSelected event) {
+        long selectedVocableID = event.getSelectedVocableID();
+        model.asyncGetVocableById(selectedVocableID);
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
@@ -91,8 +109,20 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
             view.showMessage(retrievedVocable.toString());
+
+            if (view.isViewLarge()) {
+                if (view.isViewLandscape()) {
+                    view.useTwoHorizontalColumnsLayout();
+                } else {
+                    view.useTwoVerticalRowsLayout();
+                }
+            } else {
+                view.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
+            }
         }
+        layoutManager.saveLayoutInUse(view.getViewLayout());
         EventBus.getDefault().removeStickyEvent(event);
+        EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(retrievedVocable));
     }
 
     @Subscribe(sticky = true)
@@ -140,7 +170,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
 //    private void exportDatabaseOnSd() {
 //        if (MyApp.getContext() != null) {
-//            DatabaseManager.getInstance(this.view.getContext()).exportDBOnSD();
+//            DatabaseManager.create(this.view.getContext()).exportDBOnSD();
 //        }
 //    }
 }

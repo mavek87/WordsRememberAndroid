@@ -10,16 +10,9 @@ public class ViewLayout {
     private ViewLayoutType viewLayoutType = null;
     private String viewLayoutMainFragmentTAG = null;
 
-    public ViewLayout(ViewLayoutType viewLayoutType) {
-        this.viewLayoutType = viewLayoutType;
-    }
-
-    public void setViewLayoutType(ViewLayoutType viewLayoutType) {
-        this.viewLayoutType = viewLayoutType;
-    }
-
-    public void setMainFragmentTAG(String viewLayoutMainFragmentTAG) {
-        this.viewLayoutMainFragmentTAG = viewLayoutMainFragmentTAG;
+    private ViewLayout(ViewLayoutBuilder builder) {
+        this.viewLayoutType = builder.viewLayoutType;
+        this.viewLayoutMainFragmentTAG = builder.viewLayoutMainFragmentTAG;
     }
 
     public ViewLayoutType getViewLayoutType() {
@@ -45,5 +38,28 @@ public class ViewLayout {
         int result = getViewLayoutType().hashCode();
         result = 31 * result + (viewLayoutMainFragmentTAG != null ? viewLayoutMainFragmentTAG.hashCode() : 0);
         return result;
+    }
+
+    public static class ViewLayoutBuilder {
+        private final ViewLayoutType viewLayoutType;
+        private String viewLayoutMainFragmentTAG;
+
+        public static ViewLayoutBuilder viewLayoutType(ViewLayoutType viewLayoutType){
+            return new ViewLayoutBuilder(viewLayoutType);
+        }
+
+        public ViewLayoutBuilder(ViewLayoutType viewLayoutType) {
+            this.viewLayoutType = viewLayoutType;
+        }
+
+        public ViewLayoutBuilder mainFragmentTag(String mainFragmentTag) {
+            this.viewLayoutMainFragmentTAG = mainFragmentTag;
+            return this;
+        }
+
+        public ViewLayout build() {
+            return new ViewLayout(this);
+        }
+
     }
 }

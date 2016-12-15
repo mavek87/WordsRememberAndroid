@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.fragments.factory;
+package com.matteoveroni.wordsremember.dictionary.fragments;
 
 import android.support.v4.app.Fragment;
 
@@ -21,7 +21,7 @@ public class DictionaryFragmentFactory {
      *
      * @return A new instance of a DictionaryFragment.
      */
-    public static Fragment getInstance(DictionaryFragmentType type) {
+    public static Fragment create(DictionaryFragmentType type) {
         switch (type) {
             case MANAGEMENT:
                 return new DictionaryManagementFragment();

@@ -16,9 +16,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.events.EventManipulateVocable;
-import com.matteoveroni.wordsremember.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
@@ -38,6 +39,8 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public static final String TAG = "F_dictionaryManagement";
 
     private WordsListViewAdapter dictionaryListViewAdapter;
+
+    private Presenter presenter;
 
     /**********************************************************************************************/
 
@@ -139,7 +142,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 ////            dictionaryListViewAdapter.setSelected(position, false);
 //            lastSelectedVocableID = -1;
 //        }
-        EventBus.getDefault().post(new EventVocableSelected(id));
+        EventBus.getDefault().postSticky(new EventVocableSelected(id));
     }
 
 /**********************************************************************************************/
