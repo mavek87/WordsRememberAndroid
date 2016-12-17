@@ -2,13 +2,12 @@ package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
 
 import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutBackupChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutBackupChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.NoViewLayoutFoundException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.EmptyStackException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -43,7 +42,7 @@ public class DictionaryManagementViewLayoutManagerTest {
         layoutManager = new DictionaryManagementViewLayoutManager();
     }
 
-    @Test(expected = EmptyStackException.class)
+    @Test(expected = NoViewLayoutFoundException.class)
     public void testReadLayoutInUseIfLayoutNotSetThrowsEmptyStackException() {
         layoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT);
     }
@@ -54,12 +53,12 @@ public class DictionaryManagementViewLayoutManagerTest {
         assertEquals(VIEW_LAYOUT, layoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT));
     }
 
-    @Test(expected = EmptyStackException.class)
+    @Test(expected = NoViewLayoutFoundException.class)
     public void testDiscardCurrentLayoutAndGetPreviousOneThrowsEmptyStackExceptionIfAnyLayoutWasSaved() {
         layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
-    @Test(expected = EmptyStackException.class)
+    @Test(expected = NoViewLayoutFoundException.class)
     public void testDiscardCurrentLayoutAndGetPreviousOneThrowsEmptyStackExceptionIfOnlyOneLayoutWasSaved() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.getViewLayout(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
@@ -74,7 +73,7 @@ public class DictionaryManagementViewLayoutManagerTest {
         assertNotEquals(SECOND_VIEW_LAYOUT, previousDictionaryManagementViewLayout);
     }
 
-    @Test(expected = EmptyStackException.class)
+    @Test(expected = NoViewLayoutFoundException.class)
     public void testSameLayoutInUseCannotBeSavedMoreThanOneTimeConsequently() {
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);
         layoutManager.saveLayoutInUse(VIEW_LAYOUT);

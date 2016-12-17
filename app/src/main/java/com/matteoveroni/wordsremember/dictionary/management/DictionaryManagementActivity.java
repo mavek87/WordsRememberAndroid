@@ -51,7 +51,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
     private ViewLayout viewLayout;
     private DictionaryManagementPresenter presenter;
     private static final int PRESENTER_LOADER_ID = 1;
-    private LoaderManager presenterLoaderManager;
 
     private FragmentManager fragmentManager;
     private DictionaryManagementFragment managementFragment;
@@ -74,46 +73,39 @@ public class DictionaryManagementActivity extends AppCompatActivity
     // ANDROID LIFECYCLE METHOD
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
-
-        setContentView(R.layout.activity_dictionary_management_view);
-
-        ButterKnife.bind(this);
-
-        fragmentManager = getSupportFragmentManager();
-        presenterLoaderManager = getSupportLoaderManager();
-
-        presenterLoaderManager.initLoader(PRESENTER_LOADER_ID, null, this);
-
-        if (savedInstanceState == null) {
-            isActivityCreatedForTheFirstTime = true;
-
-            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANAGEMENT);
-            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANIPULATION);
-
-            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-        } else {
-            isActivityCreatedForTheFirstTime = false;
-        }
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
         if (isActivityCreatedForTheFirstTime) {
             presenter.onViewCreatedForTheFirstTime();
         }
-        Log.i(TAG, "onStart");
     }
 
     @Override
     protected void onStop() {
         presenter.onViewDetached();
         super.onStop();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_dictionary_management_view);
+
+        ButterKnife.bind(this);
+
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+
+        fragmentManager = getSupportFragmentManager();
+
+        if (isActivityCreatedForTheFirstTime = (savedInstanceState == null)) {
+            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANAGEMENT);
+            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANIPULATION);
+
+            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+        }
     }
 
     @Override
