@@ -1,9 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
-public class EventAsyncSaveVocableSuccessful {
+public class EventAsyncSaveVocable {
     private final long insertedVocableId;
 
-    public EventAsyncSaveVocableSuccessful(long insertedVocableId) {
+    public EventAsyncSaveVocable(long insertedVocableId) {
         this.insertedVocableId = insertedVocableId;
     }
 

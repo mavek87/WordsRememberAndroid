@@ -2,10 +2,10 @@ package com.matteoveroni.wordsremember.dictionary.events;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 
-public class EventAsyncGetVocableByIdSuccessful {
+public class EventAsyncGetVocableById {
     private final Word vocable;
 
-    public EventAsyncGetVocableByIdSuccessful(Word vocable) {
+    public EventAsyncGetVocableById(Word vocable) {
         this.vocable = vocable;
     }
 

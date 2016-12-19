@@ -1,15 +1,15 @@
 package com.matteoveroni.wordsremember.dictionary.management;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableSuccessful;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
 import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdSuccessful;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableSuccessful;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
 import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
@@ -31,13 +31,12 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     public static final String TAG = "DictManagePresenter";
 
     private DictionaryManagementView view;
-
     private final DictionaryDAO model;
-    private final DictionaryManagementViewLayoutManager layoutManager;
+    private final ViewLayoutManager viewLayoutManager;
 
-    public DictionaryManagementActivityPresenter(DictionaryDAO model, DictionaryManagementViewLayoutManager layoutManager) {
+    public DictionaryManagementActivityPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
         this.model = model;
-        this.layoutManager = layoutManager;
+        this.viewLayoutManager = viewLayoutManager;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     @Override
     public void onViewCreatedForTheFirstTime() {
         view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
-        layoutManager.saveLayoutInUse(view.getViewLayout());
+        viewLayoutManager.saveLayoutInUse(view.getViewLayout());
         populateDatabaseForTestPurposes();
     }
 
@@ -80,6 +79,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Override
     public void onCreateVocableRequest(Word vocable) {
+
         model.asyncSaveVocable(vocable);
     }
 
@@ -93,7 +93,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncGetVocableByIdSuccessful(EventAsyncGetVocableByIdSuccessful event) {
+    public void onEventAsyncGetVocableByIdSuccessful(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
             setLayoutForView(DictionaryManipulationFragment.TAG);
@@ -104,7 +104,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncSaveVocableSuccessful(EventAsyncSaveVocableSuccessful event) {
+    public void onEventAsyncSaveVocableSuccessful(EventAsyncSaveVocable event) {
         long savedVocableId = event.getIdOfInsertedVocable();
         view.showMessage("saved with id " + savedVocableId);
         EventBus.getDefault().removeStickyEvent(event);
@@ -112,7 +112,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocableSuccessful event) {
+    public void onEventAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocable event) {
         view.showMessage("updated");
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -120,7 +120,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     private boolean restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology viewLayoutBackupChronology) {
         ViewLayout viewLayoutRestored = null;
         try {
-            viewLayoutRestored = layoutManager.getViewLayout(viewLayoutBackupChronology);
+            viewLayoutRestored = viewLayoutManager.getViewLayout(viewLayoutBackupChronology);
         } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
         }
         if (viewLayoutRestored != null) {
@@ -150,7 +150,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         } else {
             view.useSingleLayoutWithFragment(fragmentTAG);
         }
-        layoutManager.saveLayoutInUse(view.getViewLayout());
+        viewLayoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
     private void populateDatabaseForTestPurposes() {

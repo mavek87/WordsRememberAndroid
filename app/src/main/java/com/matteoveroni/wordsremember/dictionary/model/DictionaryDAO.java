@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.model;
 
+import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
