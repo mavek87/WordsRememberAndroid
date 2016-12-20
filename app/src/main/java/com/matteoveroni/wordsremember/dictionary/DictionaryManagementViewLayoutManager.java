@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management;
+package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;

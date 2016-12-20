@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,18 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryFragmentFactory;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
+import com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory;
+import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
@@ -32,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.matteoveroni.wordsremember.dictionary.fragments.DictionaryFragmentFactory.DictionaryFragmentType;
+import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory.DictionaryFragmentType;
 
 /**
  * Dictionary Management Activity

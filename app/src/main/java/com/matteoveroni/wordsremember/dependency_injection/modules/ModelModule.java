@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementViewLayoutManager;
+import com.matteoveroni.wordsremember.dictionary.DictionaryManagementViewLayoutManager;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import dagger.Module;

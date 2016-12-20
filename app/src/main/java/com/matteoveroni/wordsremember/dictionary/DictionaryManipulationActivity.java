@@ -1,10 +1,12 @@
-package com.matteoveroni.wordsremember.dictionary.manipulation;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationPresenter;
+import com.matteoveroni.wordsremember.pojo.Word;
 
 public class DictionaryManipulationActivity extends AppCompatActivity {
 

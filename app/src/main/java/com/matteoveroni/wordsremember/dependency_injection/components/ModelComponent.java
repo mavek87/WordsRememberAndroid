@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.components;
 
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
-import com.matteoveroni.wordsremember.dictionary.management.DictionaryManagementPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 
 import javax.inject.Singleton;
 

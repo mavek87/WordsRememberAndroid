@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.fragments;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.content.Context;
 import android.os.Bundle;

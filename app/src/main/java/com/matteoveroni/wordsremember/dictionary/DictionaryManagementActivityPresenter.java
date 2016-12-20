@@ -1,12 +1,10 @@
-package com.matteoveroni.wordsremember.dictionary.management;
+package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManagementFragment;
-import com.matteoveroni.wordsremember.dictionary.fragments.DictionaryManipulationFragment;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.management.interfaces.DictionaryManagementView;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.fragments;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -40,13 +40,8 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     private WordsListViewAdapter dictionaryListViewAdapter;
 
-    /**********************************************************************************************/
-
-    // CONSTRUCTOR
     public DictionaryManagementFragment() {
     }
-
-    /**********************************************************************************************/
 
     // ANDROID LIFECYCLE METHODS
     @Override

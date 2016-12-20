@@ -1,6 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.management.interfaces;
-
-import android.content.Context;
+package com.matteoveroni.wordsremember.dictionary.interfaces;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
