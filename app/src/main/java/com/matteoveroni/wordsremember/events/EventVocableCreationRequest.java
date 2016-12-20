@@ -5,8 +5,8 @@ package com.matteoveroni.wordsremember.events;
  *
  * @author Matteo Veroni
  */
-public class EventCreateVocable {
+public class EventVocableCreationRequest {
 
-    public EventCreateVocable() {
+    public EventVocableCreationRequest() {
     }
 }

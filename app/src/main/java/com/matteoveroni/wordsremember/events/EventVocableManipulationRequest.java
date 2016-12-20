@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.events;
 /**
  * @author Matteo Veroni
  */
-public class EventManipulateVocable {
+public class EventVocableManipulationRequest {
 
     private final long vocableIDToManipulte;
     private final TypeOfManipulation typeOfManipulation;
@@ -12,7 +12,7 @@ public class EventManipulateVocable {
         EDIT, REMOVE;
     }
 
-    public EventManipulateVocable(long vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {
+    public EventVocableManipulationRequest(long vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {
         this.vocableIDToManipulte = vocableIDToManipulate;
         this.typeOfManipulation = typeOfManipulation;
     }

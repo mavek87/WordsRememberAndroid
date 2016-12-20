@@ -25,5 +25,4 @@ public class ModelModule {
     public DictionaryManagementViewLayoutManager provideDictionaryManagementViewLayoutManager() {
         return new DictionaryManagementViewLayoutManager();
     }
-
 }

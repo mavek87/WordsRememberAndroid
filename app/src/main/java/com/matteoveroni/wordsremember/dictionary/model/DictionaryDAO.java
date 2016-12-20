@@ -30,13 +30,6 @@ public class DictionaryDAO {
         this.contentResolver = context.getContentResolver();
     }
 
-    /**
-     * Insert a vocable into the dictionary if it's not present
-     *
-     * @param vocable The vocable to insert into the dictionary
-     * @return A long number that is negative if an error occurred during the insertion operation or
-     * is positive and corresponds to the inserted vocable id if the operation was successful.
-     */
     public long saveVocable(Word vocable) {
         long id = -1;
         if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
@@ -53,58 +46,6 @@ public class DictionaryDAO {
         return id;
     }
 
-    public void asyncSaveVocable(Word vocable) {
-        // TODO: search a way to avoid to call isVocablePresent synchronous method
-        if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
-            AsyncSaveVocableHandler asyncInsertHandler = new AsyncSaveVocableHandler(contentResolver);
-            asyncInsertHandler.startInsert(
-                    1,
-                    null,
-                    CONTENT_PROVIDER_URI,
-                    vocableToContentValues(vocable)
-            );
-        }
-    }
-
-    public boolean updateVocable(long vocableID, Word newVocable) {
-        final String str_idColumn = String.valueOf(vocableID);
-
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
-
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-        int updatedRecords = contentResolver.update(vocableUri, vocableToContentValues(newVocable), selection, selectionArgs);
-
-        return updatedRecords > 0;
-    }
-
-    public void asyncUpdateVocable(long vocableID, Word newVocable) {
-        final String str_idColumn = String.valueOf(vocableID);
-
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
-
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-        AsyncUpdateVocableHandler asyncUpdateHandler = new AsyncUpdateVocableHandler(contentResolver);
-        asyncUpdateHandler.startUpdate(
-                1,
-                null,
-                vocableUri,
-                vocableToContentValues(newVocable),
-                selection,
-                selectionArgs
-        );
-    }
-
-    /**
-     * Retrieve and get a vocable from the db using his ID
-     *
-     * @param id The vocable ID to search into the database
-     * @return The vocable corresponding to the searched ID or null if the database doesn't contain any
-     * vocable with that ID.
-     */
     public Word getVocableById(long id) {
         final String str_idColumn = String.valueOf(id);
 
@@ -122,7 +63,7 @@ public class DictionaryDAO {
                 null
         );
 
-        if (cursor != null && cursor.getCount() == 1) {
+        if (cursor != null) {
             cursor.moveToFirst();
             return cursorToVocable(cursor);
         } else {
@@ -130,33 +71,19 @@ public class DictionaryDAO {
         }
     }
 
-    public void asyncGetVocableById(long id) {
-        final String str_idColumn = String.valueOf(id);
+    public boolean updateVocable(long vocableID, Word newVocable) {
+        final String str_idColumn = String.valueOf(vocableID);
 
-        final String[] projection = {Schema.COLUMN_NAME};
         final String selection = Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_idColumn};
 
         final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-        AsyncGetVocableByIdHandler asyncQueryHandler = new AsyncGetVocableByIdHandler(contentResolver);
-        asyncQueryHandler.startQuery(
-                1,
-                null,
-                vocableUri,
-                projection,
-                selection,
-                selectionArgs,
-                null
-        );
+        int updatedRecords = contentResolver.update(vocableUri, vocableToContentValues(newVocable), selection, selectionArgs);
+
+        return updatedRecords > 0;
     }
 
-    /**
-     * Remove a vocable from the dictionary using the vocable ID
-     *
-     * @param vocableID The vocable ID
-     * @return True if the vocable has been removed and false in the other case
-     */
     public boolean removeVocable(long vocableID) {
         int recordDeleted = 0;
         if (vocableID > 0) {
@@ -176,6 +103,56 @@ public class DictionaryDAO {
         return recordDeleted > 0;
     }
 
+    public void asyncSaveVocable(Word vocable) {
+        // TODO: search a way to avoid to call isVocablePresent synchronous method
+        if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
+            new AsyncSaveVocableHandler(contentResolver).startInsert(
+                    1,
+                    null,
+                    CONTENT_PROVIDER_URI,
+                    vocableToContentValues(vocable)
+            );
+        }
+    }
+
+    public void asyncGetVocableById(long id) {
+        final String str_idColumn = String.valueOf(id);
+
+        final String[] projection = {Schema.COLUMN_NAME};
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        new AsyncGetVocableByIdHandler(contentResolver).startQuery(
+                1,
+                null,
+                vocableUri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+    }
+
+    public void asyncUpdateVocable(long vocableID, Word newVocable) {
+        final String str_idColumn = String.valueOf(vocableID);
+
+        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_idColumn};
+
+        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+        new AsyncUpdateVocableHandler(contentResolver).startUpdate(
+                1,
+                null,
+                vocableUri,
+                vocableToContentValues(newVocable),
+                selection,
+                selectionArgs
+        );
+    }
+
     public void asyncRemoveVocable(long vocableID) {
         if (vocableID > 0) {
             final String str_idColumn = String.valueOf(vocableID);
@@ -185,8 +162,7 @@ public class DictionaryDAO {
 
             final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-            AsyncDeleteVocableHandler asyncDeleteHandler = new AsyncDeleteVocableHandler(contentResolver);
-            asyncDeleteHandler.startDelete(
+            new AsyncDeleteVocableHandler(contentResolver).startDelete(
                     1,
                     null,
                     vocableUri,

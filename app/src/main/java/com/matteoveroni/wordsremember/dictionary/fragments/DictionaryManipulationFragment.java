@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.events.EventCreateVocable;
+import com.matteoveroni.wordsremember.events.EventVocableCreationRequest;
 import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -41,9 +41,9 @@ public class DictionaryManipulationFragment extends Fragment {
     @BindView(R.id.fragment_dictionary_manipulation_lbl_vocable_name)
     TextView lbl_vocableName;
 
-    private ManipulationMode mode;
+    private DictionaryManipulationMode mode;
 
-    private enum ManipulationMode {
+    private enum DictionaryManipulationMode {
         CREATE, UPDATE;
     }
 
@@ -118,11 +118,9 @@ public class DictionaryManipulationFragment extends Fragment {
      */
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventVocableSelected(EventNotifySelectedVocableToObservers event) {
+    public void onEventNotifiedVocableToVisualize(EventNotifySelectedVocableToObservers event) {
         if (isViewCreated()) {
-            // Get data from event
             Word selectedVocable = event.getSelectedVocable();
-            // Populate view with data
             populateViewUsingData("Edit Vocable", selectedVocable);
         }
     }
@@ -134,10 +132,10 @@ public class DictionaryManipulationFragment extends Fragment {
      */
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventCreateVocable(EventCreateVocable event) {
+    public void onEventVocableCreationRequest(EventVocableCreationRequest event) {
         if (isViewCreated()) {
             populateViewUsingData("Create Vocable", null);
-            mode = ManipulationMode.CREATE;
+            mode = DictionaryManipulationMode.CREATE;
         }
     }
 

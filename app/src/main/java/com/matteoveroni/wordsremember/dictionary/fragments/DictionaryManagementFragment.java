@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.events.EventManipulateVocable;
+import com.matteoveroni.wordsremember.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
@@ -39,8 +39,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public static final String TAG = "F_dictionaryManagement";
 
     private WordsListViewAdapter dictionaryListViewAdapter;
-
-    private Presenter presenter;
 
     /**********************************************************************************************/
 
@@ -113,18 +111,17 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
         AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int position = contextMenuInfo.position;
 
+        int position = contextMenuInfo.position;
         long targetVocableID = dictionaryListViewAdapter.getItemId(position);
 
         switch (item.getItemId()) {
             case R.id.menu_dictionary_management_long_press_edit:
-                EventBus.getDefault().postSticky(new EventManipulateVocable(targetVocableID, EventManipulateVocable.TypeOfManipulation.EDIT));
+                EventBus.getDefault().postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
                 return true;
             case R.id.menu_dictionary_management_long_press_remove:
-                EventBus.getDefault().postSticky(new EventManipulateVocable(targetVocableID, EventManipulateVocable.TypeOfManipulation.REMOVE));
+                EventBus.getDefault().postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
                 return true;
         }
         return super.onContextItemSelected(item);

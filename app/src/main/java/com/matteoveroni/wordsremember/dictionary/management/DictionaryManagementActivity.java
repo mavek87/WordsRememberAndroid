@@ -213,7 +213,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @SuppressWarnings("unused")
     public void onFloatingActionButtonClicked() {
 //        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
-//        EventBus.getDefault().postSticky(new EventCreateVocable());
+//        EventBus.getDefault().postSticky(new EventVocableCreationRequest());
         Word vocableToCreate = new Word("provaCreazione");
         presenter.onCreateVocableRequest(vocableToCreate);
     }
@@ -227,7 +227,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //     */
 //    @SuppressWarnings("unused")
 //    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventVocableSelected(EventVocableSelected event) {
+//    public void onEventNotifiedVocableToVisualize(EventVocableSelected event) {
 //        long selectedVocableID = event.getSelectedVocableID();
 //
 //        Word selectedVocable = null;
@@ -256,7 +256,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //     */
 //    @SuppressWarnings("unused")
 //    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onVocableManipulationRequest(EventManipulateVocable event) {
+//    public void onVocableManipulationRequest(EventVocableManipulationRequest event) {
 //        final long selectedVocableID = event.getVocableIDToManipulate();
 //        switch (event.getTypeOfManipulation()) {
 //            case EDIT:

@@ -79,7 +79,6 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Override
     public void onCreateVocableRequest(Word vocable) {
-
         model.asyncSaveVocable(vocable);
     }
 
@@ -88,12 +87,11 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     public void onEventVocableSelected(EventVocableSelected event) {
         long selectedVocableID = event.getSelectedVocableID();
         model.asyncGetVocableById(selectedVocableID);
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncGetVocableByIdSuccessful(EventAsyncGetVocableById event) {
+    public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
             setLayoutForView(DictionaryManipulationFragment.TAG);
@@ -104,7 +102,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncSaveVocableSuccessful(EventAsyncSaveVocable event) {
+    public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
         long savedVocableId = event.getIdOfInsertedVocable();
         view.showMessage("saved with id " + savedVocableId);
         EventBus.getDefault().removeStickyEvent(event);
@@ -112,7 +110,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncUpdatedVocableSuccessful(EventAsyncUpdateVocable event) {
+    public void onEventAsyncUpdatedVocableCompleted(EventAsyncUpdateVocable event) {
         view.showMessage("updated");
         EventBus.getDefault().removeStickyEvent(event);
     }
