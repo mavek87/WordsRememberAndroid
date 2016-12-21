@@ -1,9 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
+import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
@@ -25,7 +25,7 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  */
 
-public class DictionaryManagementActivityPresenter implements DictionaryManagementPresenter {
+public class DictionaryManagementPresenter implements Presenter {
 
     public static final String TAG = "DictManagePresenter";
 
@@ -33,7 +33,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     private final ViewLayoutManager viewLayoutManager;
     private DictionaryManagementView view;
 
-    public DictionaryManagementActivityPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
+    public DictionaryManagementPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
         this.model = model;
         this.viewLayoutManager = viewLayoutManager;
     }
@@ -59,24 +59,20 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         onViewDetached();
     }
 
-    @Override
     public void onViewRestored() {
         restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.LAST_LAYOUT);
     }
 
-    @Override
     public void onViewCreatedForTheFirstTime() {
         view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
         viewLayoutManager.saveLayoutInUse(view.getViewLayout());
         populateDatabaseForTestPurposes();
     }
 
-    @Override
     public boolean onKeyBackPressedRestorePreviousState() {
         return restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
     }
 
-    @Override
     public void onCreateVocableRequest(Word vocable) {
         model.asyncSaveVocable(vocable);
     }
@@ -86,6 +82,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     public void onEventVocableSelected(EventVocableSelected event) {
         long selectedVocableID = event.getSelectedVocableID();
         model.asyncGetVocableById(selectedVocableID);
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
@@ -96,7 +93,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
             resolveAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
             ViewLayout currentLayout = viewLayoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT);
             if (currentLayout.getViewLayoutType().equals(ViewLayoutType.SINGLE_LAYOUT)) {
-                view.switchToManipulationView(retrievedVocable);
+                view.goToManipulationView(retrievedVocable);
             } else {
                 EventBus.getDefault().postSticky(new EventVisualizeVocable(retrievedVocable));
             }

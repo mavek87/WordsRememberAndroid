@@ -2,9 +2,8 @@ package com.matteoveroni.wordsremember.dictionary.factories;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
 import com.matteoveroni.wordsremember.MyApp;
-import com.matteoveroni.wordsremember.dictionary.DictionaryManagementActivityPresenter;
+import com.matteoveroni.wordsremember.dictionary.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.DictionaryManagementViewLayoutManager;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import javax.inject.Inject;
@@ -19,6 +18,6 @@ public class DictionaryManagementPresenterFactory implements PresenterFactory {
     @Override
     public DictionaryManagementPresenter create() {
         MyApp.getModelComponent().inject(this);
-        return new DictionaryManagementActivityPresenter(injectedModel, injectedLayoutManager);
+        return new DictionaryManagementPresenter(injectedModel, injectedLayoutManager);
     }
 }

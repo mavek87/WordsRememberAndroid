@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
@@ -44,13 +43,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     }
 
     @Override
-    public void switchToPreviousView() {
+    public void returnToPreviousView() {
         onBackPressed();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -62,15 +56,13 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        Word vocableToManipulate = detectVocableToManipulate();
-        presenter.onVocableToManipulateLoaded(vocableToManipulate);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
+        presenter.onVocableToManipulateRetrieved(retrieveVocableToManipulate());
     }
 
     @Override
@@ -79,7 +71,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         super.onStop();
     }
 
-    private Word detectVocableToManipulate() {
+    private Word retrieveVocableToManipulate() {
         Intent starterIntent = getIntent();
         if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
             String str_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
@@ -88,6 +80,5 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         }
         return null;
     }
-
 
 }

@@ -1,9 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
+import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
@@ -16,14 +15,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 
-public class DictionaryManipulationActivityPresenter implements DictionaryManipulationPresenter {
+public class DictionaryManipulationPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";
 
     private final DictionaryDAO model;
     private DictionaryManipulationView view;
 
-    public DictionaryManipulationActivityPresenter(DictionaryDAO model) {
+    public DictionaryManipulationPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
@@ -48,8 +47,7 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
         onViewDetached();
     }
 
-    @Override
-    public void onVocableToManipulateLoaded(Word vocableToManipulate) {
+    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
         if (vocableToManipulate != null)
             EventBus.getDefault().postSticky(new EventVisualizeVocable(vocableToManipulate));
         else
@@ -72,7 +70,7 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
         long savedVocableId = event.getIdOfInsertedVocable();
         //TODO: send event to reload data in the list adapter
-        view.switchToPreviousView();
+        view.returnToPreviousView();
         EventBus.getDefault().removeStickyEvent(event);
     }
 }

@@ -17,7 +17,6 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
@@ -85,64 +84,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         presenter = null;
     }
 
-    // ANDROID LIFECYCLE METHOD
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.onViewAttached(this);
-        if (isActivityCreatedForTheFirstTime) {
-            presenter.onViewCreatedForTheFirstTime();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.onViewDetached();
-        super.onStop();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_dictionary_management_view);
-
-        ButterKnife.bind(this);
-
-        getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
-
-        fragmentManager = getSupportFragmentManager();
-
-        if (isActivityCreatedForTheFirstTime = (savedInstanceState == null)) {
-            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANAGEMENT);
-            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANIPULATION);
-
-            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
-        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
-        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
-
-        manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
-        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
-
-        presenter.onViewRestored();
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -191,7 +132,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     }
 
     @Override
-    public void switchToManipulationView(Word vocableToManipulate) {
+    public void goToManipulationView(Word vocableToManipulate) {
         Intent intent_startManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
         intent_startManipulationActivity.putExtra(
                 Extras.VOCABLE_TO_MANIPULATE,
@@ -213,6 +154,64 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    // ANDROID LIFECYCLE METHODS
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_dictionary_management_view);
+
+        ButterKnife.bind(this);
+
+        getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
+
+        fragmentManager = getSupportFragmentManager();
+
+        if (isActivityCreatedForTheFirstTime = (savedInstanceState == null)) {
+            managementFragment = (DictionaryManagementFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANAGEMENT);
+            manipulationFragment = (DictionaryManipulationFragment) DictionaryFragmentFactory.create(DictionaryFragmentType.MANIPULATION);
+
+            addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+            addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onViewAttached(this);
+        if (isActivityCreatedForTheFirstTime) {
+            presenter.onViewCreatedForTheFirstTime();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.onViewDetached();
+        super.onStop();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
+        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        managementFragment = (DictionaryManagementFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManagementFragment.TAG);
+        addFragmentToView(managementContainer, managementFragment, DictionaryManagementFragment.TAG);
+
+        manipulationFragment = (DictionaryManipulationFragment) fragmentManager.getFragment(savedInstanceState, DictionaryManipulationFragment.TAG);
+        addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
+
+        presenter.onViewRestored();
     }
 
     /**********************************************************************************************/

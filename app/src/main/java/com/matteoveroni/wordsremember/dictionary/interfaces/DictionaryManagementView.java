@@ -19,5 +19,5 @@ public interface DictionaryManagementView {
 
     void showMessage(String message);
 
-    void switchToManipulationView(Word vocableToManipulate);
+    void goToManipulationView(Word vocableToManipulate);
 }
