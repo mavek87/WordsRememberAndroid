@@ -16,7 +16,7 @@ public class ModelModule {
 
     @Provides
     @SuppressWarnings("unused")
-    public DictionaryDAO provideDictionaryManagementPresenterModel(Context context) {
+    public DictionaryDAO provideDictionaryModel(Context context) {
         return new DictionaryDAO(context);
     }
 

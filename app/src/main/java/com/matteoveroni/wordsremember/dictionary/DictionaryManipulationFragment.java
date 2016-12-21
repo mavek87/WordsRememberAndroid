@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.events.EventVocableCreationRequest;
-import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
+import com.matteoveroni.wordsremember.events.EventStartVocableCreation;
+import com.matteoveroni.wordsremember.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,17 +49,8 @@ public class DictionaryManipulationFragment extends Fragment {
 
     private Unbinder viewInjector;
 
-    /**********************************************************************************************/
-
-    // CONSTRUCTORS
-
-    /**
-     * Empty Constructor
-     */
     public DictionaryManipulationFragment() {
     }
-
-    /**********************************************************************************************/
 
     // ANDROID LIFECYCLE METHODS
     @Override
@@ -118,9 +109,9 @@ public class DictionaryManipulationFragment extends Fragment {
      */
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventNotifiedVocableToVisualize(EventNotifySelectedVocableToObservers event) {
+    public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
         if (isViewCreated()) {
-            Word selectedVocable = event.getSelectedVocable();
+            Word selectedVocable = event.getVocable();
             populateViewUsingData("Edit Vocable", selectedVocable);
         }
     }
@@ -132,7 +123,7 @@ public class DictionaryManipulationFragment extends Fragment {
      */
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventVocableCreationRequest(EventVocableCreationRequest event) {
+    public void onEventVocableCreationRequest(EventStartVocableCreation event) {
         if (isViewCreated()) {
             populateViewUsingData("Create Vocable", null);
             mode = DictionaryManipulationMode.CREATE;

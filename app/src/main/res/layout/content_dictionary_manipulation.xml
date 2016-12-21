@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_dictionary_manipulation">
 
     <fragment
-        android:id="@+id/activity_dictionary_manipulation_fragment_manipulation"
+        android:id="@+id/activity_dictionary_manipulation_fragment"
         android:name="com.matteoveroni.wordsremember.dictionary.DictionaryManipulationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

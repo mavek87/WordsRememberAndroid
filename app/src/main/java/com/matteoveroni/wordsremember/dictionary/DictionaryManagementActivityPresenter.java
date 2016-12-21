@@ -8,12 +8,13 @@ import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagement
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
-import com.matteoveroni.wordsremember.events.EventNotifySelectedVocableToObservers;
+import com.matteoveroni.wordsremember.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutBackupChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -92,8 +93,13 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
     public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
-            setLayoutForView(DictionaryManipulationFragment.TAG);
-            EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(retrievedVocable));
+            resolveAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
+            ViewLayout currentLayout = viewLayoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT);
+            if (currentLayout.getViewLayoutType().equals(ViewLayoutType.SINGLE_LAYOUT)) {
+                view.switchToManipulationView(retrievedVocable);
+            } else {
+                EventBus.getDefault().postSticky(new EventVisualizeVocable(retrievedVocable));
+            }
         }
         EventBus.getDefault().removeStickyEvent(event);
     }
@@ -136,7 +142,7 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
         return false;
     }
 
-    private void setLayoutForView(String fragmentTAG) {
+    private void resolveAndApplyLayoutForView(String fragmentTAG) {
         if (view.isViewLarge()) {
             if (view.isViewLandscape()) {
                 view.useTwoHorizontalColumnsLayout();

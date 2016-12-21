@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +8,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -25,6 +25,7 @@ import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import static com.matteoveroni.wordsremember.ui.layout.ViewLayout.ViewLayoutBuilder;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
+import com.matteoveroni.wordsremember.utilities.Json;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +48,9 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public static final String TAG = "A_DICTIONARY_MANAGE";
 
     private ViewLayout viewLayout;
+
     private DictionaryManagementPresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
+    private static final int PRESENTER_ID = 1;
 
     private FragmentManager fragmentManager;
     private DictionaryManagementFragment managementFragment;
@@ -66,6 +68,21 @@ public class DictionaryManagementActivity extends AppCompatActivity
     FloatingActionButton floatingActionButton;
 
     public DictionaryManagementActivity() {
+    }
+
+    @Override
+    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
+        presenter = null;
     }
 
     // ANDROID LIFECYCLE METHOD
@@ -93,7 +110,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -124,22 +141,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         addFragmentToView(manipulationContainer, manipulationFragment, DictionaryManipulationFragment.TAG);
 
         presenter.onViewRestored();
-    }
-
-    @Override
-    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
-        this.presenter = presenter;
-        Log.i(TAG, "onLoadFinished");
-    }
-
-    @Override
-    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
-        presenter = null;
     }
 
     @Override
@@ -190,6 +191,16 @@ public class DictionaryManagementActivity extends AppCompatActivity
     }
 
     @Override
+    public void switchToManipulationView(Word vocableToManipulate) {
+        Intent intent_startManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
+        intent_startManipulationActivity.putExtra(
+                Extras.VOCABLE_TO_MANIPULATE,
+                (vocableToManipulate != null) ? Json.getInstance().toJson(vocableToManipulate) : ""
+        );
+        startActivity(intent_startManipulationActivity);
+    }
+
+    @Override
     public boolean isViewLarge() {
         return getResources().getBoolean(R.bool.LARGE_SCREEN);
     }
@@ -211,7 +222,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @SuppressWarnings("unused")
     public void onFloatingActionButtonClicked() {
 //        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
-//        EventBus.getDefault().postSticky(new EventVocableCreationRequest());
+//        EventBus.getDefault().postSticky(new EventStartVocableCreation());
         Word vocableToCreate = new Word("provaCreazione");
         presenter.onCreateVocableRequest(vocableToCreate);
     }
@@ -243,78 +254,10 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //                injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
 //            }
 //
-//            EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(selectedVocable));
-//        }
-//    }
-//
-//    /**
-//     * Method called when a manipulation operation on a vocable (update or remove) is required
-//     *
-//     * @param event The event for manipulating a vocable
-//     */
-//    @SuppressWarnings("unused")
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onVocableManipulationRequest(EventVocableManipulationRequest event) {
-//        final long selectedVocableID = event.getVocableIDToManipulate();
-//        switch (event.getTypeOfManipulation()) {
-//            case EDIT:
-//                break;
-//            case REMOVE:
-//                if (model.removeVocable(selectedVocableID)) {
-//                    // Send selected vocable to all the listeners (fragments)
-//                    EventBus.getDefault().postSticky(new EventNotifySelectedVocableToObservers(null));
-////                    loadFragmentsInsideView(true, false);
-//                }
-//                break;
-//            default:
-//                throw new InvalidParameterException("Internal error, something goes wrong! - Invalid vocable manipulation operation");
+//            EventBus.getDefault().postSticky(new EventVisualizeVocable(selectedVocable));
 //        }
 //    }
 
-    /**********************************************************************************************/
-
-    // HELPER METHODS
-
-    //    /**
-//     * @param useManagementFragment
-//     * @param useManipulationFragment
-//     */
-//    private void loadFragmentsInsideView(boolean useManagementFragment, boolean useManipulationFragment) {
-//        if (useManagementFragment && useManipulationFragment) {
-//            // Add management fragment if it's not added yet in any case
-//            addFragmentToView(managementContainer, managementFragment);
-//
-//            if (isViewLarge() && (managementFragment != null && managementFragment.isItemSelected())) {
-//                // LARGE SCREEN and A VOCABLE SELECTED
-//                // so load the manipulation fragment inside the view together with the management fragment
-//                addFragmentToView(manipulationContainer, manipulationFragment);
-//
-//                if (isViewLandscape()) {
-//                    // LANDSCAPE MODE
-//                    useTwoHorizontalColumnsLayout();
-//                } else {
-//                    // NOT IN LANDSCAPE MODE
-//                    useTwoVerticalRowsLayout();
-//                }
-//            } else {
-//                // NOT LARGE SCREEN or NO VOCABLE SELECTED
-//                // so if it's present the manipulation fragment in the view remove it
-//                manipulationContainer.removeAllViews();
-//                removeFragmentFromView(manipulationFragment);
-//                useSingleLayoutWithFragment(managementFragment);
-//            }
-//        } else if (useManagementFragment) {
-//            manipulationContainer.removeAllViews();
-//            removeFragmentFromView(manipulationFragment);
-//            addFragmentToView(managementContainer, managementFragment);
-//            useSingleLayoutWithFragment(managementFragment);
-//        } else if (useManipulationFragment) {
-//            managementContainer.removeAllViews();
-//            removeFragmentFromView(managementFragment);
-//            addFragmentToView(manipulationContainer, manipulationFragment);
-//            useSingleLayoutWithFragment(manipulationFragment);
-//        }
-//    }
     private boolean addFragmentToView(FrameLayout container, Fragment fragment, String fragmentTAG) {
         if (fragment != null && !fragment.isAdded()) {
             fragmentManager

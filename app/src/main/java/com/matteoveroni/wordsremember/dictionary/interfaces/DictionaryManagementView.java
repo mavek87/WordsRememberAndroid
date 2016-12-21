@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.interfaces;
 
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
 public interface DictionaryManagementView {
@@ -17,4 +18,6 @@ public interface DictionaryManagementView {
     boolean isViewLandscape();
 
     void showMessage(String message);
+
+    void switchToManipulationView(Word vocableToManipulate);
 }
