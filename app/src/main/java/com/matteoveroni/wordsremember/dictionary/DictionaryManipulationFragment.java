@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.events.EventStartVocableCreation;
-import com.matteoveroni.wordsremember.events.EventVisualizeVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventStartVocableCreation;
+import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;

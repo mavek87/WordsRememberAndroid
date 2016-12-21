@@ -4,9 +4,11 @@ import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationPresenter;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.events.EventStartVocableCreation;
-import com.matteoveroni.wordsremember.events.EventVisualizeVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
+import com.matteoveroni.wordsremember.dictionary.events.EventStartVocableCreation;
+import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,8 +21,7 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
     public static final String TAG = "DictManipulPresenter";
 
     private final DictionaryDAO model;
-    private DictionaryManagementView view;
-    private Word vocableToManipulate = null;
+    private DictionaryManipulationView view;
 
     public DictionaryManipulationActivityPresenter(DictionaryDAO model) {
         this.model = model;
@@ -28,9 +29,9 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
 
     @Override
     public void onViewAttached(Object viewAttached) {
-        view = (DictionaryManagementView) Proxy.newProxyInstance(
+        view = (DictionaryManipulationView) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
-                new Class[]{DictionaryManagementView.class},
+                new Class[]{DictionaryManipulationView.class},
                 new NullWeakReferenceProxy(viewAttached));
 
         EventBus.getDefault().register(this);
@@ -39,7 +40,6 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
     @Override
     public void onViewDetached() {
         view = null;
-        vocableToManipulate = null;
         EventBus.getDefault().unregister(this);
     }
 
@@ -49,28 +49,30 @@ public class DictionaryManipulationActivityPresenter implements DictionaryManipu
     }
 
     @Override
-    public void setVocableToManipulate(Word vocableToManipulate) {
-        this.vocableToManipulate = vocableToManipulate;
-        if (vocableToManipulate != null) {
+    public void onVocableToManipulateLoaded(Word vocableToManipulate) {
+        if (vocableToManipulate != null)
             EventBus.getDefault().postSticky(new EventVisualizeVocable(vocableToManipulate));
-        } else {
+        else
             EventBus.getDefault().postSticky(new EventStartVocableCreation());
-        }
     }
 
-    @Override
-    public void onSaveVocableRequest() {
-        if (vocableToManipulate != null)
-            model.asyncSaveVocable(vocableToManipulate);
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
+        Word vocableToSave = event.getVocable();
+        if (vocableToSave != null)
+            model.asyncSaveVocable(vocableToSave);
         else
-            view.showMessage("Error occurred during the save. Compile all the data and retry");
+            view.showMessage("Error occurred during the saving process. Compile all the data and retry");
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
         long savedVocableId = event.getIdOfInsertedVocable();
-        view.showMessage("saved with id " + savedVocableId);
+        //TODO: send event to reload data in the list adapter
+        view.switchToPreviousView();
         EventBus.getDefault().removeStickyEvent(event);
     }
 }

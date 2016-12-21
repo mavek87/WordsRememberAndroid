@@ -6,16 +6,19 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationPresenter;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 
 public class DictionaryManipulationActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
     private DictionaryManipulationPresenter presenter;
     private static final int PRESENTER_ID = 1;
@@ -36,6 +39,21 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     }
 
     @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void switchToPreviousView() {
+        onBackPressed();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_manipulation);
@@ -46,7 +64,19 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Word vocableToManipulate = detectVocableToManipulate();
-        presenter.setVocableToManipulate(vocableToManipulate);
+        presenter.onVocableToManipulateLoaded(vocableToManipulate);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.onViewAttached(this);
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.onViewDetached();
+        super.onStop();
     }
 
     private Word detectVocableToManipulate() {
@@ -58,4 +88,6 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         }
         return null;
     }
+
+
 }

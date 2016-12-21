@@ -1,15 +1,12 @@
-package com.matteoveroni.wordsremember.events;
+package com.matteoveroni.wordsremember.dictionary.events;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 
-/**
- * @author Matteo Veroni
- */
-public class EventVisualizeVocable {
+public class EventSaveVocableRequest {
 
     private final Word vocable;
 
-    public EventVisualizeVocable(Word vocable) {
+    public EventSaveVocableRequest(Word vocable) {
         this.vocable = vocable;
     }
 
@@ -17,4 +14,3 @@ public class EventVisualizeVocable {
         return vocable;
     }
 }
-

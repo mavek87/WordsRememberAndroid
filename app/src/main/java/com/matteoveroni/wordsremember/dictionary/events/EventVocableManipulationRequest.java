@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.events;
+package com.matteoveroni.wordsremember.dictionary.events;
 
 /**
  * @author Matteo Veroni

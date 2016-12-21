@@ -16,9 +16,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.events.EventVocableManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;

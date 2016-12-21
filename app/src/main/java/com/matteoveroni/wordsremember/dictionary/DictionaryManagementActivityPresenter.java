@@ -8,7 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagement
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
-import com.matteoveroni.wordsremember.events.EventVisualizeVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
@@ -29,9 +29,9 @@ public class DictionaryManagementActivityPresenter implements DictionaryManageme
 
     public static final String TAG = "DictManagePresenter";
 
-    private DictionaryManagementView view;
     private final DictionaryDAO model;
     private final ViewLayoutManager viewLayoutManager;
+    private DictionaryManagementView view;
 
     public DictionaryManagementActivityPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
         this.model = model;
