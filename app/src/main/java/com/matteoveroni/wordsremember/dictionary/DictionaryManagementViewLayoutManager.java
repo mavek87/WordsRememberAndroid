@@ -23,6 +23,13 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
     }
 
     @Override
+    public void removeLastLayoutSaved() {
+        if (!viewLayoutHistory.empty()) {
+            viewLayoutHistory.pop();
+        }
+    }
+
+    @Override
     public ViewLayout getLayout(ViewLayoutChronology viewLayoutChronology) throws NoViewLayoutFoundException {
         ViewLayout viewLayout = null;
         try {

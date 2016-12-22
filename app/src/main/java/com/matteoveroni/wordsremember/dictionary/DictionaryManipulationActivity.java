@@ -11,10 +11,13 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
@@ -45,15 +48,12 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     public void returnToPreviousView() {
         onBackPressed();
-//        Intent startManagementActivity = new Intent(getApplicationContext(), DictionaryManagementActivity.class);
-//        startActivity(startManagementActivity);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Toast.makeText(this, "entro tasto premuto", Toast.LENGTH_SHORT).show();
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            EventBus.getDefault().postSticky(new EventResetDictionaryManagementView());
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -91,5 +91,4 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         }
         return null;
     }
-
 }

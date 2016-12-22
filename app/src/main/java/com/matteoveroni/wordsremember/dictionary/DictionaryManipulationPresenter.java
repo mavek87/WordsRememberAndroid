@@ -20,6 +20,8 @@ public class DictionaryManipulationPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";
 
+    private final EventBus eventBus = EventBus.getDefault();
+
     private final DictionaryDAO model;
     private DictionaryManipulationView view;
 
@@ -32,15 +34,16 @@ public class DictionaryManipulationPresenter implements Presenter {
         view = (DictionaryManipulationView) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
                 new Class[]{DictionaryManipulationView.class},
-                new NullWeakReferenceProxy(viewAttached));
+                new NullWeakReferenceProxy(viewAttached)
+        );
 
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
     }
 
     @Override
     public void onViewDetached() {
         view = null;
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
     }
 
     @Override
@@ -50,27 +53,27 @@ public class DictionaryManipulationPresenter implements Presenter {
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
         if (vocableToManipulate != null)
-            EventBus.getDefault().postSticky(new EventVisualizeVocable(vocableToManipulate));
+            eventBus.postSticky(new EventVisualizeVocable(vocableToManipulate));
         else
-            EventBus.getDefault().postSticky(new EventStartVocableCreation());
+            eventBus.postSticky(new EventStartVocableCreation());
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
+        eventBus.removeStickyEvent(event);
         Word vocableToSave = event.getVocable();
         if (vocableToSave != null)
             model.asyncSaveVocable(vocableToSave);
         else
             view.showMessage("Error occurred during the saving process. Compile all the data and retry");
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
-        EventBus.getDefault().postSticky(new EventResetDictionaryManagementView());
-        EventBus.getDefault().removeStickyEvent(event);
+        eventBus.removeStickyEvent(event);
+        eventBus.postSticky(new EventResetDictionaryManagementView());
         view.returnToPreviousView();
     }
 }

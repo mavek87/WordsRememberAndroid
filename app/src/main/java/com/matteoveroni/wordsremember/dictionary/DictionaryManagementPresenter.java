@@ -15,7 +15,6 @@ import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutChronology;
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,6 +28,8 @@ import java.lang.reflect.Proxy;
 public class DictionaryManagementPresenter implements Presenter {
 
     public static final String TAG = "DictManagePresenter";
+
+    private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
     private final ViewLayoutManager viewLayoutManager;
@@ -44,15 +45,16 @@ public class DictionaryManagementPresenter implements Presenter {
         view = (DictionaryManagementView) Proxy.newProxyInstance(
                 getClass().getClassLoader(),
                 new Class[]{DictionaryManagementView.class},
-                new NullWeakReferenceProxy(viewAttached));
+                new NullWeakReferenceProxy(viewAttached)
+        );
 
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
     }
 
     @Override
     public void onViewDetached() {
         view = null;
-        EventBus.getDefault().unregister(this);
+        eventBus.unregister(this);
     }
 
     @Override
@@ -81,75 +83,84 @@ public class DictionaryManagementPresenter implements Presenter {
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventResetDictionaryManagementView(EventResetDictionaryManagementView event) {
+        eventBus.removeStickyEvent(event);
         onViewCreatedForTheFirstTime();
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventVocableSelected(EventVocableSelected event) {
+        eventBus.removeStickyEvent(event);
         long selectedVocableID = event.getSelectedVocableID();
         model.asyncGetVocableById(selectedVocableID);
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
+        eventBus.removeStickyEvent(event);
         if (retrievedVocable != null) {
             try {
-                ViewLayout viewLayout = viewLayoutManager.getLayout(ViewLayoutChronology.LAST_LAYOUT);
-                if (viewLayout.getViewLayoutType().equals(ViewLayoutType.SINGLE_LAYOUT)) {
+                if (!view.isViewLarge()) {
                     view.goToManipulationView(retrievedVocable);
                 } else {
-                    resolveAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
-                    EventBus.getDefault().postSticky(new EventVisualizeVocable(retrievedVocable));
+                    determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
+                    viewLayoutManager.saveLayoutInUse(view.getViewLayout());
+                    eventBus.postSticky(new EventVisualizeVocable(retrievedVocable));
                 }
-            }catch (ViewLayoutManager.NoViewLayoutFoundException ex){
+            } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
             }
         }
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
+        eventBus.removeStickyEvent(event);
         long savedVocableId = event.getIdOfInsertedVocable();
         view.showMessage("saved with id " + savedVocableId);
-        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncUpdatedVocableCompleted(EventAsyncUpdateVocable event) {
-        view.showMessage("updated");
-        EventBus.getDefault().removeStickyEvent(event);
+        eventBus.removeStickyEvent(event);
     }
 
     private boolean restoreSavedViewLayoutIfPresent(ViewLayoutChronology viewLayoutChronology) {
-        ViewLayout viewLayoutRestored = null;
+        ViewLayout viewLayoutToRestore;
         try {
-            viewLayoutRestored = viewLayoutManager.getLayout(viewLayoutChronology);
-        } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
-        }
-        if (viewLayoutRestored != null) {
-            switch (viewLayoutRestored.getViewLayoutType()) {
+            viewLayoutToRestore = viewLayoutManager.getLayout(viewLayoutChronology);
+            switch (viewLayoutToRestore.getViewLayoutType()) {
                 case SINGLE_LAYOUT:
-                    view.useSingleLayoutWithFragment(viewLayoutRestored.getMainFragmentTAG());
+                    view.useSingleLayoutWithFragment(viewLayoutToRestore.getMainFragmentTAG());
                     break;
                 case TWO_COLUMNS_LAYOUT:
-                    view.useTwoHorizontalColumnsLayout();
+                    if (view.isViewLarge()) {
+                        viewLayoutManager.removeLastLayoutSaved();
+                        determinateAndApplyLayoutForView(null);
+                    } else {
+                        view.useTwoHorizontalColumnsLayout();
+                    }
                     break;
                 case TWO_ROWS_LAYOUT:
-                    view.useTwoVerticalRowsLayout();
+                    if (view.isViewLarge()) {
+                        viewLayoutManager.removeLastLayoutSaved();
+                        determinateAndApplyLayoutForView(null);
+                    } else {
+                        view.useTwoVerticalRowsLayout();
+                    }
                     break;
             }
-            return true;
+            viewLayoutManager.saveLayoutInUse(view.getViewLayout());
+        } catch (ViewLayoutManager.NoViewLayoutFoundException e) {
+            return false;
         }
-        return false;
+        return true;
     }
 
-    private void resolveAndApplyLayoutForView(String fragmentTAG) {
+    private void determinateAndApplyLayoutForView(String fragmentTAG) {
         if (view.isViewLarge()) {
             if (view.isViewLandscape()) {
                 view.useTwoHorizontalColumnsLayout();
@@ -159,7 +170,6 @@ public class DictionaryManagementPresenter implements Presenter {
         } else {
             view.useSingleLayoutWithFragment(fragmentTAG);
         }
-        viewLayoutManager.saveLayoutInUse(view.getViewLayout());
     }
 
     private void populateDatabaseForTestPurposes() {

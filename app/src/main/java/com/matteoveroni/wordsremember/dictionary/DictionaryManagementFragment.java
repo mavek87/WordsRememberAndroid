@@ -35,6 +35,8 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     public static final String TAG = "F_dictionaryManagement";
 
+    private final EventBus eventBus = EventBus.getDefault();
+
     private WordsListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
@@ -107,10 +109,10 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
         switch (item.getItemId()) {
             case R.id.menu_dictionary_management_long_press_edit:
-                EventBus.getDefault().postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
+                eventBus.postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
                 return true;
             case R.id.menu_dictionary_management_long_press_remove:
-                EventBus.getDefault().postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
+                eventBus.postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -128,7 +130,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 ////            dictionaryListViewAdapter.setSelected(position, false);
 //            lastSelectedVocableID = -1;
 //        }
-        EventBus.getDefault().postSticky(new EventVocableSelected(id));
+        eventBus.postSticky(new EventVocableSelected(id));
     }
 
 /**********************************************************************************************/
