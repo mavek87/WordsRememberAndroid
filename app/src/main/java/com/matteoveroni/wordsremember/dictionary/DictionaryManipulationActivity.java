@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
@@ -24,6 +25,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     private DictionaryManipulationPresenter presenter;
     private static final int PRESENTER_ID = 1;
+
+    private EventBus eventBus;
 
     @Override
     public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
@@ -53,7 +56,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EventBus.getDefault().postSticky(new EventResetDictionaryManagementView());
+            eventBus.postSticky(new EventResetDictionaryManagementView());
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -66,7 +69,10 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(MyApp.NAME + " - " + "Details");
         setSupportActionBar(toolbar);
+
+        eventBus = EventBus.getDefault();
     }
 
     @Override

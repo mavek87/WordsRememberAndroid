@@ -214,9 +214,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         presenter.onViewRestored();
     }
 
-    /**********************************************************************************************/
-
-//    // EVENTS - ACTIVITY VIEW EVENTS
     @OnClick(R.id.dictionary_management_floating_action_button)
     @SuppressWarnings("unused")
     public void onFloatingActionButtonClicked() {
@@ -225,37 +222,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         Word vocableToCreate = new Word("provaCreazione");
         presenter.onCreateVocableRequest(vocableToCreate);
     }
-//
-//    // EVENTS - EXTERNAL EVENTS
-//
-//    /**
-//     * Observer method launched when a EventVocableSelected is posted on the app event bus
-//     *
-//     * @param event Event that occurs when a vocable is selected
-//     */
-//    @SuppressWarnings("unused")
-//    @Subscribe(threadMode = ThreadMode.MAIN)
-//    public void onEventNotifiedVocableToVisualize(EventVocableSelected event) {
-//        long selectedVocableID = event.getSelectedVocableID();
-//
-//        Word selectedVocable = null;
-//        if (selectedVocableID >= 0) {
-//            selectedVocable = model.asyncGetVocableById(selectedVocableID);
-//
-//            if (isViewLarge()) {
-//                if (isViewLandscape()) {
-//                    injectedLayoutManager.useTwoHorizontalColumnsLayout();
-//                } else {
-//                    injectedLayoutManager.useTwoVerticalRowsLayout();
-//                }
-//            } else {
-////                manipulationContainer.removeAllViews();
-//                injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
-//            }
-//
-//            EventBus.getDefault().postSticky(new EventVisualizeVocable(selectedVocable));
-//        }
-//    }
 
     private boolean addFragmentToView(FrameLayout container, Fragment fragment, String fragmentTAG) {
         if (fragment != null && !fragment.isAdded()) {

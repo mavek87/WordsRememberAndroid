@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.main_menu;
 
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuPresenter;
+import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 
@@ -12,7 +12,7 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.y0b4pwra1
  */
 
-public class MainMenuConcretePresenter implements MainMenuPresenter {
+public class MainMenuPresenter implements Presenter{
 
     private MainMenuView view;
 
@@ -35,7 +35,6 @@ public class MainMenuConcretePresenter implements MainMenuPresenter {
         onViewDetached();
     }
 
-    @Override
     public void onButtonManageDictionaryClicked() {
         view.startDictionaryManagement();
     }
