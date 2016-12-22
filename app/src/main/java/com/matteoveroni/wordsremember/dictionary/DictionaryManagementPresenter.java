@@ -76,7 +76,15 @@ public class DictionaryManagementPresenter implements Presenter {
         return restoreSavedViewLayoutIfPresent(ViewLayoutChronology.PREVIOUS_LAYOUT);
     }
 
-    public void onCreateVocableRequest(Word vocable) {
+    public void onCreateVocableRequest() {
+        if (view.isViewLarge()) {
+            onEventAsyncGetVocableByIdCompleted(new EventAsyncGetVocableById(null));
+        } else {
+            view.goToManipulationView(null);
+        }
+    }
+
+    public void onSaveVocableRequest(Word vocable) {
         model.asyncSaveVocable(vocable);
     }
 
@@ -100,17 +108,15 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         eventBus.removeStickyEvent(event);
-        if (retrievedVocable != null) {
-            try {
-                if (!view.isViewLarge()) {
-                    view.goToManipulationView(retrievedVocable);
-                } else {
-                    determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
-                    viewLayoutManager.saveLayoutInUse(view.getViewLayout());
-                    eventBus.postSticky(new EventVisualizeVocable(retrievedVocable));
-                }
-            } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
+        try {
+            if (!view.isViewLarge()) {
+                view.goToManipulationView(retrievedVocable);
+            } else {
+                determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
+                viewLayoutManager.saveLayoutInUse(view.getViewLayout());
+                eventBus.postSticky(new EventVisualizeVocable(retrievedVocable));
             }
+        } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
         }
     }
 

@@ -219,8 +219,9 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public void onFloatingActionButtonClicked() {
 //        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
 //        EventBus.getDefault().postSticky(new EventStartVocableCreation());
-        Word vocableToCreate = new Word("provaCreazione");
-        presenter.onCreateVocableRequest(vocableToCreate);
+        presenter.onCreateVocableRequest();
+//        Word vocableToCreate = new Word("provaCreazione");
+//        presenter.onSaveVocableRequest(vocableToCreate);
     }
 
     private boolean addFragmentToView(FrameLayout container, Fragment fragment, String fragmentTAG) {

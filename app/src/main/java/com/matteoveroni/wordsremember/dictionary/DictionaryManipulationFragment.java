@@ -105,7 +105,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
         if (isViewCreated()) {
             Word selectedVocable = event.getVocable();
-            populateViewUsingData("View Vocable", selectedVocable);
+            populateViewUsingData(selectedVocable);
         }
         eventBus.removeStickyEvent(event);
     }
@@ -115,17 +115,20 @@ public class DictionaryManipulationFragment extends Fragment {
     public void onEventVocableCreationRequest(EventStartVocableCreation event) {
         eventBus.removeStickyEvent(event);
         if (isViewCreated()) {
-            populateViewUsingData("Create Vocable", null);
+            populateViewUsingData(null);
             fragmentMode = DictionaryManipulationMode.CREATE;
         }
     }
 
-    private void populateViewUsingData(String viewTitle, Word vocable) {
-        lbl_title.setText(viewTitle);
-        if (vocable != null && vocable.getName() != null) {
-            lbl_vocableName.setText(vocable.getName());
-        } else {
+    private void populateViewUsingData(Word vocable) {
+        if (vocable == null || vocable.getName() == null) {
+            lbl_title.setText("Create vocable");
             lbl_vocableName.setText("");
+            fragmentMode = DictionaryManipulationMode.CREATE;
+        } else {
+            lbl_title.setText("View vocable");
+            lbl_vocableName.setText(vocable.getName());
+            fragmentMode = DictionaryManipulationMode.VIEW;
         }
     }
 
