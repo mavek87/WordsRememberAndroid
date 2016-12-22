@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.dictionary;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -13,7 +14,7 @@ import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
-import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutBackupChronology;
+import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutChronology;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutType;
 
 import org.greenrobot.eventbus.EventBus;
@@ -60,7 +61,7 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onViewRestored() {
-        restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.LAST_LAYOUT);
+        restoreSavedViewLayoutIfPresent(ViewLayoutChronology.LAST_LAYOUT);
     }
 
     public void onViewCreatedForTheFirstTime() {
@@ -70,11 +71,17 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public boolean onKeyBackPressedRestorePreviousState() {
-        return restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology.PREVIOUS_LAYOUT);
+        return restoreSavedViewLayoutIfPresent(ViewLayoutChronology.PREVIOUS_LAYOUT);
     }
 
     public void onCreateVocableRequest(Word vocable) {
         model.asyncSaveVocable(vocable);
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEventResetDictionaryManagementView(EventResetDictionaryManagementView event) {
+        onViewCreatedForTheFirstTime();
     }
 
     @Subscribe(sticky = true)
@@ -90,12 +97,15 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         if (retrievedVocable != null) {
-            resolveAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
-            ViewLayout currentLayout = viewLayoutManager.getViewLayout(ViewLayoutBackupChronology.LAST_LAYOUT);
-            if (currentLayout.getViewLayoutType().equals(ViewLayoutType.SINGLE_LAYOUT)) {
-                view.goToManipulationView(retrievedVocable);
-            } else {
-                EventBus.getDefault().postSticky(new EventVisualizeVocable(retrievedVocable));
+            try {
+                ViewLayout viewLayout = viewLayoutManager.getLayout(ViewLayoutChronology.LAST_LAYOUT);
+                if (viewLayout.getViewLayoutType().equals(ViewLayoutType.SINGLE_LAYOUT)) {
+                    view.goToManipulationView(retrievedVocable);
+                } else {
+                    resolveAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
+                    EventBus.getDefault().postSticky(new EventVisualizeVocable(retrievedVocable));
+                }
+            }catch (ViewLayoutManager.NoViewLayoutFoundException ex){
             }
         }
         EventBus.getDefault().removeStickyEvent(event);
@@ -116,10 +126,10 @@ public class DictionaryManagementPresenter implements Presenter {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    private boolean restoreSavedViewLayoutIfPresent(ViewLayoutBackupChronology viewLayoutBackupChronology) {
+    private boolean restoreSavedViewLayoutIfPresent(ViewLayoutChronology viewLayoutChronology) {
         ViewLayout viewLayoutRestored = null;
         try {
-            viewLayoutRestored = viewLayoutManager.getViewLayout(viewLayoutBackupChronology);
+            viewLayoutRestored = viewLayoutManager.getLayout(viewLayoutChronology);
         } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
         }
         if (viewLayoutRestored != null) {

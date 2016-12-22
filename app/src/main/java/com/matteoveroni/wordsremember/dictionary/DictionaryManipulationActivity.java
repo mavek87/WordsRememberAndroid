@@ -45,6 +45,17 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     public void returnToPreviousView() {
         onBackPressed();
+//        Intent startManagementActivity = new Intent(getApplicationContext(), DictionaryManagementActivity.class);
+//        startActivity(startManagementActivity);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Toast.makeText(this, "entro tasto premuto", Toast.LENGTH_SHORT).show();
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.dictionary;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
@@ -68,9 +69,8 @@ public class DictionaryManipulationPresenter implements Presenter {
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
-        long savedVocableId = event.getIdOfInsertedVocable();
-        //TODO: send event to reload data in the list adapter
-        view.returnToPreviousView();
+        EventBus.getDefault().postSticky(new EventResetDictionaryManagementView());
         EventBus.getDefault().removeStickyEvent(event);
+        view.returnToPreviousView();
     }
 }

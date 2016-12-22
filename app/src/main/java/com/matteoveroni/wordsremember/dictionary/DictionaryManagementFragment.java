@@ -33,38 +33,12 @@ import org.greenrobot.eventbus.EventBus;
  */
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // ATTRIBUTES
-
     public static final String TAG = "F_dictionaryManagement";
 
     private WordsListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
     }
-
-    // ANDROID LIFECYCLE METHODS
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
-        getLoaderManager().initLoader(0, null, this);
-        dictionaryListViewAdapter = new WordsListViewAdapter(getContext(), null);
-        setListAdapter(dictionaryListViewAdapter);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        registerForContextMenu(getListView());
-    }
-
-    // ANDROID LIFECYCLE METHODS - LOADER MANAGER for CURSOR MANAGEMENT
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -86,6 +60,27 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         dictionaryListViewAdapter.swapCursor(null);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
+        getLoaderManager().initLoader(0, null, this);
+        dictionaryListViewAdapter = new WordsListViewAdapter(getContext(), null);
+        setListAdapter(dictionaryListViewAdapter);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        registerForContextMenu(getListView());
     }
 
     @Override

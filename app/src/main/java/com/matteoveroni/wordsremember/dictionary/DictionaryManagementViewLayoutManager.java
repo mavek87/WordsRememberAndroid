@@ -23,10 +23,10 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
     }
 
     @Override
-    public ViewLayout getViewLayout(ViewLayoutBackupChronology viewLayoutBackupChronology) throws NoViewLayoutFoundException {
+    public ViewLayout getLayout(ViewLayoutChronology viewLayoutChronology) throws NoViewLayoutFoundException {
         ViewLayout viewLayout = null;
         try {
-            switch (viewLayoutBackupChronology) {
+            switch (viewLayoutChronology) {
                 case LAST_LAYOUT:
                     viewLayout = viewLayoutHistory.peek();
                     break;

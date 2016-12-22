@@ -6,9 +6,9 @@ public interface ViewLayoutManager {
 
     void saveLayoutInUse(ViewLayout layoutToSave);
 
-    ViewLayout getViewLayout(ViewLayoutBackupChronology layoutChronology) throws NoViewLayoutFoundException;
+    ViewLayout getLayout(ViewLayoutChronology layoutChronology) throws NoViewLayoutFoundException;
 
-    enum ViewLayoutBackupChronology {
+    enum ViewLayoutChronology {
         LAST_LAYOUT, PREVIOUS_LAYOUT;
     }
 
