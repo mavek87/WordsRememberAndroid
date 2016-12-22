@@ -7,7 +7,6 @@ import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryMana
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventStartVocableCreation;
 import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -52,10 +51,7 @@ public class DictionaryManipulationPresenter implements Presenter {
     }
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        if (vocableToManipulate != null)
-            eventBus.postSticky(new EventVisualizeVocable(vocableToManipulate));
-        else
-            eventBus.postSticky(new EventStartVocableCreation());
+        eventBus.postSticky(new EventVisualizeVocable(vocableToManipulate));
     }
 
     @Subscribe(sticky = true)

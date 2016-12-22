@@ -77,11 +77,7 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        if (view.isViewLarge()) {
-            onEventAsyncGetVocableByIdCompleted(new EventAsyncGetVocableById(null));
-        } else {
-            view.goToManipulationView(null);
-        }
+        showManipulationViewUsingVocable(null);
     }
 
     public void onSaveVocableRequest(Word vocable) {
@@ -108,16 +104,7 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
         Word retrievedVocable = event.getVocableRetrieved();
         eventBus.removeStickyEvent(event);
-        try {
-            if (!view.isViewLarge()) {
-                view.goToManipulationView(retrievedVocable);
-            } else {
-                determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
-                viewLayoutManager.saveLayoutInUse(view.getViewLayout());
-                eventBus.postSticky(new EventVisualizeVocable(retrievedVocable));
-            }
-        } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
-        }
+        showManipulationViewUsingVocable(retrievedVocable);
     }
 
     @Subscribe(sticky = true)
@@ -132,6 +119,19 @@ public class DictionaryManagementPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onEventAsyncUpdatedVocableCompleted(EventAsyncUpdateVocable event) {
         eventBus.removeStickyEvent(event);
+    }
+
+    private void showManipulationViewUsingVocable(Word vocable) {
+        try {
+            if (!view.isViewLarge()) {
+                view.goToManipulationView(vocable);
+            } else {
+                determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
+                viewLayoutManager.saveLayoutInUse(view.getViewLayout());
+                eventBus.postSticky(new EventVisualizeVocable(vocable));
+            }
+        } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
+        }
     }
 
     private boolean restoreSavedViewLayoutIfPresent(ViewLayoutChronology viewLayoutChronology) {

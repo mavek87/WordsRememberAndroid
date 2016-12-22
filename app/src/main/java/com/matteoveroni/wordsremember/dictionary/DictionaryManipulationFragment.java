@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.events.EventStartVocableCreation;
 import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -46,7 +45,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private DictionaryManipulationMode fragmentMode;
 
     private enum DictionaryManipulationMode {
-        VIEW, CREATE, UPDATE;
+        EDIT, CREATE;
     }
 
     private Unbinder viewInjector;
@@ -110,16 +109,6 @@ public class DictionaryManipulationFragment extends Fragment {
         eventBus.removeStickyEvent(event);
     }
 
-    @SuppressWarnings("unused")
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventVocableCreationRequest(EventStartVocableCreation event) {
-        eventBus.removeStickyEvent(event);
-        if (isViewCreated()) {
-            populateViewUsingData(null);
-            fragmentMode = DictionaryManipulationMode.CREATE;
-        }
-    }
-
     private void populateViewUsingData(Word vocable) {
         if (vocable == null || vocable.getName() == null) {
             lbl_title.setText("Create vocable");
@@ -128,7 +117,7 @@ public class DictionaryManipulationFragment extends Fragment {
         } else {
             lbl_title.setText("View vocable");
             lbl_vocableName.setText(vocable.getName());
-            fragmentMode = DictionaryManipulationMode.VIEW;
+            fragmentMode = DictionaryManipulationMode.EDIT;
         }
     }
 
