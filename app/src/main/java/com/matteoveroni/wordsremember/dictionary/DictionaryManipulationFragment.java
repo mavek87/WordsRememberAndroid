@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationFragmentPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,7 +31,8 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationFragment extends Fragment implements LoaderManager.LoaderCallbacks<DictionaryManipulationFragmentPresenter> {
+public class DictionaryManipulationFragment extends Fragment
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationFragmentPresenter> {
 
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
@@ -118,6 +121,16 @@ public class DictionaryManipulationFragment extends Fragment implements LoaderMa
                 txt_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
             }
         }
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void returnToPreviousView() {
+        throw new UnsupportedOperationException();
     }
 
     public void populateViewForVocable(Word vocable) {

@@ -20,6 +20,9 @@ import com.matteoveroni.wordsremember.utilities.Json;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationActivityPresenter> {
 
@@ -55,8 +58,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     @Override
     public void populateViewForVocable(Word vocable) {
-        // fragmentPresenter = fragment.getPresenter()
-        // fragmentPresenter.onPopulateViewForVocable(vocable)
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -70,6 +72,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dictionary_manipulation);
 
         getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);

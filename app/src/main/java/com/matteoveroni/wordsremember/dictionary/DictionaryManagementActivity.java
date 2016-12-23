@@ -163,7 +163,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_management_view);
-
         ButterKnife.bind(this);
 
         getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
