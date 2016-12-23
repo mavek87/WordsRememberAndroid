@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 
-public class DictionaryManipulationPresenter implements Presenter {
+public class DictionaryManipulationActivityPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";
 
@@ -24,7 +24,7 @@ public class DictionaryManipulationPresenter implements Presenter {
     private final DictionaryDAO model;
     private DictionaryManipulationView view;
 
-    public DictionaryManipulationPresenter(DictionaryDAO model) {
+    public DictionaryManipulationActivityPresenter(DictionaryDAO model) {
         this.model = model;
     }
 

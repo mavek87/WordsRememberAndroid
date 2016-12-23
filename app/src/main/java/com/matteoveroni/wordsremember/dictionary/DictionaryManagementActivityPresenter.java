@@ -25,7 +25,7 @@ import java.lang.reflect.Proxy;
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  */
 
-public class DictionaryManagementPresenter implements Presenter {
+public class DictionaryManagementActivityPresenter implements Presenter {
 
     public static final String TAG = "DictManagePresenter";
 
@@ -35,7 +35,7 @@ public class DictionaryManagementPresenter implements Presenter {
     private final ViewLayoutManager viewLayoutManager;
     private DictionaryManagementView view;
 
-    public DictionaryManagementPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
+    public DictionaryManagementActivityPresenter(DictionaryDAO model, ViewLayoutManager viewLayoutManager) {
         this.model = model;
         this.viewLayoutManager = viewLayoutManager;
     }

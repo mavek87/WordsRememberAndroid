@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
@@ -39,8 +40,8 @@ public class DictionaryManipulationFragment extends Fragment {
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
 
-    @BindView(R.id.fragment_dictionary_manipulation_lbl_vocable_name)
-    TextView lbl_vocableName;
+    @BindView(R.id.fragment_dictionary_manipulation_txt_vocable_name)
+    EditText txt_vocableName;
 
     private DictionaryManipulationMode fragmentMode;
 
@@ -68,7 +69,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dictionary_manipulation_vocable, container, false);
+        View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
         viewInjector = ButterKnife.bind(this, view);
         return view;
     }
@@ -83,7 +84,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putString(TITLE_CONTENT_KEY, lbl_title.getText().toString());
-        savedInstanceState.putString(VOCABLE_NAME_CONTENT_KEY, lbl_vocableName.getText().toString());
+        savedInstanceState.putString(VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
     }
 
     @Override
@@ -94,7 +95,7 @@ public class DictionaryManipulationFragment extends Fragment {
                 lbl_title.setText(savedInstanceState.getString(TITLE_CONTENT_KEY));
             }
             if (savedInstanceState.containsKey(VOCABLE_NAME_CONTENT_KEY)) {
-                lbl_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
+                txt_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
             }
         }
     }
@@ -104,24 +105,24 @@ public class DictionaryManipulationFragment extends Fragment {
     public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
         if (isViewCreated()) {
             Word selectedVocable = event.getVocable();
-            populateViewUsingData(selectedVocable);
+            populateViewForVocable(selectedVocable);
         }
         eventBus.removeStickyEvent(event);
     }
 
-    private void populateViewUsingData(Word vocable) {
+    private void populateViewForVocable(Word vocable) {
         if (vocable == null || vocable.getName() == null) {
             lbl_title.setText("Create vocable");
-            lbl_vocableName.setText("");
+            txt_vocableName.setText("");
             fragmentMode = DictionaryManipulationMode.CREATE;
         } else {
             lbl_title.setText("View vocable");
-            lbl_vocableName.setText(vocable.getName());
+            txt_vocableName.setText(vocable.getName());
             fragmentMode = DictionaryManipulationMode.EDIT;
         }
     }
 
     private boolean isViewCreated() {
-        return getView() != null && lbl_title != null && lbl_vocableName != null;
+        return getView() != null && lbl_title != null && txt_vocableName != null;
     }
 }

@@ -42,13 +42,13 @@ import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFrag
  * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
  */
 public class DictionaryManagementActivity extends AppCompatActivity
-        implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+        implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementActivityPresenter> {
 
     public static final String TAG = "A_DICTIONARY_MANAGE";
 
     private ViewLayout viewLayout;
 
-    private DictionaryManagementPresenter presenter;
+    private DictionaryManagementActivityPresenter presenter;
     private static final int PRESENTER_ID = 1;
 
     private FragmentManager fragmentManager;
@@ -70,17 +70,17 @@ public class DictionaryManagementActivity extends AppCompatActivity
     }
 
     @Override
-    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<DictionaryManagementActivityPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryManagementActivityPresenter> loader, DictionaryManagementActivityPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryManagementActivityPresenter> loader) {
         presenter = null;
     }
 

@@ -14,10 +14,10 @@
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
-        android:id="@+id/fragment_dictionary_manipulation_lbl_vocable_name"
+    <EditText
+        android:id="@+id/fragment_dictionary_manipulation_txt_vocable_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:textAlignment="center" />
 

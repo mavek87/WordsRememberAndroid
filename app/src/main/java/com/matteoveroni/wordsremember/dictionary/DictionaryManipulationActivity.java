@@ -21,25 +21,25 @@ import com.matteoveroni.wordsremember.utilities.Json;
 import org.greenrobot.eventbus.EventBus;
 
 public class DictionaryManipulationActivity extends AppCompatActivity
-        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationActivityPresenter> {
 
-    private DictionaryManipulationPresenter presenter;
+    private DictionaryManipulationActivityPresenter presenter;
     private static final int PRESENTER_ID = 1;
 
     private EventBus eventBus;
 
     @Override
-    public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<DictionaryManipulationActivityPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManipulationPresenter> loader, DictionaryManipulationPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryManipulationActivityPresenter> loader, DictionaryManipulationActivityPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryManipulationActivityPresenter> loader) {
         presenter = null;
     }
 
