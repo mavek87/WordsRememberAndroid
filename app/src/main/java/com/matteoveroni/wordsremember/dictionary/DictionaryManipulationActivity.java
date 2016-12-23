@@ -54,6 +54,12 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     }
 
     @Override
+    public void populateViewForVocable(Word vocable) {
+        // fragmentPresenter = fragment.getPresenter()
+        // fragmentPresenter.onPopulateViewForVocable(vocable)
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             eventBus.postSticky(new EventResetDictionaryManagementView());

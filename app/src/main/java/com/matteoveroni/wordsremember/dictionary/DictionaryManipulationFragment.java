@@ -4,19 +4,20 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
+import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationFragmentPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,14 +29,22 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationFragment extends Fragment {
+public class DictionaryManipulationFragment extends Fragment implements LoaderManager.LoaderCallbacks<DictionaryManipulationFragmentPresenter> {
 
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
     private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
     private final static String VOCABLE_NAME_CONTENT_KEY = "VOCABLE_NAME_KEY";
 
-    private final EventBus eventBus = EventBus.getDefault();
+    public static final int PRESENTER_ID = 1;
+    private DictionaryManipulationFragmentPresenter presenter;
+
+    private DictionaryManipulationMode fragmentMode;
+    private Unbinder viewInjector;
+
+    private enum DictionaryManipulationMode {
+        EDIT, CREATE;
+    }
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
@@ -43,27 +52,37 @@ public class DictionaryManipulationFragment extends Fragment {
     @BindView(R.id.fragment_dictionary_manipulation_txt_vocable_name)
     EditText txt_vocableName;
 
-    private DictionaryManipulationMode fragmentMode;
-
-    private enum DictionaryManipulationMode {
-        EDIT, CREATE;
-    }
-
-    private Unbinder viewInjector;
-
     public DictionaryManipulationFragment() {
     }
 
-    // ANDROID LIFECYCLE METHODS
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        eventBus.register(this);
+    public Loader<DictionaryManipulationFragmentPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(
+                getActivity().getApplicationContext(),
+                new DictionaryManipulationFragmentPresenterFactory()
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<DictionaryManipulationFragmentPresenter> loader,
+                               DictionaryManipulationFragmentPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<DictionaryManipulationFragmentPresenter> loader) {
+        presenter = null;
+    }
+
+    @Override
+    public void onResume() {
+        presenter.onViewAttached(this);
+        super.onResume();
     }
 
     @Override
     public void onDetach() {
-        eventBus.unregister(this);
+        presenter.onViewDetached();
         super.onDetach();
     }
 
@@ -71,6 +90,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
         viewInjector = ButterKnife.bind(this, view);
+        getLoaderManager().initLoader(PRESENTER_ID, null, this);
         return view;
     }
 
@@ -100,29 +120,21 @@ public class DictionaryManipulationFragment extends Fragment {
         }
     }
 
-    @SuppressWarnings("unused")
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
-        if (isViewCreated()) {
-            Word selectedVocable = event.getVocable();
-            populateViewForVocable(selectedVocable);
-        }
-        eventBus.removeStickyEvent(event);
-    }
-
-    private void populateViewForVocable(Word vocable) {
-        if (vocable == null || vocable.getName() == null) {
-            lbl_title.setText("Create vocable");
-            txt_vocableName.setText("");
-            fragmentMode = DictionaryManipulationMode.CREATE;
-        } else {
-            lbl_title.setText("View vocable");
-            txt_vocableName.setText(vocable.getName());
-            fragmentMode = DictionaryManipulationMode.EDIT;
+    public void populateViewForVocable(Word vocable) {
+        if (isFragmentCreated()) {
+            if (vocable == null || vocable.getName() == null) {
+                lbl_title.setText("Create vocable");
+                txt_vocableName.setText("");
+                fragmentMode = DictionaryManipulationMode.CREATE;
+            } else {
+                lbl_title.setText("View vocable");
+                txt_vocableName.setText(vocable.getName());
+                fragmentMode = DictionaryManipulationMode.EDIT;
+            }
         }
     }
 
-    private boolean isViewCreated() {
+    private boolean isFragmentCreated() {
         return getView() != null && lbl_title != null && txt_vocableName != null;
     }
 }

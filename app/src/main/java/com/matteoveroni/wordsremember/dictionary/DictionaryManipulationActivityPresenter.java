@@ -5,7 +5,7 @@ import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;

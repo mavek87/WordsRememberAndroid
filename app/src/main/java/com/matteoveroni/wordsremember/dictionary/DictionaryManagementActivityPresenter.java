@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
 import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
@@ -53,8 +53,8 @@ public class DictionaryManagementActivityPresenter implements Presenter {
 
     @Override
     public void onViewDetached() {
-        view = null;
         eventBus.unregister(this);
+        view = null;
     }
 
     @Override

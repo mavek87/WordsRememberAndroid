@@ -4,7 +4,7 @@ import com.matteoveroni.wordsremember.PresenterFactory;
 import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.dictionary.DictionaryManagementActivityPresenter;
 import com.matteoveroni.wordsremember.dictionary.DictionaryManagementViewLayoutManager;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 
 import javax.inject.Inject;
 
