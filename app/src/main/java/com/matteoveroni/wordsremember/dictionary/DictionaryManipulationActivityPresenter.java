@@ -7,7 +7,6 @@ import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryMana
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,7 +50,7 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
     }
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        eventBus.postSticky(new EventVisualizeVocable(vocableToManipulate));
+        view.populateViewForVocable(vocableToManipulate);
     }
 
     @Subscribe(sticky = true)

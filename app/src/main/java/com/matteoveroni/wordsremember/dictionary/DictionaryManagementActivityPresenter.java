@@ -7,9 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryMana
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
-import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
@@ -94,17 +92,9 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventVocableSelected(EventVocableSelected event) {
+        Word selectedVocable = event.getSelectedVocable();
+        showManipulationViewUsingVocable(selectedVocable);
         eventBus.removeStickyEvent(event);
-        long selectedVocableID = event.getSelectedVocableID();
-        model.asyncGetVocableById(selectedVocableID);
-    }
-
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEventAsyncGetVocableByIdCompleted(EventAsyncGetVocableById event) {
-        Word retrievedVocable = event.getVocableRetrieved();
-        eventBus.removeStickyEvent(event);
-        showManipulationViewUsingVocable(retrievedVocable);
     }
 
     @Subscribe(sticky = true)
@@ -128,9 +118,10 @@ public class DictionaryManagementActivityPresenter implements Presenter {
             } else {
                 determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
                 viewLayoutManager.saveLayoutInUse(view.getViewLayout());
-                eventBus.postSticky(new EventVisualizeVocable(vocable));
+//                eventBus.postSticky(new EventVisualizeVocable(vocable));
             }
         } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
+            //
         }
     }
 

@@ -32,15 +32,16 @@ import butterknife.Unbinder;
  */
 
 public class DictionaryManipulationFragment extends Fragment
-        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationFragmentPresenter> {
+//        implements LoaderManager.LoaderCallbacks<DictionaryManipulationFragmentPresenter>
+{
 
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
     private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
     private final static String VOCABLE_NAME_CONTENT_KEY = "VOCABLE_NAME_KEY";
 
-    public static final int PRESENTER_ID = 1;
-    private DictionaryManipulationFragmentPresenter presenter;
+//    public static final int PRESENTER_ID = 1;
+//    private DictionaryManipulationFragmentPresenter presenter;
 
     private DictionaryManipulationMode fragmentMode;
     private Unbinder viewInjector;
@@ -58,34 +59,34 @@ public class DictionaryManipulationFragment extends Fragment
     public DictionaryManipulationFragment() {
     }
 
-    @Override
-    public Loader<DictionaryManipulationFragmentPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(
-                getActivity().getApplicationContext(),
-                new DictionaryManipulationFragmentPresenterFactory()
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<DictionaryManipulationFragmentPresenter> loader,
-                               DictionaryManipulationFragmentPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<DictionaryManipulationFragmentPresenter> loader) {
-        presenter = null;
-    }
+//    @Override
+//    public Loader<DictionaryManipulationFragmentPresenter> onCreateLoader(int id, Bundle arg) {
+//        return new PresenterLoader<>(
+//                getActivity().getApplicationContext(),
+//                new DictionaryManipulationFragmentPresenterFactory()
+//        );
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<DictionaryManipulationFragmentPresenter> loader,
+//                               DictionaryManipulationFragmentPresenter presenter) {
+//        this.presenter = presenter;
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<DictionaryManipulationFragmentPresenter> loader) {
+//        presenter = null;
+//    }
 
     @Override
     public void onResume() {
-        presenter.onViewAttached(this);
+//        presenter.onViewAttached(this);
         super.onResume();
     }
 
     @Override
     public void onDetach() {
-        presenter.onViewDetached();
+//        presenter.onViewDetached();
         super.onDetach();
     }
 
@@ -93,7 +94,7 @@ public class DictionaryManipulationFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
         viewInjector = ButterKnife.bind(this, view);
-        getLoaderManager().initLoader(PRESENTER_ID, null, this);
+//        getLoaderManager().initLoader(PRESENTER_ID, null, this);
         return view;
     }
 
@@ -121,16 +122,6 @@ public class DictionaryManipulationFragment extends Fragment
                 txt_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
             }
         }
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void returnToPreviousView() {
-        throw new UnsupportedOperationException();
     }
 
     public void populateViewForVocable(Word vocable) {

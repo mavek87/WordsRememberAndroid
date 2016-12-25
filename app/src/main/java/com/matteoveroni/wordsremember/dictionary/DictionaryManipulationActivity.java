@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,6 @@ import com.matteoveroni.wordsremember.utilities.Json;
 
 import org.greenrobot.eventbus.EventBus;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationActivityPresenter> {
 
@@ -30,6 +28,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     private static final int PRESENTER_ID = 1;
 
     private EventBus eventBus;
+
+    DictionaryManipulationFragment manipulationFragment;
 
     @Override
     public Loader<DictionaryManipulationActivityPresenter> onCreateLoader(int id, Bundle arg) {
@@ -58,7 +58,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     @Override
     public void populateViewForVocable(Word vocable) {
-        throw new UnsupportedOperationException();
+        manipulationFragment.populateViewForVocable(vocable);
     }
 
     @Override
@@ -74,8 +74,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_manipulation);
-
         getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
+        manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(MyApp.NAME + " - " + "Details");

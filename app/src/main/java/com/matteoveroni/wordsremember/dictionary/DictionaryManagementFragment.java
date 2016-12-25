@@ -7,6 +7,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -19,6 +20,8 @@ import android.widget.ListView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
@@ -130,7 +133,15 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 ////            dictionaryListViewAdapter.setSelected(position, false);
 //            lastSelectedVocableID = -1;
 //        }
-        eventBus.postSticky(new EventVocableSelected(id));
+        Cursor cursor = ((WordsListViewAdapter) listView.getAdapter()).getCursor();
+        cursor.moveToPosition(position);
+
+        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
+        cursor.close();
+
+        Log.i(TAG, selectedVocable.toString());
+
+        eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
 
 /**********************************************************************************************/

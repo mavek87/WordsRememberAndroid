@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 /**
@@ -172,7 +173,7 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        return new Word(cursor.getString(0));
+        return new Word(cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME)));
     }
 
     /**

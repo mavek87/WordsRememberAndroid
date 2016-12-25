@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.EventVisualizeVocable;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -24,12 +23,12 @@ public class DictionaryManipulationFragmentPresenter implements Presenter {
                 new Class[]{DictionaryManipulationView.class},
                 new NullWeakReferenceProxy(viewAttached)
         );
-        eventBus.register(this);
+//        eventBus.register(this);
     }
 
     @Override
     public void onViewDetached() {
-        eventBus.unregister(this);
+//        eventBus.unregister(this);
         view = null;
     }
 
@@ -38,12 +37,12 @@ public class DictionaryManipulationFragmentPresenter implements Presenter {
         onViewDetached();
     }
 
-    @SuppressWarnings("unused")
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
-        view.populateViewForVocable(event.getVocable());
-        eventBus.removeStickyEvent(event);
-    }
+//    @SuppressWarnings("unused")
+//    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+//    public void onEventNotifiedVocableToVisualize(EventVisualizeVocable event) {
+//        view.populateViewForVocable(event.getVocable());
+//        eventBus.removeStickyEvent(event);
+//    }
 
     public void onSaveVocable(Word vocableToSave) {
         if (vocableToSave != null) {

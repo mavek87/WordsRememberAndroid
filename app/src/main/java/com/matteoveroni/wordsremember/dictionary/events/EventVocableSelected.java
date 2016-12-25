@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
+import com.matteoveroni.wordsremember.pojo.Word;
+
 /**
  * Event used when a dictionary item is selected in a fragment, to inform the main activity
  *
@@ -8,13 +10,13 @@ package com.matteoveroni.wordsremember.dictionary.events;
 
 public class EventVocableSelected {
 
-    private final long dictionaryItemIDSelected;
+    private final Word selectedVocable;
 
-    public EventVocableSelected(long dictionaryItemIDSelected) {
-        this.dictionaryItemIDSelected = dictionaryItemIDSelected;
+    public EventVocableSelected(Word selectedVocable) {
+        this.selectedVocable = selectedVocable;
     }
 
-    public long getSelectedVocableID() {
-        return dictionaryItemIDSelected;
+    public Word getSelectedVocable() {
+        return selectedVocable;
     }
 }
