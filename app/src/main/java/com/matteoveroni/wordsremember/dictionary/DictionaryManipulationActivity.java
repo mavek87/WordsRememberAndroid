@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -28,6 +29,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     private static final int PRESENTER_ID = 1;
 
     private EventBus eventBus;
+
+    private Toolbar toolbar;
 
     DictionaryManipulationFragment manipulationFragment;
 
@@ -77,8 +80,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(MyApp.NAME + " - " + "Details");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(MyApp.NAME + " - Details");
         setSupportActionBar(toolbar);
 
         eventBus = EventBus.getDefault();
