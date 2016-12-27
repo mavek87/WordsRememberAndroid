@@ -101,7 +101,7 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     public Word getVocable() {
-        return new Word(this.txt_vocableName.toString());
+        return new Word(vocable.getId(), txt_vocableName.toString());
     }
 
     private boolean isFragmentCreated() {

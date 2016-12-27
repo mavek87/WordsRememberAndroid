@@ -170,10 +170,10 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
-        Word firstVocableToSave = new Word("test123");
+        Word firstVocableToSave = new Word(1, "test123");
         model.saveVocable(firstVocableToSave);
 
-        Word secondVocableToSave = new Word("second vocable");
+        Word secondVocableToSave = new Word(2, "second vocable");
         model.saveVocable(secondVocableToSave);
     }
 

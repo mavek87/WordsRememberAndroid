@@ -173,7 +173,10 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        return new Word(cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME)));
+        return new Word(
+                cursor.getLong(cursor.getColumnIndex(Schema.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME))
+        );
     }
 
     /**
