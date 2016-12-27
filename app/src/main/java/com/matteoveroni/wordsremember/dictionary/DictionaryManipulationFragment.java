@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.utilities.Json;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,11 +26,14 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public static final String TAG = "F_DICTIONARY_MANIPULATION";
 
-    private final static String TITLE_CONTENT_KEY = "TITLE_KEY";
-    private final static String VOCABLE_NAME_CONTENT_KEY = "VOCABLE_NAME_KEY";
+    private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
+    private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
+    private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
 
     private DictionaryManipulationMode fragmentMode;
     private Unbinder viewInjector;
+
+    private Word vocable;
 
     private enum DictionaryManipulationMode {
         EDIT, CREATE;
@@ -61,25 +64,30 @@ public class DictionaryManipulationFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(TITLE_CONTENT_KEY, lbl_title.getText().toString());
-        savedInstanceState.putString(VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
+        savedInstanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(vocable));
+        savedInstanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
+        savedInstanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(TITLE_CONTENT_KEY)) {
-                lbl_title.setText(savedInstanceState.getString(TITLE_CONTENT_KEY));
+            if (savedInstanceState.containsKey(VOCABLE_CONTENT_KEY)) {
+                vocable = Json.getInstance().fromJson(savedInstanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
             }
-            if (savedInstanceState.containsKey(VOCABLE_NAME_CONTENT_KEY)) {
-                txt_vocableName.setText(savedInstanceState.getString(VOCABLE_NAME_CONTENT_KEY));
+            if (savedInstanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
+                lbl_title.setText(savedInstanceState.getString(VIEW_TITLE_CONTENT_KEY));
+            }
+            if (savedInstanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
+                txt_vocableName.setText(savedInstanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
             }
         }
     }
 
     public void populateViewForVocable(Word vocable) {
         if (isFragmentCreated()) {
+            this.vocable = vocable;
             if (vocable == null || vocable.getName() == null) {
                 lbl_title.setText("Create vocable");
                 txt_vocableName.setText("");
@@ -90,6 +98,10 @@ public class DictionaryManipulationFragment extends Fragment {
                 fragmentMode = DictionaryManipulationMode.EDIT;
             }
         }
+    }
+
+    public Word getVocable() {
+        return new Word(this.txt_vocableName.toString());
     }
 
     private boolean isFragmentCreated() {

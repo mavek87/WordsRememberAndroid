@@ -53,22 +53,39 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
         view.populateViewForVocable(vocableToManipulate);
     }
 
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
-        eventBus.removeStickyEvent(event);
-        Word vocableToSave = event.getVocable();
-        if (vocableToSave != null)
-            model.asyncSaveVocable(vocableToSave);
-        else
-            view.showMessage("Error occurred during the saving process. Compile all the data and retry");
+    public void onSaveVocableRequest(Word vocableToSave) {
+        if (vocableToSave != null) {
+            String vocableToSaveName = vocableToSave.getName();
+            if (vocableToSaveName != null && !vocableToSaveName.trim().isEmpty()) {
+                model.asyncSaveVocable(vocableToSave);
+                return;
+            }
+        }
+        view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
 
+//    @Subscribe(sticky = true)
+//    @SuppressWarnings("unused")
+//    public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
+//        eventBus.removeStickyEvent(event);
+//        Word vocableToSave = event.getVocable();
+//        if (vocableToSave != null)
+//            model.asyncSaveVocable(vocableToSave);
+//        else
+//            view.showMessage("Error occurred during the saving process. Compile all the data and retry");
+//    }
+//
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
         eventBus.removeStickyEvent(event);
         eventBus.postSticky(new EventResetDictionaryManagementView());
+        view.showMessage("Vocable saved");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         view.returnToPreviousView();
     }
 }

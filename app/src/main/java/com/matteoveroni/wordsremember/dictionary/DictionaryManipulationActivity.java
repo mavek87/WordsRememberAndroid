@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.MyApp;
@@ -98,6 +100,22 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     protected void onStop() {
         presenter.onViewDetached();
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dictionary_management_editing, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_done:
+                presenter.onSaveVocableRequest(manipulationFragment.getVocable());
+                return true;
+        }
+        return false;
     }
 
     private Word retrieveVocableToManipulate() {
