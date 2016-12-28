@@ -88,7 +88,7 @@ public class DictionaryDAO {
         }
     }
 
-    public void asyncRemoveVocable(long id) {
+    public void asyncDeleteVocable(long id) {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 

@@ -57,6 +57,26 @@ public class DictionaryManipulationFragment extends Fragment {
         return currentVocableInView;
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onEvent(EventVocableSelected event) {
+        populateViewWithVocableData(event.getSelectedVocable());
+    }
+
+    public void populateViewWithVocableData(Word vocable) {
+        if (isFragmentCreated()) {
+            if (vocable == null || vocable.getName() == null) {
+                lbl_title.setText("Create vocable");
+                txt_vocableName.setText("");
+                this.vocable = new Word("");
+            } else {
+                lbl_title.setText("Edit vocable");
+                txt_vocableName.setText(vocable.getName());
+                this.vocable = vocable;
+            }
+        }
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -102,26 +122,6 @@ public class DictionaryManipulationFragment extends Fragment {
             }
             if (savedInstanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
                 txt_vocableName.setText(savedInstanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
-            }
-        }
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    @SuppressWarnings("unused")
-    public void onEvent(EventVocableSelected event) {
-        populateViewWithVocableData(event.getSelectedVocable());
-    }
-
-    private void populateViewWithVocableData(Word vocable) {
-        if (isFragmentCreated()) {
-            if (vocable == null || vocable.getName() == null) {
-                lbl_title.setText("Create vocable");
-                txt_vocableName.setText("");
-                this.vocable = new Word("");
-            } else {
-                lbl_title.setText("Edit vocable");
-                txt_vocableName.setText(vocable.getName());
-                this.vocable = vocable;
             }
         }
     }

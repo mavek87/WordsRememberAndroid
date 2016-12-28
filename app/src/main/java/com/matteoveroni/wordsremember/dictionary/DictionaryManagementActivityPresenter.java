@@ -41,6 +41,12 @@ public class DictionaryManagementActivityPresenter implements Presenter {
         this.viewLayoutManager = viewLayoutManager;
     }
 
+    /**********************************************************************************************/
+
+    // Presenter interface
+
+    /**********************************************************************************************/
+
     @Override
     public void onViewAttached(Object viewAttached) {
         view = (DictionaryManagementView) Proxy.newProxyInstance(
@@ -62,6 +68,12 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     public void onViewDestroyed() {
         onViewDetached();
     }
+
+    /**********************************************************************************************/
+
+    // View's callbacks
+
+    /**********************************************************************************************/
 
     public void onViewRestored() {
         restoreSavedViewLayoutIfPresent(ViewLayoutChronology.LAST_LAYOUT);
@@ -96,6 +108,12 @@ public class DictionaryManagementActivityPresenter implements Presenter {
         view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
 
+    /**********************************************************************************************/
+
+    // System Events
+
+    /**********************************************************************************************/
+
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventResetDictionaryManagementView event) {
@@ -106,10 +124,10 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventVocableManipulationRequest event) {
-        final Word vocableToManipulate = event.getVocableToManipulate();
+        Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
-                model.asyncRemoveVocable(vocableToManipulate.getId());
+                model.asyncDeleteVocable(vocableToManipulate.getId());
                 break;
         }
         eventBus.removeStickyEvent(event);
@@ -142,6 +160,12 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
         eventBus.removeStickyEvent(event);
     }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
 
     private void showManipulationViewUsingVocable(Word vocable) {
         try {
@@ -202,6 +226,7 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
+        view.showMessage("populateDatabaseForTestPurposes");
 
         Word firstVocableToSave = new Word(generateRandomWord());
         model.saveVocable(firstVocableToSave);

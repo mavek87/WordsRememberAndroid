@@ -48,9 +48,9 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
         onViewDetached();
     }
 
-//    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-//        view.populateViewForVocable(vocableToManipulate);
-//    }
+    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
+        view.populateViewForVocable(vocableToManipulate);
+    }
 
     public void onSaveRequest(Word currentVocableInView) {
         if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
