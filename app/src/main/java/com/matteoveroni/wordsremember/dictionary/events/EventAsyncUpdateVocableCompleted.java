@@ -1,10 +1,10 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
-public class EventVocableUpdated {
+public class EventAsyncUpdateVocableCompleted {
 
     private final int numberOfVocablesUpdated;
 
-    public EventVocableUpdated(int numberOfVocablesInvolved) {
+    public EventAsyncUpdateVocableCompleted(int numberOfVocablesInvolved) {
         this.numberOfVocablesUpdated = numberOfVocablesInvolved;
     }
 

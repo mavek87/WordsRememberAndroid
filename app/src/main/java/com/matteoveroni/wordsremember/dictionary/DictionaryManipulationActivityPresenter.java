@@ -2,11 +2,10 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.events.EventSaveVocableRequest;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -68,6 +67,14 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
         view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
 
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEvent(EventAsyncSaveVocableCompleted event) {
+        eventBus.removeStickyEvent(event);
+        eventBus.postSticky(new EventResetDictionaryManagementView());
+        view.returnToPreviousView();
+    }
+
     //    @Subscribe(sticky = true)
 //    @SuppressWarnings("unused")
 //    public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
@@ -79,17 +86,4 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
 //            view.showMessage("Error occurred during the saving process. Compile all the data and retry");
 //    }
 //
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
-        eventBus.removeStickyEvent(event);
-        eventBus.postSticky(new EventResetDictionaryManagementView());
-//        view.showMessage("Vocable saved");
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        view.returnToPreviousView();
-    }
 }

@@ -21,7 +21,7 @@ import android.widget.ListView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
@@ -39,7 +39,7 @@ import org.greenrobot.eventbus.Subscribe;
  */
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = "F_dictionaryManagement";
+    public static final String TAG = "F_dictManage";
 
     private final EventBus eventBus = EventBus.getDefault();
 
@@ -129,9 +129,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
 
         switch (item.getItemId()) {
-            case R.id.menu_dictionary_management_long_press_edit:
-                eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
-                return true;
             case R.id.menu_dictionary_management_long_press_remove:
                 eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
                 return true;
@@ -162,7 +159,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onVocableUpdated(EventVocableUpdated event) {
+    public void onEvent(EventAsyncUpdateVocableCompleted event) {
         if (dictionaryListViewAdapter != null)
             dictionaryListViewAdapter.notifyDataSetChanged();
     }

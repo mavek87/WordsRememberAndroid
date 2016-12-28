@@ -38,14 +38,9 @@ public class DictionaryManipulationFragment extends Fragment {
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
 
     private EventBus eventBus = EventBus.getDefault();
-    private DictionaryManipulationMode fragmentMode;
     private Unbinder viewInjector;
 
     private Word vocable;
-
-    private enum DictionaryManipulationMode {
-        EDIT, CREATE;
-    }
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
@@ -54,6 +49,12 @@ public class DictionaryManipulationFragment extends Fragment {
     EditText txt_vocableName;
 
     public DictionaryManipulationFragment() {
+    }
+
+    public Word getCurrentVocableInView() {
+        final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
+        currentVocableInView.setId(this.vocable.getId());
+        return currentVocableInView;
     }
 
     @Override
@@ -105,9 +106,9 @@ public class DictionaryManipulationFragment extends Fragment {
         }
     }
 
-    @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEventNotifiedVocableToVisualize(EventVocableSelected event) {
+    @SuppressWarnings("unused")
+    public void onEvent(EventVocableSelected event) {
         populateViewWithVocableData(event.getSelectedVocable());
     }
 
@@ -116,21 +117,13 @@ public class DictionaryManipulationFragment extends Fragment {
             if (vocable == null || vocable.getName() == null) {
                 lbl_title.setText("Create vocable");
                 txt_vocableName.setText("");
-                fragmentMode = DictionaryManipulationMode.CREATE;
                 this.vocable = new Word("");
             } else {
                 lbl_title.setText("Edit vocable");
                 txt_vocableName.setText(vocable.getName());
-                fragmentMode = DictionaryManipulationMode.EDIT;
                 this.vocable = vocable;
             }
         }
-    }
-
-    public Word getCurrentVocableInView() {
-        final Word updatedVocable = new Word(txt_vocableName.getText().toString());
-        updatedVocable.setId(this.vocable.getId());
-        return updatedVocable;
     }
 
     private boolean isFragmentCreated() {

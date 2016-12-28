@@ -5,12 +5,12 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Message;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 
 import org.greenrobot.eventbus.EventBus;
 
 public class AsyncSaveVocableHandler extends AsyncQueryHandler {
-    private EventAsyncSaveVocable event;
+    private EventAsyncSaveVocableCompleted event;
 
     public AsyncSaveVocableHandler(ContentResolver contentResolver) {
         super(contentResolver);
@@ -21,9 +21,9 @@ public class AsyncSaveVocableHandler extends AsyncQueryHandler {
         try {
             final String createdRowIdUri = uri.getLastPathSegment();
             if (!createdRowIdUri.isEmpty())
-                event = new EventAsyncSaveVocable(Long.valueOf(createdRowIdUri));
+                event = new EventAsyncSaveVocableCompleted(Long.valueOf(createdRowIdUri));
         } finally {
-            if (event == null) event = new EventAsyncSaveVocable(-1);
+            if (event == null) event = new EventAsyncSaveVocableCompleted(-1);
             EventBus.getDefault().postSticky(event);
         }
     }

@@ -2,13 +2,14 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
+import java.util.Random;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
@@ -96,45 +98,48 @@ public class DictionaryManagementActivityPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventResetDictionaryManagementView(EventResetDictionaryManagementView event) {
+    public void onEvent(EventResetDictionaryManagementView event) {
         eventBus.removeStickyEvent(event);
         onViewCreatedForTheFirstTime();
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventManipulationRequest(EventVocableManipulationRequest event) {
+    public void onEvent(EventVocableManipulationRequest event) {
+        final Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
-            case EDIT:
-                break;
             case REMOVE:
-                model.asyncRemoveVocable(event.getVocableToManipulate().getId());
+                model.asyncRemoveVocable(vocableToManipulate.getId());
                 break;
         }
         eventBus.removeStickyEvent(event);
         // TODO: post event to inform the listview adapter of data change
     }
 
-
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventVocableSelected(EventVocableSelected event) {
-        Word selectedVocable = event.getSelectedVocable();
-        showManipulationViewUsingVocable(selectedVocable);
-        eventBus.removeStickyEvent(event);
+    public void onEvent(EventAsyncDeleteVocableCompleted event) {
+        view.showMessage("Vocable removed");
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncSaveVocableCompleted(EventAsyncSaveVocable event) {
+    public void onEvent(EventVocableSelected event) {
+        Word selectedVocable = event.getSelectedVocable();
+        showManipulationViewUsingVocable(selectedVocable);
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEvent(EventAsyncSaveVocableCompleted event) {
         eventBus.removeStickyEvent(event);
-        long savedVocableId = event.getIdOfInsertedVocable();
+        long savedVocableId = event.getIdOfSavedVocable();
         view.showMessage("saved with id " + savedVocableId);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncUpdatedVocableCompleted(EventVocableUpdated event) {
+    public void onEvent(EventAsyncUpdateVocableCompleted event) {
         eventBus.removeStickyEvent(event);
     }
 
@@ -197,11 +202,26 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
-        Word firstVocableToSave = new Word("test123");
+
+        Word firstVocableToSave = new Word(generateRandomWord());
         model.saveVocable(firstVocableToSave);
 
-        Word secondVocableToSave = new Word("second vocable");
+        Word secondVocableToSave = new Word(generateRandomWord());
         model.saveVocable(secondVocableToSave);
+    }
+
+    private String generateRandomWord() {
+        final Random randomGenerator = new Random();
+        final int MAX_DECIMALS = 10;
+        String generatedWord = "";
+
+        int generatedDecimals = randomGenerator.nextInt(MAX_DECIMALS);
+
+        for (int i = 0; i < generatedDecimals; i++) {
+            char randomChar = (char) (randomGenerator.nextInt(25) + 97);
+            generatedWord += randomChar;
+        }
+        return generatedWord;
     }
 
 //    private void exportDatabaseOnSd() {

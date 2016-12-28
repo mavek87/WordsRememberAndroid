@@ -1,10 +1,10 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
-public class EventAsyncDeleteVocable {
+public class EventAsyncDeleteVocableCompleted {
 
     private final int numberOfRowsDeleted;
 
-    public EventAsyncDeleteVocable(int numberOfRowsDeleted) {
+    public EventAsyncDeleteVocableCompleted(int numberOfRowsDeleted) {
         this.numberOfRowsDeleted = numberOfRowsDeleted;
     }
 

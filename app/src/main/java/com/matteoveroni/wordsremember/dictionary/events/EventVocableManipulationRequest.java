@@ -11,7 +11,7 @@ public class EventVocableManipulationRequest {
     private final TypeOfManipulation typeOfManipulation;
 
     public enum TypeOfManipulation {
-        EDIT, REMOVE;
+        REMOVE;
     }
 
     public EventVocableManipulationRequest(Word vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {

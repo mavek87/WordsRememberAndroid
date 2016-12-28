@@ -2,15 +2,14 @@ package com.matteoveroni.wordsremember.dictionary.events;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 
-public class EventSaveVocableRequest {
-
+public class EventAsyncGetVocableByIdCompleted {
     private final Word vocable;
 
-    public EventSaveVocableRequest(Word vocable) {
+    public EventAsyncGetVocableByIdCompleted(Word vocable) {
         this.vocable = vocable;
     }
 
-    public Word getVocable() {
+    public Word getVocableRetrieved() {
         return vocable;
     }
 }

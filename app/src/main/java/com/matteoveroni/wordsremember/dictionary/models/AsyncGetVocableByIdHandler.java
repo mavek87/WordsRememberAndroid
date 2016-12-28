@@ -4,7 +4,7 @@ import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.database.Cursor;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,13 +17,13 @@ public class AsyncGetVocableByIdHandler extends AsyncQueryHandler {
 
     @Override
     protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-        final EventAsyncGetVocableById event;
+        final EventAsyncGetVocableByIdCompleted event;
         if (cursor == null) {
-            event = new EventAsyncGetVocableById(null);
+            event = new EventAsyncGetVocableByIdCompleted(null);
         } else {
             cursor.moveToFirst();
             Word vocable = DictionaryDAO.cursorToVocable(cursor);
-            event = new EventAsyncGetVocableById(vocable);
+            event = new EventAsyncGetVocableByIdCompleted(vocable);
         }
         EventBus.getDefault().postSticky(event);
     }

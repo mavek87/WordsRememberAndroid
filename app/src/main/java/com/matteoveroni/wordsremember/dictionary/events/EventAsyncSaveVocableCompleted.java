@@ -1,13 +1,13 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
-public class EventAsyncSaveVocable {
+public class EventAsyncSaveVocableCompleted {
     private final long insertedVocableId;
 
-    public EventAsyncSaveVocable(long insertedVocableId) {
+    public EventAsyncSaveVocableCompleted(long insertedVocableId) {
         this.insertedVocableId = insertedVocableId;
     }
 
-    public long getIdOfInsertedVocable() {
+    public long getIdOfSavedVocable() {
         return insertedVocableId;
     }
 }
