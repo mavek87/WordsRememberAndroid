@@ -36,7 +36,6 @@ public class DictionaryDAO {
     /**********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
-        // TODO: search a way to avoid to call isVocablePresent synchronous method
         if (isVocableValid(vocable) && vocable.getId() < 0) {
             new AsyncSaveVocableHandler(contentResolver).startInsert(
                     1,

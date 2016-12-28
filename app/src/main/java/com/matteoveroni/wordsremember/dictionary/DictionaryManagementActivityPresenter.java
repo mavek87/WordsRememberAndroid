@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
@@ -78,8 +79,19 @@ public class DictionaryManagementActivityPresenter implements Presenter {
         showManipulationViewUsingVocable(null);
     }
 
-    public void onSaveVocableRequest(Word vocable) {
-        model.asyncSaveVocable(vocable);
+    public void onSaveRequest(Word currentVocableInView) {
+        if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
+            if (currentVocableInView.getId() < 0) {
+                model.asyncSaveVocable(currentVocableInView);
+                // TODO: manage the layout
+                return;
+            } else if (currentVocableInView.getId() > 0) {
+                model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
+                // TODO: manage the layout
+                return;
+            }
+        }
+        view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
 
     @Subscribe(sticky = true)
@@ -88,6 +100,21 @@ public class DictionaryManagementActivityPresenter implements Presenter {
         eventBus.removeStickyEvent(event);
         onViewCreatedForTheFirstTime();
     }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEventManipulationRequest(EventVocableManipulationRequest event) {
+        switch (event.getTypeOfManipulation()) {
+            case EDIT:
+                break;
+            case REMOVE:
+                model.asyncRemoveVocable(event.getVocableToManipulate().getId());
+                break;
+        }
+        eventBus.removeStickyEvent(event);
+        // TODO: post event to inform the listview adapter of data change
+    }
+
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")

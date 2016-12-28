@@ -1,19 +1,21 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
+import com.matteoveroni.wordsremember.pojo.Word;
+
 /**
  * @author Matteo Veroni
  */
 public class EventVocableManipulationRequest {
 
-    private final long vocableIDToManipulte;
+    private final Word vocableToManipulate;
     private final TypeOfManipulation typeOfManipulation;
 
     public enum TypeOfManipulation {
         EDIT, REMOVE;
     }
 
-    public EventVocableManipulationRequest(long vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {
-        this.vocableIDToManipulte = vocableIDToManipulate;
+    public EventVocableManipulationRequest(Word vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {
+        this.vocableToManipulate = vocableIDToManipulate;
         this.typeOfManipulation = typeOfManipulation;
     }
 
@@ -21,7 +23,7 @@ public class EventVocableManipulationRequest {
         return typeOfManipulation;
     }
 
-    public long getVocableIDToManipulate() {
-        return vocableIDToManipulte;
+    public Word getVocableToManipulate() {
+        return vocableToManipulate;
     }
 }

@@ -179,11 +179,15 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                deletedRowsCounter = db.delete(
-                        DictionaryContract.Schema.TABLE_NAME,
-                        DictionaryContract.Schema.COLUMN_ID + " = " + id +
-                                (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
-                        selectionArgs);
+                deletedRowsCounter =
+                        db.delete(
+                                DictionaryContract.Schema.TABLE_NAME,
+                                DictionaryContract.Schema.COLUMN_ID
+                                        + " = "
+                                        + id
+                                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
+                                selectionArgs
+                        );
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);

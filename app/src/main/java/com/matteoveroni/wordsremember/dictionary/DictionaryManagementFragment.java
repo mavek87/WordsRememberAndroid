@@ -121,14 +121,19 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         int position = contextMenuInfo.position;
-        long targetVocableID = dictionaryListViewAdapter.getItemId(position);
+//        long targetVocableID = dictionaryListViewAdapter.getItemId(position);
+
+        Cursor cursor = dictionaryListViewAdapter.getCursor();
+        cursor.moveToPosition(position);
+
+        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
 
         switch (item.getItemId()) {
             case R.id.menu_dictionary_management_long_press_edit:
-                eventBus.postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
+                eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.EDIT));
                 return true;
             case R.id.menu_dictionary_management_long_press_remove:
-                eventBus.postSticky(new EventVocableManipulationRequest(targetVocableID, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
+                eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
                 return true;
         }
         return super.onContextItemSelected(item);
