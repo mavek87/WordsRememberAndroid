@@ -4,16 +4,19 @@ import com.matteoveroni.wordsremember.utilities.Json;
 
 public class Word {
 
-    private final long id;
+    private long id = -1;
     private final String name;
 
-    public Word(long id, String name) {
-        this.id = id;
+    public Word(String name) {
         this.name = name;
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

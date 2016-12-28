@@ -1,8 +1,10 @@
 package com.matteoveroni.wordsremember.dictionary;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,12 +31,13 @@ import butterknife.Unbinder;
  */
 public class DictionaryManipulationFragment extends Fragment {
 
-    public static final String TAG = "F_DICTIONARY_MANIPULATION";
+    public static final String TAG = "F_DictManipul";
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
 
+    private EventBus eventBus = EventBus.getDefault();
     private DictionaryManipulationMode fragmentMode;
     private Unbinder viewInjector;
 
@@ -46,6 +54,18 @@ public class DictionaryManipulationFragment extends Fragment {
     EditText txt_vocableName;
 
     public DictionaryManipulationFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        eventBus.register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        eventBus.unregister(this);
+        super.onDetach();
     }
 
     @Override
@@ -85,23 +105,32 @@ public class DictionaryManipulationFragment extends Fragment {
         }
     }
 
-    public void populateViewForVocable(Word vocable) {
+    @SuppressWarnings("unused")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEventNotifiedVocableToVisualize(EventVocableSelected event) {
+        populateViewWithVocableData(event.getSelectedVocable());
+    }
+
+    private void populateViewWithVocableData(Word vocable) {
         if (isFragmentCreated()) {
-            this.vocable = vocable;
             if (vocable == null || vocable.getName() == null) {
                 lbl_title.setText("Create vocable");
                 txt_vocableName.setText("");
                 fragmentMode = DictionaryManipulationMode.CREATE;
+                this.vocable = new Word("");
             } else {
-                lbl_title.setText("View vocable");
+                lbl_title.setText("Edit vocable");
                 txt_vocableName.setText(vocable.getName());
                 fragmentMode = DictionaryManipulationMode.EDIT;
+                this.vocable = vocable;
             }
         }
     }
 
-    public Word getVocable() {
-        return new Word(vocable.getId(), txt_vocableName.toString());
+    public Word getCurrentVocableInView() {
+        final Word updatedVocable = new Word(txt_vocableName.getText().toString());
+        updatedVocable.setId(this.vocable.getId());
+        return updatedVocable;
     }
 
     private boolean isFragmentCreated() {

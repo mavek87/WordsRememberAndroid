@@ -220,7 +220,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
 //        EventBus.getDefault().postSticky(new EventStartVocableCreation());
         presenter.onCreateVocableRequest();
 //        Word vocableToCreate = new Word("provaCreazione");
-//        presenter.onSaveVocableRequest(vocableToCreate);
+//        presenter.onSaveRequest(vocableToCreate);
     }
 
     private boolean addFragmentToView(FrameLayout container, Fragment fragment, String fragmentTAG) {
@@ -251,14 +251,23 @@ public class DictionaryManagementActivity extends AppCompatActivity
             float managementContainerWeight,
             int manipulationContainerWidth,
             int manipulationContainerHeight,
-            float manipulationContainerWeight) {
+            float manipulationContainerWeight
+    ) {
 
         managementContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(managementContainerWidth, managementContainerHeight, managementContainerWeight)
+                new LinearLayout.LayoutParams(
+                        managementContainerWidth,
+                        managementContainerHeight,
+                        managementContainerWeight
+                )
         );
 
         manipulationContainer.setLayoutParams(
-                new LinearLayout.LayoutParams(manipulationContainerWidth, manipulationContainerHeight, manipulationContainerWeight)
+                new LinearLayout.LayoutParams(
+                        manipulationContainerWidth,
+                        manipulationContainerHeight,
+                        manipulationContainerWeight
+                )
         );
     }
 

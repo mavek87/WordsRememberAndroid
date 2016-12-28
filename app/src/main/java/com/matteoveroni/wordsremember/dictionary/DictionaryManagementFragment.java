@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
@@ -27,6 +29,7 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * List Fragment that shows all the vocables in the dictionary and allows to edit them
@@ -68,6 +71,18 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        eventBus.register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        eventBus.unregister(this);
+        super.onDetach();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         getLoaderManager().initLoader(0, null, this);
@@ -93,8 +108,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         super.onResume();
         getLoaderManager().restartLoader(0, null, this);
     }
-
-    // ANDROID LIFECYCLE METHODS - MENU
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -137,14 +150,17 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         cursor.moveToPosition(position);
 
         Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
-        cursor.close();
 
         Log.i(TAG, selectedVocable.toString());
-
         eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
 
-/**********************************************************************************************/
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onVocableUpdated(EventVocableUpdated event) {
+        if (dictionaryListViewAdapter != null)
+            dictionaryListViewAdapter.notifyDataSetChanged();
+    }
 }
 
 

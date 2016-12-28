@@ -1,6 +1,5 @@
-package com.matteoveroni.wordsremember.activities.dictionary_management.layout;
+package com.matteoveroni.wordsremember.dictionary;
 
-import com.matteoveroni.wordsremember.dictionary.DictionaryManagementViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.ViewLayoutChronology;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager.NoViewLayoutFoundException;

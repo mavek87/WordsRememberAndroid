@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.dictionary.models;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -14,6 +14,6 @@ public class AsyncUpdateVocableHandler extends AsyncQueryHandler {
 
     @Override
     protected void onUpdateComplete(int token, Object cookie, int numberOfUpdatedRows) {
-        EventBus.getDefault().postSticky(new EventAsyncUpdateVocable(numberOfUpdatedRows));
+        EventBus.getDefault().postSticky(new EventVocableUpdated(numberOfUpdatedRows));
     }
 }

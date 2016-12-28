@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocable;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableUpdated;
 import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
@@ -107,7 +107,7 @@ public class DictionaryManagementActivityPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEventAsyncUpdatedVocableCompleted(EventAsyncUpdateVocable event) {
+    public void onEventAsyncUpdatedVocableCompleted(EventVocableUpdated event) {
         eventBus.removeStickyEvent(event);
     }
 
@@ -170,10 +170,10 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
-        Word firstVocableToSave = new Word(1, "test123");
+        Word firstVocableToSave = new Word("test123");
         model.saveVocable(firstVocableToSave);
 
-        Word secondVocableToSave = new Word(2, "second vocable");
+        Word secondVocableToSave = new Word("second vocable");
         model.saveVocable(secondVocableToSave);
     }
 

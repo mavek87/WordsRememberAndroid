@@ -8,7 +8,6 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
 /**
@@ -30,33 +29,108 @@ public class DictionaryDAO {
         this.contentResolver = context.getContentResolver();
     }
 
-    public long saveVocable(Word vocable) {
-        long id = -1;
-        if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
-            final Uri createdRowUri = contentResolver.insert(CONTENT_PROVIDER_URI, vocableToContentValues(vocable));
+    /**********************************************************************************************/
 
-            if (createdRowUri != null) {
-                final String createdRowId = createdRowUri.getLastPathSegment();
+    // Async methods
 
-                if (!createdRowId.isEmpty()) {
-                    id = Long.valueOf(createdRowId);
-                }
-            }
+    /**********************************************************************************************/
+
+    public void asyncSaveVocable(Word vocable) {
+        // TODO: search a way to avoid to call isVocablePresent synchronous method
+        if (isVocableValid(vocable) && vocable.getId() < 0) {
+            new AsyncSaveVocableHandler(contentResolver).startInsert(
+                    1,
+                    null,
+                    CONTENT_PROVIDER_URI,
+                    vocableToContentValues(vocable)
+            );
         }
-        return id;
     }
 
+    public void asyncGetVocableById(long id) {
+        if (id > 0) {
+            final String str_idColumn = String.valueOf(id);
+
+            final String[] projection = {Schema.COLUMN_NAME};
+            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_idColumn};
+
+            final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+            new AsyncGetVocableByIdHandler(contentResolver).startQuery(
+                    1,
+                    null,
+                    uri,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null
+            );
+        }
+    }
+
+    public void asyncUpdateVocable(long id, Word updatedVocable) {
+        if (id > 0) {
+            final String str_id = String.valueOf(id);
+
+            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_id};
+
+            final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_id).buildUpon().build();
+
+            new AsyncUpdateVocableHandler(contentResolver).startUpdate(
+                    1,
+                    null,
+                    uri,
+                    vocableToContentValues(updatedVocable),
+                    selection,
+                    selectionArgs
+            );
+        }
+    }
+
+    public void asyncRemoveVocable(long id) {
+        if (id > 0) {
+            final String str_idColumn = String.valueOf(id);
+
+            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_idColumn};
+
+            final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+
+            new AsyncDeleteVocableHandler(contentResolver).startDelete(
+                    1,
+                    null,
+                    uri,
+                    selection,
+                    selectionArgs
+            );
+        }
+    }
+
+    public static Word cursorToVocable(Cursor cursor) {
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME)));
+        vocable.setId(cursor.getLong(cursor.getColumnIndex(Schema.COLUMN_ID)));
+        return vocable;
+    }
+
+    /**********************************************************************************************/
+
+    // Synchronous methods
+
+    /**********************************************************************************************/
+
     public Word getVocableById(long id) {
-        final String str_idColumn = String.valueOf(id);
+        final String str_id = String.valueOf(id);
 
         final String[] projection = {Schema.COLUMN_NAME};
         final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
+        final String[] selectionArgs = {str_id};
 
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_id).buildUpon().build();
 
         Cursor cursor = contentResolver.query(
-                vocableUri,
+                uri,
                 projection,
                 selection,
                 selectionArgs,
@@ -71,15 +145,34 @@ public class DictionaryDAO {
         }
     }
 
+    public long saveVocable(Word vocable) {
+        long id = -1;
+        if (isVocableValid(vocable) && vocable.getId() < 0) {
+            final Uri uri = contentResolver.insert(
+                    CONTENT_PROVIDER_URI,
+                    vocableToContentValues(vocable)
+            );
+
+            if (uri != null) {
+                final String createdRowId = uri.getLastPathSegment();
+
+                if (!createdRowId.isEmpty()) {
+                    id = Long.valueOf(createdRowId);
+                }
+            }
+        }
+        return id;
+    }
+
     public boolean updateVocable(long vocableID, Word newVocable) {
-        final String str_idColumn = String.valueOf(vocableID);
+        final String str_id = String.valueOf(vocableID);
 
         final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
+        final String[] selectionArgs = {str_id};
 
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_id).buildUpon().build();
 
-        int updatedRecords = contentResolver.update(vocableUri, vocableToContentValues(newVocable), selection, selectionArgs);
+        int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
 
         return updatedRecords > 0;
     }
@@ -87,12 +180,12 @@ public class DictionaryDAO {
     public boolean removeVocable(long vocableID) {
         int recordDeleted = 0;
         if (vocableID > 0) {
-            final String str_idColumn = String.valueOf(vocableID);
+            final String str_id = String.valueOf(vocableID);
 
             final String selection = Schema.COLUMN_ID + " = ?";
-            final String[] selectionArgs = {str_idColumn};
+            final String[] selectionArgs = {str_id};
 
-            final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+            final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_id).buildUpon().build();
 
             recordDeleted = contentResolver.delete(
                     vocableUri,
@@ -103,117 +196,17 @@ public class DictionaryDAO {
         return recordDeleted > 0;
     }
 
-    public void asyncSaveVocable(Word vocable) {
-        // TODO: search a way to avoid to call isVocablePresent synchronous method
-        if (isVocableValid(vocable) && !isVocablePresent(vocable)) {
-            new AsyncSaveVocableHandler(contentResolver).startInsert(
-                    1,
-                    null,
-                    CONTENT_PROVIDER_URI,
-                    vocableToContentValues(vocable)
-            );
-        }
-    }
+    /**********************************************************************************************/
 
-    public void asyncGetVocableById(long id) {
-        final String str_idColumn = String.valueOf(id);
+    // Helper methods
 
-        final String[] projection = {Schema.COLUMN_NAME};
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
-
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-        new AsyncGetVocableByIdHandler(contentResolver).startQuery(
-                1,
-                null,
-                vocableUri,
-                projection,
-                selection,
-                selectionArgs,
-                null
-        );
-    }
-
-    public void asyncUpdateVocable(long vocableID, Word newVocable) {
-        final String str_idColumn = String.valueOf(vocableID);
-
-        final String selection = Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_idColumn};
-
-        final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-        new AsyncUpdateVocableHandler(contentResolver).startUpdate(
-                1,
-                null,
-                vocableUri,
-                vocableToContentValues(newVocable),
-                selection,
-                selectionArgs
-        );
-    }
-
-    public void asyncRemoveVocable(long vocableID) {
-        if (vocableID > 0) {
-            final String str_idColumn = String.valueOf(vocableID);
-
-            final String selection = Schema.COLUMN_ID + " = ?";
-            final String[] selectionArgs = {str_idColumn};
-
-            final Uri vocableUri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
-
-            new AsyncDeleteVocableHandler(contentResolver).startDelete(
-                    1,
-                    null,
-                    vocableUri,
-                    selection,
-                    selectionArgs
-            );
-        }
-    }
-
-    public static Word cursorToVocable(Cursor cursor) {
-        return new Word(
-                cursor.getLong(cursor.getColumnIndex(Schema.COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME))
-        );
-    }
-
-    /**
-     * Check whether a certain vocable passed was already inserted into the db system or not
-     *
-     * @param vocable Vocable for check presence
-     * @return true if the vocable passed is present or false if it's not
-     */
-    private boolean isVocablePresent(Word vocable) throws NullPointerException {
-        if (isVocableValid(vocable)) {
-            boolean isVocablePresent = false;
-
-            final String[] projection = {Schema.COLUMN_NAME};
-            final String selection = Schema.COLUMN_NAME + " = ?";
-            final String[] selectionArgs = {vocable.getName()};
-            final String limit = "1";
-
-            Cursor cursor = contentResolver.query(
-                    CONTENT_PROVIDER_URI.buildUpon().appendQueryParameter(DictionaryProvider.QUERY_PARAMETER_LIMIT, limit).build(),
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null
-            );
-            if (cursor != null) {
-                isVocablePresent = (cursor.getCount() > 0);
-                cursor.close();
-            }
-            return isVocablePresent;
-        } else {
-            throw new NullPointerException("Vocable or Vocable Name are null");
-        }
-    }
+    /**********************************************************************************************/
 
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
-        values.put(Schema.COLUMN_NAME, vocable.getName());
+        if (isVocableValid(vocable)) {
+            values.put(Schema.COLUMN_NAME, vocable.getName());
+        }
         return values;
     }
 

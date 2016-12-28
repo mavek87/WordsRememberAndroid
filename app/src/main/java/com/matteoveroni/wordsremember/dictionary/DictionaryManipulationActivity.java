@@ -2,10 +2,8 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -61,10 +59,10 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         onBackPressed();
     }
 
-    @Override
-    public void populateViewForVocable(Word vocable) {
-        manipulationFragment.populateViewForVocable(vocable);
-    }
+//    @Override
+//    public void populateViewForVocable(Word vocable) {
+//        manipulationFragment.populateViewWithVocableData(vocable);
+//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -93,7 +91,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
-        presenter.onVocableToManipulateRetrieved(retrieveVocableToManipulate());
+//        presenter.onVocableToManipulateRetrieved(retrieveVocableToManipulate());
     }
 
     @Override
@@ -112,19 +110,19 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_done:
-                presenter.onSaveVocableRequest(manipulationFragment.getVocable());
+                presenter.onSaveRequest(manipulationFragment.getCurrentVocableInView());
                 return true;
         }
         return false;
     }
 
-    private Word retrieveVocableToManipulate() {
-        Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
-            String str_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
-            if (!str_vocableToManipulate.trim().isEmpty())
-                return Json.getInstance().fromJson(str_vocableToManipulate, Word.class);
-        }
-        return null;
-    }
+//    private Word retrieveVocableToManipulate() {
+//        Intent starterIntent = getIntent();
+//        if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
+//            String str_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
+//            if (!str_vocableToManipulate.trim().isEmpty())
+//                return Json.getInstance().fromJson(str_vocableToManipulate, Word.class);
+//        }
+//        return null;
+//    }
 }
