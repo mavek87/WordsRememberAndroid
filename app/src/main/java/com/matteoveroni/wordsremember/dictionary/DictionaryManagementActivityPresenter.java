@@ -7,6 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulation
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
+import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
@@ -174,7 +175,6 @@ public class DictionaryManagementActivityPresenter implements Presenter {
             } else {
                 determinateAndApplyLayoutForView(DictionaryManipulationFragment.TAG);
                 viewLayoutManager.saveLayoutInUse(view.getViewLayout());
-//                eventBus.postSticky(new EventVisualizeVocable(vocable));
             }
         } catch (ViewLayoutManager.NoViewLayoutFoundException ex) {
             //
@@ -226,24 +226,22 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
-//        view.showMessage("populateDatabaseForTestPurposes");
-//
-//        Word firstVocableToSave = new Word(generateRandomWord());
-//        model.saveVocable(firstVocableToSave);
-//
-//        Word secondVocableToSave = new Word(generateRandomWord());
-//        model.saveVocable(secondVocableToSave);
+        Word randomVocableToSave = new Word(generateRandomWord());
+        model.saveVocable(randomVocableToSave);
     }
 
     private String generateRandomWord() {
         final Random randomGenerator = new Random();
-        final int MAX_DECIMALS = 20;
+        final int MAX_NUM_LETTERS_FOR_WORD = 30;
+        final int MIN_NUM_LETTERS_FOR_WORD = 3;
+        final int NUM_OF_ASCII_CHARACTERS = 25;
+        final int FIRST_ASCII_LETTER = 97;
         String generatedWord = "";
 
-        int generatedDecimals = randomGenerator.nextInt(MAX_DECIMALS);
+        int numberOfLetters = (randomGenerator.nextInt(MAX_NUM_LETTERS_FOR_WORD - MIN_NUM_LETTERS_FOR_WORD)) + MIN_NUM_LETTERS_FOR_WORD;
 
-        for (int i = 3; i < generatedDecimals; i++) {
-            char randomChar = (char) (randomGenerator.nextInt(25) + 97);
+        for (int letter = 0; letter < numberOfLetters; letter++) {
+            char randomChar = (char) (randomGenerator.nextInt(NUM_OF_ASCII_CHARACTERS) + FIRST_ASCII_LETTER);
             generatedWord += randomChar;
         }
         return generatedWord;
@@ -254,6 +252,4 @@ public class DictionaryManagementActivityPresenter implements Presenter {
 //            DatabaseManager.create(this.view.getContext()).exportDBOnSD();
 //        }
 //    }
-
-
 }

@@ -64,10 +64,12 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
     }
 
     private void printLayoutHistoryForDebug() {
-        int i=0;
-        for(ViewLayout layout : viewLayoutHistory) {
+        int i = 0;
+        for (ViewLayout layout : viewLayoutHistory) {
             i++;
-            Log.d(TAG, i + ") layout | type: " + layout.getViewLayoutType().toString() + " - mainFragmentTAG: " + layout.getMainFragmentTAG().toString());
+            Log.d(TAG,
+                    i + ") layout | type: " + layout.getViewLayoutType().toString() + " - mainFragmentTAG: " + ((layout.getMainFragmentTAG() != null) ? layout.getMainFragmentTAG() : "null")
+            );
         }
     }
 }
