@@ -28,4 +28,21 @@ public class Word {
         return Json.getInstance().toJson(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Word)) return false;
+
+        Word word = (Word) o;
+
+        return getId() == word.getId() && getName().equals(word.getName());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + getName().hashCode();
+        return result;
+    }
 }

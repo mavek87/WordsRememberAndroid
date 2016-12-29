@@ -44,7 +44,7 @@ import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFrag
 public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementActivityPresenter> {
 
-    public static final String TAG = "A_DICTIONARY_MANAGE";
+    public static final String TAG = "A_DictManagement";
 
     private ViewLayout viewLayout;
 
@@ -69,20 +69,17 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public DictionaryManagementActivity() {
     }
 
-    @Override
-    public Loader<DictionaryManagementActivityPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
+    @OnClick(R.id.dictionary_management_floating_action_button)
+    @SuppressWarnings("unused")
+    public void onFloatingActionButtonClicked() {
+        presenter.onCreateVocableRequest();
     }
 
-    @Override
-    public void onLoadFinished(Loader<DictionaryManagementActivityPresenter> loader, DictionaryManagementActivityPresenter presenter) {
-        this.presenter = presenter;
-    }
+    /**********************************************************************************************/
 
-    @Override
-    public void onLoaderReset(Loader<DictionaryManagementActivityPresenter> loader) {
-        presenter = null;
-    }
+    // DictionaryManagementView interface methods
+
+    /**********************************************************************************************/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -156,7 +153,11 @@ public class DictionaryManagementActivity extends AppCompatActivity
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    // ANDROID LIFECYCLE METHODS
+    /**********************************************************************************************/
+
+    // Android Lifecycle Methods
+
+    /**********************************************************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,15 +214,32 @@ public class DictionaryManagementActivity extends AppCompatActivity
         presenter.onViewRestored();
     }
 
-    @OnClick(R.id.dictionary_management_floating_action_button)
-    @SuppressWarnings("unused")
-    public void onFloatingActionButtonClicked() {
-//        injectedLayoutManager.useSingleLayoutWithFragment(DictionaryManipulationFragment.TAG);
-//        EventBus.getDefault().postSticky(new EventStartVocableCreation());
-        presenter.onCreateVocableRequest();
-//        Word vocableToCreate = new Word("provaCreazione");
-//        presenter.onSaveRequest(vocableToCreate);
+    /**********************************************************************************************/
+
+    // Presenter Loader methods
+
+    /**********************************************************************************************/
+
+    @Override
+    public Loader<DictionaryManagementActivityPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
     }
+
+    @Override
+    public void onLoadFinished(Loader<DictionaryManagementActivityPresenter> loader, DictionaryManagementActivityPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<DictionaryManagementActivityPresenter> loader) {
+        presenter = null;
+    }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
 
     private boolean addFragmentToView(FrameLayout container, Fragment fragment, String fragmentTAG) {
         if (fragment != null && !fragment.isAdded()) {

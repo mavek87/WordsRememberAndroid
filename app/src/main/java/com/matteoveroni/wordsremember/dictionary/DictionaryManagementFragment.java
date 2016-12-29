@@ -71,18 +71,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        eventBus.register(this);
-    }
-
-    @Override
-    public void onDetach() {
-        eventBus.unregister(this);
-        super.onDetach();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         getLoaderManager().initLoader(0, null, this);
@@ -105,8 +93,15 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public void onResume() {
-        super.onResume();
+        eventBus.register(this);
         getLoaderManager().restartLoader(0, null, this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        eventBus.unregister(this);
+        super.onPause();
     }
 
     @Override

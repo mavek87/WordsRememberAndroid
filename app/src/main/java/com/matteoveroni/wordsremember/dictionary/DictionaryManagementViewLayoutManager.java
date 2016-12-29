@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary;
 
+import android.util.Log;
+
 import com.matteoveroni.wordsremember.ui.layout.ViewLayoutManager;
 import com.matteoveroni.wordsremember.ui.layout.ViewLayout;
 
@@ -11,7 +13,7 @@ import java.util.Stack;
  */
 public class DictionaryManagementViewLayoutManager implements ViewLayoutManager {
 
-    public static final String TAG = "DMA_LAYOUT_MANAGER";
+    public static final String TAG = "DictLayoutManager";
 
     private final Stack<ViewLayout> viewLayoutHistory = new Stack<>();
 
@@ -19,6 +21,7 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
     public void saveLayoutInUse(ViewLayout layoutToSave) {
         if (layoutToSave != null && !isLayoutToSaveEqualsToCurrentLayout(layoutToSave)) {
             viewLayoutHistory.push(layoutToSave);
+            printLayoutHistoryForDebug();
         }
     }
 
@@ -26,6 +29,7 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
     public void removeLastLayoutSaved() {
         if (!viewLayoutHistory.empty()) {
             viewLayoutHistory.pop();
+            printLayoutHistoryForDebug();
         }
     }
 
@@ -57,5 +61,13 @@ public class DictionaryManagementViewLayoutManager implements ViewLayoutManager 
         } catch (EmptyStackException ex) {
         }
         return false;
+    }
+
+    private void printLayoutHistoryForDebug() {
+        int i=0;
+        for(ViewLayout layout : viewLayoutHistory) {
+            i++;
+            Log.d(TAG, i + ") layout | type: " + layout.getViewLayoutType().toString() + " - mainFragmentTAG: " + layout.getMainFragmentTAG().toString());
+        }
     }
 }

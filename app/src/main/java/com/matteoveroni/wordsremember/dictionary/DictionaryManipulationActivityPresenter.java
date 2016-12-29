@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.dictionary;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
@@ -71,7 +71,15 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
         eventBus.removeStickyEvent(event);
-        eventBus.postSticky(new EventResetDictionaryManagementView());
+//        eventBus.postSticky(new EventResetDictionaryManagementView());
+        view.returnToPreviousView();
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEvent(EventAsyncUpdateVocableCompleted event) {
+        eventBus.removeStickyEvent(event);
+//        eventBus.postSticky(new EventResetDictionaryManagementView());
         view.returnToPreviousView();
     }
 

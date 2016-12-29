@@ -1,10 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +39,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private Unbinder viewInjector;
 
     private Word vocable;
+    private Word previousVocableShownInView;
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
@@ -51,42 +50,64 @@ public class DictionaryManipulationFragment extends Fragment {
     public DictionaryManipulationFragment() {
     }
 
+    /**********************************************************************************************/
+
+    // Public API
+
+    /**********************************************************************************************/
+
     public Word getCurrentVocableInView() {
         final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
         currentVocableInView.setId(this.vocable.getId());
         return currentVocableInView;
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    @SuppressWarnings("unused")
-    public void onEvent(EventVocableSelected event) {
-        populateViewWithVocableData(event.getSelectedVocable());
-    }
-
-    public void populateViewWithVocableData(Word vocable) {
-        if (isFragmentCreated()) {
-            if (vocable == null || vocable.getName() == null) {
+    public void populateViewForVocable(Word vocableToShow) {
+        if (previousVocableShownInView == null || !previousVocableShownInView.equals(vocableToShow)) {
+            if (vocableToShow == null || vocableToShow.getName() == null) {
                 lbl_title.setText("Create vocable");
                 txt_vocableName.setText("");
                 this.vocable = new Word("");
             } else {
                 lbl_title.setText("Edit vocable");
-                txt_vocableName.setText(vocable.getName());
-                this.vocable = vocable;
+                txt_vocableName.setText(vocableToShow.getName());
+                this.vocable = vocableToShow;
             }
+            previousVocableShownInView = this.vocable;
         }
     }
 
+    /**********************************************************************************************/
+
+    // System events
+
+    /**********************************************************************************************/
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onEvent(EventVocableSelected event) {
+        if (isFragmentCreated()) {
+            Word vocableToShowInView = event.getSelectedVocable();
+            populateViewForVocable(vocableToShowInView);
+        }
+    }
+
+    /**********************************************************************************************/
+
+    // Android lifecycle methods
+
+    /**********************************************************************************************/
+
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onResume() {
+        super.onResume();
         eventBus.register(this);
     }
 
     @Override
-    public void onDetach() {
+    public void onPause() {
         eventBus.unregister(this);
-        super.onDetach();
+        super.onPause();
     }
 
     @Override
@@ -125,6 +146,12 @@ public class DictionaryManipulationFragment extends Fragment {
             }
         }
     }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
 
     private boolean isFragmentCreated() {
         return getView() != null && lbl_title != null && txt_vocableName != null;

@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,13 +13,10 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationActivityPresenter> {
@@ -28,26 +24,15 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     private DictionaryManipulationActivityPresenter presenter;
     private static final int PRESENTER_ID = 1;
 
-    private EventBus eventBus;
-
     private Toolbar toolbar;
 
     DictionaryManipulationFragment manipulationFragment;
 
-    @Override
-    public Loader<DictionaryManipulationActivityPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
-    }
+    /**********************************************************************************************/
 
-    @Override
-    public void onLoadFinished(Loader<DictionaryManipulationActivityPresenter> loader, DictionaryManipulationActivityPresenter presenter) {
-        this.presenter = presenter;
-    }
+    // DictionaryManipulationView interface methods
 
-    @Override
-    public void onLoaderReset(Loader<DictionaryManipulationActivityPresenter> loader) {
-        presenter = null;
-    }
+    /**********************************************************************************************/
 
     @Override
     public void showMessage(String message) {
@@ -61,16 +46,14 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     @Override
     public void populateViewForVocable(Word vocable) {
-        manipulationFragment.populateViewWithVocableData(vocable);
+        manipulationFragment.populateViewForVocable(vocable);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            eventBus.postSticky(new EventResetDictionaryManagementView());
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+    /**********************************************************************************************/
+
+    // Android Lifecycle Methods
+
+    /**********************************************************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +66,6 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(MyApp.NAME + " - Details");
         setSupportActionBar(toolbar);
-
-        eventBus = EventBus.getDefault();
     }
 
     @Override
@@ -108,12 +89,33 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_done:
                 presenter.onSaveRequest(manipulationFragment.getCurrentVocableInView());
                 return true;
         }
         return false;
+    }
+
+    /**********************************************************************************************/
+
+    // Presenter Loader methods
+
+    /**********************************************************************************************/
+
+    @Override
+    public Loader<DictionaryManipulationActivityPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<DictionaryManipulationActivityPresenter> loader, DictionaryManipulationActivityPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<DictionaryManipulationActivityPresenter> loader) {
+        presenter = null;
     }
 
     private Word retrieveVocableToManipulate() {

@@ -5,7 +5,6 @@ import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.EventResetDictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManagementView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
@@ -80,6 +79,7 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     public void onViewCreatedForTheFirstTime() {
+        view.showMessage("created for the first time");
         view.useSingleLayoutWithFragment(DictionaryManagementFragment.TAG);
         viewLayoutManager.saveLayoutInUse(view.getViewLayout());
         populateDatabaseForTestPurposes();
@@ -93,20 +93,20 @@ public class DictionaryManagementActivityPresenter implements Presenter {
         showManipulationViewUsingVocable(null);
     }
 
-    public void onSaveRequest(Word currentVocableInView) {
-        if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
-            if (currentVocableInView.getId() < 0) {
-                model.asyncSaveVocable(currentVocableInView);
-                // TODO: manage the layout
-                return;
-            } else if (currentVocableInView.getId() > 0) {
-                model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
-                // TODO: manage the layout
-                return;
-            }
-        }
-        view.showMessage("Error occurred during the saving process. Compile all the data and retry");
-    }
+//    public void onSaveRequest(Word currentVocableInView) {
+//        if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
+//            if (currentVocableInView.getId() < 0) {
+//                model.asyncSaveVocable(currentVocableInView);
+//                // TODO: manage the layout
+//                return;
+//            } else if (currentVocableInView.getId() > 0) {
+//                model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
+//                // TODO: manage the layout
+//                return;
+//            }
+//        }
+//        view.showMessage("Error occurred during the saving process. Compile all the data and retry");
+//    }
 
     /**********************************************************************************************/
 
@@ -116,13 +116,20 @@ public class DictionaryManagementActivityPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEvent(EventResetDictionaryManagementView event) {
+    /**
+     * Event fired when a vocable is being selected
+     */
+    public void onEvent(EventVocableSelected event) {
+        Word selectedVocable = event.getSelectedVocable();
+        showManipulationViewUsingVocable(selectedVocable);
         eventBus.removeStickyEvent(event);
-        onViewCreatedForTheFirstTime();
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
+    /**
+     * Event fired when a manipulation on a vocable is requested
+     */
     public void onEvent(EventVocableManipulationRequest event) {
         Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
@@ -138,13 +145,6 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
         view.showMessage("Vocable removed");
-    }
-
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEvent(EventVocableSelected event) {
-        Word selectedVocable = event.getSelectedVocable();
-        showManipulationViewUsingVocable(selectedVocable);
     }
 
     @Subscribe(sticky = true)
@@ -226,23 +226,23 @@ public class DictionaryManagementActivityPresenter implements Presenter {
     }
 
     private void populateDatabaseForTestPurposes() {
-        view.showMessage("populateDatabaseForTestPurposes");
-
-        Word firstVocableToSave = new Word(generateRandomWord());
-        model.saveVocable(firstVocableToSave);
-
-        Word secondVocableToSave = new Word(generateRandomWord());
-        model.saveVocable(secondVocableToSave);
+//        view.showMessage("populateDatabaseForTestPurposes");
+//
+//        Word firstVocableToSave = new Word(generateRandomWord());
+//        model.saveVocable(firstVocableToSave);
+//
+//        Word secondVocableToSave = new Word(generateRandomWord());
+//        model.saveVocable(secondVocableToSave);
     }
 
     private String generateRandomWord() {
         final Random randomGenerator = new Random();
-        final int MAX_DECIMALS = 10;
+        final int MAX_DECIMALS = 20;
         String generatedWord = "";
 
         int generatedDecimals = randomGenerator.nextInt(MAX_DECIMALS);
 
-        for (int i = 0; i < generatedDecimals; i++) {
+        for (int i = 3; i < generatedDecimals; i++) {
             char randomChar = (char) (randomGenerator.nextInt(25) + 97);
             generatedWord += randomChar;
         }
