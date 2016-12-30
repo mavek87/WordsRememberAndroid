@@ -15,6 +15,7 @@ import java.lang.reflect.Proxy;
 /**
  * @author Matteo Veroni
  */
+
 public class DictionaryManipulationPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";

@@ -7,6 +7,10 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableC
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class AsyncDeleteVocableHandler extends AsyncQueryHandler {
     public AsyncDeleteVocableHandler(ContentResolver contentResolver) {
         super(contentResolver);

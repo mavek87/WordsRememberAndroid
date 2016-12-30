@@ -1,5 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.events;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class EventAsyncDeleteVocableCompleted {
 
     private final int numberOfRowsDeleted;

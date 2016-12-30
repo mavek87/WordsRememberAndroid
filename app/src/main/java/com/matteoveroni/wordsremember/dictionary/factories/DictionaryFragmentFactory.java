@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.DictionaryManipulationFragment;
 /**
  * @author Matteo Veroni
  */
+
 public class DictionaryFragmentFactory {
 
     public enum DictionaryFragmentType {

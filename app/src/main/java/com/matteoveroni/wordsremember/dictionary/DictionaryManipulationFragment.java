@@ -27,6 +27,7 @@ import butterknife.Unbinder;
  *
  * @author Matteo Veroni
  */
+
 public class DictionaryManipulationFragment extends Fragment {
 
     public static final String TAG = "F_DictManipul";

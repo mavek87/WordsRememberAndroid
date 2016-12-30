@@ -9,6 +9,10 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCom
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class AsyncSaveVocableHandler extends AsyncQueryHandler {
     private EventAsyncSaveVocableCompleted event;
 

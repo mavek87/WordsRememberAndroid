@@ -18,6 +18,10 @@ import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulatio
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
@@ -122,6 +126,12 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
         presenter = null;
     }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
 
     private Word retrieveVocableToManipulate() {
         Intent starterIntent = getIntent();

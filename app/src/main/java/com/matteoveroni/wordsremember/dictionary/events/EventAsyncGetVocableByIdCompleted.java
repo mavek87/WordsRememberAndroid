@@ -2,6 +2,10 @@ package com.matteoveroni.wordsremember.dictionary.events;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class EventAsyncGetVocableByIdCompleted {
     private final Word vocable;
 

@@ -22,6 +22,8 @@ import java.util.Random;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
+ *
+ * @author Matteo Veroni
  */
 
 public class DictionaryManagementPresenter implements Presenter {

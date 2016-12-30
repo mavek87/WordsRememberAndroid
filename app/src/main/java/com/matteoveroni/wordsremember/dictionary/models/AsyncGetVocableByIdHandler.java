@@ -9,6 +9,10 @@ import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class AsyncGetVocableByIdHandler extends AsyncQueryHandler {
 
     public AsyncGetVocableByIdHandler(ContentResolver contentResolver) {

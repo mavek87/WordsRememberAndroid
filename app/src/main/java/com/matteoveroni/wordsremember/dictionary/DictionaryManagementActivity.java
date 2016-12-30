@@ -24,12 +24,11 @@ import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFrag
 /**
  * Dictionary Management Activity
  *
+ * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
+ *
  * @author Matteo Veroni
  */
 
-/**
- * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
- */
 public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
@@ -106,19 +105,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         presenter.onViewDetached();
         super.onStop();
     }
-
-//    @Override
-//    protected void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
-//        fragmentManager.putFragment(savedInstanceState, DictionaryManagementFragment.TAG, managementFragment);
-//        fragmentManager.putFragment(savedInstanceState, DictionaryManipulationFragment.TAG, manipulationFragment);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        presenter.onViewRestored();
-//    }
 
     /**********************************************************************************************/
 

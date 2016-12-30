@@ -29,11 +29,12 @@ import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * List Fragment that shows all the vocables in the dictionary and allows to edit them
- * using a long press touch.
+ * Fragment that lists all the vocables in the dictionary using a Cursor Loader.
+ * Is also possible to remove vocables using a long press touch.
  *
  * @author Matteo Veroni
  */
+
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = "F_dictManage";

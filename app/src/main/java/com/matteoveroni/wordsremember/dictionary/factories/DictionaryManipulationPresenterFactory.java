@@ -7,6 +7,10 @@ import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 
 import javax.inject.Inject;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class DictionaryManipulationPresenterFactory implements PresenterFactory {
 
     @Inject
