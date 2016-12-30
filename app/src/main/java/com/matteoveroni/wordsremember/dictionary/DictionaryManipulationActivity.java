@@ -65,7 +65,9 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(MyApp.NAME + " - Details");
+        if (toolbar != null) {
+            toolbar.setTitle(MyApp.NAME + " - Details");
+        }
         setSupportActionBar(toolbar);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

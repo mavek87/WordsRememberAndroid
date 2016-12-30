@@ -12,6 +12,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * @author Matteo Veroni
+ */
 public class DictionaryManipulationPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";
@@ -25,6 +28,12 @@ public class DictionaryManipulationPresenter implements Presenter {
         this.model = model;
     }
 
+    /**********************************************************************************************/
+
+    // Presenter interface
+
+    /**********************************************************************************************/
+
     @Override
     public void onViewAttached(Object viewAttached) {
         view = (DictionaryManipulationView) Proxy.newProxyInstance(
@@ -32,7 +41,6 @@ public class DictionaryManipulationPresenter implements Presenter {
                 new Class[]{DictionaryManipulationView.class},
                 new NullWeakReferenceProxy(viewAttached)
         );
-
         eventBus.register(this);
     }
 
@@ -47,11 +55,17 @@ public class DictionaryManipulationPresenter implements Presenter {
         onViewDetached();
     }
 
-    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
+    /**********************************************************************************************/
+
+    // Activity's callbacks
+
+    /**********************************************************************************************/
+
+    void onVocableToManipulateRetrieved(Word vocableToManipulate) {
         view.populateViewForVocable(vocableToManipulate);
     }
 
-    public void onSaveRequest(Word currentVocableInView) {
+    void onSaveRequest(Word currentVocableInView) {
         if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
             if (currentVocableInView.getId() < 0) {
                 model.asyncSaveVocable(currentVocableInView);
@@ -66,31 +80,35 @@ public class DictionaryManipulationPresenter implements Presenter {
         view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
 
+    /**********************************************************************************************/
+
+    // System Events
+
+    /**********************************************************************************************/
+
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
-        eventBus.removeStickyEvent(event);
-//        eventBus.postSticky(new EventResetDictionaryManagementView());
-        view.returnToPreviousView();
+        handleAsyncEventAndGoToPreviousView(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        eventBus.removeStickyEvent(event);
-//        eventBus.postSticky(new EventResetDictionaryManagementView());
-        view.returnToPreviousView();
+        handleAsyncEventAndGoToPreviousView(event);
     }
 
-    //    @Subscribe(sticky = true)
-//    @SuppressWarnings("unused")
-//    public void onEventSaveVocableRequest(EventSaveVocableRequest event) {
-//        eventBus.removeStickyEvent(event);
-//        Word vocableToSave = event.getVocableInView();
-//        if (vocableToSave != null)
-//            model.asyncSaveVocable(vocableToSave);
-//        else
-//            view.showMessage("Error occurred during the saving process. Compile all the data and retry");
-//    }
-//
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
+
+    private void handleAsyncEventAndGoToPreviousView(Object event) {
+        try {
+            eventBus.removeStickyEvent(event);
+        } finally {
+            view.returnToPreviousView();
+        }
+    }
 }

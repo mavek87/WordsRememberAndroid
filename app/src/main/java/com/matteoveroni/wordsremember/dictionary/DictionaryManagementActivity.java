@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
@@ -33,8 +34,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     public static final String TAG = "A_DictManagement";
-
-    private boolean isActivityCreatedForTheFirstTime;
 
     private DictionaryManagementPresenter presenter;
 
@@ -90,16 +89,15 @@ public class DictionaryManagementActivity extends AppCompatActivity
 
         managementFragment = (DictionaryManagementFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_management_fragment);
 
-        if (isActivityCreatedForTheFirstTime = (savedInstanceState == null)) {
-        }
+        MyApp.DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER++;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
-        if (isActivityCreatedForTheFirstTime) {
-            presenter.onViewCreatedForTheFirstTime();
+        if (MyApp.DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER == 1) {
+            presenter.onViewCreatedForTheFirstTime(getApplicationContext());
         }
     }
 

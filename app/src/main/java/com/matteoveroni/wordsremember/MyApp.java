@@ -13,11 +13,13 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  * Dagger2 components for dependency injection are built here
  *
  * @author Matteo Veroni
- * @version 0.0.14
+ * @version 0.0.15
  */
 public class MyApp extends Application {
 
     public static final String NAME = "WordsRemember";
+    public static int DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER = 0;
+
     private static ModelComponent modelComponent;
 
     @Override

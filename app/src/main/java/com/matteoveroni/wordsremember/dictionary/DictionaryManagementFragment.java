@@ -52,6 +52,12 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     /**********************************************************************************************/
 
     @Override
+    public void onResume() {
+        getLoaderManager().restartLoader(0, null, this);
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         getLoaderManager().initLoader(0, null, this);
@@ -73,10 +79,17 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
-    public void onResume() {
-        getLoaderManager().restartLoader(0, null, this);
-        super.onResume();
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        super.onListItemClick(listView, view, position, id);
+
+        Cursor cursor = ((WordsListViewAdapter) listView.getAdapter()).getCursor();
+        cursor.moveToPosition(position);
+
+        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
+
+        eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -102,27 +115,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
                 return true;
         }
         return super.onContextItemSelected(item);
-    }
-
-    @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
-//        if (id != lastSelectedVocableID) {
-////                view.setActivated(true);
-////            dictionaryListViewAdapter.setSelected(position, true);
-//            lastSelectedVocableID = id;
-//        } else {
-////            view.setActivated(false);
-////            dictionaryListViewAdapter.setSelected(position, false);
-//            lastSelectedVocableID = -1;
-//        }
-        Cursor cursor = ((WordsListViewAdapter) listView.getAdapter()).getCursor();
-        cursor.moveToPosition(position);
-
-        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
-
-        Log.i(TAG, selectedVocable.toString());
-        eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
 
     /**********************************************************************************************/

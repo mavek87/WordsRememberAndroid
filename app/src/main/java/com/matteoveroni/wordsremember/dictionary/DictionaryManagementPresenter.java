@@ -1,5 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary;
 
+import android.content.Context;
+
+import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
@@ -9,6 +12,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,13 +66,13 @@ public class DictionaryManagementPresenter implements Presenter {
 
     /**********************************************************************************************/
 
-    // View's callbacks
+    // Activity's callbacks
 
     /**********************************************************************************************/
 
-    void onViewCreatedForTheFirstTime() {
-        view.showMessage("created for the first time");
+    void onViewCreatedForTheFirstTime(Context context) {
         populateDatabaseForTestPurposes();
+        exportDatabaseOnSd(context);
     }
 
     void onCreateVocableRequest() {
@@ -105,7 +109,6 @@ public class DictionaryManagementPresenter implements Presenter {
                 break;
         }
         eventBus.removeStickyEvent(event);
-        // TODO: post event to inform the listview adapter of data change
     }
 
     @Subscribe(sticky = true)
@@ -143,9 +146,9 @@ public class DictionaryManagementPresenter implements Presenter {
         return generatedWord;
     }
 
-//    private void exportDatabaseOnSd() {
-//        if (MyApp.getContext() != null) {
-//            DatabaseManager.create(this.view.getContext()).exportDBOnSD();
-//        }
-//    }
+    private void exportDatabaseOnSd(Context context) {
+        if (context != null) {
+            DatabaseManager.getInstance(context).exportDBOnSD();
+        }
+    }
 }
