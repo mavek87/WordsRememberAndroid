@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +20,6 @@ import android.widget.ListView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
@@ -29,7 +27,6 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * List Fragment that shows all the vocables in the dictionary and allows to edit them
@@ -48,27 +45,11 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public DictionaryManagementFragment() {
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
-                getActivity(),
-                DictionaryProvider.CONTENT_URI,
-                DictionaryContract.Schema.ALL_COLUMNS,
-                null,
-                null,
-                null
-        );
-    }
+    /**********************************************************************************************/
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        dictionaryListViewAdapter.swapCursor(cursor);
-    }
+    // Android lifecycle methods
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        dictionaryListViewAdapter.swapCursor(null);
-    }
+    /**********************************************************************************************/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,6 +123,34 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
         Log.i(TAG, selectedVocable.toString());
         eventBus.postSticky(new EventVocableSelected(selectedVocable));
+    }
+
+    /**********************************************************************************************/
+
+    // Presenter Loader methods
+
+    /**********************************************************************************************/
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                getActivity(),
+                DictionaryProvider.CONTENT_URI,
+                DictionaryContract.Schema.ALL_COLUMNS,
+                null,
+                null,
+                DictionaryContract.Schema.COLUMN_NAME + " ASC"
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        dictionaryListViewAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        dictionaryListViewAdapter.swapCursor(null);
     }
 }
 
