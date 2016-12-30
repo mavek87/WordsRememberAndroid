@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.main_menu;
 
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 
 import java.lang.reflect.Proxy;
@@ -35,7 +34,7 @@ public class MainMenuPresenter implements Presenter{
         onViewDetached();
     }
 
-    public void onButtonManageDictionaryClicked() {
+    void onButtonManageDictionaryClicked() {
         view.startDictionaryManagement();
     }
 }

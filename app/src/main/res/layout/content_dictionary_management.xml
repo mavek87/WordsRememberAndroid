@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_dictionary_manipulation"
+    android:id="@+id/content_dictionary_management"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,12 +10,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.DictionaryManipulationActivity"
-    tools:showIn="@layout/activity_dictionary_manipulation">
+    tools:context=".dictionary.DictionaryManagementActivity"
+    tools:showIn="@layout/activity_dictionary_management">
 
     <fragment
-        android:id="@+id/activity_dictionary_manipulation_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.DictionaryManipulationFragment"
+        android:id="@+id/activity_dictionary_management_fragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.DictionaryManagementFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

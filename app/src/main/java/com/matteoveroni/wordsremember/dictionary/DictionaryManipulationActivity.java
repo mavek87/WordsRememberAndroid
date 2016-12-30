@@ -14,19 +14,17 @@ import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 
 public class DictionaryManipulationActivity extends AppCompatActivity
-        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationActivityPresenter> {
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
-    private DictionaryManipulationActivityPresenter presenter;
-    private static final int PRESENTER_ID = 1;
+    private DictionaryManipulationPresenter presenter;
 
     private Toolbar toolbar;
 
-    DictionaryManipulationFragment manipulationFragment;
+    private DictionaryManipulationFragment manipulationFragment;
 
     /**********************************************************************************************/
 
@@ -60,7 +58,9 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dictionary_manipulation);
-        getSupportLoaderManager().initLoader(PRESENTER_ID, null, this);
+
+        getSupportLoaderManager().initLoader(1, null, this);
+
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -104,17 +104,17 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     /**********************************************************************************************/
 
     @Override
-    public Loader<DictionaryManipulationActivityPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManipulationActivityPresenter> loader, DictionaryManipulationActivityPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryManipulationPresenter> loader, DictionaryManipulationPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManipulationActivityPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
         presenter = null;
     }
 

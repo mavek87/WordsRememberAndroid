@@ -4,7 +4,6 @@ import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.interfaces.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -13,7 +12,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 
-public class DictionaryManipulationActivityPresenter implements Presenter {
+public class DictionaryManipulationPresenter implements Presenter {
 
     public static final String TAG = "DictManipulPresenter";
 
@@ -22,7 +21,7 @@ public class DictionaryManipulationActivityPresenter implements Presenter {
     private final DictionaryDAO model;
     private DictionaryManipulationView view;
 
-    public DictionaryManipulationActivityPresenter(DictionaryDAO model) {
+    public DictionaryManipulationPresenter(DictionaryDAO model) {
         this.model = model;
     }
 

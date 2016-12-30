@@ -93,15 +93,8 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public void onResume() {
-        eventBus.register(this);
         getLoaderManager().restartLoader(0, null, this);
         super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        eventBus.unregister(this);
-        super.onPause();
     }
 
     @Override
@@ -116,7 +109,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         int position = contextMenuInfo.position;
-//        long targetVocableID = dictionaryListViewAdapter.getItemId(position);
 
         Cursor cursor = dictionaryListViewAdapter.getCursor();
         cursor.moveToPosition(position);
@@ -150,13 +142,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
         Log.i(TAG, selectedVocable.toString());
         eventBus.postSticky(new EventVocableSelected(selectedVocable));
-    }
-
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        if (dictionaryListViewAdapter != null)
-            dictionaryListViewAdapter.notifyDataSetChanged();
     }
 }
 

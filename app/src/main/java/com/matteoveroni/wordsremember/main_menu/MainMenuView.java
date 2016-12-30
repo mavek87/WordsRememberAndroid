@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.main_menu.interfaces;
+package com.matteoveroni.wordsremember.main_menu;
 
 public interface MainMenuView {
     void startDictionaryManagement();

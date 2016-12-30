@@ -12,7 +12,6 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
-import com.matteoveroni.wordsremember.main_menu.interfaces.MainMenuView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

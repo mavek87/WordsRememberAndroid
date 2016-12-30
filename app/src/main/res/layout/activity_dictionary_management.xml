@@ -8,26 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".dictionary.DictionaryManagementActivity">
 
-    <LinearLayout
-        android:id="@+id/activity_dictionary_management_smartphone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:context=".dictionary.DictionaryManagementActivity">
-
-        <FrameLayout
-            android:id="@+id/dictionary_management_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <FrameLayout
-            android:id="@+id/dictionary_manipulation_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    <include layout="@layout/content_dictionary_management" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/dictionary_management_floating_action_button"
