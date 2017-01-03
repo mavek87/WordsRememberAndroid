@@ -17,12 +17,12 @@ public final class TranslationsContract {
         public static final String TABLE_NAME = "translations";
 
         public static final String COLUMN_ID = BaseColumns._ID;
-        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_TRANSLATION = "translation";
 
         public static final String[] ALL_COLUMNS =
                 {
                         COLUMN_ID,
-                        COLUMN_NAME
+                        COLUMN_TRANSLATION
                 };
     }
 }

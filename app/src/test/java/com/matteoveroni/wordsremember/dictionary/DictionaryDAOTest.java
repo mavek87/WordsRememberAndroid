@@ -35,7 +35,7 @@ public class DictionaryDAOTest {
 //    public void testB() {
 //        Cursor cursor = mock(Cursor.class);
 //        DictionaryDAO.cursorToVocable(cursor);
-//        when(cursor.getString(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_NAME))).thenReturn()
+//        when(cursor.getString(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_TRANSLATION))).thenReturn()
 //
 //
 //    }

@@ -2,24 +2,28 @@ package com.matteoveroni.wordsremember.provider.contracts;
 
 import android.database.sqlite.SQLiteDatabase;
 
-public class TableDictionaryTranslations {
+/**
+ * @author Matteo Veroni
+ */
+
+public class DictionaryTranslationsContract {
 
     public static final String NAME = "dictionary_translations";
 
-    public static final String COLUMN_DICTIONARY_WORD_ID = "_ID";
-    public static final String COLUMN_TRANSLATION_WORD_ID = "translation_word_id";
+    public static final String COLUMN_DICTIONARY_VOCABLE_ID = "vocable_id";
+    public static final String COLUMN_TRANSLATIONS_TRANSLATION_ID = "translation_id";
 
     public static final String[] ALL_COLUMNS =
             {
-                    COLUMN_DICTIONARY_WORD_ID,
-                    COLUMN_TRANSLATION_WORD_ID
+                    COLUMN_DICTIONARY_VOCABLE_ID,
+                    COLUMN_TRANSLATIONS_TRANSLATION_ID
             };
 
     private static class Queries {
         private static final String CREATE_TABLE = "create table "
                 + NAME + " ( "
-                + COLUMN_DICTIONARY_WORD_ID + " integer primary key, "
-                + COLUMN_TRANSLATION_WORD_ID + " integer primary key"
+                + COLUMN_DICTIONARY_VOCABLE_ID + " integer primary key, "
+                + COLUMN_TRANSLATIONS_TRANSLATION_ID + " integer primary key"
                 + " );";
 
         private static final String DROP_TABLE = "drop table if exists " + NAME;

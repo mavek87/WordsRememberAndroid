@@ -29,7 +29,7 @@ import java.util.HashSet;
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
-    public static final String TAG = "DICTIONARY_PROVIDER";
+    public static final String TAG = "DictionaryProvider";
 
     public static final String CONTENT_SCHEME = "content://";
 
