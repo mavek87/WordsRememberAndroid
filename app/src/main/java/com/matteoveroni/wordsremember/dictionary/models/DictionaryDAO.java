@@ -10,6 +10,10 @@ import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
  * the dictionary content provider.
@@ -27,6 +31,12 @@ public class DictionaryDAO {
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
+    }
+
+    public Observable<Word> rxSaveVocable(Word vocableToSave) {
+        return Observable.just(vocableToSave)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**********************************************************************************************/

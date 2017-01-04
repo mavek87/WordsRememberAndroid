@@ -27,7 +27,8 @@ public class AsyncSaveVocableHandler extends AsyncQueryHandler {
             if (!createdRowIdUri.isEmpty())
                 event = new EventAsyncSaveVocableCompleted(Long.valueOf(createdRowIdUri));
         } finally {
-            if (event == null) event = new EventAsyncSaveVocableCompleted(-1);
+            if (event == null)
+                event = new EventAsyncSaveVocableCompleted(-1);
             EventBus.getDefault().postSticky(event);
         }
     }

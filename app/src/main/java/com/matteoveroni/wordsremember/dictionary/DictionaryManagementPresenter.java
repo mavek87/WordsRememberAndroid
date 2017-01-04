@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.lang.reflect.Proxy;
 import java.util.Random;
 
+import rx.Observer;
+
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
  *
@@ -128,7 +130,32 @@ public class DictionaryManagementPresenter implements Presenter {
 
     private void populateDatabaseForTestPurposes() {
         Word randomVocableToSave = new Word(generateRandomWord());
-        model.saveVocable(randomVocableToSave);
+//        model.saveVocable(randomVocableToSave);
+
+        Observer
+
+
+
+        model.rxSaveVocable(randomVocableToSave).subscribe(
+                new Observer<Word>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Word word) {
+                        String url = "http://www.google.com";
+                        String charset = "UTF-8";
+
+                        model.saveVocable(word);
+                    }
+                }
+        );
     }
 
     private String generateRandomWord() {

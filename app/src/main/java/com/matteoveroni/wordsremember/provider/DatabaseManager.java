@@ -102,8 +102,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void exportDBOnSD() {
         File sd = Environment.getExternalStorageDirectory();
         File data = Environment.getDataDirectory();
-        FileChannel source = null;
-        FileChannel destination = null;
+        FileChannel source;
+        FileChannel destination;
         String currentDBPath = "/data/" + "com.matteoveroni.wordsremember" + "/databases/" + NAME;
         String backupDBPath = NAME;
         File currentDB = new File(data, currentDBPath);

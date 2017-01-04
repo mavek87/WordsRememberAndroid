@@ -19,6 +19,7 @@ import java.util.HashSet;
  * Content Provider for the dictionary.
  * <p>
  * Usefull resources on Content Providers:
+ * https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
  * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
@@ -35,23 +36,22 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
-    public static final String BASE_PATH = "dictionary";
+    public static final String DICTIONARY_BASE_PATH = "dictionary";
 
-    public static final Uri CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + BASE_PATH);
+    public static final Uri CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + DICTIONARY_BASE_PATH);
 
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE;
+    public static final String CONTENT_DIR_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE;
 
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
-    // TODO: searching how the id's in a content provider works (auto generated id ????)
-    private static final int VOCABLES_ID = 10;
-    private static final int VOCABLE_ID = 20;
+    private static final int VOCABLES_ID = 1;
+    private static final int VOCABLE_ID = 2;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH, VOCABLES_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH + "/#", VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_BASE_PATH, VOCABLES_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_BASE_PATH + "/#", VOCABLE_ID);
     }
 
     private DatabaseManager databaseManager;
@@ -61,7 +61,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case VOCABLES_ID:
-                return CONTENT_TYPE;
+                return CONTENT_DIR_TYPE;
             case VOCABLE_ID:
                 return CONTENT_ITEM_TYPE;
             default:
@@ -127,7 +127,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(BASE_PATH + "/" + id);
+        return Uri.parse(DICTIONARY_BASE_PATH + "/" + id);
     }
 
     // TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
