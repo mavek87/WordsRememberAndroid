@@ -27,7 +27,7 @@ public class DictionaryDAO {
 
     private final ContentResolver contentResolver;
 
-    private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
+    private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.DICTIONARY_CONTENT_URI;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();

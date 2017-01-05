@@ -7,7 +7,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -128,7 +127,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                DictionaryProvider.CONTENT_URI,
+                DictionaryProvider.DICTIONARY_CONTENT_URI,
                 DictionaryContract.Schema.ALL_COLUMNS,
                 null,
                 null,
