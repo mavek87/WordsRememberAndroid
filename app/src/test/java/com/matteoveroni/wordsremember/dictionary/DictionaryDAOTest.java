@@ -1,12 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary;
 
-import android.database.Cursor;
 import android.test.mock.MockContext;
 
-import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
-import com.matteoveroni.wordsremember.pojo.Word;
-
-import junit.framework.Assert;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class DictionaryDAOTest {
 

@@ -1,16 +1,14 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
@@ -19,8 +17,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 import java.util.Random;
-
-import rx.Observer;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
@@ -74,12 +70,12 @@ public class DictionaryManagementPresenter implements Presenter {
 
     /**********************************************************************************************/
 
-    void onViewCreatedForTheFirstTime(Context context) {
-        populateDatabaseForTestPurposes();
+    public void onViewCreated(Context context) {
+//        populateDatabaseForTestPurposes(context);
         exportDatabaseOnSd(context);
     }
 
-    void onCreateVocableRequest() {
+    public void onCreateVocableRequest() {
         view.goToManipulationView(null);
     }
 
@@ -128,48 +124,26 @@ public class DictionaryManagementPresenter implements Presenter {
 
     /**********************************************************************************************/
 
-    private void populateDatabaseForTestPurposes() {
+    private void populateDatabaseForTestPurposes(Context context) {
+//        DatabaseManager db = DatabaseManager.getInstance(context);
+//        db.resetDatabase();
         Word randomVocableToSave = new Word(generateRandomWord());
-//        model.saveVocable(randomVocableToSave);
-
-        Observer
-
-
-
-        model.rxSaveVocable(randomVocableToSave).subscribe(
-                new Observer<Word>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Word word) {
-                        String url = "http://www.google.com";
-                        String charset = "UTF-8";
-
-                        model.saveVocable(word);
-                    }
-                }
-        );
+        model.saveVocable(randomVocableToSave);
     }
 
     private String generateRandomWord() {
         final Random randomGenerator = new Random();
-        final int MAX_NUM_LETTERS_FOR_WORD = 30;
-        final int MIN_NUM_LETTERS_FOR_WORD = 3;
-        final int NUM_OF_ASCII_CHARACTERS = 25;
-        final int FIRST_ASCII_LETTER = 97;
+        final int MAX_NUM_LETTERS = 30;
+        final int MIN_NUM_LETTERS = 3;
+        final int FIRST_ASCII_CHAR_CODE = 97;
+        final int ASCII_CHAR_CODE = 25;
         String generatedWord = "";
 
-        int numberOfLetters = (randomGenerator.nextInt(MAX_NUM_LETTERS_FOR_WORD - MIN_NUM_LETTERS_FOR_WORD)) + MIN_NUM_LETTERS_FOR_WORD;
+        // MIN_NUM_LETTERS <= numbersOfLetters <= MAX_NUM_LETTERS
+        int numberOfLetters = (randomGenerator.nextInt(MAX_NUM_LETTERS - MIN_NUM_LETTERS)) + MIN_NUM_LETTERS;
 
         for (int letter = 0; letter < numberOfLetters; letter++) {
-            char randomChar = (char) (randomGenerator.nextInt(NUM_OF_ASCII_CHARACTERS) + FIRST_ASCII_LETTER);
+            char randomChar = (char) (FIRST_ASCII_CHAR_CODE + randomGenerator.nextInt(ASCII_CHAR_CODE));
             generatedWord += randomChar;
         }
         return generatedWord;

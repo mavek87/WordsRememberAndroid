@@ -13,21 +13,20 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  * Dagger2 components for dependency injection are built here
  *
  * @author Matteo Veroni
- * @version 0.0.16
+ * @version 0.0.17
  */
 public class MyApp extends Application {
 
     public static final String NAME = "WordsRemember";
-    public static int DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER = 0;
 
-    private static ModelComponent modelComponent;
+    private static ModelComponent MODEL_COMPONENT;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         // Dagger2 component. Used for injecting models to each class specified by ModelComponent interface.
-        modelComponent = DaggerModelComponent
+        MODEL_COMPONENT = DaggerModelComponent
                 .builder()
                 .appModule(new AppModule(this))
                 .modelModule(new ModelModule())
@@ -35,7 +34,7 @@ public class MyApp extends Application {
     }
 
     public static ModelComponent getModelComponent() {
-        return modelComponent;
+        return MODEL_COMPONENT;
     }
 
     public static MyApp getInjectorsForApp(Context context) {

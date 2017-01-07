@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 
 import butterknife.BindView;

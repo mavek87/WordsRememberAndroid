@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
@@ -19,11 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.matteoveroni.wordsremember.dictionary.factories.DictionaryFragmentFactory.DictionaryFragmentType;
-
 /**
  * Dictionary Management Activity
- *
+ * <p>
  * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
  *
  * @author Matteo Veroni
@@ -87,17 +86,13 @@ public class DictionaryManagementActivity extends AppCompatActivity
         getSupportLoaderManager().initLoader(1, null, this);
 
         managementFragment = (DictionaryManagementFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_management_fragment);
-
-        MyApp.DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER++;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
-        if (MyApp.DICTIONARY_MANAGEMENT_ACTIVITY_CREATION_COUNTER == 1) {
-            presenter.onViewCreatedForTheFirstTime(getApplicationContext());
-        }
+        presenter.onViewCreated(getApplicationContext());
     }
 
     @Override

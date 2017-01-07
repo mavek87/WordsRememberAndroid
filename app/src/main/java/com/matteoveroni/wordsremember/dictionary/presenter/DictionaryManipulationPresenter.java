@@ -1,10 +1,11 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,11 +63,11 @@ public class DictionaryManipulationPresenter implements Presenter {
 
     /**********************************************************************************************/
 
-    void onVocableToManipulateRetrieved(Word vocableToManipulate) {
+    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
         view.populateViewForVocable(vocableToManipulate);
     }
 
-    void onSaveRequest(Word currentVocableInView) {
+    public void onSaveRequest(Word currentVocableInView) {
         if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
             if (currentVocableInView.getId() < 0) {
                 model.asyncSaveVocable(currentVocableInView);

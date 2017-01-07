@@ -1,18 +1,21 @@
-package com.matteoveroni.wordsremember.dictionary.models;
+package com.matteoveroni.wordsremember.dictionary.model;
 
+import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
@@ -26,17 +29,13 @@ public class DictionaryDAO {
     public static final String TAG = "DictionaryDAO";
 
     private final ContentResolver contentResolver;
+    private final AsyncVocableHandler asyncVocableHandler;
 
-    private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.DICTIONARY_CONTENT_URI;
+    private static final Uri CONTENT_PROVIDER_URI = DictionaryProvider.CONTENT_URI;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
-    }
-
-    public Observable<Word> rxSaveVocable(Word vocableToSave) {
-        return Observable.just(vocableToSave)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread());
+        this.asyncVocableHandler = new AsyncVocableHandler(this.contentResolver);
     }
 
     /**********************************************************************************************/
@@ -47,7 +46,7 @@ public class DictionaryDAO {
 
     public void asyncSaveVocable(Word vocable) {
         if (isVocableValid(vocable) && vocable.getId() < 0) {
-            new AsyncSaveVocableHandler(contentResolver).startInsert(
+            new AsyncVocableHandler(contentResolver).startInsert(
                     1,
                     null,
                     CONTENT_PROVIDER_URI,
@@ -66,7 +65,7 @@ public class DictionaryDAO {
 
             final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-            new AsyncGetVocableByIdHandler(contentResolver).startQuery(
+            asyncVocableHandler.startQuery(
                     1,
                     null,
                     uri,
@@ -87,7 +86,7 @@ public class DictionaryDAO {
 
             final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_id).buildUpon().build();
 
-            new AsyncUpdateVocableHandler(contentResolver).startUpdate(
+            asyncVocableHandler.startUpdate(
                     1,
                     null,
                     uri,
@@ -107,7 +106,7 @@ public class DictionaryDAO {
 
             final Uri uri = Uri.withAppendedPath(CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
 
-            new AsyncDeleteVocableHandler(contentResolver).startDelete(
+            asyncVocableHandler.startDelete(
                     1,
                     null,
                     uri,
@@ -222,4 +221,58 @@ public class DictionaryDAO {
     private boolean isVocableValid(Word vocable) {
         return vocable != null && vocable.getName() != null;
     }
+
+    /**
+     * AsyncVocableHandler private inner class
+     */
+    private class AsyncVocableHandler extends AsyncQueryHandler {
+
+        private final EventBus eventBus = EventBus.getDefault();
+
+        AsyncVocableHandler(ContentResolver contentResolver) {
+            super(contentResolver);
+        }
+
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            EventAsyncGetVocableByIdCompleted event;
+            if (cursor == null) {
+                event = new EventAsyncGetVocableByIdCompleted(null);
+            } else {
+                cursor.moveToFirst();
+                Word vocable = DictionaryDAO.cursorToVocable(cursor);
+                event = new EventAsyncGetVocableByIdCompleted(vocable);
+            }
+            eventBus.postSticky(event);
+        }
+
+        @Override
+        protected void onInsertComplete(int token, Object cookie, Uri uri) {
+            EventAsyncSaveVocableCompleted event = null;
+            try {
+                final String createdRowIdUri = uri.getLastPathSegment();
+                if (!createdRowIdUri.isEmpty())
+                    event = new EventAsyncSaveVocableCompleted(Long.valueOf(createdRowIdUri));
+            } finally {
+                if (event == null)
+                    event = new EventAsyncSaveVocableCompleted(-1);
+                eventBus.postSticky(event);
+            }
+        }
+
+        @Override
+        protected void onUpdateComplete(int token, Object cookie, int numberOfUpdatedRows) {
+            eventBus.postSticky(new EventAsyncUpdateVocableCompleted(numberOfUpdatedRows));
+        }
+
+
+        @Override
+        protected void onDeleteComplete(int token, Object cookie, int numberOfDeletedRows) {
+            eventBus.postSticky(new EventAsyncDeleteVocableCompleted(numberOfDeletedRows));
+        }
+    }
+
+
 }
+
+

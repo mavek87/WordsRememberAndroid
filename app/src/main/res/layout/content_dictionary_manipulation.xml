@@ -10,12 +10,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.DictionaryManipulationActivity"
+    tools:context=".dictionary.view.DictionaryManipulationActivity"
     tools:showIn="@layout/activity_dictionary_manipulation">
 
     <fragment
         android:id="@+id/activity_dictionary_manipulation_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.DictionaryManipulationFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

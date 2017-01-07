@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.ListView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.models.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
@@ -127,7 +127,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                DictionaryProvider.DICTIONARY_CONTENT_URI,
+                DictionaryProvider.CONTENT_URI,
                 DictionaryContract.Schema.ALL_COLUMNS,
                 null,
                 null,
