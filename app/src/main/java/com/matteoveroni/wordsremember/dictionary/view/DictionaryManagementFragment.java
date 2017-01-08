@@ -127,7 +127,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                DictionaryProvider.CONTENT_URI,
+                DictionaryProvider.DICTIONARY_CONTENT_URI,
                 DictionaryContract.Schema.ALL_COLUMNS,
                 null,
                 null,

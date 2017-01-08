@@ -31,39 +31,44 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String TAG = "DictionaryProvider";
 
-    public static final String CONTENT_SCHEME = "content://";
+    // DatabaseManager singleton instance
 
+    private DatabaseManager databaseManager;
+
+    // Content Provider Parameters
+
+    public static final String CONTENT_SCHEME = "content://";
     public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
-    public static final String BASE_PATH = "dictionary";
+    // Dictionary provider
 
-    public static final Uri CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + BASE_PATH);
+    public static final String DICTIONARY_PATH = "dictionary";
+    public static final Uri DICTIONARY_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + DICTIONARY_PATH);
+    private static final int VOCABLES_LIST = 1;
+    private static final int VOCABLE_ID = 2;
 
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE;
-
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
-
-    // TODO: searching how the id's in a content provider works (auto generated id ????)
-    private static final int VOCABLES_ID = 10;
-    private static final int VOCABLE_ID = 20;
+    // URI Matcher
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH, VOCABLES_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, BASE_PATH + "/#", VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH, VOCABLES_LIST);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH + "/#", VOCABLE_ID);
     }
 
-    private DatabaseManager databaseManager;
+    // MIME type
+
+    public static final String CONTENT_TYPE_MULTIPLE = ContentResolver.CURSOR_DIR_BASE_TYPE;
+    public static final String CONTENT_TYPE_SINGLE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
     @Nullable
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
-            case VOCABLES_ID:
-                return CONTENT_TYPE;
+            case VOCABLES_LIST:
+                return CONTENT_TYPE_MULTIPLE;
             case VOCABLE_ID:
-                return CONTENT_ITEM_TYPE;
+                return CONTENT_TYPE_SINGLE;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -85,7 +90,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case VOCABLES_ID:
+            case VOCABLES_LIST:
                 break;
             case VOCABLE_ID:
                 selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
@@ -96,7 +101,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
@@ -107,7 +112,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParameterLimitValue(uri)
         );
-        // make sure that potential listeners are getting notified
+
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -116,29 +121,30 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         long id;
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case VOCABLES_ID:
+            case VOCABLES_LIST:
                 id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(BASE_PATH + "/" + id);
+        return Uri.parse(DICTIONARY_PATH + "/" + id);
     }
 
     // TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int updatedRowsCounter;
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case VOCABLES_ID:
+            case VOCABLES_LIST:
                 updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
@@ -159,7 +165,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     }
 
     /**
-     * TODO: check VOCABLE_ID case not sure it works
+     * TODO: check VOCABLE_ITEM case not sure it works
      * TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
      *
      * @param uri
@@ -170,11 +176,11 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int deletedRowsCounter;
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
-            case VOCABLES_ID:
+            case VOCABLES_LIST:
                 deletedRowsCounter = db.delete(DictionaryContract.Schema.TABLE_NAME, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
@@ -192,6 +198,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
         return deletedRowsCounter;
     }
@@ -259,8 +266,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //
 //    public static final Uri DICTIONARY_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/" + DICTIONARY_PATH);
 //
-//    private static final int VOCABLES_CODE = 1;
-//    private static final int VOCABLE_ID_CODE = 2;
+//    private static final int VOCABLES_LIST = 1;
+//    private static final int VOCABLE_ITEM = 2;
 //
 //    // Translations Provider
 //
@@ -276,8 +283,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 //
 //    static {
-//        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH, VOCABLES_CODE);
-//        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH + "/#", VOCABLE_ID_CODE);
+//        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH, VOCABLES_LIST);
+//        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH + "/#", VOCABLE_ITEM);
 //        URI_MATCHER.addURI(CONTENT_AUTHORITY, TRANSLATIONS_PATH, TRANSLATIONS_CODE);
 //        URI_MATCHER.addURI(CONTENT_AUTHORITY, TRANSLATIONS_PATH + "/#", TRANSLATION_ID_CODE);
 //    }
@@ -292,9 +299,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //    @Override
 //    public String getType(Uri uri) {
 //        switch (URI_MATCHER.match(uri)) {
-//            case VOCABLES_CODE:
+//            case VOCABLES_LIST:
 //                return MYME_CONTENT_MULTIPLE;
-//            case VOCABLE_ID_CODE:
+//            case VOCABLE_ITEM:
 //                return MYME_CONTENT_SINGLE;
 //            case TRANSLATIONS_CODE:
 //                return MYME_CONTENT_MULTIPLE;
@@ -322,9 +329,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //
 //        int uriType = URI_MATCHER.match(uri);
 //        switch (uriType) {
-//            case VOCABLES_CODE:
+//            case VOCABLES_LIST:
 //                break;
-//            case VOCABLE_ID_CODE:
+//            case VOCABLE_ITEM:
 //                selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
 //                final String id = uri.getLastPathSegment();
 //                selectionArgs = new String[]{id};
@@ -357,7 +364,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //
 //        final int uriType = URI_MATCHER.match(uri);
 //        switch (uriType) {
-//            case VOCABLES_CODE:
+//            case VOCABLES_LIST:
 //                id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
 //                break;
 //            default:
@@ -375,10 +382,10 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //
 //        final int uriType = URI_MATCHER.match(uri);
 //        switch (uriType) {
-//            case VOCABLES_CODE:
+//            case VOCABLES_LIST:
 //                updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME, values, selection, selectionArgs);
 //                break;
-//            case VOCABLE_ID_CODE:
+//            case VOCABLE_ITEM:
 //                String id = uri.getLastPathSegment();
 //                updatedRowsCounter = db.update(
 //                        DictionaryContract.Schema.TABLE_NAME,
@@ -396,7 +403,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //    }
 //
 //    /**
-//     * TODO: check VOCABLE_ID_CODE case not sure it works
+//     * TODO: check VOCABLE_ITEM case not sure it works
 //     * TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
 //     *
 //     * @param uri
@@ -410,10 +417,10 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //        SQLiteDatabase db = databaseManager.getWritableDatabase();
 //
 //        switch (URI_MATCHER.match(uri)) {
-//            case VOCABLES_CODE:
+//            case VOCABLES_LIST:
 //                deletedRowsCounter = db.delete(DictionaryContract.Schema.TABLE_NAME, selection, selectionArgs);
 //                break;
-//            case VOCABLE_ID_CODE:
+//            case VOCABLE_ITEM:
 //                final String id = uri.getLastPathSegment();
 //
 //                // TODO: sanitize id String from SQL Injection using regular expression to extract only valid number
