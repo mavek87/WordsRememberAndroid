@@ -9,12 +9,14 @@ import android.provider.BaseColumns;
  */
 public final class DictionaryContract {
 
+    public static final String NAME = "dictionary";
+
     private DictionaryContract() {
     }
 
     public static final class Schema implements BaseColumns {
 
-        public static final String TABLE_NAME = "dictionary";
+        public static final String TABLE_NAME = NAME;
 
         public static final String COLUMN_ID = BaseColumns._ID;
         public static final String COLUMN_NAME = "name";

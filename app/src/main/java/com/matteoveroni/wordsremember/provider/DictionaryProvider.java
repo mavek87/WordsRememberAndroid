@@ -11,22 +11,25 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 
 import java.util.Arrays;
 import java.util.HashSet;
 
 /**
  * Content Provider for the dictionary.
- * <p>
- * Usefull resources on Content Providers:
- * <p>
+ *
+ * @author Matteo Veroni
+ */
+
+/**
+ * Useful resources on Content Providers:
+ *
  * https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
  * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
  * http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
- *
- * @author Matteo Veroni
  */
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
@@ -44,15 +47,13 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     // Dictionary provider
 
-    public static final String DICTIONARY_PATH = "dictionary";
-    public static final Uri DICTIONARY_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + DICTIONARY_PATH);
+    public static final Uri DICTIONARY_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + DictionaryContract.NAME);
     private static final int VOCABLES = 1;
     private static final int VOCABLE_ID = 2;
 
     // Translations provider
 
-    public static final String TRANSLATIONS_PATH = "translations";
-    public static final Uri TRANSLATIONS_CONTENT_URI = Uri.parse(CONTENT_AUTHORITY + "/" + TRANSLATIONS_PATH);
+    public static final Uri TRANSLATIONS_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + TranslationsContract.NAME);
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
 
@@ -61,10 +62,10 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH, VOCABLES);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DICTIONARY_PATH + "/#", VOCABLE_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, TRANSLATIONS_PATH, TRANSLATIONS);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, TRANSLATIONS_PATH + "/#", TRANSLATION_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DictionaryContract.NAME, VOCABLES);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DictionaryContract.NAME + "/#", VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
     }
 
     // MIME type
@@ -148,7 +149,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(DICTIONARY_PATH + "/" + id);
+        return Uri.parse(DictionaryContract.NAME + "/" + id);
     }
 
     // TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
