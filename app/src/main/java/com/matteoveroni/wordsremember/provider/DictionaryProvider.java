@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.utilities.Util;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,7 +35,7 @@ import java.util.HashSet;
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
-    public static final String TAG = "DictionaryProvider";
+    public static final String TAG = Util.generateTag(DictionaryProvider.class);
 
     // Database manager/helper singleton instance
 
@@ -42,18 +43,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     // Content Provider Parameters
 
-    public static final String CONTENT_SCHEME = "content://";
+    public static final String SCHEME = "content://";
     public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
 
     // Dictionary provider
 
-    public static final Uri DICTIONARY_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + DictionaryContract.NAME);
     private static final int VOCABLES = 1;
     private static final int VOCABLE_ID = 2;
 
     // Translations provider
 
-    public static final Uri TRANSLATIONS_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY + "/" + TranslationsContract.NAME);
+    public static final Uri TRANSLATIONS_CONTENT_URI = Uri.parse(SCHEME + CONTENT_AUTHORITY + "/" + TranslationsContract.NAME);
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
 

@@ -1,6 +1,9 @@
 package com.matteoveroni.wordsremember.provider.contracts;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
+
+import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 
 /**
  * Contract class that defines Dictionary Table Schema
@@ -10,6 +13,9 @@ import android.provider.BaseColumns;
 public final class DictionaryContract {
 
     public static final String NAME = "dictionary";
+
+    public static final Uri CONTENT_URI =
+            Uri.parse(DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME);
 
     private DictionaryContract() {
     }

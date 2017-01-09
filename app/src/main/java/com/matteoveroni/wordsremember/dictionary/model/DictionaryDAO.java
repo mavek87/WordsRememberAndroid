@@ -12,8 +12,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract.Schema;
+import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -31,7 +30,7 @@ public class DictionaryDAO {
     private final ContentResolver contentResolver;
     private final AsyncVocableHandler asyncVocableHandler;
 
-    private static final Uri VOCABLES_CONTENT_PROVIDER_URI = DictionaryProvider.DICTIONARY_CONTENT_URI;
+    private static final Uri VOCABLES_CONTENT_PROVIDER_URI = DictionaryContract.CONTENT_URI;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
@@ -59,8 +58,8 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String[] projection = {Schema.COLUMN_NAME};
-            final String selection = Schema.COLUMN_ID + " = ?";
+            final String[] projection = {DictionaryContract.Schema.COLUMN_NAME};
+            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
             final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
@@ -81,7 +80,7 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_id = String.valueOf(id);
 
-            final String selection = Schema.COLUMN_ID + " = ?";
+            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
             final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
@@ -101,7 +100,7 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String selection = Schema.COLUMN_ID + " = ?";
+            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
             final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
@@ -117,8 +116,8 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(Schema.COLUMN_NAME)));
-        vocable.setId(cursor.getLong(cursor.getColumnIndex(Schema.COLUMN_ID)));
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_NAME)));
+        vocable.setId(cursor.getLong(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_ID)));
         return vocable;
     }
 
@@ -131,8 +130,8 @@ public class DictionaryDAO {
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
 
-        final String[] projection = {Schema.COLUMN_NAME};
-        final String selection = Schema.COLUMN_ID + " = ?";
+        final String[] projection = {DictionaryContract.Schema.COLUMN_NAME};
+        final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
         final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
@@ -175,7 +174,7 @@ public class DictionaryDAO {
     public boolean updateVocable(long vocableID, Word newVocable) {
         final String str_id = String.valueOf(vocableID);
 
-        final String selection = Schema.COLUMN_ID + " = ?";
+        final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
         final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
@@ -190,7 +189,7 @@ public class DictionaryDAO {
         if (vocableID > 0) {
             final String str_id = String.valueOf(vocableID);
 
-            final String selection = Schema.COLUMN_ID + " = ?";
+            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
             final Uri vocableUri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
@@ -213,7 +212,7 @@ public class DictionaryDAO {
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
         if (isVocableValid(vocable)) {
-            values.put(Schema.COLUMN_NAME, vocable.getName());
+            values.put(DictionaryContract.Schema.COLUMN_NAME, vocable.getName());
         }
         return values;
     }
@@ -271,8 +270,6 @@ public class DictionaryDAO {
             eventBus.postSticky(new EventAsyncDeleteVocableCompleted(numberOfDeletedRows));
         }
     }
-
-
 }
 
 
