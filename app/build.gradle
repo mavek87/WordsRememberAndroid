@@ -43,6 +43,8 @@ dependencies {
     apt 'com.google.dagger:dagger-compiler:2.7'
     compile 'com.google.dagger:dagger:2.7'
     provided 'javax.annotation:jsr250-api:1.0'
+    // Roboelectric (unit tests)
+    testCompile "org.robolectric:robolectric:3.2.1"
     // required if you want to use Mockito for unit tests
     testCompile 'org.mockito:mockito-core:1.+'
     // required if you want to use Mockito for Android instrumentation tests
