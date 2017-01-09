@@ -70,6 +70,45 @@ public class DatabaseManagerTest {
     }
 
     @Test
+    public void testWhenTheDBManagerIsCreatedThenTheDictionaryTableShouldBeCreated() {
+        Cursor cursor;
+        final SQLiteDatabase db = getReadableDatabase();
+        cursor = db.query(DictionaryContract.Schema.TABLE_NAME, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+        assertNotNull("cursor is null after a query on a table that should exists", cursor);
+        assertTrue("cursor contain some query result when it should not", cursor.getCount() == 0);
+        destroyCursor(cursor);
+        assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+    }
+
+    @Test(expected = SQLiteException.class)
+    public void testWhenQueryExecutedOnInvalidTableSQLiteExceptionOccurs() {
+        Cursor cursor = null;
+        try {
+            final SQLiteDatabase db = getReadableDatabase();
+            cursor = db.query(INVALID_TABLE, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+        } catch (SQLiteException ex) {
+            throw new SQLiteException();
+        } finally {
+            destroyCursor(cursor);
+            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+        }
+    }
+
+    @Test(expected = SQLiteException.class)
+    public void testWhenQueryExecutedUsingInvalidColumnSQLiteExceptionOccurs() {
+        Cursor cursor = null;
+        try {
+            final SQLiteDatabase db = getReadableDatabase();
+            cursor = db.query(DictionaryContract.Schema.TABLE_NAME, INVALID_COLUMN, "", null, null, null, null, null);
+        } catch (SQLiteException ex) {
+            throw new SQLiteException();
+        } finally {
+            destroyCursor(cursor);
+            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+        }
+    }
+
+    @Test
     public void testIfValidVocableInsertedInValidTableTheInsertionSucceed() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DictionaryContract.Schema.COLUMN_NAME, VALID_VOCABLE_NAME);
@@ -87,34 +126,6 @@ public class DatabaseManagerTest {
 
         destroyCursor(cursor);
         assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
-    }
-
-    @Test(expected = SQLiteException.class)
-    public void testWhenQueryExecutedOnInvalidTableSQLiteExceptionOccur() {
-        Cursor cursor = null;
-        try {
-            final SQLiteDatabase db = getReadableDatabase();
-            cursor = db.query(INVALID_TABLE, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
-        } catch (SQLiteException ex) {
-            throw new SQLiteException();
-        } finally {
-            destroyCursor(cursor);
-            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
-        }
-    }
-
-    @Test(expected = SQLiteException.class)
-    public void testWhenQueryExecutedUsingInvalidColumnSQLiteExceptionOccur() {
-        Cursor cursor = null;
-        try {
-            final SQLiteDatabase db = getReadableDatabase();
-            cursor = db.query(DictionaryContract.Schema.TABLE_NAME, INVALID_COLUMN, "", null, null, null, null, null);
-        } catch (SQLiteException ex) {
-            throw new SQLiteException();
-        } finally {
-            destroyCursor(cursor);
-            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
-        }
     }
 
     private SQLiteDatabase getReadableDatabase() {
