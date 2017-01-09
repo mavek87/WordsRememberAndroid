@@ -2,21 +2,14 @@ package com.matteoveroni.wordsremember.dictionary;
 
 import android.test.ProviderTestCase2;
 import android.test.mock.MockContentResolver;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * @author Matteo Veroni
@@ -24,12 +17,14 @@ import static org.mockito.Mockito.mock;
 
 /**
  * Reference Material:
- *
+ * <p>
  * http://stackoverflow.com/questions/5286876/android-code-example-for-testing-with-the-providertestcase2
  */
 
 @RunWith(MockitoJUnitRunner.class)
 public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
+
+    public static final String TAG = "DictDAOTest";
 
     @Mock
     private MockContentResolver mockResolver;
@@ -38,9 +33,26 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
         super(DictionaryProvider.class, DictionaryProvider.CONTENT_AUTHORITY);
     }
 
-    @Before
-    public void createMockResolver() {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        final String setupMessage = "setUp";
+
+        Log.d(TAG, setupMessage);
+        System.out.println(setupMessage);
+
         mockResolver = getMockContentResolver();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+
+        final String tearDownMessage = "tearDown";
+
+        Log.d(TAG, tearDownMessage);
+        System.out.println(tearDownMessage);
     }
 
     @Test
