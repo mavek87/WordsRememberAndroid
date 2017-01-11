@@ -28,10 +28,9 @@ public final class TagGenerator {
         if (length < 1) {
             tag = generateRandomUniqueTag();
         } else {
-            tag = isCapitalLetter(tag.charAt(0))
-                    ? tag
-                    : tag.substring(0, 1).toUpperCase() + tag.substring(1, tag.length());
-
+            if (!isCapitalLetter(tag.charAt(0))) {
+                 tag = capitalizeFirstLetter(tag);
+            }
             if (length > MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
                 tag = shrinkLengthOfString(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
             }
@@ -128,7 +127,14 @@ public final class TagGenerator {
     private boolean isCapitalLetter(char c) {
         final int FIRST_ASCII_CAPITAL_LETTER_CHAR = 65;
         final int LAST_ASCII_CAPITAL_LETTER_CHAR = 90;
-        return c >= FIRST_ASCII_CAPITAL_LETTER_CHAR || c <= LAST_ASCII_CAPITAL_LETTER_CHAR;
+        return c >= FIRST_ASCII_CAPITAL_LETTER_CHAR && c <= LAST_ASCII_CAPITAL_LETTER_CHAR;
+    }
+
+    private String capitalizeFirstLetter(String original) {
+        if (original == null || original.length() == 0) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 }
 

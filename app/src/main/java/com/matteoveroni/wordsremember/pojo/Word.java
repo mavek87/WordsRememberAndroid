@@ -36,7 +36,6 @@ public class Word {
         Word word = (Word) o;
 
         return getId() == word.getId() && getName().equals(word.getName());
-
     }
 
     @Override
