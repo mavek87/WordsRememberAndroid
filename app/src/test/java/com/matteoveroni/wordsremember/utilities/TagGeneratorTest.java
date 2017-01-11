@@ -23,30 +23,30 @@ public class TagGeneratorTest {
         };
         final Class aClass = anonymousClass.getClass();
 
-        final String generatedTag = tagGenerator.generateTag(aClass);
+        final String tag = tagGenerator.generateTag(aClass);
 
-        final String ERROR1 = "generated tag is null";
-        assertNotNull(ERROR1, generatedTag);
+        final String ERROR1 = "tag is null";
+        assertNotNull(ERROR1, tag);
 
-        final String ERROR2 = "generated tag doesn\'t start with the Tag suffix";
-        assertEquals(ERROR2, TagGenerator.TAG, generatedTag.substring(0, 3));
+        final String ERROR2 = "tag doesn\'t start with the Tag suffix";
+        assertEquals(ERROR2, TagGenerator.TAG, tag.substring(0, 3));
 
-        final String ERROR3 = "generated tag is not equal to Tag";
-        assertNotSame(ERROR3, "Tag", generatedTag);
+        final String ERROR3 = "tag is not equal to Tag";
+        assertNotSame(ERROR3, "Tag", tag);
 
-        final String ERROR4 = "generated tag is too long";
-        assertTrue(ERROR4, generatedTag.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
+        final String ERROR4 = "tag is too long";
+        assertTrue(ERROR4, tag.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
     }
 
     @Test
     public void testGenerateValidTagUsingValidCamelCaseClass() {
-        final String generatedTag = tagGenerator.generateTag(ValidCamelCaseClass.class);
+        final String tag = tagGenerator.generateTag(ValidCamelCaseClass.class);
 
-        final String ERROR1 = "generated tag is null";
-        assertNotNull(ERROR1, generatedTag);
+        final String ERROR1 = "tag is null";
+        assertNotNull(ERROR1, tag);
 
-        final String ERROR2 = "generated tag is not equal to ValidCamelCaseClass.class.getSimpleName() like expected";
-        assertEquals(ERROR2, ValidCamelCaseClass.class.getSimpleName(), generatedTag);
+        final String ERROR2 = "tag is not equal to ValidCamelCaseClass.class.getSimpleName() like expected";
+        assertEquals(ERROR2, ValidCamelCaseClass.class.getSimpleName(), tag);
     }
 
     @Test
@@ -54,13 +54,26 @@ public class TagGeneratorTest {
         class firstNotCapitalClass {
         }
 
-        final String generatedTag = tagGenerator.generateTag(firstNotCapitalClass.class);
+        final String tag = tagGenerator.generateTag(firstNotCapitalClass.class);
 
-        final String ERROR1 = "generated tag is null";
+        final String ERROR1 = "tag is null";
+        assertNotNull(ERROR1, tag);
+
+        final String ERROR2 = "tag is not equal to FirstNotCapitalClass like expected";
+        assertEquals(ERROR2, "FirstNotCapitalClass", tag);
+    }
+
+    @Test
+    public void testGenerateValidTagWithFirstLetterCapitalUsingAllLowercaseLettersClass() {
+        class lowercaselettersclass {
+        }
+        final String generatedTag = tagGenerator.generateTag(lowercaselettersclass.class);
+
+        final String ERROR1 = "tag is null";
         assertNotNull(ERROR1, generatedTag);
 
-        final String ERROR2 = "generated tag is not equal to FirstNotCapitalClass like expected";
-        assertEquals(ERROR2, "FirstNotCapitalClass", generatedTag);
+        final String ERROR2 = "tag is not equal to Lowercaselettersclass like expected";
+        assertEquals(ERROR2, "Lowercaselettersclass", generatedTag);
     }
 
     private class ValidCamelCaseClass {
