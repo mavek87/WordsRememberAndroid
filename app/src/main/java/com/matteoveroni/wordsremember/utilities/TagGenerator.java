@@ -1,10 +1,9 @@
 package com.matteoveroni.wordsremember.utilities;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -40,9 +39,11 @@ public final class TagGenerator {
         return tag;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    //HELPER METHODS
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /**********************************************************************************************/
+
+    // HELPER METHODS
+
+    /**********************************************************************************************/
 
     /**
      * Useful material:
@@ -69,84 +70,106 @@ public final class TagGenerator {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // CamelCaseStringShrinker PRIVATE CLASS
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /**********************************************************************************************/
+
+    // CamelCaseStringShrinker  PRIVATE CLASS
+
+    /**********************************************************************************************/
 
     private class CamelCaseStringShrinker {
+
         private int totalSubstringsLetters;
+        private int maxSubstringLength;
 
         /**
          * @param string    a passed camel case string to shrink
-         * @param maxLength Max length of the given string. It MUST be less than string.length()
+         * @param maxLength Max possible length. It MUST be less than string.length()
          * @return optimal shrunk substring of the original string passed
          */
         public String shrink(String string, int maxLength) {
             totalSubstringsLetters = 0;
-            Map<Integer, List<String>> mapOfCamelCaseSubstringsWithTheirLength = findSubstringsWithTheirLength(string);
-            return calculateOptimalSubstring(mapOfCamelCaseSubstringsWithTheirLength, maxLength);
+            maxSubstringLength = 0;
+            final List<String> substrings = findSubstrings(string);
+            return calculateOptimalShrinkString(substrings, maxLength);
         }
 
-        private Map<Integer, List<String>> findSubstringsWithTheirLength(String string) {
-            final Map<Integer, List<String>> mapOfSubStringsWithTheirLength = new HashMap<>();
+        public List<String> findSubstrings(String string) {
+            final List<String> substrings = new ArrayList<>();
             String substring = "";
             for (char letter : string.toCharArray()) {
                 if (isCapitalLetter(letter)) {
-                    String newSubstring = String.valueOf(letter);
                     if (!substring.isEmpty()) {
-                        saveSubString(substring, mapOfSubStringsWithTheirLength);
+                        saveSubstring(substring, substrings);
                     }
-                    substring = newSubstring;
+                    substring = String.valueOf(letter);
                 } else {
                     substring += String.valueOf(letter);
                 }
             }
-            saveSubString(substring, mapOfSubStringsWithTheirLength);
-            return mapOfSubStringsWithTheirLength;
+            saveSubstring(substring, substrings);
+            return substrings;
         }
 
-        private void saveSubString(String substring, Map<Integer, List<String>> mapOfSubstringsWithTheirLength) {
-            int length = substring.length();
-            if (length > 0) {
-                if (mapOfSubstringsWithTheirLength.containsKey(length)) {
-                    mapOfSubstringsWithTheirLength.get(length).add(substring);
+        public String calculateOptimalShrinkString(List<String> substrings, int maxLength) {
+            String optimalString = concatStrings(substrings);
+
+            while (totalSubstringsLetters > maxLength) {
+
+                maxSubstringLength = 1;
+                int indexOfMaxSubstringLength = findIndexOfMaxSubstringLength(substrings);
+
+                if (maxSubstringLength == 1) {
+                    optimalString = optimalString.substring(0, maxLength);
+                    break;
                 } else {
-                    mapOfSubstringsWithTheirLength.put(length, new ArrayList<>(Arrays.asList(substring)));
+                    String maxSubStringDecreased = getStringDecreasedByOne(substrings.get(indexOfMaxSubstringLength));
+                    substrings.set(indexOfMaxSubstringLength, maxSubStringDecreased);
+                    totalSubstringsLetters--;
+                    optimalString = concatStrings(substrings);
                 }
-                totalSubstringsLetters += length;
             }
+
+            return optimalString;
         }
 
-        private String calculateOptimalSubstring(String string, Map<Integer, List<String>> mapOfSubstringsWithTheirLength, int maxLength) {
-            int longestSubstringLength = string.length();
-            optimal_substring_search:
-            while (totalSubstringsLetters > maxLength || mapOfSubstringsWithTheirLength.keySet().size() <= 1) {
-                string = decreaseLongestSubstringByOne(mapOfSubstringsWithTheirLength);
-                longestSubstringLength = mapOfSubstringsWithTheirLength.keySet().size();
-                totalSubstringsLetters--;
+        private int findIndexOfMaxSubstringLength(List<String> substrings) {
+            int indexOfMaxSubstringLength = substrings.size();
+
+            for (int i = substrings.size() - 1; i >= 0; i--) {
+                String substring = substrings.get(i);
+                if (substring.length() > maxSubstringLength) {
+                    maxSubstringLength = substring.length();
+                    indexOfMaxSubstringLength = i;
+                }
+            }
+            return indexOfMaxSubstringLength;
+        }
+
+        private String getStringDecreasedByOne(String string) {
+            if (string.length() > 1) {
+                string = string.substring(0, string.length() - 1);
             }
             return string;
         }
+
+        private String concatStrings(Iterable<String> strings) {
+            final StringBuilder stringBuilder = new StringBuilder();
+            for (String s : strings) {
+                stringBuilder.append(s);
+            }
+            return stringBuilder.toString();
+        }
+
+        private void saveSubstring(String substring, List<String> substrings) {
+            int length = substring.length();
+            if (length > 0) {
+                if (length > maxSubstringLength) {
+                    maxSubstringLength = length;
+                }
+                substrings.add(substring);
+                totalSubstringsLetters += length;
+            }
+        }
     }
-
-    private String decreaseLongestSubstringByOne(Map<Integer, List<String>> mapOfSubStringsWithTheirLength) {
-
-    }
-
-
-//    private String getShorterTagWithLongestSubstringDecreasedByOne(List<String> subStrings, Stack<Integer> longerSubStringsIndexes) {
-//        final int longestSubIndex = longerSubStringsIndexes.pop();
-//        String longestSub = subStrings.get(longestSubIndex);
-//        subStrings.set(longestSubIndex, longestSub.substring(0, longestSub.length() - 1));
-//        return concatStrings(subStrings);
-//    }
-//
-//    private String concatStrings(Iterable<String> strings) {
-//        final StringBuilder stringBuilder = new StringBuilder();
-//        for (String s : strings) {
-//            stringBuilder.append(s);
-//        }
-//        return stringBuilder.toString();
-//    }
 }
 
