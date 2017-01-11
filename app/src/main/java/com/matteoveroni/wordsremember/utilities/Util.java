@@ -13,8 +13,8 @@ public class Util {
      * @param clazz
      * @return the corresponding TAG for the passed class
      */
-    public static String generateTag(Class clazz) throws TagGenerator.ClassNameIsNotCamelCaseException, TagGenerator.ClassNameIsLongZeroCharacters {
-        TagGenerator tagGenerator = new TagGenerator(clazz);
-        return tagGenerator.generateTag();
+    public static String generateTag(Class clazz) {
+        TagGenerator tagGenerator = new TagGenerator();
+        return tagGenerator.generateTag(clazz);
     }
 }

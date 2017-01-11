@@ -11,9 +11,8 @@ import java.util.UUID;
 
 public final class TagGenerator {
 
-    public final static String TAG = "Tag";
-
-    private final int MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG = 23;
+    public static final String TAG = "Tag";
+    public static final int MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG = 23;
 
     /**
      * Method for creating Android Tags for a given class. Android TAG's text length can't exceed
@@ -29,11 +28,12 @@ public final class TagGenerator {
         if (length < 1) {
             tag = generateRandomUniqueTag();
         } else {
-            if (!isCapitalLetter(tag.charAt(0))) {
-                tag = tag.substring(0, 1).toUpperCase() + tag.substring(1, tag.length());
-            }
+            tag = isCapitalLetter(tag.charAt(0))
+                    ? tag
+                    : tag.substring(0, 1).toUpperCase() + tag.substring(1, tag.length());
+
             if (length > MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
-                tag = shrinkLengthOfTag(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
+                tag = shrinkLengthOfString(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
             }
         }
         return tag;
@@ -52,17 +52,17 @@ public final class TagGenerator {
      */
     private String generateRandomUniqueTag() {
         final UUID uuid = UUID.randomUUID();
-        String str_uuid = Long.toString(uuid.getMostSignificantBits(), 94) + '-' + Long.toString(uuid.getLeastSignificantBits(), 94);
+        String str_uuid = Long.toString(uuid.getLeastSignificantBits(), 94);
         return TAG + str_uuid;
     }
 
-    private String shrinkLengthOfTag(String tag, int MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
-        final List<String> tagSubStrings = new ArrayList<>();
-        final Stack<Integer> longerTagSubStringsIndexes = new Stack<>();
+    private String shrinkLengthOfString(String string, int MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
+        final List<String> subStrings = new ArrayList<>();
+        final Stack<Integer> longerSubStringsIndexes = new Stack<>();
 
-        findSubStringsAndTheirLongerIndexes(tag, tagSubStrings, longerTagSubStringsIndexes);
+        findSubStringsAndTheirLongerIndexes(string, subStrings, longerSubStringsIndexes);
 
-        return findOptimalTag(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG, tagSubStrings, longerTagSubStringsIndexes);
+        return findOptimalTag(string, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG, subStrings, longerSubStringsIndexes);
     }
 
     private void findSubStringsAndTheirLongerIndexes(String string, List<String> subStrings, Stack<Integer> longestSubIndexes) {
