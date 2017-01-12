@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 
-    public static final String TAG = TagGenerator.getInstance().getTag(DictionaryDAOTest.class);
+    public static final String TAG = new TagGenerator().getTag(DictionaryDAOTest.class);
 
     //    private String DICTIONARY_URI = "content://com.matteoveroni.wordsremember.provider/dictionary";
     private String DICTIONARY_URI = DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + DictionaryContract.NAME;

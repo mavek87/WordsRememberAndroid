@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class TagGeneratorTest {
 
-    private TagGenerator tagGenerator = TagGenerator.getInstance();
+    private TagGenerator tagGenerator = new TagGenerator();
 
     @Test
     public void testGenerateRandomUniqueTagUsingNoLengthAnonymousClass() {
