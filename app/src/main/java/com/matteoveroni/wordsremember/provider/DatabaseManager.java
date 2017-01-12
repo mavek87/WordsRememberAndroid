@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +22,7 @@ import java.nio.channels.FileChannel;
  * @author Matteo Veroni
  */
 public class DatabaseManager extends SQLiteOpenHelper {
-    public static final String TAG = "DatabaseManager";
+    public static final String TAG = new TagGenerator().getTag(DatabaseManager.class);
     public static final String NAME = "wordsremember.db";
     public static final int VERSION = 1;
 

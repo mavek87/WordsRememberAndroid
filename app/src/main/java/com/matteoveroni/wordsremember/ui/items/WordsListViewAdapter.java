@@ -29,7 +29,7 @@ public class WordsListViewAdapter extends CursorAdapter {
 //    }
 //
 //    public boolean isSelected(int position) {
-//        return itemViewsSelectionArray.get(position);
+//        return itemViewsSelectionArray.instance(position);
 //    }
 //
 //    public void resetSelection() {
@@ -40,7 +40,7 @@ public class WordsListViewAdapter extends CursorAdapter {
     public void bindView(View itemView, Context context, Cursor cursor) {
 //        int position = cursor.getPosition();
 //
-//        if (itemViewsSelectionArray.get(position)) {
+//        if (itemViewsSelectionArray.instance(position)) {
 //            itemView.setActivated(true);
 //        } else {
 //            itemView.setActivated(false);

@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertTrue;
 
 public class TagGeneratorTest {
 
-    private TagGenerator tagGenerator = new TagGenerator();
+    private TagGenerator tagGenerator = TagGenerator.getInstance();
 
     @Test
     public void testGenerateRandomUniqueTagUsingNoLengthAnonymousClass() {
@@ -23,13 +23,13 @@ public class TagGeneratorTest {
         };
         final Class aClass = anonymousClass.getClass();
 
-        final String tag = tagGenerator.generateTag(aClass);
+        final String tag = tagGenerator.getTag(aClass);
 
         final String ERROR1 = "tag is null";
         assertNotNull(ERROR1, tag);
 
         final String ERROR2 = "tag doesn\'t start with the Tag suffix";
-        assertEquals(ERROR2, TagGenerator.TAG, tag.substring(0, 3));
+        assertEquals(ERROR2, TagGenerator.TAG_PREFIX, tag.substring(0, 3));
 
         final String ERROR3 = "tag is not equal to Tag";
         assertNotSame(ERROR3, "Tag", tag);
@@ -43,10 +43,13 @@ public class TagGeneratorTest {
         class ValidCamelCaseClass {
         }
 
-        final String tag = tagGenerator.generateTag(ValidCamelCaseClass.class);
+        final String EXPECTED_RESULT = ValidCamelCaseClass.class.getSimpleName();
+        assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to ValidCamelCaseClass.class.getSimpleName() like expected";
-        assertEquals(ERROR, ValidCamelCaseClass.class.getSimpleName(), tag);
+        final String tag = tagGenerator.getTag(ValidCamelCaseClass.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, tag);
     }
 
     @Test
@@ -54,20 +57,27 @@ public class TagGeneratorTest {
         class firstNotCapitalClass {
         }
 
-        final String tag = tagGenerator.generateTag(firstNotCapitalClass.class);
+        final String EXPECTED_RESULT = "FirstNotCapitalClass";
+        assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to FirstNotCapitalClass like expected";
-        assertEquals(ERROR, "FirstNotCapitalClass", tag);
+        final String tag = tagGenerator.getTag(firstNotCapitalClass.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, tag);
     }
 
     @Test
     public void testGenerateValidTagWithFirstLetterCapitalUsingAllLowercaseLettersClass() {
         class lowercaselettersclass {
         }
-        final String generatedTag = tagGenerator.generateTag(lowercaselettersclass.class);
 
-        final String ERROR = "tag is not equal to Lowercaselettersclass like expected";
-        assertEquals(ERROR, "Lowercaselettersclass", generatedTag);
+        final String EXPECTED_RESULT = "Lowercaselettersclass";
+        assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
+
+        final String generatedTag = tagGenerator.getTag(lowercaselettersclass.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     @Test
@@ -75,10 +85,13 @@ public class TagGeneratorTest {
         class TooMuchLongCamelCaseClass {
         }
 
-        final String generatedTag = tagGenerator.generateTag(TooMuchLongCamelCaseClass.class);
+        final String EXPECTED_RESULT = "TooMuchLongCameCaseClas";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to TooMuchLongCameCaseClas like expected";
-        assertEquals(ERROR, "TooMuchLongCameCaseClas", generatedTag);
+        final String generatedTag = tagGenerator.getTag(TooMuchLongCamelCaseClass.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     @Test
@@ -86,10 +99,13 @@ public class TagGeneratorTest {
         class ALLUPPERCASESHORTCLASS {
         }
 
-        final String generatedTag = tagGenerator.generateTag(ALLUPPERCASESHORTCLASS.class);
+        final String EXPECTED_RESULT = "ALLUPPERCASESHORTCLASS";
+        assertTrue(EXPECTED_RESULT.length() < TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to ALLUPPERCASESHORTCLASS like expected";
-        assertEquals(ERROR, "ALLUPPERCASESHORTCLASS", generatedTag);
+        final String generatedTag = tagGenerator.getTag(ALLUPPERCASESHORTCLASS.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     @Test
@@ -97,10 +113,13 @@ public class TagGeneratorTest {
         class ALLUPPERCASETOOMUCHLONGCLASS {
         }
 
-        final String generatedTag = tagGenerator.generateTag(ALLUPPERCASETOOMUCHLONGCLASS.class);
+        final String EXPECTED_RESULT = "ALLUPPERCASETOOMUCHLONG";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to ALLUPPERCASETOOMUCHLONG like expected";
-        assertEquals(ERROR, "ALLUPPERCASETOOMUCHLONG", generatedTag);
+        final String generatedTag = tagGenerator.getTag(ALLUPPERCASETOOMUCHLONGCLASS.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     /**
@@ -116,10 +135,13 @@ public class TagGeneratorTest {
         class AaaaaaBbbbCccccDdddddEeeeee {
         }
 
-        final String generatedTag = tagGenerator.generateTag(AaaaaaBbbbCccccDdddddEeeeee.class);
+        final String EXPECTED_RESULT = "AaaaaBbbbCccccDddddEeee";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to AaaaaBbbbCccccDddddEeee like expected";
-        assertEquals(ERROR, "AaaaaBbbbCccccDddddEeee", generatedTag);
+        final String generatedTag = tagGenerator.getTag(AaaaaaBbbbCccccDdddddEeeeee.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     /**
@@ -135,9 +157,12 @@ public class TagGeneratorTest {
         class AaaaaaaaaaaBbbbCcccccccDdddddEeeeee {
         }
 
-        final String generatedTag = tagGenerator.generateTag(AaaaaaaaaaaBbbbCcccccccDdddddEeeeee.class);
+        final String EXPECTED_RESULT = "AaaaaBbbbCccccDddddEeee";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to AaaaaBbbbCccccDddddEeee like expected";
+        final String generatedTag = tagGenerator.getTag(AaaaaaaaaaaBbbbCcccccccDdddddEeeeee.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, "AaaaaBbbbCccccDddddEeee", generatedTag);
     }
 
@@ -159,10 +184,13 @@ public class TagGeneratorTest {
         class AAaaaaBbbbCcCCcccDdddddEEEeee {
         }
 
-        final String generatedTag = tagGenerator.generateTag(AAaaaaBbbbCcCCcccDdddddEEEeee.class);
+        final String EXPECTED_RESULT = "AAaaaBbbbCcCCccDddEEEee";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to AAaaaBbbbCcCCccDddEEEee like expected";
-        assertEquals(ERROR, "AAaaaBbbbCcCCccDddEEEee", generatedTag);
+        final String generatedTag = tagGenerator.getTag(AAaaaaBbbbCcCCcccDdddddEEEeee.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 
     /**
@@ -183,9 +211,29 @@ public class TagGeneratorTest {
         class AAaaaaBbbbCcCcCcccDdddddEEEeee {
         }
 
-        final String generatedTag = tagGenerator.generateTag(AAaaaaBbbbCcCcCcccDdddddEEEeee.class);
+        final String EXPECTED_RESULT = "AAaaaBbbCcCcCccDddEEEee";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String ERROR = "tag is not equal to AAaaaBbbCcCcCccDddEEEee like expected";
-        assertEquals(ERROR, "AAaaaBbbCcCcCccDddEEEee", generatedTag);
+        final String generatedTag = tagGenerator.getTag(AAaaaaBbbbCcCcCcccDdddddEEEeee.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
+    }
+
+    /**
+     * aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa  = 60 letters (17 letter longer than max)
+     */
+    @Test
+    public void testGenerateTagForaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa() {
+        class aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa {
+        }
+
+        final String EXPECTED_RESULT = "Aaaaaaaaaaaaaaaaaaaaaaa";
+        assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
+
+        final String generatedTag = tagGenerator.getTag(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.class);
+
+        final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
+        assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
     }
 }

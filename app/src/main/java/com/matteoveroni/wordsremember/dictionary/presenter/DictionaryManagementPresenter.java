@@ -26,8 +26,6 @@ import java.util.Random;
 
 public class DictionaryManagementPresenter implements Presenter {
 
-    public static final String TAG = "DictManagePresenter";
-
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
@@ -125,7 +123,7 @@ public class DictionaryManagementPresenter implements Presenter {
     /**********************************************************************************************/
 
     private void populateDatabaseForTestPurposes(Context context) {
-//        DatabaseManager db = DatabaseManager.getInstance(context);
+//        DatabaseManager db = DatabaseManager.instance(context);
 //        db.resetDatabase();
         Word randomVocableToSave = new Word(generateRandomWord());
         model.saveVocable(randomVocableToSave);

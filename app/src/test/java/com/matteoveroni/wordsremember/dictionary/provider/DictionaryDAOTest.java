@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
-import com.matteoveroni.wordsremember.utilities.Util;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 
-    public static final String TAG = Util.generateTag(DictionaryDAOTest.class);
+    public static final String TAG = TagGenerator.getInstance().getTag(DictionaryDAOTest.class);
 
     //    private String DICTIONARY_URI = "content://com.matteoveroni.wordsremember.provider/dictionary";
     private String DICTIONARY_URI = DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + DictionaryContract.NAME;
@@ -158,7 +158,7 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 //@RunWith(MockitoJUnitRunner.class)
 //public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 //
-//    public static final String TAG = "DictDAOTest";
+//    public static final String TAG_PREFIX = "DictDAOTest";
 //
 //    //    private String DICTIONARY_URI = "content://com.matteoveroni.wordsremember.provider/dictionary";
 //    private String DICTIONARY_URI = DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + DictionaryContract.NAME;
@@ -181,7 +181,7 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 //    @Override
 //    protected void setUp() throws Exception {
 //        super.setUp();
-//        Log.d(TAG, "setUp");
+//        Log.d(TAG_PREFIX, "setUp");
 //        mockResolver = getMockContentResolver();
 //
 //
@@ -190,7 +190,7 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 //    @Override
 //    protected void tearDown() throws Exception {
 //        super.tearDown();
-//        Log.d(TAG, "tearDown");
+//        Log.d(TAG_PREFIX, "tearDown");
 //    }
 //
 //    @Test
@@ -251,7 +251,7 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 ////        }
 ////        @Override
 ////        public Cursor query(Uri dictionaryUri, String[] projection, String selection, String[] selectionArgs, String sortOrder){
-////            return expectedResults.get(dictionaryUri);
+////            return expectedResults.instance(dictionaryUri);
 ////        }
 ////    }
 ////
@@ -263,7 +263,7 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 ////        @Override public Context getApplicationContext(){ return this; } //Added in-case my class called getApplicationContext()
 ////    }
 ////
-////    //An example class under test which queries the populated cursor to get the expected phone number
+////    //An example class under test which queries the populated cursor to instance the expected phone number
 ////    public class ExampleClassUnderTest{
 ////        public  String getPhoneNumbers(Context context){//Query for  phone numbers from contacts
 ////            String[] projection = new String[]{ ContactsContract.CommonDataKinds.Phone.NUMBER};

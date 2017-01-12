@@ -12,7 +12,7 @@ import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.utilities.Util;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,7 +35,7 @@ import java.util.HashSet;
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
-    public static final String TAG = Util.generateTag(DictionaryProvider.class);
+    public static final String TAG = new TagGenerator().getTag(DictionaryProvider.class);
 
     // Database manager/helper singleton instance
 

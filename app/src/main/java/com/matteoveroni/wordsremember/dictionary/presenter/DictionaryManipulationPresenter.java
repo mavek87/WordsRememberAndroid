@@ -19,8 +19,6 @@ import java.lang.reflect.Proxy;
 
 public class DictionaryManipulationPresenter implements Presenter {
 
-    public static final String TAG = "DictManipulPresenter";
-
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;

@@ -13,6 +13,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,7 +31,7 @@ import butterknife.Unbinder;
 
 public class DictionaryManipulationFragment extends Fragment {
 
-    public static final String TAG = "F_DictManipul";
+    public static final String TAG = new TagGenerator().getTag(DictionaryManipulationFragment.class);;
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";

@@ -13,6 +13,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCom
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,8 +25,6 @@ import org.greenrobot.eventbus.EventBus;
  */
 
 public class DictionaryDAO {
-
-    public static final String TAG = "DictionaryDAO";
 
     private final ContentResolver contentResolver;
     private final AsyncVocableHandler asyncVocableHandler;

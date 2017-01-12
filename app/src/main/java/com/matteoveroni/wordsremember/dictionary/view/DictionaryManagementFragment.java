@@ -22,8 +22,8 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = "F_dictManage";
+    public static final String TAG = new TagGenerator().getTag(DictionaryManagementFragment.class);
 
     private final EventBus eventBus = EventBus.getDefault();
 

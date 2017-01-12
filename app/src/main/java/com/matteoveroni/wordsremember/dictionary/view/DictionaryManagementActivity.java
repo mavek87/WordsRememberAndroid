@@ -15,6 +15,7 @@ import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ import butterknife.OnClick;
 public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
-    public static final String TAG = "A_DictManagement";
+    public static final String TAG = new TagGenerator().getTag(DictionaryManagementActivity.class);
 
     private DictionaryManagementPresenter presenter;
 

@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.utilities;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,16 +10,16 @@ import java.util.UUID;
 
 public final class TagGenerator {
 
-    public static final String TAG = "Tag";
+    public static final String TAG_PREFIX = "Tag";
     public static final int MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG = 23;
 
     /**
-     * Method for creating Android Tags for a given class. Android TAG's text length can't exceed
+     * Method for creating Android Tags for a given class. Android TAG_PREFIX's text length can't exceed
      * 23 characters.
      *
-     * @return the corresponding TAG for class passed to the constructor
+     * @return the corresponding TAG_PREFIX for class passed to the constructor
      */
-    public final String generateTag(Class classInstance) {
+    public final String getTag(Class classInstance) {
 
         String tag = classInstance.getSimpleName();
         int length = tag.length();
@@ -54,7 +52,7 @@ public final class TagGenerator {
     private String generateRandomUniqueTag() {
         final UUID uuid = UUID.randomUUID();
         String str_uuid = Long.toString(uuid.getLeastSignificantBits(), 94);
-        return TAG + str_uuid;
+        return TAG_PREFIX + str_uuid;
     }
 
     private boolean isCapitalLetter(char c) {
