@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.utilities.Str;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.util.Arrays;
@@ -28,10 +28,13 @@ import java.util.HashSet;
  * Useful resources on Content Providers:
  * <p>
  * https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
+ * http://www.grokkingandroid.com/android-tutorial-writing-your-own-content-provider/
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
  * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
  * http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
+ * <p>
+ * sql inject => https://github.com/yahoo/squidb/wiki/Protecting-against-SQL-Injection
  */
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
@@ -39,11 +42,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     public static final String TAG = new TagGenerator().getTag(DictionaryProvider.class);
 
     // Database manager/helper singleton instance
-
     private DatabaseManager databaseManager;
 
     // Content Provider Parameters
-
     public static final String SCHEME = "content://";
     public static final String CONTENT_AUTHORITY = DictionaryProvider.class.getPackage().getName();
 
@@ -62,20 +63,22 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
     }
 
+    private static final String UNSUPPORTED_URI_ERROR = "Unsupported URI ";
+
     @Nullable
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case VOCABLES:
-                return DictionaryContract.CONTENT_TYPE_MULTIPLE;
+                return DictionaryContract.CONTENT_DIR_TYPE;
             case VOCABLE_ID:
-                return DictionaryContract.CONTENT_TYPE_SINGLE;
+                return DictionaryContract.CONTENT_ITEM_TYPE;
             case TRANSLATIONS:
-                return TranslationsContract.CONTENT_TYPE_MULTIPLE;
+                return TranslationsContract.CONTENT_DIR_TYPE;
             case TRANSLATION_ID:
-                return TranslationsContract.CONTENT_TYPE_SINGLE;
+                return TranslationsContract.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                return null;
         }
     }
 
@@ -103,7 +106,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 selectionArgs = new String[]{id};
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
         }
 
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
@@ -117,10 +120,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParameterLimitValue(uri)
         );
-
-        if (isContentResolverNotNull()) {
+        if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        }
         return cursor;
     }
 
@@ -136,13 +137,13 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
         }
         notifyChangeToObservers(uri);
         return Uri.parse(DictionaryContract.NAME + "/" + id);
     }
 
-    // TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int updatedRowsCounter;
@@ -154,33 +155,30 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
-                String id = uri.getLastPathSegment();
+                final String id = uri.getLastPathSegment();
+                final String where = DictionaryContract.Schema.COLUMN_ID + " = " + id + (
+                        !TextUtils.isEmpty(selection)
+                                ? " AND (" + selection + ")"
+                                : ""
+                );
                 updatedRowsCounter = db.update(
                         DictionaryContract.Schema.TABLE_NAME,
                         values,
-                        DictionaryContract.Schema.COLUMN_ID + " =" + id +
-                                (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
+                        where,
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
         }
         notifyChangeToObservers(uri);
         return updatedRowsCounter;
     }
 
-    /**
-     * TODO: check VOCABLE_ITEM case not sure it works
-     * TODO: this method is probably vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
-     *
-     * @param uri
-     * @param selection
-     * @param selectionArgs
-     * @return
-     */
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         int deletedRowsCounter;
+
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
         final int uriType = URI_MATCHER.match(uri);
@@ -190,18 +188,19 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                deletedRowsCounter =
-                        db.delete(
-                                DictionaryContract.Schema.TABLE_NAME,
-                                DictionaryContract.Schema.COLUMN_ID
-                                        + " = "
-                                        + id
-                                        + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ')' : ""), // append selection to query if selection is not empty
-                                selectionArgs
-                        );
+                final String where = DictionaryContract.Schema.COLUMN_ID + " = " + id + (
+                        !TextUtils.isEmpty(selection)
+                                ? " AND (" + selection + ")"
+                                : ""
+                );
+                deletedRowsCounter = db.delete(
+                        DictionaryContract.Schema.TABLE_NAME,
+                        where,
+                        selectionArgs
+                );
                 break;
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
         }
         notifyChangeToObservers(uri);
         return deletedRowsCounter;

@@ -29,8 +29,6 @@ public class DictionaryDAO {
     private final ContentResolver contentResolver;
     private final AsyncVocableHandler asyncVocableHandler;
 
-    private static final Uri VOCABLES_CONTENT_PROVIDER_URI = DictionaryContract.CONTENT_URI;
-
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
         this.asyncVocableHandler = new AsyncVocableHandler(this.contentResolver);
@@ -47,7 +45,7 @@ public class DictionaryDAO {
             new AsyncVocableHandler(contentResolver).startInsert(
                     1,
                     null,
-                    VOCABLES_CONTENT_PROVIDER_URI,
+                    DictionaryContract.CONTENT_URI,
                     vocableToContentValues(vocable)
             );
         }
@@ -61,7 +59,7 @@ public class DictionaryDAO {
             final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
-            final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_idColumn).buildUpon().build();
 
             asyncVocableHandler.startQuery(
                     1,
@@ -82,7 +80,7 @@ public class DictionaryDAO {
             final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
 
             asyncVocableHandler.startUpdate(
                     1,
@@ -102,7 +100,7 @@ public class DictionaryDAO {
             final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
-            final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_idColumn).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_idColumn).buildUpon().build();
 
             asyncVocableHandler.startDelete(
                     1,
@@ -133,7 +131,7 @@ public class DictionaryDAO {
         final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
-        final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
 
         Cursor cursor = contentResolver.query(
                 uri,
@@ -155,7 +153,7 @@ public class DictionaryDAO {
         long id = -1;
         if (isVocableValid(vocable) && vocable.getId() < 0) {
             final Uri uri = contentResolver.insert(
-                    VOCABLES_CONTENT_PROVIDER_URI,
+                    DictionaryContract.CONTENT_URI,
                     vocableToContentValues(vocable)
             );
 
@@ -176,7 +174,7 @@ public class DictionaryDAO {
         final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
-        final Uri uri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
 
         int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
 
@@ -191,7 +189,7 @@ public class DictionaryDAO {
             final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri vocableUri = Uri.withAppendedPath(VOCABLES_CONTENT_PROVIDER_URI, str_id).buildUpon().build();
+            final Uri vocableUri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
 
             recordDeleted = contentResolver.delete(
                     vocableUri,

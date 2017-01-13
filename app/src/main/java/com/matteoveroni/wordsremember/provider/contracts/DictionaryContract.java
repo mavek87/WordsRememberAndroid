@@ -6,6 +6,8 @@ import android.provider.BaseColumns;
 
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 
+import static android.provider.ContactsContract.Settings.CONTENT_ITEM_TYPE;
+
 /**
  * Contract class that defines Dictionary Table Schema
  *
@@ -17,12 +19,12 @@ public final class DictionaryContract {
 
     public static final Uri CONTENT_URI =
             Uri.parse(
-                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
+                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "." + NAME
             );
 
     // Mime type
-    public static final String CONTENT_TYPE_MULTIPLE = CONTENT_URI + "/vocables";
-    public static final String CONTENT_TYPE_SINGLE = CONTENT_URI + "/vocable";
+    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
+    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
     private DictionaryContract() {
     }
