@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.utilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +21,15 @@ public final class TagGenerator {
      * @return the corresponding TAG_PREFIX for class passed to the constructor
      */
     public final String getTag(Class classInstance) {
-
         String tag = classInstance.getSimpleName();
-        int length = tag.length();
-
-        if (length < 1) {
+        int tagLength = tag.length();
+        if (tagLength < 1) {
             tag = generateRandomUniqueTag();
         } else {
             if (!isCapitalLetter(tag.charAt(0))) {
                 tag = capitalizeFirstLetter(tag);
             }
-            if (length > MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
+            if (tagLength > MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
                 tag = new CamelCaseStringShrinker().shrink(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
             }
         }
@@ -62,24 +61,23 @@ public final class TagGenerator {
 
         public List<String> findSubstrings(String string) {
             final List<String> substrings = new ArrayList<>();
-            String substring = "";
+            StringBuilder substringBuilder = null;
             for (char letter : string.toCharArray()) {
                 if (isCapitalLetter(letter)) {
-                    if (!substring.isEmpty()) {
-                        saveSubstring(substring, substrings);
+                    if (substringBuilder != null) {
+                        saveSubstring(substringBuilder.toString(), substrings);
                     }
-                    substring = String.valueOf(letter);
+                    substringBuilder = new StringBuilder(String.valueOf(letter));
                 } else {
-                    substring += String.valueOf(letter);
+                    substringBuilder.append(String.valueOf(letter));
                 }
             }
-            saveSubstring(substring, substrings);
+            saveSubstring(substringBuilder.toString(), substrings);
             return substrings;
         }
 
         public String calculateOptimalShrinkString(List<String> substrings, int maxLength) {
-            String optimalString = concatStrings(substrings);
-
+            String optimalString = Str.concat(substrings);
             while (totalSubstringsLetters > maxLength) {
 
                 maxSubstringLength = 1;
@@ -92,10 +90,9 @@ public final class TagGenerator {
                     String maxSubStringDecreased = getStringDecreasedByOne(substrings.get(indexOfMaxSubstringLength));
                     substrings.set(indexOfMaxSubstringLength, maxSubStringDecreased);
                     totalSubstringsLetters--;
-                    optimalString = concatStrings(substrings);
+                    optimalString = Str.concat(substrings);
                 }
             }
-
             return optimalString;
         }
 
@@ -114,17 +111,9 @@ public final class TagGenerator {
 
         private String getStringDecreasedByOne(String string) {
             if (string.length() > 1) {
-                string = string.substring(0, string.length() - 1);
+                string = removeLastLetter(string);
             }
             return string;
-        }
-
-        private String concatStrings(Iterable<String> strings) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            for (String s : strings) {
-                stringBuilder.append(s);
-            }
-            return stringBuilder.toString();
         }
 
         private void saveSubstring(String substring, List<String> substrings) {
@@ -163,11 +152,20 @@ public final class TagGenerator {
         return c >= FIRST_ASCII_CAPITAL_LETTER_CHAR && c <= LAST_ASCII_CAPITAL_LETTER_CHAR;
     }
 
-    private String capitalizeFirstLetter(String original) {
-        if (original == null || original.length() == 0) {
-            return original;
-        }
-        return original.substring(0, 1).toUpperCase() + original.substring(1);
+    private String capitalizeFirstLetter(String string) {
+        return isStringValid(string)
+                ? string.substring(0, 1).toUpperCase() + string.substring(1)
+                : string;
+    }
+
+    private String removeLastLetter(String string) {
+        return isStringValid(string)
+                ? string.substring(0, string.length() - 1)
+                : string;
+    }
+
+    private boolean isStringValid(String string) {
+        return (string != null && string.length() > 0);
     }
 }
 
