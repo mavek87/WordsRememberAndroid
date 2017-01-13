@@ -12,7 +12,6 @@ import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.utilities.Str;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.util.Arrays;
@@ -33,8 +32,8 @@ import java.util.HashSet;
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
  * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
  * http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
- * <p>
  * sql inject => https://github.com/yahoo/squidb/wiki/Protecting-against-SQL-Injection
+ * </p>
  */
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
@@ -63,7 +62,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
     }
 
-    private static final String UNSUPPORTED_URI_ERROR = "Unsupported URI ";
+    private static final class Errors {
+        private static final String UNSUPPORTED_URI = "Unsupported URI ";
+    }
 
     @Nullable
     @Override
@@ -106,7 +107,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 selectionArgs = new String[]{id};
                 break;
             default:
-                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
 
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
@@ -137,7 +138,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
         notifyChangeToObservers(uri);
         return Uri.parse(DictionaryContract.NAME + "/" + id);
@@ -168,7 +169,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
         notifyChangeToObservers(uri);
         return updatedRowsCounter;
@@ -200,7 +201,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 );
                 break;
             default:
-                throw new IllegalArgumentException(UNSUPPORTED_URI_ERROR + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
         notifyChangeToObservers(uri);
         return deletedRowsCounter;

@@ -46,23 +46,23 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Unique DatabaseManager instance
+     * Unique DatabaseManager's instance
      */
     private volatile static DatabaseManager DB_MANAGER;
 
     /**
-     * DatabaseManager private constructor
+     * Private constructor
      *
-     * @param context
+     * @param context The application's context
      */
     private DatabaseManager(Context context) {
         super(context, DatabaseManager.NAME, null, DatabaseManager.VERSION);
     }
 
     /**
-     * Get or create a unique DatabaseManager instance
+     * Get or create a unique DatabaseManager's instance
      *
-     * @param context
+     * @param context The application's context
      * @return Unique DatabaseManager instance
      */
     public static final DatabaseManager getInstance(Context context) {

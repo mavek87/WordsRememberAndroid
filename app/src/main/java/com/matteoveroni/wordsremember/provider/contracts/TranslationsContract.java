@@ -18,7 +18,7 @@ public final class TranslationsContract {
 
     public static final Uri CONTENT_URI =
             Uri.parse(
-                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "." + NAME
+                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
             );
 
     // Mime type
