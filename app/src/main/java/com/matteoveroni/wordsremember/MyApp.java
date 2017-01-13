@@ -17,7 +17,9 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  */
 public class MyApp extends Application {
 
-    public static final String NAME = "WordsRemember";
+    public static final String NAME = "wordsremember";
+    public static final String NAME_TO_DISPLAY = "WordsRemember";
+    public static final String AUTHORITY = MyApp.class.getPackage().getName();
 
     private static ModelComponent MODEL_COMPONENT;
 

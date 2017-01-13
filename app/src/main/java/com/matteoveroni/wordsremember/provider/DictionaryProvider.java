@@ -1,12 +1,13 @@
 package com.matteoveroni.wordsremember.provider;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -25,7 +26,7 @@ import java.util.HashSet;
 
 /**
  * Useful resources on Content Providers:
- *
+ * <p>
  * https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
  * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
  * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
@@ -44,22 +45,15 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     // Content Provider Parameters
 
     public static final String SCHEME = "content://";
-    public static final String CONTENT_AUTHORITY = "com.matteoveroni.wordsremember.provider";
+    public static final String CONTENT_AUTHORITY = DictionaryProvider.class.getPackage().getName();
 
-    // Dictionary provider
+    // URI Matcher
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     private static final int VOCABLES = 1;
     private static final int VOCABLE_ID = 2;
-
-    // Translations provider
-
-    public static final Uri TRANSLATIONS_CONTENT_URI = Uri.parse(SCHEME + CONTENT_AUTHORITY + "/" + TranslationsContract.NAME);
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
-
-    // URI Matcher
-
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, DictionaryContract.NAME, VOCABLES);
@@ -68,23 +62,18 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
     }
 
-    // MIME type
-
-    public static final String CONTENT_TYPE_MULTIPLE = ContentResolver.CURSOR_DIR_BASE_TYPE;
-    public static final String CONTENT_TYPE_SINGLE = ContentResolver.CURSOR_ITEM_BASE_TYPE;
-
     @Nullable
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case VOCABLES:
-                return CONTENT_TYPE_MULTIPLE;
+                return DictionaryContract.CONTENT_TYPE_MULTIPLE;
             case VOCABLE_ID:
-                return CONTENT_TYPE_SINGLE;
+                return DictionaryContract.CONTENT_TYPE_SINGLE;
             case TRANSLATIONS:
-                return CONTENT_TYPE_MULTIPLE;
+                return TranslationsContract.CONTENT_TYPE_MULTIPLE;
             case TRANSLATION_ID:
-                return CONTENT_TYPE_SINGLE;
+                return TranslationsContract.CONTENT_TYPE_SINGLE;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -129,7 +118,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 getQueryParameterLimitValue(uri)
         );
 
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        if (isContentResolverNotNull()) {
+            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        }
         return cursor;
     }
 
@@ -147,8 +138,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        notifyChangeToObservers(uri);
         return Uri.parse(DictionaryContract.NAME + "/" + id);
     }
 
@@ -175,8 +165,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        notifyChangeToObservers(uri);
         return updatedRowsCounter;
     }
 
@@ -214,8 +203,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        notifyChangeToObservers(uri);
         return deletedRowsCounter;
     }
 
@@ -229,5 +217,15 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException("Unknown columns in projection");
             }
         }
+    }
+
+    private void notifyChangeToObservers(Uri uri) {
+        if (isContentResolverNotNull())
+            getContext().getContentResolver().notifyChange(uri, null);
+    }
+
+    private boolean isContentResolverNotNull() {
+        final Context ctx = getContext();
+        return (ctx != null && ctx.getContentResolver() != null);
     }
 }

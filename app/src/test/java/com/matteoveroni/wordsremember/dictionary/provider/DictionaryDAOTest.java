@@ -161,8 +161,8 @@ public class DictionaryDAOTest extends ProviderTestCase2<DictionaryProvider> {
 //    public static final String TAG_PREFIX = "DictDAOTest";
 //
 //    //    private String DICTIONARY_URI = "content://com.matteoveroni.wordsremember.provider/dictionary";
-//    private String DICTIONARY_URI = DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + DictionaryContract.NAME;
-//    private static final String NAME = DictionaryContract.NAME;
+//    private String DICTIONARY_URI = DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + DictionaryContract.NAME_TO_DISPLAY;
+//    private static final String NAME_TO_DISPLAY = DictionaryContract.NAME_TO_DISPLAY;
 //
 //    @Mock
 //    private MockContentResolver mockResolver;

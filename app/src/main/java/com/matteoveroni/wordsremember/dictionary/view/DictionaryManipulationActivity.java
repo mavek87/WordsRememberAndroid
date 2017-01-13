@@ -72,7 +72,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(MyApp.NAME + " - Details");
+            toolbar.setTitle(MyApp.NAME_TO_DISPLAY + " - Details");
         }
         setSupportActionBar(toolbar);
 
