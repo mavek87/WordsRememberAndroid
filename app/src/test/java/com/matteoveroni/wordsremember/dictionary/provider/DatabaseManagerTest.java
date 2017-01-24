@@ -52,8 +52,8 @@ public class DatabaseManagerTest {
 
     @Before
     public void setUp() {
-        ShadowApplication context = Shadows.shadowOf(RuntimeEnvironment.application);
-        dbManager = DatabaseManager.getInstance(context.getApplicationContext());
+        ShadowApplication application = Shadows.shadowOf(RuntimeEnvironment.application);
+        dbManager = DatabaseManager.getInstance(application.getApplicationContext());
     }
 
     @After
@@ -65,8 +65,8 @@ public class DatabaseManagerTest {
 
     @Test
     public void testWhenDBManagerIsCreatedThenTheDBNameShouldBeSet() {
-        assertNotNull("dbManager is null after setUp", dbManager);
-        assertEquals("dbManager name is not equal to expected name", DICTIONARY_DATABASE_NAME, dbManager.getDatabaseName());
+        assertNotNull("dbManager must be not null after setUp", dbManager);
+        assertEquals("dbManager name must be equal to expected name", DICTIONARY_DATABASE_NAME, dbManager.getDatabaseName());
     }
 
     @Test
@@ -74,10 +74,10 @@ public class DatabaseManagerTest {
         Cursor cursor;
         final SQLiteDatabase db = getReadableDatabase();
         cursor = db.query(DictionaryContract.Schema.TABLE_NAME, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
-        assertNotNull("cursor is null after a query on a table that should exists", cursor);
-        assertTrue("cursor contain some query result when it should not", cursor.getCount() == 0);
+        assertNotNull("cursor must be not null after a query on a existing table", cursor);
+        assertTrue("cursor mustn't contain any query result", cursor.getCount() == 0);
         destroyCursor(cursor);
-        assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+        assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
     }
 
     @Test(expected = SQLiteException.class)
@@ -90,7 +90,7 @@ public class DatabaseManagerTest {
             throw new SQLiteException();
         } finally {
             destroyCursor(cursor);
-            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+            assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
         }
     }
 
@@ -104,7 +104,7 @@ public class DatabaseManagerTest {
             throw new SQLiteException();
         } finally {
             destroyCursor(cursor);
-            assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+            assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
         }
     }
 
@@ -119,13 +119,13 @@ public class DatabaseManagerTest {
         Cursor cursor =
                 db.query(DictionaryContract.Schema.TABLE_NAME, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
 
-        assertTrue("query should return just one value but it\'s not so", cursor.getCount() == 1);
-        assertTrue("impossible to move to the first retrieved vocable position", cursor.moveToNext());
-        assertEquals("the first id is not equal to one", 1, cursor.getInt(0));
-        assertEquals("the inserted vocable name doesn\tt match with the expected value", VALID_VOCABLE_NAME, cursor.getString(1));
+        assertTrue("query must return just one value", cursor.getCount() == 1);
+        assertTrue("move to the first retrieved vocable position", cursor.moveToNext());
+        assertEquals("the first valid_id must be equal to one", 1, cursor.getInt(0));
+        assertEquals("the inserted vocable name must match with the expected value", VALID_VOCABLE_NAME, cursor.getString(1));
 
         destroyCursor(cursor);
-        assertTrue("cursor was not destroyed", isCursorDestroyed(cursor));
+        assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
     }
 
     private SQLiteDatabase getReadableDatabase() {

@@ -141,7 +141,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
         notifyChangeToObservers(uri);
-        return Uri.parse(DictionaryContract.NAME + "/" + id);
+        return Uri.parse(DictionaryContract.CONTENT_URI + "/" + id);
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
