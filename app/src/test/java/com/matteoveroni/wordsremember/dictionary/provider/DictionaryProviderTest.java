@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.provider;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 
@@ -32,6 +33,7 @@ public class DictionaryProviderTest {
 
     private DictionaryProvider provider;
     private ContentValues values;
+    private Cursor cursor;
 
     private final String VALID_ID_COLUMN_NAME = DictionaryContract.Schema.COLUMN_ID;
     private final long VALID_ID = 1;
@@ -46,8 +48,9 @@ public class DictionaryProviderTest {
     public void onStart() {
         values = new ContentValues();
         provider = Robolectric.setupContentProvider(DictionaryProvider.class);
-        assertThat("no values should be inserted at the beginning ", values.keySet().isEmpty());
         assertNotNull("dictionary provider is not null ", provider);
+        assertThat("no values should be inserted at the beginning ", values.keySet().isEmpty());
+        assertThat("cursor should be null or closed", (cursor == null || cursor.isClosed()));
     }
 
     @After
@@ -55,7 +58,16 @@ public class DictionaryProviderTest {
         // Reset DatabaseManager Singleton using reflections
         Util.resetSingleton(DatabaseManager.class, "DB_INSTANCE");
         values.clear();
+        if (cursor != null) {
+            cursor.close();
+        }
     }
+
+    /**********************************************************************************************/
+
+    // Insertion tests
+
+    /**********************************************************************************************/
 
     @Test(expected = SQLiteException.class)
     public void insert_empty_content_value_throws_sqliteException() {
@@ -77,11 +89,54 @@ public class DictionaryProviderTest {
 
     @Test
     public void insert_real_vocable_works() {
+        Uri generatedUri = insertValidVocable();
+        assertEquals("generated uri is like expected", Uri.parse(DictionaryContract.CONTENT_URI + "/" + VALID_ID), generatedUri);
+    }
+
+    /**********************************************************************************************/
+
+    // Query tests
+
+    /**********************************************************************************************/
+
+    @Test
+    public void select_query_by_id_on_empty_db_return_zero_results() {
+        cursor = provider.query(
+                Uri.parse(DictionaryContract.CONTENT_URI + "/" + VALID_ID),
+                DictionaryContract.Schema.ALL_COLUMNS,
+                null,
+                null,
+                null
+        );
+        assertEquals("query should return no results", 0, cursor.getCount());
+    }
+
+    @Test
+    public void select_query_by_id_on_not_empty_db_retrieve_the_right_result() {
+        insertValidVocable();
+        cursor = provider.query(
+                Uri.parse(DictionaryContract.CONTENT_URI + "/" + VALID_ID),
+                DictionaryContract.Schema.ALL_COLUMNS,
+                null,
+                null,
+                null
+        );
+        cursor.moveToFirst();
+        assertEquals("query should return no results", 1, cursor.getCount());
+        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_ID)), VALID_ID);
+        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_NAME)), VALID_NAME);
+    }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
+
+    private Uri insertValidVocable() {
         values.put(VALID_ID_COLUMN_NAME, VALID_ID);
         values.put(VALID_NAME_COLUMN_NAME, VALID_NAME);
-
-        Uri generatedUri = provider.insert(DictionaryContract.CONTENT_URI, values);
-        assertEquals("generated uri is like expected", Uri.parse(DictionaryContract.CONTENT_URI + "/" + VALID_ID), generatedUri);
+        return provider.insert(DictionaryContract.CONTENT_URI, values);
     }
 
 }

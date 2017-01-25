@@ -100,7 +100,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                break;
+                throw new UnsupportedOperationException();
             case VOCABLE_ID:
                 selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
                 final String id = uri.getLastPathSegment();

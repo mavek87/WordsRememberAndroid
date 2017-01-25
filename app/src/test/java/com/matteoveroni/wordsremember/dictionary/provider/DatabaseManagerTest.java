@@ -74,7 +74,7 @@ public class DatabaseManagerTest {
         Cursor cursor;
         final SQLiteDatabase db = getReadableDatabase();
         cursor = db.query(DictionaryContract.Schema.TABLE_NAME, DictionaryContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
-        assertNotNull("cursor must be not null after a query on a existing table", cursor);
+        assertNotNull("cursor must be not null after select_query_on_empty_db_return_zero_results query on select_query_on_empty_db_return_zero_results existing table", cursor);
         assertTrue("cursor mustn't contain any query result", cursor.getCount() == 0);
         destroyCursor(cursor);
         assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
