@@ -48,14 +48,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
     /**
      * Unique DatabaseManager's instance
      */
-    private volatile static DatabaseManager DB_MANAGER;
+    private volatile static DatabaseManager DB_INSTANCE;
 
     /**
-     * Private constructor
+     * Public constructor
+     *
+     * TODO: is public to allow tests
      *
      * @param context The application's context
      */
-    private DatabaseManager(Context context) {
+    public DatabaseManager(Context context) {
         super(context, DatabaseManager.NAME, null, DatabaseManager.VERSION);
     }
 
@@ -66,14 +68,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
      * @return Unique DatabaseManager instance
      */
     public static final DatabaseManager getInstance(Context context) {
-        if (DB_MANAGER == null) {
+        if (DB_INSTANCE == null) {
             synchronized (DatabaseManager.class) {
-                if (DB_MANAGER == null) {
-                    DB_MANAGER = new DatabaseManager(context);
+                if (DB_INSTANCE == null) {
+                    DB_INSTANCE = new DatabaseManager(context);
                 }
             }
         }
-        return DB_MANAGER;
+        return DB_INSTANCE;
     }
 
     @Override
