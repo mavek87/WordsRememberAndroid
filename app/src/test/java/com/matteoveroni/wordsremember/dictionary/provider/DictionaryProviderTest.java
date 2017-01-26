@@ -76,13 +76,13 @@ public class DictionaryProviderTest {
     }
 
     @Test(expected = SQLiteException.class)
-    public void insert_content_value_with_wrong_sql_column_throws_sqliteException() {
+    public void insert_vocable_with_wrong_sql_column_throws_sqliteException() {
         values.put(INVALID_COLUMN_NAME, VALID_ID);
         provider.insert(DictionaryContract.CONTENT_URI, values);
     }
 
     @Test(expected = SQLiteException.class)
-    public void insert_content_value_with_wrong_type_for_column_throws_sqliteException() {
+    public void insert_vocable_with_wrong_type_for_column_throws_sqliteException() {
         values.put(VALID_ID_COLUMN_NAME, ID_WITH_INVALID_TYPE);
         provider.insert(DictionaryContract.CONTENT_URI, values);
     }
@@ -112,7 +112,7 @@ public class DictionaryProviderTest {
     }
 
     @Test
-    public void select_query_by_id_on_not_empty_db_retrieve_the_right_result() {
+    public void select_query_by_id_on_db_containing_element_with_this_id_retrieve_the_right_result() {
         insertValidVocable();
         cursor = provider.query(
                 Uri.parse(DictionaryContract.CONTENT_URI + "/" + VALID_ID),

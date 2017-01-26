@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.io.File;
@@ -26,24 +27,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = new TagGenerator().getTag(DatabaseManager.class);
     public static final String NAME = MyApp.NAME + ".db";
     public static final int VERSION = 1;
-
-    private static final class SQL_QUERIES {
-        private static final String CREATE_DICTIONARY_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + DictionaryContract.Schema.TABLE_NAME + " ( "
-                + DictionaryContract.Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DictionaryContract.Schema.COLUMN_NAME + " TEXT NOT NULL"
-                + " );";
-
-        private static final String DROP_DICTIONARY_TABLE = "DROP TABLE IF EXISTS " + DictionaryContract.Schema.TABLE_NAME;
-
-        private static final String CREATE_TRANSLATIONS_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + DictionaryContract.Schema.TABLE_NAME + " ( "
-                + DictionaryContract.Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DictionaryContract.Schema.COLUMN_NAME + " TEXT NOT NULL"
-                + " );";
-
-        private static final String DROP_TRANSLATIONS_TABLE = "DROP TABLE IF EXISTS " + DictionaryContract.Schema.TABLE_NAME;
-    }
 
     /**
      * Unique DatabaseManager's instance
@@ -125,12 +108,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     private void createAllTables(SQLiteDatabase db) {
-        db.execSQL(SQL_QUERIES.CREATE_DICTIONARY_TABLE);
-        db.execSQL(SQL_QUERIES.CREATE_TRANSLATIONS_TABLE);
+        db.execSQL(DictionaryContract.Queries.CREATE_TABLE);
+        db.execSQL(TranslationsContract.Queries.CREATE_TABLE);
     }
 
     private void dropAllTables(SQLiteDatabase db) {
-        db.execSQL(SQL_QUERIES.DROP_DICTIONARY_TABLE);
-        db.execSQL(SQL_QUERIES.DROP_TRANSLATIONS_TABLE);
+        db.execSQL(DictionaryContract.Queries.DROP_TABLE);
+        db.execSQL(TranslationsContract.Queries.DROP_TABLE);
     }
 }

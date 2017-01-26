@@ -8,7 +8,7 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import static com.matteoveroni.wordsremember.provider.DictionaryProvider.CONTENT_AUTHORITY;
 
 /**
- * Contract class that defines Translations Table Schema
+ * Contract class for Translations
  *
  * @author Matteo Veroni
  */
@@ -22,14 +22,13 @@ public final class TranslationsContract {
             );
 
     // Mime type
-    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".item";
-    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".dir";
+    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
+    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
     private TranslationsContract() {
     }
 
     public static final class Schema implements BaseColumns {
-
         public static final String TABLE_NAME = "translations";
 
         public static final String COLUMN_ID = BaseColumns._ID;
@@ -40,5 +39,14 @@ public final class TranslationsContract {
                         COLUMN_ID,
                         COLUMN_TRANSLATION
                 };
+    }
+
+    public static final class Queries {
+        public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
+                + Schema.TABLE_NAME + " ( "
+                + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Schema.COLUMN_TRANSLATION + " TEXT NOT NULL"
+                + " );";
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }
