@@ -54,7 +54,7 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String[] projection = {VocablesContract.Schema.COLUMN_NAME};
+            final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
             final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
@@ -112,7 +112,7 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_NAME)));
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
         vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
         return vocable;
     }
@@ -126,7 +126,7 @@ public class DictionaryDAO {
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
 
-        final String[] projection = {VocablesContract.Schema.COLUMN_NAME};
+        final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
         final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
@@ -208,7 +208,7 @@ public class DictionaryDAO {
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
         if (isVocableValid(vocable)) {
-            values.put(VocablesContract.Schema.COLUMN_NAME, vocable.getName());
+            values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         }
         return values;
     }

@@ -39,7 +39,7 @@ public class DictionaryProviderTest {
     private final long VALID_ID = 1;
     private final String ID_WITH_INVALID_TYPE = "IdWithInvalidType";
 
-    private final String VALID_NAME_COLUMN_NAME = VocablesContract.Schema.COLUMN_NAME;
+    private final String VALID_NAME_COLUMN_NAME = VocablesContract.Schema.COLUMN_VOCABLE;
     private final String VALID_NAME = "Name";
 
     private final String INVALID_COLUMN_NAME = "Invalid";
@@ -124,7 +124,7 @@ public class DictionaryProviderTest {
         cursor.moveToFirst();
         assertEquals("query should return no results", 1, cursor.getCount());
         assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), VALID_ID);
-        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_NAME)), VALID_NAME);
+        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VALID_NAME);
     }
 
     /**********************************************************************************************/

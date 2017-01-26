@@ -47,6 +47,6 @@ public class WordsListViewAdapter extends CursorAdapter {
 //        }
 
         // Draw the cursor into the item view
-        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COLUMN_NAME)));
+        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COLUMN_VOCABLE)));
     }
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import com.matteoveroni.wordsremember.MyApp;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     /**
      * Public constructor
-     *
+     * <p>
      * TODO: is public to allow tests
      *
      * @param context The application's context
@@ -110,10 +111,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private void createAllTables(SQLiteDatabase db) {
         db.execSQL(VocablesContract.Queries.CREATE_TABLE);
         db.execSQL(TranslationsContract.Queries.CREATE_TABLE);
+        db.execSQL(VocablesTranslationsContract.Queries.CREATE_TABLE);
     }
 
     private void dropAllTables(SQLiteDatabase db) {
         db.execSQL(VocablesContract.Queries.DROP_TABLE);
         db.execSQL(TranslationsContract.Queries.DROP_TABLE);
+        db.execSQL(VocablesTranslationsContract.Queries.DROP_TABLE);
     }
 }

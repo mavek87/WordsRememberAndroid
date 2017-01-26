@@ -131,7 +131,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
                 VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
-                VocablesContract.Schema.COLUMN_NAME + " ASC"
+                VocablesContract.Schema.COLUMN_VOCABLE + " ASC"
         );
     }
 

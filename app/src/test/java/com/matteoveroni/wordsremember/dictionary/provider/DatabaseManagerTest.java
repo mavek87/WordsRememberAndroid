@@ -111,7 +111,7 @@ public class DatabaseManagerTest {
     @Test
     public void testIfValidVocableInsertedInValidTableTheInsertionSucceed() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(VocablesContract.Schema.COLUMN_NAME, VALID_VOCABLE_NAME);
+        contentValues.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
 
         final SQLiteDatabase db = getWritableDatabase();
         db.insert(VocablesContract.Schema.TABLE_NAME, "", contentValues);
