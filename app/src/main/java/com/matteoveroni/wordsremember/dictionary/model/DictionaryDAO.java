@@ -12,8 +12,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableById
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -45,7 +44,7 @@ public class DictionaryDAO {
             new AsyncVocableHandler(contentResolver).startInsert(
                     1,
                     null,
-                    DictionaryContract.CONTENT_URI,
+                    VocablesContract.CONTENT_URI,
                     vocableToContentValues(vocable)
             );
         }
@@ -55,11 +54,11 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String[] projection = {DictionaryContract.Schema.COLUMN_NAME};
-            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+            final String[] projection = {VocablesContract.Schema.COLUMN_NAME};
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
-            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_idColumn).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
 
             asyncVocableHandler.startQuery(
                     1,
@@ -77,10 +76,10 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_id = String.valueOf(id);
 
-            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
             asyncVocableHandler.startUpdate(
                     1,
@@ -97,10 +96,10 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
-            final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_idColumn).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
 
             asyncVocableHandler.startDelete(
                     1,
@@ -113,8 +112,8 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_NAME)));
-        vocable.setId(cursor.getLong(cursor.getColumnIndex(DictionaryContract.Schema.COLUMN_ID)));
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_NAME)));
+        vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
         return vocable;
     }
 
@@ -127,11 +126,11 @@ public class DictionaryDAO {
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
 
-        final String[] projection = {DictionaryContract.Schema.COLUMN_NAME};
-        final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+        final String[] projection = {VocablesContract.Schema.COLUMN_NAME};
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
-        final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
         Cursor cursor = contentResolver.query(
                 uri,
@@ -153,7 +152,7 @@ public class DictionaryDAO {
         long id = -1;
         if (isVocableValid(vocable) && vocable.getId() < 0) {
             final Uri uri = contentResolver.insert(
-                    DictionaryContract.CONTENT_URI,
+                    VocablesContract.CONTENT_URI,
                     vocableToContentValues(vocable)
             );
 
@@ -171,10 +170,10 @@ public class DictionaryDAO {
     public boolean updateVocable(long vocableID, Word newVocable) {
         final String str_id = String.valueOf(vocableID);
 
-        final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
-        final Uri uri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
+        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
         int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
 
@@ -186,10 +185,10 @@ public class DictionaryDAO {
         if (vocableID > 0) {
             final String str_id = String.valueOf(vocableID);
 
-            final String selection = DictionaryContract.Schema.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri vocableUri = Uri.withAppendedPath(DictionaryContract.CONTENT_URI, str_id).buildUpon().build();
+            final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
             recordDeleted = contentResolver.delete(
                     vocableUri,
@@ -209,7 +208,7 @@ public class DictionaryDAO {
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
         if (isVocableValid(vocable)) {
-            values.put(DictionaryContract.Schema.COLUMN_NAME, vocable.getName());
+            values.put(VocablesContract.Schema.COLUMN_NAME, vocable.getName());
         }
         return values;
     }

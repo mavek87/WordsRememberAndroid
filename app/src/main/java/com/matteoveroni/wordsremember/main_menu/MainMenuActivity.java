@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +77,9 @@ public class MainMenuActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+
+        // Use this line to reset the database if changes in some contract class schema has occurred
+        // DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
     }
 
     @Override

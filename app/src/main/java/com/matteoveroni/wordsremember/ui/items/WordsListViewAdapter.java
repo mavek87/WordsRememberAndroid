@@ -6,7 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 public class WordsListViewAdapter extends CursorAdapter {
 
@@ -47,6 +47,6 @@ public class WordsListViewAdapter extends CursorAdapter {
 //        }
 
         // Draw the cursor into the item view
-        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(DictionaryContract.Schema.COLUMN_NAME)));
+        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COLUMN_NAME)));
     }
 }

@@ -13,7 +13,7 @@ import static android.provider.ContactsContract.Settings.CONTENT_ITEM_TYPE;
  *
  * @author Matteo Veroni
  */
-public final class DictionaryContract {
+public final class VocablesContract {
 
     public static final String NAME = Schema.TABLE_NAME;
 
@@ -26,13 +26,13 @@ public final class DictionaryContract {
     public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
-    private DictionaryContract() {
+    private VocablesContract() {
     }
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "dictionary";
+        public static final String TABLE_NAME = "vocables";
 
-        public static final String COLUMN_ID = BaseColumns._ID;
+        public static final String COLUMN_ID = _ID;
         public static final String COLUMN_NAME = "name";
 
         public static final String[] ALL_COLUMNS =

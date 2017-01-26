@@ -22,7 +22,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -127,11 +127,11 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getActivity(),
-                DictionaryContract.CONTENT_URI,
-                DictionaryContract.Schema.ALL_COLUMNS,
+                VocablesContract.CONTENT_URI,
+                VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
-                DictionaryContract.Schema.COLUMN_NAME + " ASC"
+                VocablesContract.Schema.COLUMN_NAME + " ASC"
         );
     }
 

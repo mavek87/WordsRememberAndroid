@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.provider.contracts.DictionaryContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
@@ -56,8 +56,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private static final int TRANSLATION_ID = 4;
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DictionaryContract.NAME, VOCABLES);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DictionaryContract.NAME + "/#", VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME + "/#", VOCABLE_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
     }
@@ -71,9 +71,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case VOCABLES:
-                return DictionaryContract.CONTENT_DIR_TYPE;
+                return VocablesContract.CONTENT_DIR_TYPE;
             case VOCABLE_ID:
-                return DictionaryContract.CONTENT_ITEM_TYPE;
+                return VocablesContract.CONTENT_ITEM_TYPE;
             case TRANSLATIONS:
                 return TranslationsContract.CONTENT_DIR_TYPE;
             case TRANSLATION_ID:
@@ -95,14 +95,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         checkColumnsExistence(projection);
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(DictionaryContract.Schema.TABLE_NAME);
+        queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                throw new UnsupportedOperationException();
+                break;
             case VOCABLE_ID:
-                selection = DictionaryContract.Schema.COLUMN_ID + " = ? ";
+                selection = VocablesContract.Schema.COLUMN_ID + " = ? ";
                 final String id = uri.getLastPathSegment();
                 selectionArgs = new String[]{id};
                 break;
@@ -135,13 +135,13 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                id = db.insertOrThrow(DictionaryContract.Schema.TABLE_NAME, null, values);
+                id = db.insertOrThrow(VocablesContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
         notifyChangeToObservers(uri);
-        return Uri.parse(DictionaryContract.CONTENT_URI + "/" + id);
+        return Uri.parse(VocablesContract.CONTENT_URI + "/" + id);
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
@@ -153,17 +153,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                updatedRowsCounter = db.update(DictionaryContract.Schema.TABLE_NAME, values, selection, selectionArgs);
+                updatedRowsCounter = db.update(VocablesContract.Schema.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = DictionaryContract.Schema.COLUMN_ID + " = " + id + (
+                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""
                 );
                 updatedRowsCounter = db.update(
-                        DictionaryContract.Schema.TABLE_NAME,
+                        VocablesContract.Schema.TABLE_NAME,
                         values,
                         where,
                         selectionArgs);
@@ -185,17 +185,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                deletedRowsCounter = db.delete(DictionaryContract.Schema.TABLE_NAME, selection, selectionArgs);
+                deletedRowsCounter = db.delete(VocablesContract.Schema.TABLE_NAME, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = DictionaryContract.Schema.COLUMN_ID + " = " + id + (
+                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""
                 );
                 deletedRowsCounter = db.delete(
-                        DictionaryContract.Schema.TABLE_NAME,
+                        VocablesContract.Schema.TABLE_NAME,
                         where,
                         selectionArgs
                 );
@@ -210,7 +210,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private void checkColumnsExistence(String[] projection) {
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
-            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(DictionaryContract.Schema.ALL_COLUMNS));
+            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
 
             // check if all columns which are requested are available
             if (!availableColumns.containsAll(requestedColumns)) {
