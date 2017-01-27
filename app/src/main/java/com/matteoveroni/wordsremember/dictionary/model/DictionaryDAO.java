@@ -54,8 +54,8 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String[] projection = {VocablesContract.Table.COLUMN_VOCABLE};
-            final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+            final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
             final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
@@ -76,7 +76,7 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_id = String.valueOf(id);
 
-            final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
             final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
@@ -96,7 +96,7 @@ public class DictionaryDAO {
         if (id > 0) {
             final String str_idColumn = String.valueOf(id);
 
-            final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_idColumn};
 
             final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
@@ -112,8 +112,8 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Table.COLUMN_VOCABLE)));
-        vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Table.COLUMN_ID)));
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
+        vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
         return vocable;
     }
 
@@ -126,8 +126,8 @@ public class DictionaryDAO {
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
 
-        final String[] projection = {VocablesContract.Table.COLUMN_VOCABLE};
-        final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+        final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
         final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
@@ -170,7 +170,7 @@ public class DictionaryDAO {
     public boolean updateVocable(long vocableID, Word newVocable) {
         final String str_id = String.valueOf(vocableID);
 
-        final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
         final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
@@ -185,7 +185,7 @@ public class DictionaryDAO {
         if (vocableID > 0) {
             final String str_id = String.valueOf(vocableID);
 
-            final String selection = VocablesContract.Table.COLUMN_ID + " = ?";
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
             final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
@@ -208,7 +208,7 @@ public class DictionaryDAO {
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
         if (isVocableValid(vocable)) {
-            values.put(VocablesContract.Table.COLUMN_VOCABLE, vocable.getName());
+            values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         }
         return values;
     }

@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
  */
 public final class VocablesContract {
 
-    public static final String NAME = Table.TABLE_NAME;
+    public static final String NAME = Schema.TABLE_NAME;
 
     public static final Uri CONTENT_URI =
             Uri.parse(
@@ -26,7 +26,7 @@ public final class VocablesContract {
     private VocablesContract() {
     }
 
-    public static final class Table implements BaseColumns {
+    public static final class Schema implements BaseColumns {
         public static final String TABLE_NAME = "vocables";
 
         public static final String COLUMN_ID = _ID;
@@ -41,10 +41,10 @@ public final class VocablesContract {
 
     public static final class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + Table.TABLE_NAME + " ( "
-                + Table.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Table.COLUMN_VOCABLE + " TEXT NOT NULL"
+                + Schema.TABLE_NAME + " ( "
+                + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Schema.COLUMN_VOCABLE + " TEXT NOT NULL"
                 + " );";
-        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Table.TABLE_NAME;
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }

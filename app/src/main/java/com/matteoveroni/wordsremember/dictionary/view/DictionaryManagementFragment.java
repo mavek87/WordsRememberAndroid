@@ -128,10 +128,10 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         return new CursorLoader(
                 getActivity(),
                 VocablesContract.CONTENT_URI,
-                VocablesContract.Table.ALL_COLUMNS,
+                VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
-                VocablesContract.Table.COLUMN_VOCABLE + " ASC"
+                VocablesContract.Schema.COLUMN_VOCABLE + " ASC"
         );
     }
 

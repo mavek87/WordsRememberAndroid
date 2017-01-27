@@ -27,7 +27,7 @@ public class VocablesTranslationsContract {
     private VocablesTranslationsContract() {
     }
 
-    public static final class Table implements BaseColumns {
+    public static final class Schema implements BaseColumns {
         public static final String TABLE_NAME = NAME;
 
         public static final String COLUMN_ID = _ID;
@@ -44,10 +44,10 @@ public class VocablesTranslationsContract {
 
     public static class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + Table.TABLE_NAME + " ( "
-                + Table.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Table.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
-                + Table.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
+                + Schema.TABLE_NAME + " ( "
+                + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
+                + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
                 + " );";
         public static final String DROP_TABLE = "drop table if exists " + NAME;
     }
