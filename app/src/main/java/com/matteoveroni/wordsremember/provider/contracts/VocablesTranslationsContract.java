@@ -14,7 +14,7 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 
 public class VocablesTranslationsContract {
 
-    public static final String NAME = Schema.TABLE_NAME;
+    public static final String NAME = "vocables_translations";
 
     public static final Uri CONTENT_URI =
             Uri.parse(
@@ -22,14 +22,13 @@ public class VocablesTranslationsContract {
             );
 
     // Mime type
-    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
     private VocablesTranslationsContract() {
     }
 
-    public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "vocables_translations";
+    public static final class Table implements BaseColumns {
+        public static final String TABLE_NAME = NAME;
 
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_VOCABLE_ID = "vocable_id";
@@ -43,12 +42,12 @@ public class VocablesTranslationsContract {
                 };
     }
 
-    public static class Queries {
+    public static class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + Schema.TABLE_NAME + " ( "
-                + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL"
-                + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
+                + Table.TABLE_NAME + " ( "
+                + Table.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Table.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
+                + Table.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
                 + " );";
         public static final String DROP_TABLE = "drop table if exists " + NAME;
     }

@@ -35,11 +35,11 @@ public class DictionaryProviderTest {
     private ContentValues values;
     private Cursor cursor;
 
-    private final String VALID_ID_COLUMN_NAME = VocablesContract.Schema.COLUMN_ID;
+    private final String VALID_ID_COLUMN_NAME = VocablesContract.Table.COLUMN_ID;
     private final long VALID_ID = 1;
     private final String ID_WITH_INVALID_TYPE = "IdWithInvalidType";
 
-    private final String VALID_NAME_COLUMN_NAME = VocablesContract.Schema.COLUMN_VOCABLE;
+    private final String VALID_NAME_COLUMN_NAME = VocablesContract.Table.COLUMN_VOCABLE;
     private final String VALID_NAME = "Name";
 
     private final String INVALID_COLUMN_NAME = "Invalid";
@@ -103,7 +103,7 @@ public class DictionaryProviderTest {
     public void select_query_by_id_on_empty_db_return_zero_results() {
         cursor = provider.query(
                 Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_ID),
-                VocablesContract.Schema.ALL_COLUMNS,
+                VocablesContract.Table.ALL_COLUMNS,
                 null,
                 null,
                 null
@@ -116,15 +116,15 @@ public class DictionaryProviderTest {
         insertValidVocable();
         cursor = provider.query(
                 Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_ID),
-                VocablesContract.Schema.ALL_COLUMNS,
+                VocablesContract.Table.ALL_COLUMNS,
                 null,
                 null,
                 null
         );
         cursor.moveToFirst();
         assertEquals("query should return no results", 1, cursor.getCount());
-        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), VALID_ID);
-        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VALID_NAME);
+        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Table.COLUMN_ID)), VALID_ID);
+        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Table.COLUMN_VOCABLE)), VALID_NAME);
     }
 
     /**********************************************************************************************/

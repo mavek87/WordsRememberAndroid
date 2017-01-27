@@ -73,7 +73,7 @@ public class DatabaseManagerTest {
     public void testWhenTheDBManagerIsCreatedThenTheDictionaryTableShouldBeCreated() {
         Cursor cursor;
         final SQLiteDatabase db = getReadableDatabase();
-        cursor = db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+        cursor = db.query(VocablesContract.Table.TABLE_NAME, VocablesContract.Table.ALL_COLUMNS, "", null, null, null, null, null);
         assertNotNull("cursor must be not null after select_query_on_empty_db_return_zero_results query on select_query_on_empty_db_return_zero_results existing table", cursor);
         assertTrue("cursor mustn't contain any query result", cursor.getCount() == 0);
         destroyCursor(cursor);
@@ -85,7 +85,7 @@ public class DatabaseManagerTest {
         Cursor cursor = null;
         try {
             final SQLiteDatabase db = getReadableDatabase();
-            cursor = db.query(INVALID_TABLE, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+            cursor = db.query(INVALID_TABLE, VocablesContract.Table.ALL_COLUMNS, "", null, null, null, null, null);
         } catch (SQLiteException ex) {
             throw new SQLiteException();
         } finally {
@@ -99,7 +99,7 @@ public class DatabaseManagerTest {
         Cursor cursor = null;
         try {
             final SQLiteDatabase db = getReadableDatabase();
-            cursor = db.query(VocablesContract.Schema.TABLE_NAME, INVALID_COLUMN, "", null, null, null, null, null);
+            cursor = db.query(VocablesContract.Table.TABLE_NAME, INVALID_COLUMN, "", null, null, null, null, null);
         } catch (SQLiteException ex) {
             throw new SQLiteException();
         } finally {
@@ -111,13 +111,13 @@ public class DatabaseManagerTest {
     @Test
     public void testIfValidVocableInsertedInValidTableTheInsertionSucceed() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+        contentValues.put(VocablesContract.Table.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
 
         final SQLiteDatabase db = getWritableDatabase();
-        db.insert(VocablesContract.Schema.TABLE_NAME, "", contentValues);
+        db.insert(VocablesContract.Table.TABLE_NAME, "", contentValues);
 
         Cursor cursor =
-                db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+                db.query(VocablesContract.Table.TABLE_NAME, VocablesContract.Table.ALL_COLUMNS, "", null, null, null, null, null);
 
         assertTrue("query must return just one value", cursor.getCount() == 1);
         assertTrue("move to the first retrieved vocable position", cursor.moveToNext());

@@ -12,6 +12,7 @@ import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import java.util.Arrays;
@@ -54,12 +55,15 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private static final int VOCABLE_ID = 2;
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
+    private static final int VOCABLES_TRANSLATIONS = 5;
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME + "/#", VOCABLE_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, VOCABLES_TRANSLATIONS);
+
     }
 
     private static final class Errors {
@@ -78,6 +82,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 return TranslationsContract.CONTENT_DIR_TYPE;
             case TRANSLATION_ID:
                 return TranslationsContract.CONTENT_ITEM_TYPE;
+            case VOCABLES_TRANSLATIONS:
+                return VocablesTranslationsContract.CONTENT_DIR_TYPE;
             default:
                 return null;
         }
@@ -95,14 +101,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         checkColumnsExistence(projection);
 
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
+        queryBuilder.setTables(VocablesContract.Table.TABLE_NAME);
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
                 break;
             case VOCABLE_ID:
-                selection = VocablesContract.Schema.COLUMN_ID + " = ? ";
+                selection = VocablesContract.Table.COLUMN_ID + " = ? ";
                 final String id = uri.getLastPathSegment();
                 selectionArgs = new String[]{id};
                 break;
@@ -135,7 +141,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                id = db.insertOrThrow(VocablesContract.Schema.TABLE_NAME, null, values);
+                id = db.insertOrThrow(VocablesContract.Table.TABLE_NAME, null, values);
                 break;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
@@ -153,17 +159,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                updatedRowsCounter = db.update(VocablesContract.Schema.TABLE_NAME, values, selection, selectionArgs);
+                updatedRowsCounter = db.update(VocablesContract.Table.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
+                final String where = VocablesContract.Table.COLUMN_ID + " = " + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""
                 );
                 updatedRowsCounter = db.update(
-                        VocablesContract.Schema.TABLE_NAME,
+                        VocablesContract.Table.TABLE_NAME,
                         values,
                         where,
                         selectionArgs);
@@ -185,17 +191,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case VOCABLES:
-                deletedRowsCounter = db.delete(VocablesContract.Schema.TABLE_NAME, selection, selectionArgs);
+                deletedRowsCounter = db.delete(VocablesContract.Table.TABLE_NAME, selection, selectionArgs);
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
+                final String where = VocablesContract.Table.COLUMN_ID + " = " + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""
                 );
                 deletedRowsCounter = db.delete(
-                        VocablesContract.Schema.TABLE_NAME,
+                        VocablesContract.Table.TABLE_NAME,
                         where,
                         selectionArgs
                 );
@@ -210,7 +216,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private void checkColumnsExistence(String[] projection) {
         if (projection != null) {
             HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
-            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
+            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Table.ALL_COLUMNS));
 
             // check if all columns which are requested are available
             if (!availableColumns.containsAll(requestedColumns)) {

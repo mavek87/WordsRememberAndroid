@@ -46,7 +46,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Get or create a unique DatabaseManager's instance
+     * Get or CreateTable a unique DatabaseManager's instance
      *
      * @param context The application's context
      * @return Unique DatabaseManager instance
@@ -109,14 +109,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     private void createAllTables(SQLiteDatabase db) {
-        db.execSQL(VocablesContract.Queries.CREATE_TABLE);
-        db.execSQL(TranslationsContract.Queries.CREATE_TABLE);
-        db.execSQL(VocablesTranslationsContract.Queries.CREATE_TABLE);
+        db.execSQL(VocablesContract.Query.CREATE_TABLE);
+        db.execSQL(TranslationsContract.Query.CREATE_TABLE);
+        db.execSQL(VocablesTranslationsContract.Query.CREATE_TABLE);
     }
 
     private void dropAllTables(SQLiteDatabase db) {
-        db.execSQL(VocablesContract.Queries.DROP_TABLE);
-        db.execSQL(TranslationsContract.Queries.DROP_TABLE);
-        db.execSQL(VocablesTranslationsContract.Queries.DROP_TABLE);
+        db.execSQL(VocablesContract.Query.DROP_TABLE);
+        db.execSQL(TranslationsContract.Query.DROP_TABLE);
+        db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
     }
 }

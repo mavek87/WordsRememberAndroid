@@ -17,7 +17,7 @@ public class DictionaryFragmentFactory {
     }
 
     /**
-     * Use this factory method to create a new instance of
+     * Use this factory method to CreateTable a new instance of
      * of a DictionaryFragment.
      *
      * @return A new instance of a DictionaryFragment.
