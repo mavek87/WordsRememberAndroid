@@ -95,7 +95,7 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = SQLiteException.class)
-    public void testWhenQueryExecutedUsingInvalidColumnSQLiteExceptionOccurs() {
+    public void testWhenQueryExecutedUsingInvalidColumnSQLiteExceptionOccurs) {
         Cursor cursor = null;
         try {
             final SQLiteDatabase db = getReadableDatabase();
@@ -109,11 +109,11 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void testIfValidVocableInsertedInValidTableTheInsertionSucceed() {
+    public void insert_valid_record_in_valid_table_succeed() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
 
-        final SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.insert(VocablesContract.Schema.TABLE_NAME, "", contentValues);
 
         Cursor cursor =
@@ -126,6 +126,15 @@ public class DatabaseManagerTest {
 
         destroyCursor(cursor);
         assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
+    }
+
+    @Test(expected = SQLiteException.class)
+    public void insert_record_with_invalid_type_for_column_in_valid_table_throws_sqliteexception() {
+        ContentValues values = new ContentValues();
+        String idWithInvalidType = "invalidTypeId";
+        values.put(VocablesContract.Schema.COLUMN_ID, idWithInvalidType);
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(VocablesContract.Schema.TABLE_NAME, null, values);
     }
 
     private SQLiteDatabase getReadableDatabase() {

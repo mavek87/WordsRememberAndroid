@@ -8,6 +8,7 @@ import android.net.Uri;
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.utilities.Util;
@@ -36,13 +37,19 @@ public class DictionaryProviderTest {
     private ContentValues values;
     private Cursor cursor;
 
-    private final String VALID_ID_COLUMN_NAME = VocablesContract.Schema.COLUMN_ID;
-    private final long VALID_ID = 1;
+//    private final String VOCABLES_COLUMN_ID = VocablesContract.Schema.COLUMN_ID;
+//    private final String VOCABLES_COLUMN_VOCABLE = VocablesContract.Schema.COLUMN_VOCABLE;
+
+    private final long VOCABLES_VALID_VOCABLE_ID = 1;
+    private final String VOCABLES_VALID_VOCABLE = "Name";
+
+//    private final String TRANSLATIONS_COLUMN_ID = VocablesContract.Schema.COLUMN_ID;
+//    private final String TRANSLATIONS_COLUMN_TRANSLATION = VocablesContract.Schema.COLUMN_VOCABLE;
+
+    private final long TRANSLATIONS_VALID_TRANSLATION_ID = 1;
+    private final String TRANSLATIONS_VALID_TRANSLATION = "Name";
+
     private final String ID_WITH_INVALID_TYPE = "IdWithInvalidType";
-
-    private final String VALID_NAME_COLUMN_NAME = VocablesContract.Schema.COLUMN_VOCABLE;
-    private final String VALID_NAME = "Name";
-
     private final String INVALID_COLUMN_NAME = "Invalid";
 
     @Before
@@ -70,31 +77,30 @@ public class DictionaryProviderTest {
 
     /**********************************************************************************************/
 
-    @Test(expected = SQLiteException.class)
-    public void insert_empty_content_value_throws_sqliteException() {
-        assertThat("no values should be inserted at the beginning ", values.keySet().isEmpty());
-        provider.insert(VocablesContract.CONTENT_URI, values);
-    }
-
-    @Test(expected = SQLiteException.class)
-    public void insert_vocable_with_wrong_sql_column_throws_sqliteException() {
-        values.put(INVALID_COLUMN_NAME, VALID_ID);
-        provider.insert(VocablesContract.CONTENT_URI, values);
-    }
-
-    @Test(expected = SQLiteException.class)
-    public void insert_vocable_with_wrong_type_for_column_throws_sqliteException() {
-        values.put(VALID_ID_COLUMN_NAME, ID_WITH_INVALID_TYPE);
-        provider.insert(VocablesContract.CONTENT_URI, values);
+    @Test
+    public void insert_vocable_in_vocables_table_returns_expected_uri() {
+        values.put(VocablesContract.Schema.COLUMN_ID, VOCABLES_VALID_VOCABLE_ID);
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VOCABLES_VALID_VOCABLE);
+        Uri generatedUri = provider.insert(VocablesContract.CONTENT_URI, values);
+        assertEquals("generated uri is like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID), generatedUri);
     }
 
     @Test
-    public void insert_real_vocable_works() {
-        values.put(VALID_ID_COLUMN_NAME, VALID_ID);
-        values.put(VALID_NAME_COLUMN_NAME, VALID_NAME);
-        Uri generatedUri = provider.insert(VocablesContract.CONTENT_URI, values);
-        assertEquals("generated uri is like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_ID), generatedUri);
+    public void insert_translation_in_translations_table_returns_expected_uri() {
+        values.put(TranslationsContract.Schema.COLUMN_ID, 1);
+        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, TRANSLATIONS_VALID_TRANSLATION);
+        Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
+        assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
+
+    @Test
+    public void insert_record_in_vocablestranslations_table_returns_expected_uri() {
+        values.put(VocablesTranslationsContract.Schema.COLUMN_ID, 1);
+        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, TRANSLATIONS_VALID_TRANSLATION);
+        Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
+        assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
+    }
+
 
     /**********************************************************************************************/
 
@@ -105,7 +111,7 @@ public class DictionaryProviderTest {
     @Test
     public void select_query_by_id_on_empty_db_return_zero_results() {
         cursor = provider.query(
-                Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_ID),
+                Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID),
                 VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
@@ -116,11 +122,11 @@ public class DictionaryProviderTest {
 
     @Test
     public void select_query_by_id_on_db_containing_element_with_this_id_retrieve_the_right_result() {
-        values.put(VALID_ID_COLUMN_NAME, VALID_ID);
-        values.put(VALID_NAME_COLUMN_NAME, VALID_NAME);
+        values.put(VocablesContract.Schema.COLUMN_ID, VOCABLES_VALID_VOCABLE_ID);
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VOCABLES_VALID_VOCABLE);
         provider.insert(VocablesContract.CONTENT_URI, values);
         cursor = provider.query(
-                Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_ID),
+                Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID),
                 VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
@@ -128,8 +134,8 @@ public class DictionaryProviderTest {
         );
         cursor.moveToFirst();
         assertEquals("query should return no results", 1, cursor.getCount());
-        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), VALID_ID);
-        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VALID_NAME);
+        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), VOCABLES_VALID_VOCABLE_ID);
+        assertEquals("query should return the right id", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VOCABLES_VALID_VOCABLE);
     }
 
     @Test
