@@ -43,116 +43,87 @@ public class DatabaseManagerTest {
 
     private static final String DICTIONARY_DATABASE_NAME = DatabaseManager.NAME;
 
-    public static final String INVALID_TABLE = "invalid_table";
-    public static final String[] INVALID_COLUMN = {"invalid_column"};
+    private static final String INVALID_TABLE = "invalid_table";
+    private static final String[] INVALID_COLUMN = {"invalid_column"};
 
-    public static final String VALID_VOCABLE_NAME = "test_vocable_123";
+    private static final String VALID_VOCABLE_NAME = "test_vocable_123";
 
     private DatabaseManager dbManager = null;
+    private Cursor cursor = null;
+    private ContentValues values = new ContentValues();
 
     @Before
     public void setUp() {
+        assertNull(dbManager);
+        assertNull(cursor);
+
         ShadowApplication application = Shadows.shadowOf(RuntimeEnvironment.application);
         dbManager = DatabaseManager.getInstance(application.getApplicationContext());
+
+        assertNotNull(dbManager);
     }
 
     @After
     public void tearDown() {
+        values.clear();
         if (dbManager != null) {
             dbManager.close();
+            dbManager = null;
+        }
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
         }
     }
 
     @Test
-    public void testWhenDBManagerIsCreatedThenTheDBNameShouldBeSet() {
-        assertNotNull("dbManager must be not null after setUp", dbManager);
+    public void when_db_manager_is_created_db_name_should_be_set() {
+        assertNotNull("dbManager must not be null after setUp", dbManager);
         assertEquals("dbManager name must be equal to expected name", DICTIONARY_DATABASE_NAME, dbManager.getDatabaseName());
     }
 
     @Test
-    public void testWhenTheDBManagerIsCreatedThenTheDictionaryTableShouldBeCreated() {
-        Cursor cursor;
-        final SQLiteDatabase db = getReadableDatabase();
+    public void when_db_manager_is_created_dictionary_table_should_be_created() {
+        final SQLiteDatabase db = dbManager.getReadableDatabase();
         cursor = db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
-        assertNotNull("cursor must be not null after select_query_on_empty_db_return_zero_results query on select_query_on_empty_db_return_zero_results existing table", cursor);
+        assertNotNull("cursor must not be null after selection query on existing table", cursor);
         assertTrue("cursor mustn't contain any query result", cursor.getCount() == 0);
-        destroyCursor(cursor);
-        assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
     }
 
     @Test(expected = SQLiteException.class)
-    public void testWhenQueryExecutedOnInvalidTableSQLiteExceptionOccurs() {
-        Cursor cursor = null;
+    public void sqlite_exception_should_be_thrown_when_query_executed_on_invalid_table() {
         try {
-            final SQLiteDatabase db = getReadableDatabase();
+            final SQLiteDatabase db = dbManager.getReadableDatabase();
             cursor = db.query(INVALID_TABLE, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
         } catch (SQLiteException ex) {
             throw new SQLiteException();
-        } finally {
-            destroyCursor(cursor);
-            assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
         }
     }
 
     @Test(expected = SQLiteException.class)
-    public void testWhenQueryExecutedUsingInvalidColumnSQLiteExceptionOccurs) {
-        Cursor cursor = null;
+    public void sqlite_exception_should_be_thrown_when_query_executed_using_invalid_column() {
         try {
-            final SQLiteDatabase db = getReadableDatabase();
+            final SQLiteDatabase db = dbManager.getReadableDatabase();
             cursor = db.query(VocablesContract.Schema.TABLE_NAME, INVALID_COLUMN, "", null, null, null, null, null);
         } catch (SQLiteException ex) {
             throw new SQLiteException();
-        } finally {
-            destroyCursor(cursor);
-            assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
         }
     }
 
     @Test
-    public void insert_valid_record_in_valid_table_succeed() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+    public void insert_valid_vocable_in_valid_table_succeed_and_autoincrement_id() {
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
 
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(VocablesContract.Schema.TABLE_NAME, "", contentValues);
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.insert(VocablesContract.Schema.TABLE_NAME, null, values);
 
         Cursor cursor =
-                db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, "", null, null, null, null, null);
+                db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, null, null, null, null, null);
 
         assertTrue("query must return just one value", cursor.getCount() == 1);
-        assertTrue("move to the first retrieved vocable position", cursor.moveToNext());
-        assertEquals("the first valid_id must be equal to one", 1, cursor.getInt(0));
+        assertTrue("move to the first retrieved vocable position", cursor.moveToFirst());
+        assertEquals("the first valid_id must be equal to one", 1, cursor.getLong(0));
         assertEquals("the inserted vocable name must match with the expected value", VALID_VOCABLE_NAME, cursor.getString(1));
-
-        destroyCursor(cursor);
-        assertTrue("cursor must be destroyed", isCursorDestroyed(cursor));
-    }
-
-    @Test(expected = SQLiteException.class)
-    public void insert_record_with_invalid_type_for_column_in_valid_table_throws_sqliteexception() {
-        ContentValues values = new ContentValues();
-        String idWithInvalidType = "invalidTypeId";
-        values.put(VocablesContract.Schema.COLUMN_ID, idWithInvalidType);
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(VocablesContract.Schema.TABLE_NAME, null, values);
-    }
-
-    private SQLiteDatabase getReadableDatabase() {
-        return dbManager.getReadableDatabase();
-    }
-
-    private SQLiteDatabase getWritableDatabase() {
-        return dbManager.getWritableDatabase();
-    }
-
-    private void destroyCursor(Cursor cursor) {
-        if (cursor != null) {
-            cursor.close();
-        }
-    }
-
-    private boolean isCursorDestroyed(Cursor cursor) {
-        return cursor == null || cursor.isClosed();
     }
 
 }
