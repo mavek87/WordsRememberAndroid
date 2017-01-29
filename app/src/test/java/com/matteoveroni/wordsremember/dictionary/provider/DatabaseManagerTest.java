@@ -122,8 +122,14 @@ public class DatabaseManagerTest {
 
         assertTrue("query must return just one value", cursor.getCount() == 1);
         assertTrue("move to the first retrieved vocable position", cursor.moveToFirst());
-        assertEquals("the first valid_id must be equal to one", 1, cursor.getLong(0));
-        assertEquals("the inserted vocable name must match with the expected value", VALID_VOCABLE_NAME, cursor.getString(1));
+        assertEquals("the first valid_id must be equal to one",
+                1,
+                cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID))
+        );
+        assertEquals("the inserted vocable name must match with the expected value",
+                VALID_VOCABLE_NAME,
+                cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
+        );
     }
 
 }
