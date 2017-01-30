@@ -26,23 +26,13 @@ import java.nio.channels.FileChannel;
  */
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = new TagGenerator().getTag(DatabaseManager.class);
-    public static final String NAME = MyApp.NAME + ".db";
+    public static final String DB_NAME = MyApp.NAME + ".db";
     public static final int VERSION = 1;
 
-    /**
-     * Unique DatabaseManager's instance
-     */
     private volatile static DatabaseManager DB_INSTANCE;
 
-    /**
-     * Public constructor
-     * <p>
-     * TODO: is public to allow tests
-     *
-     * @param context The application's context
-     */
-    public DatabaseManager(Context context) {
-        super(context, DatabaseManager.NAME, null, DatabaseManager.VERSION);
+    private DatabaseManager(Context context) {
+        super(context, DatabaseManager.DB_NAME, null, DatabaseManager.VERSION);
     }
 
     /**
@@ -92,8 +82,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
         File data = Environment.getDataDirectory();
         FileChannel source;
         FileChannel destination;
-        String currentDBPath = "/data/" + MyApp.AUTHORITY + "/databases/" + NAME;
-        String backupDBPath = NAME;
+        String currentDBPath = "/data/" + MyApp.AUTHORITY + "/databases/" + DB_NAME;
+        String backupDBPath = DB_NAME;
         File currentDB = new File(data, currentDBPath);
         File backupDB = new File(sd, backupDBPath);
         try {

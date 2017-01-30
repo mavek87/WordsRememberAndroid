@@ -92,7 +92,6 @@ public class DictionaryProviderTest {
         assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
 
-
     /**********************************************************************************************/
 
     // Query tests
@@ -100,7 +99,7 @@ public class DictionaryProviderTest {
     /**********************************************************************************************/
 
     @Test
-    public void select_query_by_id_on_empty_db_return_zero_results() {
+    public void select_vocable_by_id_on_empty_db_return_zero_results() {
         cursor = provider.query(
                 Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID),
                 VocablesContract.Schema.ALL_COLUMNS,
@@ -112,11 +111,16 @@ public class DictionaryProviderTest {
     }
 
     @Test
-    public void select_query_by_id_on_db_containing_element_with_this_id_retrieve_the_right_result() {
+    public void select_vocable_by_id_on_db_containing_element_with_this_id_retrieve_the_right_vocable() {
         values.put(VocablesContract.Schema.COLUMN_VOCABLE, VOCABLES_VALID_VOCABLE);
-        provider.insert(VocablesContract.CONTENT_URI, values);
+        Uri uri = provider.insert(VocablesContract.CONTENT_URI, values);
+        assertEquals(
+                "uri of inserted vocable is like expected",
+                uri.toString(), VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID
+        );
+
         cursor = provider.query(
-                Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID),
+                uri,
                 VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,

@@ -111,7 +111,7 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void query_valid_vocable_inserted_in_valid_table_succeed_and_autoincrement_id() {
+    public void select_existing_vocable_succeed() {
         insertValidVocable();
         final SQLiteDatabase db = dbManager.getReadableDatabase();
 

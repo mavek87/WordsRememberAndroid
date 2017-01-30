@@ -161,8 +161,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         int updatedRowsCounter;
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
-        final int uriType = URI_MATCHER.match(uri);
-        switch (uriType) {
+        switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 updatedRowsCounter = db.update(VocablesContract.Schema.TABLE_NAME, values, selection, selectionArgs);
                 break;
@@ -193,8 +192,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
 
-        final int uriType = URI_MATCHER.match(uri);
-        switch (uriType) {
+        switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 deletedRowsCounter = db.delete(VocablesContract.Schema.TABLE_NAME, selection, selectionArgs);
                 break;
