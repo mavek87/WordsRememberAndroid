@@ -41,7 +41,7 @@ import static junit.framework.Assert.assertTrue;
 @Config(constants = BuildConfig.class)
 public class DatabaseManagerTest {
 
-    private static final String DICTIONARY_DATABASE_NAME = DatabaseManager.NAME;
+    private static final String DICTIONARY_DATABASE_NAME = DatabaseManager.DB_NAME;
 
     private static final String INVALID_TABLE = "invalid_table";
     private static final String[] INVALID_COLUMN = {"invalid_column"};
@@ -111,14 +111,15 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void insert_valid_vocable_in_valid_table_succeed_and_autoincrement_id() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+    public void query_valid_vocable_inserted_in_valid_table_succeed_and_autoincrement_id() {
+        insertValidVocable();
+        final SQLiteDatabase db = dbManager.getReadableDatabase();
 
-        SQLiteDatabase db = dbManager.getWritableDatabase();
-        db.insert(VocablesContract.Schema.TABLE_NAME, null, values);
-
-        Cursor cursor =
-                db.query(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS, null, null, null, null, null);
+        cursor = db.query(
+                VocablesContract.Schema.TABLE_NAME,
+                VocablesContract.Schema.ALL_COLUMNS,
+                null, null, null, null, null
+        );
 
         assertTrue("query must return just one value", cursor.getCount() == 1);
         assertTrue("move to the first retrieved vocable position", cursor.moveToFirst());
@@ -132,4 +133,60 @@ public class DatabaseManagerTest {
         );
     }
 
+    @Test
+    public void delete_existing_vocable_succeed() {
+        insertValidVocable();
+
+        final SQLiteDatabase db = dbManager.getWritableDatabase();
+
+        int rowDeleted = db.delete(
+                VocablesContract.Schema.TABLE_NAME,
+                VocablesContract.Schema.COLUMN_ID + " = " + 1,
+                null
+        );
+        assertEquals("should delete only one row", 1, rowDeleted);
+
+        cursor = db.query(
+                VocablesContract.Schema.TABLE_NAME,
+                VocablesContract.Schema.ALL_COLUMNS,
+                null, null, null, null, null
+        );
+        assertTrue("query must return no values because the vocable should be deleted", cursor.getCount() == 0);
+        cursor.close();
+    }
+
+    @Test
+    public void update_existing_vocable_succeed() {
+        insertValidVocable();
+
+        final SQLiteDatabase db = dbManager.getWritableDatabase();
+        final ContentValues updatedValues = new ContentValues();
+        final String UPDATED_VOCABLE_NAME = "UpdatedVocable";
+
+        updatedValues.put(VocablesContract.Schema.COLUMN_VOCABLE, UPDATED_VOCABLE_NAME);
+
+        final int rowsUpdated = db.update(VocablesContract.Schema.TABLE_NAME, updatedValues, VocablesContract.Schema.COLUMN_ID + " = " + 1, null);
+        assertEquals("rows updated should be only one", 1, rowsUpdated);
+
+        cursor = db.query(
+                VocablesContract.Schema.TABLE_NAME,
+                VocablesContract.Schema.ALL_COLUMNS,
+                null, null, null, null, null
+        );
+        assertTrue("query must return just one vocable", cursor.getCount() == 1);
+
+        cursor.moveToFirst();
+        assertEquals(
+                "the only vocable should be updated like expected",
+                UPDATED_VOCABLE_NAME, cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
+        );
+    }
+
+    private void insertValidVocable() {
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+        final SQLiteDatabase db = dbManager.getWritableDatabase();
+        long idOfVocableInserted = db.insert(VocablesContract.Schema.TABLE_NAME, null, values);
+        assertEquals("id generated from insert is equal to one", 1, idOfVocableInserted);
+        dbManager.close();
+    }
 }
