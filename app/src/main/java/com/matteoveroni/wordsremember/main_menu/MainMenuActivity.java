@@ -78,8 +78,9 @@ public class MainMenuActivity extends AppCompatActivity
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
 
+        // Todo: remove this line in production code
         // Use this line to reset the database if changes in some contract class schema has occurred
-        // DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
+         DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
     }
 
     @Override

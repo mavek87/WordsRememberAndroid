@@ -13,7 +13,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  * Dagger2 components for dependency injection are built here
  *
  * @author Matteo Veroni
- * @version 0.0.19
+ * @version 0.0.20
  */
 public class MyApp extends Application {
 

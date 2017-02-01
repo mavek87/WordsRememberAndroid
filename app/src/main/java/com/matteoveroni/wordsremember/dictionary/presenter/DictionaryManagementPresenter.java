@@ -16,6 +16,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -69,7 +74,7 @@ public class DictionaryManagementPresenter implements Presenter {
     /**********************************************************************************************/
 
     public void onViewCreated(Context context) {
-//        populateDatabaseForTestPurposes(context);
+        populateDatabaseForTestPurposes(context);
         exportDatabaseOnSd(context);
     }
 
@@ -123,14 +128,21 @@ public class DictionaryManagementPresenter implements Presenter {
     /**********************************************************************************************/
 
     private void populateDatabaseForTestPurposes(Context context) {
-//        DatabaseManager db = DatabaseManager.instance(context);
-//        db.resetDatabase();
-        Word randomVocableToSave = new Word(generateRandomWord());
-        model.saveVocable(randomVocableToSave);
+//        DatabaseManager.getInstance(context).resetDatabase();
+
+        Map<String, Word> uniqueVocables = new HashMap<>();
+        Word vocableToSave = null;
+        for (int i = 0; i < 5; i++) {
+            do {
+                vocableToSave = new Word(generateRandomWord());
+            } while (uniqueVocables.containsKey(vocableToSave.getName()));
+            uniqueVocables.put(vocableToSave.getName(), vocableToSave);
+            model.asyncSaveVocable(vocableToSave);
+        }
     }
 
     private String generateRandomWord() {
-        final Random randomGenerator = new Random();
+        final Random randomGenerator = new SecureRandom();
         final int MAX_NUM_LETTERS = 30;
         final int MIN_NUM_LETTERS = 3;
         final int FIRST_ASCII_CHAR_CODE = 97;

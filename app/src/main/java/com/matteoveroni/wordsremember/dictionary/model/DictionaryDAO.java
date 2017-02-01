@@ -52,12 +52,9 @@ public class DictionaryDAO {
 
     public void asyncSaveVocable(Word vocable) {
         if (isWordValid(vocable) && vocable.getId() < 0) {
-            new AsyncVocablesHandler(contentResolver).startInsert(
-                    1,
-                    null,
-                    VocablesContract.CONTENT_URI,
-                    vocableToContentValues(vocable)
-            );
+            ContentValues val = new ContentValues();
+            val.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
+            new AsyncInsertCommand(contentResolver, VocablesContract.CONTENT_URI, val).execute();
         }
     }
 
