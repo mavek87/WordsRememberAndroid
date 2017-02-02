@@ -18,5 +18,4 @@
         android:name="com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </RelativeLayout>

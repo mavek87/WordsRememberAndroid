@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WordsRemember</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="done">Done</string>
 
     <string name="add_word">Add Word</string>
@@ -15,6 +14,8 @@
 
     <string name="fragment_dictionary_management_title">Dictionary</string>
     <string name="fragment_dictionary_manipulation_title"></string>
+
+    <string name="fragment_translations_management_title">Translations</string>
 
     <string name="create_vocable">Create vocable</string>
     <string name="edit">Edit</string>

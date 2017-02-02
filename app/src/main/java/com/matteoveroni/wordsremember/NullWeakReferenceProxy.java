@@ -17,7 +17,6 @@ public class NullWeakReferenceProxy implements InvocationHandler {
         if (object == null || object.get() == null) {
             return null;
         }
-
         return method.invoke(object.get(), args);
     }
 }
