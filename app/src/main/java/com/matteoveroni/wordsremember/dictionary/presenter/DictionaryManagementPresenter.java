@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
@@ -12,15 +11,12 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
+import com.matteoveroni.wordsremember.utilities.Str;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
-import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
@@ -132,35 +128,10 @@ public class DictionaryManagementPresenter implements Presenter {
     /**********************************************************************************************/
 
     private void populateDatabaseForTestPurposes(Context context) {
-//        DatabaseManager.getInstance(context).resetDatabase();
-
-        Map<String, Word> uniqueVocables = new HashMap<>();
-        Word vocableToSave = null;
         for (int i = 0; i < 5; i++) {
-            do {
-                vocableToSave = new Word(generateRandomWord());
-            } while (uniqueVocables.containsKey(vocableToSave.getName()));
-            uniqueVocables.put(vocableToSave.getName(), vocableToSave);
+            Word vocableToSave = new Word(Str.generateRandomUniqueString());
             model.asyncSaveVocable(vocableToSave);
         }
-    }
-
-    private String generateRandomWord() {
-        final Random randomGenerator = new SecureRandom();
-        final int MAX_NUM_LETTERS = 30;
-        final int MIN_NUM_LETTERS = 3;
-        final int FIRST_ASCII_CHAR_CODE = 97;
-        final int ASCII_CHAR_CODE = 25;
-        String generatedWord = "";
-
-        // MIN_NUM_LETTERS <= numbersOfLetters <= MAX_NUM_LETTERS
-        int numberOfLetters = (randomGenerator.nextInt(MAX_NUM_LETTERS - MIN_NUM_LETTERS)) + MIN_NUM_LETTERS;
-
-        for (int letter = 0; letter < numberOfLetters; letter++) {
-            char randomChar = (char) (FIRST_ASCII_CHAR_CODE + randomGenerator.nextInt(ASCII_CHAR_CODE));
-            generatedWord += randomChar;
-        }
-        return generatedWord;
     }
 
     private void exportDatabaseOnSd(Context context) {
