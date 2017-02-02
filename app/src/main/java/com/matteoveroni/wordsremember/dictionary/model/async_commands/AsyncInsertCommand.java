@@ -1,13 +1,10 @@
-package com.matteoveroni.wordsremember.dictionary.model;
+package com.matteoveroni.wordsremember.dictionary.model.async_commands;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,7 +20,7 @@ public class AsyncInsertCommand extends CompletionHandler {
     private final Object nextCommand;
 
     public AsyncInsertCommand(ContentResolver contentResolver, Uri content_uri, ContentValues values) {
-        this(contentResolver, content_uri, values, null);
+        this(contentResolver, content_uri, values, new NoOperationCommand(contentResolver));
     }
 
     public AsyncInsertCommand(ContentResolver contentResolver, Uri content_uri, ContentValues values, Object nextCommand) {
@@ -41,9 +38,7 @@ public class AsyncInsertCommand extends CompletionHandler {
     @Override
     protected void onInsertComplete(int token, Object nextCommand, Uri uriOfInsertedRow) {
         dispatchCompletionEvent(uriOfInsertedRow);
-        if (nextCommand != null) {
-            ((CompletionHandler) nextCommand).execute();
-        }
+        ((CompletionHandler) nextCommand).execute();
     }
 
     private void dispatchCompletionEvent(Uri uriOfInsertedRow) {

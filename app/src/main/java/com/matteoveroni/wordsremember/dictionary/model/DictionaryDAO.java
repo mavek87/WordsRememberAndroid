@@ -6,10 +6,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncInsertCommand;
+import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncQueryCommand;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
  * the dictionary content provider.
@@ -60,23 +61,12 @@ public class DictionaryDAO {
 
     public void asyncGetVocableById(long id) {
         if (id > 0) {
-            final String str_idColumn = String.valueOf(id);
-
-            final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
-            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-            final String[] selectionArgs = {str_idColumn};
-
-            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
-
-            asyncVocablesHandler.startQuery(
-                    1,
-                    null,
-                    uri,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null
-            );
+            String str_idColumn = String.valueOf(id);
+            String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
+            String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
+            String[] selectionArgs = {str_idColumn};
+            Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
+            new AsyncQueryCommand(contentResolver, uri, projection, selection, selectionArgs, "").execute();
         }
     }
 
@@ -125,16 +115,16 @@ public class DictionaryDAO {
 
     /**********************************************************************************************/
 
-    public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
-        if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
-            new AsyncTranslationsHandler(contentResolver).startInsert(
-                    1,
-                    null,
-                    TranslationsContract.CONTENT_URI,
-                    translationToContentValues(translation)
-            );
-        }
-    }
+//    public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
+//        if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
+//            new AsyncTranslationsHandler(contentResolver).startInsert(
+//                    1,
+//                    null,
+//                    TranslationsContract.CONTENT_URI,
+//                    translationToContentValues(translation)
+//            );
+//        }
+//    }
 
 //    public void asyncGetTranslationById(long id) {
 //        if (id > 0) {

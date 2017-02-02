@@ -1,18 +1,17 @@
-package com.matteoveroni.wordsremember.dictionary.model;
+package com.matteoveroni.wordsremember.dictionary.model.async_commands;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 
 /**
  * @author Matteo Veroni
  */
 
-abstract class CompletionHandler extends AsyncQueryHandler {
+abstract class CompletionHandler extends AsyncQueryHandler{
 
     public CompletionHandler(ContentResolver contentResolver) {
         super(contentResolver);
     }
 
-    abstract public void execute();
+    abstract void execute();
 }

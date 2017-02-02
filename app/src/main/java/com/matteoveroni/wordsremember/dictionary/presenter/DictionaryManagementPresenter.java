@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
@@ -17,9 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Proxy;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -39,6 +38,8 @@ public class DictionaryManagementPresenter implements Presenter {
     public DictionaryManagementPresenter(DictionaryDAO model) {
         this.model = model;
     }
+
+    private static boolean firstTimeCreated = true;
 
     /**********************************************************************************************/
 
@@ -74,8 +75,11 @@ public class DictionaryManagementPresenter implements Presenter {
     /**********************************************************************************************/
 
     public void onViewCreated(Context context) {
-        populateDatabaseForTestPurposes(context);
-        exportDatabaseOnSd(context);
+        if (firstTimeCreated) {
+            populateDatabaseForTestPurposes(context);
+            exportDatabaseOnSd(context);
+            firstTimeCreated = false;
+        }
     }
 
     public void onCreateVocableRequest() {
