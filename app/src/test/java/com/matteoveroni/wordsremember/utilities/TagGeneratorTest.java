@@ -13,8 +13,6 @@ import static junit.framework.Assert.assertTrue;
 
 public class TagGeneratorTest {
 
-    private TagGenerator tagGenerator = new TagGenerator();
-
     @Test
     public void testGenerateRandomUniqueTagUsingNoLengthAnonymousClass() {
         class AnonymousClass {
@@ -23,7 +21,7 @@ public class TagGeneratorTest {
         };
         final Class aClass = anonymousClass.getClass();
 
-        final String tag = tagGenerator.getTag(aClass);
+        final String tag = TagGenerator.tag(aClass);
 
         final String ERROR1 = "tag is null";
         assertNotNull(ERROR1, tag);
@@ -46,7 +44,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = ValidCamelCaseClass.class.getSimpleName();
         assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String tag = tagGenerator.getTag(ValidCamelCaseClass.class);
+        final String tag = TagGenerator.tag(ValidCamelCaseClass.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, tag);
@@ -60,7 +58,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "FirstNotCapitalClass";
         assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String tag = tagGenerator.getTag(firstNotCapitalClass.class);
+        final String tag = TagGenerator.tag(firstNotCapitalClass.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, tag);
@@ -74,7 +72,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "Lowercaselettersclass";
         assertTrue(EXPECTED_RESULT.length() <= TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(lowercaselettersclass.class);
+        final String generatedTag = TagGenerator.tag(lowercaselettersclass.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -88,7 +86,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "TooMuchLongCameCaseClas";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(TooMuchLongCamelCaseClass.class);
+        final String generatedTag = TagGenerator.tag(TooMuchLongCamelCaseClass.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -102,7 +100,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "ALLUPPERCASESHORTCLASS";
         assertTrue(EXPECTED_RESULT.length() < TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(ALLUPPERCASESHORTCLASS.class);
+        final String generatedTag = TagGenerator.tag(ALLUPPERCASESHORTCLASS.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -116,7 +114,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "ALLUPPERCASETOOMUCHLONG";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(ALLUPPERCASETOOMUCHLONGCLASS.class);
+        final String generatedTag = TagGenerator.tag(ALLUPPERCASETOOMUCHLONGCLASS.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -138,7 +136,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "AaaaaBbbbCccccDddddEeee";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(AaaaaaBbbbCccccDdddddEeeeee.class);
+        final String generatedTag = TagGenerator.tag(AaaaaaBbbbCccccDdddddEeeeee.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -160,7 +158,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "AaaaaBbbbCccccDddddEeee";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(AaaaaaaaaaaBbbbCcccccccDdddddEeeeee.class);
+        final String generatedTag = TagGenerator.tag(AaaaaaaaaaaBbbbCcccccccDdddddEeeeee.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, "AaaaaBbbbCccccDddddEeee", generatedTag);
@@ -187,7 +185,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "AAaaaBbbbCcCCccDddEEEee";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(AAaaaaBbbbCcCCcccDdddddEEEeee.class);
+        final String generatedTag = TagGenerator.tag(AAaaaaBbbbCcCCcccDdddddEEEeee.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -214,7 +212,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "AAaaaBbbCcCcCccDddEEEee";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(AAaaaaBbbbCcCcCcccDdddddEEEeee.class);
+        final String generatedTag = TagGenerator.tag(AAaaaaBbbbCcCcCcccDdddddEEEeee.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);
@@ -231,7 +229,7 @@ public class TagGeneratorTest {
         final String EXPECTED_RESULT = "Aaaaaaaaaaaaaaaaaaaaaaa";
         assertTrue(EXPECTED_RESULT.length() == TagGenerator.MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
 
-        final String generatedTag = tagGenerator.getTag(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.class);
+        final String generatedTag = TagGenerator.tag(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.class);
 
         final String ERROR = "tag is not equal to " + EXPECTED_RESULT + " like expected";
         assertEquals(ERROR, EXPECTED_RESULT, generatedTag);

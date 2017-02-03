@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = new TagGenerator().getTag(DictionaryManagementFragment.class);
+    public static final String TAG = TagGenerator.tag(DictionaryManagementFragment.class);
 
     private final EventBus eventBus = EventBus.getDefault();
 

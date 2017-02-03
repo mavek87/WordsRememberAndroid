@@ -32,7 +32,7 @@ import butterknife.OnClick;
 public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
-    public static final String TAG = new TagGenerator().getTag(DictionaryManagementActivity.class);
+    public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
 
     private DictionaryManagementPresenter presenter;
 

@@ -25,7 +25,7 @@ import java.nio.channels.FileChannel;
  * @author Matteo Veroni
  */
 public class DatabaseManager extends SQLiteOpenHelper {
-    public static final String TAG = new TagGenerator().getTag(DatabaseManager.class);
+    public static final String TAG = TagGenerator.tag(DatabaseManager.class);
     public static final String DB_NAME = MyApp.NAME + ".db";
     public static final int VERSION = 1;
 
@@ -36,7 +36,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Get or CreateTable a unique DatabaseManager's instance
+     * Create or get a unique DatabaseManager's instance
      *
      * @param context The application's context
      * @return Unique DatabaseManager instance

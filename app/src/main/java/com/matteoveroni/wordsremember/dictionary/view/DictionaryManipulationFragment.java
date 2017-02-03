@@ -31,7 +31,7 @@ import butterknife.Unbinder;
 
 public class DictionaryManipulationFragment extends Fragment {
 
-    public static final String TAG = new TagGenerator().getTag(DictionaryManipulationFragment.class);;
+    public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);;
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";

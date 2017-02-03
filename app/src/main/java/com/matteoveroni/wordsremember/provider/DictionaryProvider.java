@@ -36,7 +36,8 @@ import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
-    public static final String TAG = new TagGenerator().getTag(DictionaryProvider.class);
+    public static final String TAG = TagGenerator.tag(DictionaryProvider.class);
+
 
     private DatabaseManager databaseManager;
 
