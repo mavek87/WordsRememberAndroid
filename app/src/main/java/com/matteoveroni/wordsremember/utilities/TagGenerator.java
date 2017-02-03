@@ -15,14 +15,11 @@ public final class TagGenerator {
 
     private volatile static TagGenerator TAG_GENERATOR_INSTANCE;
 
+    private CamelCaseStringShrinker camelCaseStringShrinker = new CamelCaseStringShrinker();
+
     private TagGenerator() {
     }
 
-    /**
-     * Create or get a unique TagGenerator's instance
-     *
-     * @return Unique TagGenerator instance
-     */
     public static final String tag(Class classInstance) {
         if (TAG_GENERATOR_INSTANCE == null) {
             synchronized (TagGenerator.class) {
@@ -40,7 +37,7 @@ public final class TagGenerator {
      *
      * @return the corresponding TAG_PREFIX for class passed to the constructor
      */
-    public final String create(Class classInstance) {
+    private String create(Class classInstance) {
         String tag = classInstance.getSimpleName();
         int tagLength = tag.length();
         if (tagLength < 1) {
@@ -50,7 +47,7 @@ public final class TagGenerator {
                 tag = capitalizeFirstLetter(tag);
             }
             if (tagLength > MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG) {
-                tag = new CamelCaseStringShrinker().shrink(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
+                tag = camelCaseStringShrinker.shrink(tag, MAX_NUMBER_OF_LETTERS_FOR_ANDROID_TAG);
             }
         }
         return tag;
@@ -72,14 +69,14 @@ public final class TagGenerator {
          * @param maxLength Max possible length. It MUST be less than string.length()
          * @return optimal shrunk substring of the original string passed
          */
-        public String shrink(String string, int maxLength) {
+        private String shrink(String string, int maxLength) {
             totalSubstringsLetters = 0;
             maxSubstringLength = 0;
             final List<String> substrings = findSubstrings(string);
             return calculateOptimalShrinkString(substrings, maxLength);
         }
 
-        public List<String> findSubstrings(String string) {
+        private List<String> findSubstrings(String string) {
             final List<String> substrings = new ArrayList<>();
             StringBuilder substringBuilder = null;
             for (char letter : string.toCharArray()) {
@@ -96,7 +93,7 @@ public final class TagGenerator {
             return substrings;
         }
 
-        public String calculateOptimalShrinkString(List<String> substrings, int maxLength) {
+        private String calculateOptimalShrinkString(List<String> substrings, int maxLength) {
             String optimalString = Str.concat(substrings);
             while (totalSubstringsLetters > maxLength) {
 
