@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
@@ -47,6 +49,11 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         getLoaderManager().initLoader(0, null, this);
         translationsListViewAdapter = new WordsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
+
+        ContentValues v = new ContentValues();
+        v.put(TranslationsContract.Schema.COLUMN_TRANSLATION, "ciaone");
+        new AsyncInsertCommand(getContext().getContentResolver(), TranslationsContract.CONTENT_URI, v).execute();
+
         return view;
     }
 
