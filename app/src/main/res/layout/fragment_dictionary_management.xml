@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Dictionary Management Fragment -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".dictionary.view.DictionaryManagementFragment">
+    tools:context=".dictionary.view.DictionaryManagementActivity">
 
     <TextView
         android:id="@+id/fragment_dictionary_management_title"

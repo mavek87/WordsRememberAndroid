@@ -1,10 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Dictionary Manipulation Fragment -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
-    tools:context=".dictionary.view.DictionaryManipulationFragment">
+    android:orientation="vertical"
+    tools:context=".dictionary.view.DictionaryManipulationActivity">
 
     <TextView
         android:id="@+id/fragment_dictionary_manipulation_title"
@@ -25,8 +29,8 @@
     <fragment
         android:id="@+id/translations_management_fragment"
         android:name="com.matteoveroni.wordsremember.dictionary.view.TranslationsManagementFragment"
-        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp" />
 
 </LinearLayout>
