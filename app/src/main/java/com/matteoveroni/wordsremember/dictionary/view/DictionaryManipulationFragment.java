@@ -31,7 +31,7 @@ import butterknife.Unbinder;
 
 public class DictionaryManipulationFragment extends Fragment {
 
-    public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);;
+    public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
@@ -60,7 +60,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public Word getCurrentVocableInView() {
         final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
-        currentVocableInView.setId(this.vocable.getId());
+        currentVocableInView.setId(vocable.getId());
         return currentVocableInView;
     }
 
@@ -85,7 +85,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     /**********************************************************************************************/
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventVocableSelected event) {
         if (isFragmentCreated()) {

@@ -115,16 +115,16 @@ public class DictionaryDAO {
 
     /**********************************************************************************************/
 
-//    public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
-//        if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
-//            new AsyncTranslationsHandler(contentResolver).startInsert(
-//                    1,
-//                    null,
-//                    TranslationsContract.CONTENT_URI,
-//                    translationToContentValues(translation)
-//            );
-//        }
-//    }
+    public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
+        if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
+            new AsyncTranslationsHandler(contentResolver).startInsert(
+                    1,
+                    null,
+                    TranslationsContract.CONTENT_URI,
+                    translationToContentValues(translation)
+            );
+        }
+    }
 
 //    public void asyncGetTranslationById(long id) {
 //        if (id > 0) {

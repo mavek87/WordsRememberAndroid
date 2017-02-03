@@ -90,7 +90,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
 
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -119,7 +118,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     /**********************************************************************************************/
 
-    // Presenter Loader methods
+    // LoaderManager callbacks
 
     /**********************************************************************************************/
 
