@@ -12,7 +12,7 @@ import org.greenrobot.eventbus.EventBus;
  */
 class AsyncTranslationsHandler extends AsyncQueryHandler {
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private EventBus eventBus = EventBus.getDefault();
 
     AsyncTranslationsHandler(ContentResolver contentResolver) {
         super(contentResolver);

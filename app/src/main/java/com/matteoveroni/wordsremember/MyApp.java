@@ -13,13 +13,13 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  * Dagger2 components for dependency injection are built here
  *
  * @author Matteo Veroni
- * @version 0.0.23
+ * @version 0.0.24
  */
 public class MyApp extends Application {
 
     public static final String NAME = "wordsremember";
     public static final String NAME_TO_DISPLAY = "WordsRemember";
-    public static final String VERSION = "0.0.23";
+    public static final String VERSION = "0.0.24";
     public static final String AUTHORITY = MyApp.class.getPackage().getName();
 
     private static ModelComponent MODEL_COMPONENT;

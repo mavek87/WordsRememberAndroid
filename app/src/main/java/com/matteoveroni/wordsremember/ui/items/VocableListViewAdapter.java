@@ -8,11 +8,15 @@ import android.view.ViewGroup;
 
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
-public class WordsListViewAdapter extends CursorAdapter {
+/**
+ * @author Matteo Veroni
+ */
+
+public class VocableListViewAdapter extends CursorAdapter {
 
 //    private SparseBooleanArray itemViewsSelectionArray = new SparseBooleanArray();
 
-    public WordsListViewAdapter(Context context, Cursor cursor) {
+    public VocableListViewAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 

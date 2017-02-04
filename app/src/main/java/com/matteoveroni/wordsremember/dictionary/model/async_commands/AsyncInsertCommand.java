@@ -42,6 +42,7 @@ public class AsyncInsertCommand extends CompletionHandler {
     }
 
     private void dispatchCompletionEvent(Uri uriOfInsertedRow) {
+        // Todo: handle translations insertions too
         EventAsyncSaveVocableCompleted event = null;
         String errorMessage = "Insertion failed";
         try {

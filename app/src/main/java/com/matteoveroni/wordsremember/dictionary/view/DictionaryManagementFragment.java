@@ -21,7 +21,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulation
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
+import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
@@ -40,7 +40,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     private final EventBus eventBus = EventBus.getDefault();
 
-    private WordsListViewAdapter dictionaryListViewAdapter;
+    private VocableListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
     }
@@ -61,7 +61,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         getLoaderManager().initLoader(0, null, this);
-        dictionaryListViewAdapter = new WordsListViewAdapter(getContext(), null);
+        dictionaryListViewAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
         return view;
     }
@@ -82,7 +82,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = ((WordsListViewAdapter) listView.getAdapter()).getCursor();
+        Cursor cursor = ((VocableListViewAdapter) listView.getAdapter()).getCursor();
         cursor.moveToPosition(position);
 
         Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);

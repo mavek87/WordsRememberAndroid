@@ -18,7 +18,8 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.ui.items.WordsListViewAdapter;
+import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
+import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
@@ -29,7 +30,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
 
-    private WordsListViewAdapter translationsListViewAdapter;
+    private TranslationsListViewAdapter translationsListViewAdapter;
 
     /**********************************************************************************************/
 
@@ -45,14 +46,10 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
+        View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
         getLoaderManager().initLoader(0, null, this);
-        translationsListViewAdapter = new WordsListViewAdapter(getContext(), null);
+        translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
-
-        ContentValues v = new ContentValues();
-        v.put(TranslationsContract.Schema.COLUMN_TRANSLATION, "ciaone");
-        new AsyncInsertCommand(getContext().getContentResolver(), TranslationsContract.CONTENT_URI, v).execute();
 
         return view;
     }
@@ -74,12 +71,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = ((WordsListViewAdapter) listView.getAdapter()).getCursor();
+        Cursor cursor = ((VocableListViewAdapter) listView.getAdapter()).getCursor();
         cursor.moveToPosition(position);
 
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
 
-        Toast.makeText(getActivity().getApplicationContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
 
 //        eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }

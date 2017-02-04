@@ -64,7 +64,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         private static final String UNSUPPORTED_URI = "Unsupported URI ";
     }
 
-    @Nullable
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
@@ -89,7 +88,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return true;
     }
 
-    @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
@@ -132,7 +130,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return cursor;
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         long id;

@@ -11,5 +11,3 @@ https://github.com/StevenByle/Android-Phone-Tablet-Demo
 
 
 UNIT-TEST:
-
-http://blog.stablekernel.com/unit-testing-continuous-delivery-for-android-part-3/
