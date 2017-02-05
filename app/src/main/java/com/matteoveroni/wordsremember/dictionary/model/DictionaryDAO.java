@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
@@ -43,11 +44,11 @@ public class DictionaryDAO {
 
     public void asyncGetVocableById(long id) {
         if (id > 0) {
-            String str_idColumn = String.valueOf(id);
+            String str_id = String.valueOf(id);
             String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
             String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-            String[] selectionArgs = {str_idColumn};
-            Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
+            String[] selectionArgs = {str_id};
+            Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
             new AsyncQueryCommand(contentResolver, uri, projection, selection, selectionArgs, "").execute();
         }
     }
@@ -74,12 +75,12 @@ public class DictionaryDAO {
 
     public void asyncDeleteVocable(long id) {
         if (id > 0) {
-            final String str_idColumn = String.valueOf(id);
+            final String str_id = String.valueOf(id);
 
             final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-            final String[] selectionArgs = {str_idColumn};
+            final String[] selectionArgs = {str_id};
 
-            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
+            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
             asyncVocablesHandler.startDelete(
                     1,
@@ -99,6 +100,19 @@ public class DictionaryDAO {
 
     public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
         if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
+
+            ContentValues translationValue = new ContentValues();
+            translationValue.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
+
+            ContentValues vocablesTranslationValue = new ContentValues();
+            vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
+            vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
+
+            new AsyncInsertCommand(contentResolver, CompletionHandler.Type.translation, translationValue,
+                    new AsyncInsertCommand(contentResolver, CompletionHandler.Type.vocableTranslation, vocablesTranslationValue)
+            );
+
+
 //            new AsyncTranslationsHandler(contentResolver).startInsert(
 //                    1,
 //                    null,

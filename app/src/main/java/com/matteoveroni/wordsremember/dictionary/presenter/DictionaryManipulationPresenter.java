@@ -89,6 +89,10 @@ public class DictionaryManipulationPresenter implements Presenter {
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
+//        Word translation = new Word("TranslationTest");
+//        Word vocableWithSearchedId = new Word("");
+//        vocableWithSearchedId.setId(event.getIdOfSavedVocable());
+//        model.asyncSaveTranslationForVocable(translation, vocableWithSearchedId);
         handleAsyncEventAndGoToPreviousView(event);
     }
 
