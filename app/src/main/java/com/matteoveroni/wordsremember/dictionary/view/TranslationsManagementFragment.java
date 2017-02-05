@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;

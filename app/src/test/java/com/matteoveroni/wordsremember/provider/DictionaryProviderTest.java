@@ -1,17 +1,12 @@
-package com.matteoveroni.wordsremember.dictionary.provider;
+package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.utilities.Util;
 
 import org.junit.After;
@@ -34,18 +29,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Config(constants = BuildConfig.class)
 public class DictionaryProviderTest {
 
-    private DictionaryProvider provider;
-    private Cursor cursor;
-    private ContentValues values = new ContentValues();
+    DictionaryProvider provider;
+    Cursor cursor;
+    ContentValues values = new ContentValues();
 
-    private final long VOCABLES_VALID_VOCABLE_ID = 1;
-    private final String VOCABLES_VALID_VOCABLE = "Name";
+    final long VOCABLES_VALID_VOCABLE_ID = 1;
+    final String VOCABLES_VALID_VOCABLE = "Name";
 
-    private final long TRANSLATIONS_VALID_TRANSLATION_ID = 1;
-    private final String TRANSLATIONS_VALID_TRANSLATION = "Name";
-
-    private final String ID_WITH_INVALID_TYPE = "IdWithInvalidType";
-    private final String INVALID_COLUMN_NAME = "Invalid";
+    final String TRANSLATIONS_VALID_TRANSLATION = "Name";
 
     @Before
     public void onStart() {
@@ -58,7 +49,7 @@ public class DictionaryProviderTest {
     @After
     public void tearDown() {
         // Reset DatabaseManager Singleton using reflections (second paramether must match DatabaseManager instance name)
-        Util.resetSingleton(DatabaseManager.class, "DB_INSTANCE");
+        Util.resetSingletonAttribute(DatabaseManager.class, "DB_INSTANCE");
         values.clear();
         if (cursor != null) {
             cursor.close();

@@ -6,11 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncInsertCommand;
-import com.matteoveroni.wordsremember.dictionary.model.async_commands.AsyncQueryCommand;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
  * the dictionary content provider.
@@ -22,27 +21,10 @@ public class DictionaryDAO {
 
     private final ContentResolver contentResolver;
     private final AsyncVocablesHandler asyncVocablesHandler;
-    private final AsyncTranslationsHandler asyncTranslationsHandler;
-    private final AsyncVocablesTranslationsHandler asyncVocablesTranslationsHandler;
-
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
         this.asyncVocablesHandler = new AsyncVocablesHandler(this.contentResolver);
-        this.asyncTranslationsHandler = new AsyncTranslationsHandler(this.contentResolver);
-        this.asyncVocablesTranslationsHandler = new AsyncVocablesTranslationsHandler(this.contentResolver);
-    }
-
-    public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
-        vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
-        return vocable;
-    }
-
-    public static Word cursorToTranslation(Cursor cursor) {
-        final Word translation = new Word(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COLUMN_TRANSLATION)));
-        translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COLUMN_ID)));
-        return translation;
     }
 
     /**********************************************************************************************/
@@ -55,7 +37,7 @@ public class DictionaryDAO {
         if (isWordValid(vocable) && vocable.getId() < 0) {
             ContentValues val = new ContentValues();
             val.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
-            new AsyncInsertCommand(contentResolver, VocablesContract.CONTENT_URI, val).execute();
+            new AsyncInsertCommand(contentResolver, CompletionHandler.Type.vocable, val).execute();
         }
     }
 
@@ -117,12 +99,12 @@ public class DictionaryDAO {
 
     public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
         if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
-            new AsyncTranslationsHandler(contentResolver).startInsert(
-                    1,
-                    null,
-                    TranslationsContract.CONTENT_URI,
-                    translationToContentValues(translation)
-            );
+//            new AsyncTranslationsHandler(contentResolver).startInsert(
+//                    1,
+//                    null,
+//                    TranslationsContract.CONTENT_URI,
+//                    translationToContentValues(translation)
+//            );
         }
     }
 
@@ -268,6 +250,17 @@ public class DictionaryDAO {
 //        }
 //        return recordDeleted > 0;
 //    }
+    public static Word cursorToVocable(Cursor cursor) {
+        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
+        vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
+        return vocable;
+    }
+
+    public static Word cursorToTranslation(Cursor cursor) {
+        final Word translation = new Word(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COLUMN_TRANSLATION)));
+        translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COLUMN_ID)));
+        return translation;
+    }
 
     /**********************************************************************************************/
 

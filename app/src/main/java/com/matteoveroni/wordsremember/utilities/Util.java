@@ -11,7 +11,7 @@ import java.util.Random;
  */
 
 public class Util {
-    public static void resetSingleton(Class clazz, String fieldName) {
+    public static void resetSingletonAttribute(Class clazz, String fieldName) {
         Field instance;
         try {
             instance = clazz.getDeclaredField(fieldName);

@@ -1,12 +1,10 @@
-package com.matteoveroni.wordsremember.dictionary.model.async_commands;
+package com.matteoveroni.wordsremember.dictionary.model;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;

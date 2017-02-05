@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.provider;
+package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.junit.After;
@@ -41,16 +40,16 @@ import static junit.framework.Assert.assertTrue;
 @Config(constants = BuildConfig.class)
 public class DatabaseManagerTest {
 
-    private static final String DICTIONARY_DATABASE_NAME = DatabaseManager.DB_NAME;
+    static final String DICTIONARY_DATABASE_NAME = DatabaseManager.DB_NAME;
 
-    private static final String INVALID_TABLE = "invalid_table";
-    private static final String[] INVALID_COLUMN = {"invalid_column"};
+    static final String INVALID_TABLE = "invalid_table";
+    static final String[] INVALID_COLUMN = {"invalid_column"};
 
-    private static final String VALID_VOCABLE_NAME = "test_vocable_123";
+    static final String VALID_VOCABLE_NAME = "test_vocable_123";
 
-    private DatabaseManager dbManager = null;
-    private Cursor cursor = null;
-    private ContentValues values = new ContentValues();
+    DatabaseManager dbManager = null;
+    Cursor cursor = null;
+    ContentValues values = new ContentValues();
 
     @Before
     public void setUp() {

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.model.async_commands;
+package com.matteoveroni.wordsremember.dictionary.model;
 
 import android.content.ContentResolver;
 
