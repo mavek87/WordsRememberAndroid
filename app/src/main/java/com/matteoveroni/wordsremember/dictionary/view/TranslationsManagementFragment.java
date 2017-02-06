@@ -16,6 +16,8 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
 import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
@@ -29,6 +31,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
 
     private TranslationsListViewAdapter translationsListViewAdapter;
+    private Word vocable;
 
     /**********************************************************************************************/
 
@@ -48,7 +51,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         getLoaderManager().initLoader(0, null, this);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
-
+        // Todo:
+        // 1) get vocable from extra passed by dictionaryManipulationFragment
+        // 2)
+        ////////////////////////////////
+        vocable.setId(1);
+        /////////////////////////////////
         return view;
     }
 
@@ -62,7 +70,14 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // Todo: take bundle sent from DictionaryManipulationActivity
+        //http://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
+//        Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            int i = bundle.getInt();
+//        }
         registerForContextMenu(getListView());
+
     }
 
     @Override
@@ -113,12 +128,16 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        final String[] projection = new String[]{
+                TranslationsContract.Schema.COLUMN_TRANSLATION
+        };
+
         return new CursorLoader(
-                getActivity(),
-                TranslationsContract.CONTENT_URI,
-                TranslationsContract.Schema.ALL_COLUMNS,
-                null,
-                null,
+                getContext(),
+                VocablesTranslationsContract.CONTENT_URI,
+                projection,
+                VocablesContract.Schema.COLUMN_ID,
+                new String[]{"" + vocable.getId()},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
         );
     }

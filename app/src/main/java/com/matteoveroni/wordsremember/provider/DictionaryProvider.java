@@ -109,7 +109,16 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLES_TRANSLATIONS:
-                queryBuilder.setTables(VocablesTranslationsContract.Schema.TABLE_NAME);
+                String vocablesTable = VocablesContract.Schema.TABLE_NAME;
+                String translationsTable = TranslationsContract.Schema.TABLE_NAME;
+                queryBuilder.setTables(
+                        vocablesTable + " LEFT JOIN " + translationsTable
+                                + " ON ("
+                                + vocablesTable + "." + VocablesContract.Schema.COLUMN_ID
+                                + " = "
+                                + translationsTable + "." + TranslationsContract.Schema.COLUMN_ID
+                                + ")"
+                );
                 break;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
@@ -132,25 +141,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        long id;
         SQLiteDatabase db = databaseManager.getWritableDatabase();
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
-                id = db.insertOrThrow(VocablesContract.Schema.TABLE_NAME, null, values);
-                notifyChangeToObservers(uri);
-                return Uri.parse(VocablesContract.CONTENT_URI + "/" + id);
+                return InsertVocable(uri, values, db);
             case TRANSLATIONS:
-                id = db.insertOrThrow(TranslationsContract.Schema.TABLE_NAME, null, values);
-                notifyChangeToObservers(uri);
-                return Uri.parse(TranslationsContract.CONTENT_URI + "/" + id);
+                return InsertTranslation(uri, values, db);
             case VOCABLES_TRANSLATIONS:
-                id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
-                notifyChangeToObservers(uri);
-                return Uri.parse(VocablesTranslationsContract.CONTENT_URI + "/" + id);
+                return InsertVocableTranslation(uri, values, db);
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
-
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
@@ -225,6 +226,24 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 //            }
 //        }
 //    }
+
+    private Uri InsertVocable(Uri uri, ContentValues values, SQLiteDatabase db) {
+        long id = db.insertOrThrow(VocablesContract.Schema.TABLE_NAME, null, values);
+        notifyChangeToObservers(uri);
+        return Uri.parse(VocablesContract.CONTENT_URI + "/" + id);
+    }
+
+    private Uri InsertTranslation(Uri uri, ContentValues values, SQLiteDatabase db) {
+        long id = db.insertOrThrow(TranslationsContract.Schema.TABLE_NAME, null, values);
+        notifyChangeToObservers(uri);
+        return Uri.parse(TranslationsContract.CONTENT_URI + "/" + id);
+    }
+
+    private Uri InsertVocableTranslation(Uri uri, ContentValues values, SQLiteDatabase db) {
+        long id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
+        notifyChangeToObservers(uri);
+        return Uri.parse(VocablesTranslationsContract.CONTENT_URI + "/" + id);
+    }
 
     private void notifyChangeToObservers(Uri uri) {
         if (isContentResolverNotNull())
