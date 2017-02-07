@@ -17,7 +17,7 @@ import java.lang.reflect.Proxy;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationPresenter implements Presenter {
+public class DictionaryManipulationPresenter implements IDictionaryManipulationPresenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 

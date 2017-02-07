@@ -7,8 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
@@ -50,14 +50,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private static final int VOCABLE_ID = 2;
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
-    private static final int VOCABLES_TRANSLATIONS = 5;
+    private static final int VOCABLE_TRANSLATIONS = 5;
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME + "/#", VOCABLE_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NAME, VOCABLES_TRANSLATIONS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NAME, VOCABLE_TRANSLATIONS);
     }
 
     private static final class Errors {
@@ -75,7 +75,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 return TranslationsContract.CONTENT_DIR_TYPE;
             case TRANSLATION_ID:
                 return TranslationsContract.CONTENT_ITEM_TYPE;
-            case VOCABLES_TRANSLATIONS:
+            case VOCABLE_TRANSLATIONS:
                 return VocablesTranslationsContract.CONTENT_DIR_TYPE;
             default:
                 return null;
@@ -108,21 +108,27 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 selection = TranslationsContract.Schema.COLUMN_ID + " = ? ";
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 break;
-            case VOCABLES_TRANSLATIONS:
-                String vocablesTable = VocablesContract.Schema.TABLE_NAME;
-                String translationsTable = TranslationsContract.Schema.TABLE_NAME;
+            case VOCABLE_TRANSLATIONS:
+                //  SELECT translations.translation FROM vocables LEFT JOIN translations ON (vocables._id=translations._id) WHERE (vocables._id=1)
+                projection = TranslationsContract.Schema.ALL_COLUMNS;
                 queryBuilder.setTables(
-                        vocablesTable + " LEFT JOIN " + translationsTable
+                        VocablesContract.Schema.TABLE_NAME + " LEFT JOIN " + TranslationsContract.Schema.TABLE_NAME
                                 + " ON ("
-                                + vocablesTable + "." + VocablesContract.Schema.COLUMN_ID
+                                + VocablesContract.Schema.TABLE_DOT_COLUMN_ID
                                 + " = "
-                                + translationsTable + "." + TranslationsContract.Schema.COLUMN_ID
+                                + TranslationsContract.Schema.TABLE_DOT_COLUMN_ID
                                 + ")"
                 );
+                selection = VocablesContract.Schema.TABLE_DOT_COLUMN_ID + " = ?";
+
+                if (selectionArgs == null) {
+                    selectionArgs = new String[]{uri.getLastPathSegment()};
+                }
                 break;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
+
         SQLiteDatabase db = databaseManager.getWritableDatabase();
         Cursor cursor = queryBuilder.query(
                 db,
@@ -134,6 +140,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParameterLimitValue(uri)
         );
+
         if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -147,7 +154,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 return InsertVocable(uri, values, db);
             case TRANSLATIONS:
                 return InsertTranslation(uri, values, db);
-            case VOCABLES_TRANSLATIONS:
+            case VOCABLE_TRANSLATIONS:
                 return InsertVocableTranslation(uri, values, db);
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);

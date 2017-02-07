@@ -110,25 +110,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.i(TAG, "Creating loader");
 
-        final String[] projection = new String[]{
-                TranslationsContract.Schema.COLUMN_TRANSLATION
-        };
-
-//        return new CursorLoader(
-//                getContext(),
-//                VocablesTranslationsContract.CONTENT_URI,
-//                projection,
-//                VocablesContract.Schema.COLUMN_ID,
-//                new String[]{"" + selectedVocable.getId()},
-//                TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
-//        );
-
         return new CursorLoader(
                 getContext(),
                 VocablesTranslationsContract.CONTENT_URI,
-                projection,
                 null,
                 null,
+                new String[]{"" + 1},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
         );
     }

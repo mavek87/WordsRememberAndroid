@@ -32,19 +32,23 @@ public final class VocablesContract {
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_VOCABLE = "vocable";
 
+        public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + COLUMN_ID;
+        public static final String TABLE_DOT_COLUMN_VOCABLE = TABLE_NAME + "." + COLUMN_VOCABLE;
+
         public static final String[] ALL_COLUMNS =
                 {
-                        COLUMN_ID,
-                        COLUMN_VOCABLE
+                        TABLE_DOT_COLUMN_ID,
+                        TABLE_DOT_COLUMN_VOCABLE
                 };
     }
 
     public static final class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + Schema.TABLE_NAME + " ( "
+                + Schema.TABLE_NAME
+                + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Schema.COLUMN_VOCABLE + " TEXT NOT NULL"
-                + " );";
+                + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }

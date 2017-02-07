@@ -42,7 +42,7 @@ public class DictionaryManipulationFragment extends Fragment {
     private Word vocable;
     private Word previousVocableShownInView;
 
-    private TranslationsManagementFragment translationsManagementFragment;
+//    private TranslationsManagementFragment translationsManagementFragment;
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
@@ -119,7 +119,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
         viewInjector = ButterKnife.bind(this, view);
-        translationsManagementFragment = (TranslationsManagementFragment) getFragmentManager().findFragmentById(R.id.translations_management_fragment);
+//        translationsManagementFragment = (TranslationsManagementFragment) getFragmentManager().findFragmentById(R.id.translations_management_fragment);
         return view;
     }
 

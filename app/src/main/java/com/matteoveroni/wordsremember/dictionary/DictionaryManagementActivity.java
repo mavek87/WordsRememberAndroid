@@ -13,6 +13,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;

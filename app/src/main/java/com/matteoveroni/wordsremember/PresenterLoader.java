@@ -26,19 +26,16 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onStartLoading() {
-
         if (presenter != null) {
             deliverResult(presenter);
             return;
         }
-
         forceLoad();
     }
 
     @Override
     protected void onForceLoad() {
         presenter = presenterFactory.create();
-
         deliverResult(presenter);
     }
 

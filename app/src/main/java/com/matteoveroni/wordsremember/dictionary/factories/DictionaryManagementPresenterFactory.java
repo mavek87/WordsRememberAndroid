@@ -4,6 +4,7 @@ import com.matteoveroni.wordsremember.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManagementPresenter;
 
 import javax.inject.Inject;
 
@@ -17,7 +18,7 @@ public class DictionaryManagementPresenterFactory implements PresenterFactory {
     DictionaryDAO injectedModel;
 
     @Override
-    public DictionaryManagementPresenter create() {
+    public IDictionaryManagementPresenter create() {
         WordsRemember.getModelComponent().inject(this);
         return new DictionaryManagementPresenter(injectedModel);
     }

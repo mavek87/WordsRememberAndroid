@@ -34,21 +34,26 @@ public class VocablesTranslationsContract {
         public static final String COLUMN_VOCABLE_ID = "vocable_id";
         public static final String COLUMN_TRANSLATION_ID = "translation_id";
 
+        public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + _ID;
+        public static final String TABLE_DOT_COLUMN_VOCABLE_ID = TABLE_NAME + "." + "vocable_id";
+        public static final String TABLE_DOT_COLUMN_TRANSLATION_ID = TABLE_NAME + "." + "translation_id";
+
         public static final String[] ALL_COLUMNS =
                 {
-                        COLUMN_ID,
-                        COLUMN_VOCABLE_ID,
-                        COLUMN_TRANSLATION_ID
+                        TABLE_DOT_COLUMN_ID,
+                        TABLE_DOT_COLUMN_VOCABLE_ID,
+                        TABLE_DOT_COLUMN_TRANSLATION_ID
                 };
     }
 
     public static class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + Schema.TABLE_NAME + " ( "
+                + Schema.TABLE_NAME
+                + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
                 + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
-                + " );";
+                + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }
