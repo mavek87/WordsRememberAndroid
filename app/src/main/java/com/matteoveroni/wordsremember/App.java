@@ -2,31 +2,41 @@ package com.matteoveroni.wordsremember;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.components.ModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
+import com.matteoveroni.wordsremember.utilities.Str;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
  * Class which extends Application
  * Dagger2 components for dependency injection are built here
  *
  * @author Matteo Veroni
- * @version 0.0.25
+ * @version 0.0.26
  */
-public class MyApp extends Application {
+public class App extends Application {
 
+    public static final String TAG = TagGenerator.tag(App.class);
+
+    public static final String AUTHORITY = App.class.getPackage().getName();
     public static final String NAME = "wordsremember";
     public static final String NAME_TO_DISPLAY = "WordsRemember";
-    public static final String VERSION = "0.0.25";
-    public static final String AUTHORITY = MyApp.class.getPackage().getName();
+    public static final String VERSION = "0.0.26";
 
     private static ModelComponent MODEL_COMPONENT;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Log.i(TAG, Str.concat("AUTHORITY = ", AUTHORITY));
+        Log.i(TAG, Str.concat("NAME = ", NAME));
+        Log.i(TAG, Str.concat("NAME_TO_DISPLAY = ", NAME_TO_DISPLAY));
+        Log.i(TAG, Str.concat("VERSION = ", VERSION));
 
         // Dagger2 component. Used for injecting models to each class specified by ModelComponent interface.
         MODEL_COMPONENT = DaggerModelComponent
@@ -40,7 +50,7 @@ public class MyApp extends Application {
         return MODEL_COMPONENT;
     }
 
-    public static MyApp getInjectorsForApp(Context context) {
-        return (MyApp) context.getApplicationContext();
+    public static App getInjectorsForApp(Context context) {
+        return (App) context.getApplicationContext();
     }
 }

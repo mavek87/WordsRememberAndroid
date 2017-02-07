@@ -11,10 +11,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.MyApp;
+import com.matteoveroni.wordsremember.App;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
@@ -70,7 +69,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(MyApp.NAME_TO_DISPLAY + " - Details");
+            toolbar.setTitle(App.NAME_TO_DISPLAY + " - Details");
         }
         setSupportActionBar(toolbar);
 

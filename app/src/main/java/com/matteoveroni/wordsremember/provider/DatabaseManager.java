@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
-import com.matteoveroni.wordsremember.MyApp;
+import com.matteoveroni.wordsremember.App;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -27,7 +27,7 @@ import java.nio.channels.FileChannel;
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = TagGenerator.tag(DatabaseManager.class);
-    public static final String DB_NAME = MyApp.NAME + ".db";
+    public static final String DB_NAME = App.NAME + ".db";
     public static final int VERSION = 1;
 
     private volatile static DatabaseManager DB_INSTANCE;
@@ -83,7 +83,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         File data = Environment.getDataDirectory();
         FileChannel source;
         FileChannel destination;
-        String currentDBPath = "/data/" + MyApp.AUTHORITY + "/databases/" + DB_NAME;
+        String currentDBPath = "/data/" + App.AUTHORITY + "/databases/" + DB_NAME;
         String backupDBPath = DB_NAME;
         File currentDB = new File(data, currentDBPath);
         File backupDB = new File(sd, backupDBPath);
