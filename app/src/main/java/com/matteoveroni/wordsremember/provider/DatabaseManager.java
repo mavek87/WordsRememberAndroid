@@ -19,11 +19,12 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 /**
- * Singleton class that manages SQLite Database creation, reset, export and upgrade operations
- * and which contains db attributes
+ * Singleton helper class that manages SQLiteDatabase creation, reset, export and upgrade operations
+ * and which contains db attributes.
  *
  * @author Matteo Veroni
  */
+
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = TagGenerator.tag(DatabaseManager.class);
     public static final String DB_NAME = MyApp.NAME + ".db";

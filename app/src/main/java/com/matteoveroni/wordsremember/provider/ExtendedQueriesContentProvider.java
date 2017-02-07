@@ -9,6 +9,7 @@ import android.net.Uri;
  *
  * @author Matteo Veroni
  */
+
 public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "limit";
 
