@@ -11,10 +11,10 @@ import static junit.framework.Assert.assertSame;
 public class JsonTest {
 
     @Test
-    public void onlySameGsonInstanceIsReturnedFromJsonGetInstance() {
-        Gson gson1 = Json.getInstance();
-        Gson gson2 = Json.getInstance();
+    public void ONLY_SAME_GSON_INSTANCE_IS_RETURNED_FROM_JSON_GET_INSTANCE() {
+        Gson firstGsonObject = Json.getInstance();
+        Gson secondGsonObject = Json.getInstance();
 
-        assertSame("The two gson instances should be the same one", gson1, gson2);
+        assertSame("The two gson instances should be the same one", firstGsonObject, secondGsonObject);
     }
 }
