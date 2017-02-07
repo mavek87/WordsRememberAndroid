@@ -69,7 +69,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(WordsRemember.NAME_TO_DISPLAY + " - Details");
+            toolbar.setTitle(WordsRemember.TAG + " - Details");
         }
         setSupportActionBar(toolbar);
 

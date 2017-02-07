@@ -3,27 +3,26 @@ package com.matteoveroni.wordsremember.utilities;
 import com.google.gson.Gson;
 
 /**
- * Singleton that wraps a Gson object instance
+ * Singleton that wraps a unique Gson instance
  *
  * @author Matteo Veroni
  *
  */
 
 public class Json {
-    private volatile static Gson GSON;
+    private static volatile Gson GSON_INSTANCE;
 
     private Json() {
-        GSON = new Gson();
     }
 
     public static Gson getInstance() {
-        if (GSON == null) {
+        if (GSON_INSTANCE == null) {
             synchronized (Json.class) {
-                if (GSON == null) {
-                    new Json();
+                if (GSON_INSTANCE == null) {
+                    GSON_INSTANCE = new Gson();
                 }
             }
         }
-        return GSON;
+        return GSON_INSTANCE;
     }
 }

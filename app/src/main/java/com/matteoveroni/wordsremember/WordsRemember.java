@@ -15,15 +15,13 @@ import com.matteoveroni.wordsremember.utilities.TagGenerator;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.27
+ * @version 0.0.28
  */
 public class WordsRemember extends Application {
 
-    public static final String TAG = TagGenerator.tag(WordsRemember.class);
-
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
-    public static final String NAME_TO_DISPLAY = WordsRemember.class.getSimpleName();
-    public static final String NAME = NAME_TO_DISPLAY.toLowerCase();
+    public static final String TAG = TagGenerator.tag(WordsRemember.class);
+    public static final String NAME = TAG.toLowerCase();
     public static final String VERSION = "0.0.27";
 
     private static ModelComponent MODEL_COMPONENT;
@@ -31,7 +29,7 @@ public class WordsRemember extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        printAppSpecsToTerminal();
+        printAppSpecs();
         injectModels();
     }
 
@@ -47,10 +45,10 @@ public class WordsRemember extends Application {
     // Helper methods
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void printAppSpecsToTerminal() {
+    private void printAppSpecs() {
         Log.i(TAG, Str.concat("AUTHORITY = ", AUTHORITY));
+        Log.i(TAG, Str.concat("TAG = ", TAG));
         Log.i(TAG, Str.concat("NAME = ", NAME));
-        Log.i(TAG, Str.concat("NAME_TO_DISPLAY = ", NAME_TO_DISPLAY));
         Log.i(TAG, Str.concat("VERSION = ", VERSION));
     }
 
