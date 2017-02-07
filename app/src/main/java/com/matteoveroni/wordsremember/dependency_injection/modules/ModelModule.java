@@ -7,6 +7,10 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import dagger.Module;
 import dagger.Provides;
 
+/**
+ * @author Matteo Veroni
+ */
+
 @Module
 public class ModelModule {
 

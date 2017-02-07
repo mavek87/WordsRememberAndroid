@@ -9,9 +9,16 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
+/**
+ * @author Matteo Veroni
+ */
+
 @Singleton
 @Component(modules = {AppModule.class, ModelModule.class})
 public interface ModelComponent {
+
     void inject(DictionaryManagementPresenterFactory managementPresenterFactory);
+
     void inject(DictionaryManipulationPresenterFactory manipulationPresenterFactory);
+
 }

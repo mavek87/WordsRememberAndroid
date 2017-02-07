@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.factories;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.App;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
@@ -18,7 +18,7 @@ public class DictionaryManipulationPresenterFactory implements PresenterFactory 
 
     @Override
     public DictionaryManipulationPresenter create() {
-        App.getModelComponent().inject(this);
+        WordsRemember.getModelComponent().inject(this);
         return new DictionaryManipulationPresenter(injectedModel);
     }
 }
