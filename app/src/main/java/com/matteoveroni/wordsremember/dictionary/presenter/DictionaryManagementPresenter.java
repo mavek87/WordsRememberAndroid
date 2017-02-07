@@ -24,7 +24,7 @@ import java.lang.reflect.Proxy;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementPresenter implements Presenter {
+public class DictionaryManagementPresenter implements IDictionaryManagementPresenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 

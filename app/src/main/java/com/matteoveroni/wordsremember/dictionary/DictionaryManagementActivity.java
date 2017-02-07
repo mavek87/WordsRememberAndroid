@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
@@ -28,11 +29,11 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<IDictionaryManagementPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
 
-    private DictionaryManagementPresenter presenter;
+    private IDictionaryManagementPresenter presenter;
 
     public DictionaryManagementActivity() {
     }
@@ -100,17 +101,17 @@ public class DictionaryManagementActivity extends AppCompatActivity implements D
     /**********************************************************************************************/
 
     @Override
-    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<IDictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
+    public void onLoadFinished(Loader<IDictionaryManagementPresenter> loader, IDictionaryManagementPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
+    public void onLoaderReset(Loader<IDictionaryManagementPresenter> loader) {
         presenter = null;
     }
 }

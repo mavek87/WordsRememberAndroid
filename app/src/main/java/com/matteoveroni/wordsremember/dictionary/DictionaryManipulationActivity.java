@@ -16,6 +16,7 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 
@@ -24,9 +25,9 @@ import com.matteoveroni.wordsremember.utilities.Json;
  */
 
 public class DictionaryManipulationActivity extends AppCompatActivity
-        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<IDictionaryManipulationPresenter> {
 
-    private DictionaryManipulationPresenter presenter;
+    private IDictionaryManipulationPresenter presenter;
 
     private Toolbar toolbar;
 
@@ -114,17 +115,17 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     /**********************************************************************************************/
 
     @Override
-    public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<IDictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManipulationPresenter> loader, DictionaryManipulationPresenter presenter) {
+    public void onLoadFinished(Loader<IDictionaryManipulationPresenter> loader, IDictionaryManipulationPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
+    public void onLoaderReset(Loader<IDictionaryManipulationPresenter> loader) {
         presenter = null;
     }
 
