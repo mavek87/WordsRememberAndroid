@@ -37,7 +37,10 @@ import org.greenrobot.eventbus.EventBus;
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManagementFragment.class);
+
     private final EventBus eventBus = EventBus.getDefault();
+    private final int CURSOR_LOADER_ID = 1;
+
     private VocableListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
@@ -52,7 +55,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         dictionaryListViewAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
-        getLoaderManager().initLoader(1, null, this);
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         return view;
     }
 
@@ -70,7 +73,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public void onResume() {
-        getLoaderManager().restartLoader(1, null, this);
+        getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
         super.onResume();
     }
 

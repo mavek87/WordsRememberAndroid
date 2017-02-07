@@ -28,6 +28,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<IDictionaryManipulationPresenter> {
 
     private IDictionaryManipulationPresenter presenter;
+    private final int PRESENTER_LOADER_ID = 1;
 
     private Toolbar toolbar;
 
@@ -63,10 +64,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_dictionary_manipulation);
-
-        getSupportLoaderManager().initLoader(1, null, this);
 
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
@@ -77,6 +75,8 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     @Override

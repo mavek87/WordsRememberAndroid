@@ -33,6 +33,8 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
 
+    private final int CURSOR_LOADER_ID = 1;
+
     private TranslationsListViewAdapter translationsListViewAdapter;
     private Word selectedVocable;
 
@@ -47,7 +49,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
-        getLoaderManager().initLoader(1, null, this);
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
         // Todo:
         // 1) get vocable from extra passed by dictionaryManipulationFragment
@@ -84,7 +86,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public void onResume() {
-        getLoaderManager().restartLoader(1, null, this);
+        getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
         super.onResume();
     }
 

@@ -36,13 +36,13 @@ public class DictionaryManipulationFragment extends Fragment {
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
 
-    private EventBus eventBus = EventBus.getDefault();
+    private final EventBus eventBus = EventBus.getDefault();
     private Unbinder viewInjector;
 
     private Word vocable;
     private Word previousVocableShownInView;
 
-    TranslationsManagementFragment translationsManagementFragment;
+    private TranslationsManagementFragment translationsManagementFragment;
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;

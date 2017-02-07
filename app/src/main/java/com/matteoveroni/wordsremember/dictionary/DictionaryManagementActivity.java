@@ -34,6 +34,7 @@ public class DictionaryManagementActivity extends AppCompatActivity implements D
     public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
 
     private IDictionaryManagementPresenter presenter;
+    private final int PRESENTER_LOADER_ID = 1;
 
     public DictionaryManagementActivity() {
     }
@@ -78,7 +79,7 @@ public class DictionaryManagementActivity extends AppCompatActivity implements D
         setContentView(R.layout.activity_dictionary_management);
         ButterKnife.bind(this);
 
-        getSupportLoaderManager().initLoader(1, null, this);
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     @Override
