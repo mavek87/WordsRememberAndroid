@@ -20,6 +20,7 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
 import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
+import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
@@ -55,7 +56,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         // 1) get vocable from extra passed by dictionaryManipulationFragment
         // 2)
         ////////////////////////////////
-        vocable.setId(1);
+//        vocable.setId(1);
         /////////////////////////////////
         return view;
     }
@@ -72,10 +73,11 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         super.onActivityCreated(savedInstanceState);
         // Todo: take bundle sent from DictionaryManipulationActivity
         //http://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
-//        Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            int i = bundle.getInt();
-//        }
+        final Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String vocableInUse = bundle.getString("vocableInUse");
+            vocable = Json.getInstance().fromJson(vocableInUse, Word.class);
+        }
         registerForContextMenu(getListView());
 
     }

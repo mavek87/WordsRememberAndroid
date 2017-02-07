@@ -16,6 +16,7 @@ import com.matteoveroni.wordsremember.dictionary.model.CompletionHandler;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
+import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -89,19 +90,12 @@ public class MainMenuActivity extends AppCompatActivity
         // Use this line to reset the database if changes in some contract class schema has occurred
         DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
 
-        ContentValues v = new ContentValues();
-        v.put(VocablesContract.Schema.COLUMN_VOCABLE, "vocable1");
-        new AsyncInsertCommand(getContentResolver(), CompletionHandler.Type.vocable, v).execute();
+        Word vocable = new Word("vocable1");
+        Word translation = new Word("translation1");
 
-        v.clear();
-        v.put(TranslationsContract.Schema.COLUMN_TRANSLATION, "translation1");
-        new AsyncInsertCommand(getContentResolver(), CompletionHandler.Type.translation, v).execute();
-
-        v.clear();
-        v.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, 1);
-        v.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, 1);
-        new AsyncInsertCommand(getContentResolver(), CompletionHandler.Type.vocableTranslation, v).execute();
-
+        DictionaryDAO dao = new DictionaryDAO(getApplicationContext());
+        dao.asyncSaveVocable(vocable);
+        dao.asyncSaveTranslationForVocable(translation, vocable);
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +41,8 @@ public class DictionaryManipulationFragment extends Fragment {
 
     private Word vocable;
     private Word previousVocableShownInView;
+
+    TranslationsManagementFragment translationsManagementFragment;
 
     @BindView(R.id.fragment_dictionary_manipulation_title)
     TextView lbl_title;
@@ -76,6 +77,8 @@ public class DictionaryManipulationFragment extends Fragment {
                 this.vocable = vocableToShow;
             }
             previousVocableShownInView = this.vocable;
+
+            passVocableInUseToTranslationsManagementFragment(vocableToShow);
         }
     }
 
@@ -116,6 +119,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
         viewInjector = ButterKnife.bind(this, view);
+        translationsManagementFragment = (TranslationsManagementFragment) getFragmentManager().findFragmentById(R.id.translations_management_fragment);
         return view;
     }
 
@@ -157,5 +161,11 @@ public class DictionaryManipulationFragment extends Fragment {
 
     private boolean isFragmentCreated() {
         return getView() != null && lbl_title != null && txt_vocableName != null;
+    }
+
+    private void passVocableInUseToTranslationsManagementFragment(Word vocableToShow) {
+        Bundle bundle = new Bundle();
+        bundle.putString("vocableInUse", Json.getInstance().toJson(vocableToShow));
+        translationsManagementFragment.setArguments(bundle);
     }
 }

@@ -112,7 +112,6 @@ public class DictionaryDAO {
                     new AsyncInsertCommand(contentResolver, CompletionHandler.Type.vocableTranslation, vocablesTranslationValue)
             );
 
-
 //            new AsyncTranslationsHandler(contentResolver).startInsert(
 //                    1,
 //                    null,
