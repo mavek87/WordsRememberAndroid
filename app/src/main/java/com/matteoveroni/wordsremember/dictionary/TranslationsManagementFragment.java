@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
 import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
-import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
+
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Matteo Veroni
@@ -32,7 +34,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
 
     private TranslationsListViewAdapter translationsListViewAdapter;
-    private Word vocable;
+    private Word selectedVocable;
 
     /**********************************************************************************************/
 
@@ -41,17 +43,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     /**********************************************************************************************/
 
     @Override
-    public void onResume() {
-        getLoaderManager().restartLoader(0, null, this);
-        super.onResume();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
-        getLoaderManager().initLoader(0, null, this);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
+        getLoaderManager().initLoader(1, null, this);
+
         // Todo:
         // 1) get vocable from extra passed by dictionaryManipulationFragment
         // 2)
@@ -64,6 +61,8 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i(TAG, "View created");
+
         Toast.makeText(getActivity().getApplicationContext(), TAG, Toast.LENGTH_SHORT).show();
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
@@ -71,15 +70,22 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "Activity created");
+
         // Todo: take bundle sent from DictionaryManipulationActivity
         //http://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
-        final Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            String vocableInUse = bundle.getString("vocableInUse");
-            vocable = Json.getInstance().fromJson(vocableInUse, Word.class);
-        }
+//        final Bundle bundle = this.getArguments();
+//        if (bundle != null) {
+//            String vocableInUse = bundle.getString("vocableInUse");
+//            vocable = Json.getInstance().fromJson(vocableInUse, Word.class);
+//        }
         registerForContextMenu(getListView());
+    }
 
+    @Override
+    public void onResume() {
+        getLoaderManager().restartLoader(1, null, this);
+        super.onResume();
     }
 
     @Override
@@ -92,9 +98,16 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
 
         Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
-
-//        eventBus.postSticky(new EventVocableSelected(selectedVocable));
     }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEvent(EventVocableSelected event) {
+        if (isFragmentCreated()) {
+            selectedVocable = event.getSelectedVocable();
+        }
+    }
+
 //
 //    @Override
 //    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -130,16 +143,27 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.i(TAG, "Creating loader");
+
         final String[] projection = new String[]{
                 TranslationsContract.Schema.COLUMN_TRANSLATION
         };
+
+//        return new CursorLoader(
+//                getContext(),
+//                VocablesTranslationsContract.CONTENT_URI,
+//                projection,
+//                VocablesContract.Schema.COLUMN_ID,
+//                new String[]{"" + selectedVocable.getId()},
+//                TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
+//        );
 
         return new CursorLoader(
                 getContext(),
                 VocablesTranslationsContract.CONTENT_URI,
                 projection,
-                VocablesContract.Schema.COLUMN_ID,
-                new String[]{"" + vocable.getId()},
+                null,
+                null,
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
         );
     }
@@ -152,5 +176,15 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         translationsListViewAdapter.swapCursor(null);
+    }
+
+    /**********************************************************************************************/
+
+    // Helper methods
+
+    /**********************************************************************************************/
+
+    private boolean isFragmentCreated() {
+        return getView() != null;
     }
 }

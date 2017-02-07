@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dictionary.view.DictionaryManagementActivity">
+    tools:context=".dictionary.DictionaryManagementActivity">
 
     <include layout="@layout/content_dictionary_management" />
 

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,8 +28,8 @@ import com.matteoveroni.wordsremember.utilities.TagGenerator;
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * Fragment that lists all the vocables in the dictionary using a Cursor Loader.
- * Is also possible to remove vocables using a long press touch.
+ * Fragment that lists all the vocables in the dictionary using getSelectedVocable Cursor Loader.
+ * Is also possible to remove vocables using getSelectedVocable long press touch.
  *
  * @author Matteo Veroni
  */
@@ -37,32 +37,22 @@ import org.greenrobot.eventbus.EventBus;
 public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManagementFragment.class);
-
     private final EventBus eventBus = EventBus.getDefault();
-
     private VocableListViewAdapter dictionaryListViewAdapter;
 
     public DictionaryManagementFragment() {
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Android lifecycle methods
-
-    /**********************************************************************************************/
-
-    @Override
-    public void onResume() {
-        getLoaderManager().restartLoader(0, null, this);
-        super.onResume();
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
-        getLoaderManager().initLoader(0, null, this);
         dictionaryListViewAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(dictionaryListViewAdapter);
+        getLoaderManager().initLoader(1, null, this);
         return view;
     }
 
@@ -79,15 +69,16 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     }
 
     @Override
+    public void onResume() {
+        getLoaderManager().restartLoader(1, null, this);
+        super.onResume();
+    }
+
+    @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-
         Cursor cursor = ((VocableListViewAdapter) listView.getAdapter()).getCursor();
-        cursor.moveToPosition(position);
-
-        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
-
-        eventBus.postSticky(new EventVocableSelected(selectedVocable));
+        eventBus.postSticky(new EventVocableSelected(getSelectedVocable(cursor, position)));
     }
 
     @Override
@@ -102,25 +93,23 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         int position = contextMenuInfo.position;
-
         Cursor cursor = dictionaryListViewAdapter.getCursor();
-        cursor.moveToPosition(position);
-
-        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
 
         switch (item.getItemId()) {
             case R.id.menu_dictionary_management_long_press_remove:
-                eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
+                eventBus.postSticky(
+                        new EventVocableManipulationRequest(
+                                getSelectedVocable(cursor, position), EventVocableManipulationRequest.TypeOfManipulation.REMOVE
+                        )
+                );
                 return true;
         }
         return super.onContextItemSelected(item);
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // LoaderManager callbacks
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -142,6 +131,15 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         dictionaryListViewAdapter.swapCursor(null);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Word getSelectedVocable(Cursor cursor, int position) {
+        cursor.moveToPosition(position);
+        return DictionaryDAO.cursorToVocable(cursor);
     }
 }
 

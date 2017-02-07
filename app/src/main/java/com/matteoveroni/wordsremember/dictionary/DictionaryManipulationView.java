@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 

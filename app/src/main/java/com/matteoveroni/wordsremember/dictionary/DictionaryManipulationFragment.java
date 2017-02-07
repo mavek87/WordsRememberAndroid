@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -78,7 +78,7 @@ public class DictionaryManipulationFragment extends Fragment {
             }
             previousVocableShownInView = this.vocable;
 
-            passVocableInUseToTranslationsManagementFragment(vocableToShow);
+//            passVocableInUseToTranslationsManagementFragment(vocableToShow);
         }
     }
 
@@ -163,9 +163,9 @@ public class DictionaryManipulationFragment extends Fragment {
         return getView() != null && lbl_title != null && txt_vocableName != null;
     }
 
-    private void passVocableInUseToTranslationsManagementFragment(Word vocableToShow) {
-        Bundle bundle = new Bundle();
-        bundle.putString("vocableInUse", Json.getInstance().toJson(vocableToShow));
-        translationsManagementFragment.setArguments(bundle);
-    }
+//    private void passVocableInUseToTranslationsManagementFragment(Word vocableToShow) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString("vocableInUse", Json.getInstance().toJson(vocableToShow));
+//        translationsManagementFragment.setArguments(bundle);
+//    }
 }

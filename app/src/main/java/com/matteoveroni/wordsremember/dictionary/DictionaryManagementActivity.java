@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
@@ -29,25 +28,13 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity
-        implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
 
     private DictionaryManagementPresenter presenter;
 
-    private DictionaryManagementFragment managementFragment;
-
-    @BindView(R.id.dictionary_management_floating_action_button)
-    FloatingActionButton floatingActionButton;
-
     public DictionaryManagementActivity() {
-    }
-
-    @OnClick(R.id.dictionary_management_floating_action_button)
-    @SuppressWarnings("unused")
-    public void onFloatingActionButtonClicked() {
-        presenter.onCreateVocableRequest();
     }
 
     /**********************************************************************************************/
@@ -55,6 +42,12 @@ public class DictionaryManagementActivity extends AppCompatActivity
     // DictionaryManagementView interface methods
 
     /**********************************************************************************************/
+
+    @OnClick(R.id.dictionary_management_floating_action_button)
+    @SuppressWarnings("unused")
+    public void onCreateVocableRequest() {
+        presenter.onCreateVocableRequest();
+    }
 
     @Override
     public void goToManipulationView(Word vocableToManipulate) {
@@ -85,8 +78,6 @@ public class DictionaryManagementActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         getSupportLoaderManager().initLoader(1, null, this);
-
-        managementFragment = (DictionaryManagementFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_management_fragment);
     }
 
     @Override

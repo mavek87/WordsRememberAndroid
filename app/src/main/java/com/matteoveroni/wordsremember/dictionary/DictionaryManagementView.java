@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.pojo.Word;
 
@@ -8,7 +8,10 @@ import com.matteoveroni.wordsremember.pojo.Word;
 
 public interface DictionaryManagementView {
 
-    void showMessage(String message);
+    void onCreateVocableRequest();
 
     void goToManipulationView(Word vocableToManipulate);
+
+    void showMessage(String message);
+
 }
