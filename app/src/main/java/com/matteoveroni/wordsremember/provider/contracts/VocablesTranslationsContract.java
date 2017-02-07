@@ -49,6 +49,6 @@ public class VocablesTranslationsContract {
                 + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
                 + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
                 + " );";
-        public static final String DROP_TABLE = "drop table if exists " + NAME;
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }

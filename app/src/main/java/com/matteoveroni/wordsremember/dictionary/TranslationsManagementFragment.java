@@ -36,14 +36,14 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     private TranslationsListViewAdapter translationsListViewAdapter;
     private Word selectedVocable;
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Android lifecycle methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.i(TAG, "Creating the view");
+
         View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
@@ -100,46 +100,9 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
     }
 
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEvent(EventVocableSelected event) {
-        if (isFragmentCreated()) {
-            selectedVocable = event.getSelectedVocable();
-        }
-    }
-
-//
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater menuInflater = getActivity().getMenuInflater();
-//        menuInflater.inflate(R.menu.menu_dictionary_management_long_press, menu);
-//    }
-
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        int position = contextMenuInfo.position;
-//
-//        Cursor cursor = dictionaryListViewAdapter.getCursor();
-//        cursor.moveToPosition(position);
-//
-//        Word selectedVocable = DictionaryDAO.cursorToVocable(cursor);
-//
-//        switch (item.getItemId()) {
-//            case R.id.menu_dictionary_management_long_press_remove:
-//                eventBus.postSticky(new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE));
-//                return true;
-//        }
-//        return super.onContextItemSelected(item);
-//    }
-
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // LoaderManager callbacks
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -178,11 +141,9 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         translationsListViewAdapter.swapCursor(null);
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private boolean isFragmentCreated() {
         return getView() != null;
