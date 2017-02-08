@@ -14,3 +14,8 @@ http://blog.karumi.com/interfaces-for-presenters-in-mvp-are-a-waste-of-time/
 
 
 UNIT-TEST:
+
+https://www.youtube.com/watch?v=DJDBl0vURD4
+
+@Rule
+public MockitoRule mockitoRule = MockitoJUnit.rule(); (PUBLIC FIELD - ATTRIBUTE)
