@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -12,13 +11,10 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -30,11 +26,13 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<IDictionaryManagementPresenter> {
+public class DictionaryManagementActivity
+        extends AppCompatActivity
+        implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
 
-    private IDictionaryManagementPresenter presenter;
+    private DictionaryManagementPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     public DictionaryManagementActivity() {
@@ -103,17 +101,17 @@ public class DictionaryManagementActivity extends AppCompatActivity implements D
     /**********************************************************************************************/
 
     @Override
-    public Loader<IDictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<IDictionaryManagementPresenter> loader, IDictionaryManagementPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<IDictionaryManagementPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
         presenter = null;
     }
 }

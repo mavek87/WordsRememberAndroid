@@ -8,4 +8,9 @@ FRAGMENTS:
 https://github.com/StevenByle/Android-Phone-Tablet-Demo
 
 
+INTERFACES NEEDED IN MVP (MOST OF THE TIMES ONLY FOR VIEW)
+
+http://blog.karumi.com/interfaces-for-presenters-in-mvp-are-a-waste-of-time/
+
+
 UNIT-TEST:

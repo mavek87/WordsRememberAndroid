@@ -15,7 +15,7 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.IDictionaryManipulationPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 
@@ -23,21 +23,20 @@ import com.matteoveroni.wordsremember.utilities.Json;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationActivity extends AppCompatActivity
-        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<IDictionaryManipulationPresenter> {
+public class DictionaryManipulationActivity
+        extends AppCompatActivity
+        implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
-    private IDictionaryManipulationPresenter presenter;
+    private DictionaryManipulationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     private Toolbar toolbar;
 
     private DictionaryManipulationFragment manipulationFragment;
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // DictionaryManipulationView interface methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void showMessage(String message) {
@@ -54,11 +53,9 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         manipulationFragment.populateViewForVocable(vocable);
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Android Lifecycle Methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,32 +104,28 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         return false;
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Presenter Loader methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Loader<IDictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
+    public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<IDictionaryManipulationPresenter> loader, IDictionaryManipulationPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryManipulationPresenter> loader, DictionaryManipulationPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<IDictionaryManipulationPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
         presenter = null;
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Word retrieveVocableToManipulate() {
         Intent starterIntent = getIntent();
