@@ -21,6 +21,7 @@ import static junit.framework.Assert.assertNotNull;
 public class DictionaryManagementPresenterTest {
 
     public MockitoRule mockitoRule = MockitoJUnit.rule();
+    //
 
     DictionaryManagementPresenter presenter = new DictionaryManagementPresenterFactory().create();
     @Mock
