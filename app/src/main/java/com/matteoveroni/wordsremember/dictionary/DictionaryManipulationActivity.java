@@ -30,8 +30,6 @@ public class DictionaryManipulationActivity
     private DictionaryManipulationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
-    private Toolbar toolbar;
-
     private DictionaryManipulationFragment manipulationFragment;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,9 +62,9 @@ public class DictionaryManipulationActivity
 
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(WordsRemember.TAG + " - Details");
+            toolbar.setTitle(WordsRemember.NAME + " - Details");
         }
         setSupportActionBar(toolbar);
 

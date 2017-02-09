@@ -32,7 +32,7 @@ public final class TagGenerator {
     }
 
     /**
-     * Method which generates Android Tags for a given class. Android TAG's length can't exceed
+     * Method which generates Android Tags for a given class. Android NAME's length can't exceed
      * 23 characters.
      *
      * @return the corresponding TAG_PREFIX for class passed to the constructor

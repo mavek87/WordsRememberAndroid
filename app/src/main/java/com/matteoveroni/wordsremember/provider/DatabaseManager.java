@@ -27,7 +27,7 @@ import java.nio.channels.FileChannel;
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = TagGenerator.tag(DatabaseManager.class);
-    public static final String DB_NAME = WordsRemember.NAME + ".db";
+    public static final String DB_NAME = WordsRemember.LOWERCASE_NAME + ".db";
     public static final int VERSION = 1;
 
     private volatile static DatabaseManager DB_INSTANCE;

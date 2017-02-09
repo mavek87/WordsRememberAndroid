@@ -43,16 +43,14 @@ public class DictionaryManagementPresenterTest {
     }
 
     @Test
-    public void test_onCreateVocableRequest_View_goToManipulationView() {
-        Word nullVocable = null;
-
+    public void onCreateVocableRequest_View_goToManipulationView() {
         presenter.onCreateVocableRequest();
 
-        verify(view).goToManipulationView(nullVocable);
+        verify(view).goToManipulationView(null);
     }
 
     @Test
-    public void test_onEventVocableSelected_View_goToManipulationView_Using_Selected_Vocable() {
+    public void onEventVocableSelected_View_goToManipulationView_Using_Selected_Vocable() {
         EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
 
         presenter.onEvent(eventVocableSelected);
@@ -61,36 +59,25 @@ public class DictionaryManagementPresenterTest {
     }
 
     @Test
-    public void test_onEventVocableManipulationDeleteRequest_Model_Starts_asyncDeleteVocable() {
-        EventVocableManipulationRequest eventVocableDeleteRequest = new EventVocableManipulationRequest(
-                VOCABLE, TypeOfManipulation.REMOVE
-        );
+    public void onEventVocableManipulationDeleteRequest_Model_Starts_asyncDeleteVocable() {
+        EventVocableManipulationRequest eventVocableDeleteRequest
+                = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
 
         presenter.onEvent(eventVocableDeleteRequest);
 
         verify(model).asyncDeleteVocable(VOCABLE.getId());
     }
-//
-//    @Test
-//    public void test_onEventVocableSelected_View_goToManipulationView_Using_Selected_Vocable() {
-//        final Word vocableSelected = new Word("VocableTest");
-//        EventVocableSelected eventVocableSelected = new EventVocableSelected(vocableSelected);
-//        presenter.onEvent(eventVocableSelected);
-//
-//        verify(view).goToManipulationView(vocableSelected);
-//    }
-
 }
 
 class DictionaryManagementPresenterFactoryForTests implements PresenterFactory {
-    private DictionaryDAO dao;
+    private DictionaryDAO model;
 
-    public DictionaryManagementPresenterFactoryForTests(DictionaryDAO dao) {
-        this.dao = dao;
+    DictionaryManagementPresenterFactoryForTests(DictionaryDAO model) {
+        this.model = model;
     }
 
     @Override
     public DictionaryManagementPresenter create() {
-        return new DictionaryManagementPresenter(dao);
+        return new DictionaryManagementPresenter(model);
     }
 }
