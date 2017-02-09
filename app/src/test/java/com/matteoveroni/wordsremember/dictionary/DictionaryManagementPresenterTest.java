@@ -44,9 +44,11 @@ public class DictionaryManagementPresenterTest {
 
     @Test
     public void test_onCreateVocableRequest_View_goToManipulationView() {
+        Word nullVocable = null;
+
         presenter.onCreateVocableRequest();
 
-        verify(view).goToManipulationView(any(Word.class));
+        verify(view).goToManipulationView(nullVocable);
     }
 
     @Test
