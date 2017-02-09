@@ -110,7 +110,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     private void exportDatabaseOnSd(Context context) {
         if (context != null) {
-            DatabaseManager.getInstance(context).exportDBOnSD();
+            DatabaseManager.getInstance(context).exportDatabaseOnSD();
         }
     }
 }

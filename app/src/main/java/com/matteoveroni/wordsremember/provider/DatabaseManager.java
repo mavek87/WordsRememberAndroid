@@ -30,27 +30,21 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public static final String DB_NAME = WordsRemember.LOWERCASE_NAME + ".db";
     public static final int VERSION = 1;
 
-    private volatile static DatabaseManager DB_INSTANCE;
+    private volatile static DatabaseManager DB_UNIQUE_INSTANCE;
 
     private DatabaseManager(Context context) {
         super(context, DatabaseManager.DB_NAME, null, DatabaseManager.VERSION);
     }
 
-    /**
-     * Create or get a unique DatabaseManager's instance
-     *
-     * @param context The application's context
-     * @return Unique DatabaseManager instance
-     */
-    public static final DatabaseManager getInstance(Context context) {
-        if (DB_INSTANCE == null) {
+    public static final DatabaseManager getInstance(Context appContext) {
+        if (DB_UNIQUE_INSTANCE == null) {
             synchronized (DatabaseManager.class) {
-                if (DB_INSTANCE == null) {
-                    DB_INSTANCE = new DatabaseManager(context);
+                if (DB_UNIQUE_INSTANCE == null) {
+                    DB_UNIQUE_INSTANCE = new DatabaseManager(appContext);
                 }
             }
         }
-        return DB_INSTANCE;
+        return DB_UNIQUE_INSTANCE;
     }
 
     @Override
@@ -65,9 +59,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
-    /**
-     * Method that drops all the tables and their content and recreate them
-     */
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
         dropAllTables(db);
@@ -75,10 +66,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    /**
-     * Method that exports the database to the SD (/storage/emulated/legacy/)
-     */
-    public void exportDBOnSD() {
+    public void exportDatabaseOnSD() {
         File sd = Environment.getExternalStorageDirectory();
         File data = Environment.getDataDirectory();
         FileChannel source;
