@@ -11,6 +11,11 @@ public class Word {
         this.name = name;
     }
 
+    public Word(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }

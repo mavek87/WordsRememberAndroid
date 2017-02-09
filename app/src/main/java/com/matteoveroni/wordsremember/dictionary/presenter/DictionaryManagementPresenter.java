@@ -37,12 +37,6 @@ public class DictionaryManagementPresenter implements Presenter {
 
     private static boolean firstTimeCreated = true;
 
-    /**********************************************************************************************/
-
-    // Presenter interface
-
-    /**********************************************************************************************/
-
     @Override
     public void onViewAttached(Object viewAttached) {
         view = (DictionaryManagementView) Proxy.newProxyInstance(
@@ -64,12 +58,6 @@ public class DictionaryManagementPresenter implements Presenter {
         onViewDetached();
     }
 
-    /**********************************************************************************************/
-
-    // Activity's callbacks
-
-    /**********************************************************************************************/
-
     public void onViewCreated(Context context) {
         if (firstTimeCreated) {
             populateDatabaseForTestPurposes(context);
@@ -82,17 +70,8 @@ public class DictionaryManagementPresenter implements Presenter {
         view.goToManipulationView(null);
     }
 
-    /**********************************************************************************************/
-
-    // System Events
-
-    /**********************************************************************************************/
-
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    /**
-     * Event fired from DictionaryManagementFragment when a vocable is being selected
-     */
     public void onEvent(EventVocableSelected event) {
         Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
@@ -101,9 +80,6 @@ public class DictionaryManagementPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    /**
-     * Event fired from DictionaryManagementFragment when a manipulation on a vocable is requested
-     */
     public void onEvent(EventVocableManipulationRequest event) {
         Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
@@ -121,11 +97,9 @@ public class DictionaryManagementPresenter implements Presenter {
         view.showMessage("Vocable removed");
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void populateDatabaseForTestPurposes(Context context) {
         for (int i = 0; i < 5; i++) {
