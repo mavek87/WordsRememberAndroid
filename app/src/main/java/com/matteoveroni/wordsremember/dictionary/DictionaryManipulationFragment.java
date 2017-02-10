@@ -39,8 +39,8 @@ public class DictionaryManipulationFragment extends Fragment {
     private final EventBus eventBus = EventBus.getDefault();
     private Unbinder viewInjector;
 
-    private Word vocable;
-    private Word previousVocableShownInView;
+    private Word shownVocable;
+//    private Word previousVocableShownInView;
 
 //    private TranslationsManagementFragment translationsManagementFragment;
 
@@ -61,22 +61,21 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public Word getCurrentVocableInView() {
         final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
-        currentVocableInView.setId(vocable.getId());
+        currentVocableInView.setId(shownVocable.getId());
         return currentVocableInView;
     }
 
     public void populateViewForVocable(Word vocableToShow) {
-        if (previousVocableShownInView == null || !previousVocableShownInView.equals(vocableToShow)) {
+        if (shownVocable == null || !shownVocable.equals(vocableToShow)) {
             if (vocableToShow == null || vocableToShow.getName() == null) {
                 lbl_title.setText("Create vocable");
                 txt_vocableName.setText("");
-                this.vocable = new Word("");
+                shownVocable = new Word("");
             } else {
                 lbl_title.setText("Edit vocable");
                 txt_vocableName.setText(vocableToShow.getName());
-                this.vocable = vocableToShow;
+                shownVocable = vocableToShow;
             }
-            previousVocableShownInView = this.vocable;
 
 //            passVocableInUseToTranslationsManagementFragment(vocableToShow);
         }
@@ -88,14 +87,14 @@ public class DictionaryManipulationFragment extends Fragment {
 
     /**********************************************************************************************/
 
-    @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEvent(EventVocableSelected event) {
-        if (isFragmentCreated()) {
-            Word vocableToShowInView = event.getSelectedVocable();
-            populateViewForVocable(vocableToShowInView);
-        }
-    }
+//    @Subscribe(sticky = true)
+//    @SuppressWarnings("unused")
+//    public void onEvent(EventVocableSelected event) {
+//        if (isFragmentCreated()) {
+//            Word vocableToShowInView = event.getSelectedVocable();
+//            populateViewForVocable(vocableToShowInView);
+//        }
+//    }
 
     /**********************************************************************************************/
 
@@ -106,12 +105,12 @@ public class DictionaryManipulationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        eventBus.register(this);
+//        eventBus.register(this);
     }
 
     @Override
     public void onPause() {
-        eventBus.unregister(this);
+//        eventBus.unregister(this);
         super.onPause();
     }
 
@@ -132,7 +131,7 @@ public class DictionaryManipulationFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(vocable));
+        savedInstanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(shownVocable));
         savedInstanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
         savedInstanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
     }
@@ -142,7 +141,7 @@ public class DictionaryManipulationFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-                vocable = Json.getInstance().fromJson(savedInstanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
+                shownVocable = Json.getInstance().fromJson(savedInstanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
             }
             if (savedInstanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
                 lbl_title.setText(savedInstanceState.getString(VIEW_TITLE_CONTENT_KEY));

@@ -27,15 +27,13 @@ import java.lang.reflect.Proxy;
 public class DictionaryManagementPresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
-
+    private static boolean isPresenterCreatedForTheFirstTime = true;
     private final DictionaryDAO model;
     private DictionaryManagementView view;
 
     public DictionaryManagementPresenter(DictionaryDAO model) {
         this.model = model;
     }
-
-    private static boolean firstTimeCreated = true;
 
     @Override
     public void onViewAttached(Object viewAttached) {
@@ -59,10 +57,10 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onViewCreated(Context context) {
-        if (firstTimeCreated) {
+        if (isPresenterCreatedForTheFirstTime) {
             populateDatabaseForTestPurposes(context);
             exportDatabaseOnSd(context);
-            firstTimeCreated = false;
+            isPresenterCreatedForTheFirstTime = false;
         }
     }
 
@@ -96,10 +94,6 @@ public class DictionaryManagementPresenter implements Presenter {
         eventBus.removeStickyEvent(event);
         view.showMessage("Vocable removed");
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void populateDatabaseForTestPurposes(Context context) {
         for (int i = 0; i < 5; i++) {

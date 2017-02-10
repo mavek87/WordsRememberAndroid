@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -25,10 +26,10 @@ import static org.mockito.Mockito.verify;
 
 public class DictionaryManagementPresenterTest {
 
+    private DictionaryManagementPresenter presenter;
+
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
-
-    private DictionaryManagementPresenter presenter;
     @Mock
     private DictionaryManagementView view;
     @Mock
@@ -67,17 +68,28 @@ public class DictionaryManagementPresenterTest {
 
         verify(model).asyncDeleteVocable(VOCABLE.getId());
     }
-}
 
-class DictionaryManagementPresenterFactoryForTests implements PresenterFactory {
-    private DictionaryDAO model;
+    @Test
+    public void onEventAsyncDeleteVocableCompleted_View_Shows_A_Completion_Message() {
+        EventAsyncDeleteVocableCompleted eventAsyncDeleteVocableCompleted = new EventAsyncDeleteVocableCompleted(1);
 
-    DictionaryManagementPresenterFactoryForTests(DictionaryDAO model) {
-        this.model = model;
+        presenter.onEvent(eventAsyncDeleteVocableCompleted);
+
+        verify(view).showMessage(any(String.class));
     }
 
-    @Override
-    public DictionaryManagementPresenter create() {
-        return new DictionaryManagementPresenter(model);
+    private class DictionaryManagementPresenterFactoryForTests implements PresenterFactory {
+        private DictionaryDAO model;
+
+        DictionaryManagementPresenterFactoryForTests(DictionaryDAO model) {
+            this.model = model;
+        }
+
+        @Override
+        public DictionaryManagementPresenter create() {
+            return new DictionaryManagementPresenter(model);
+        }
     }
 }
+
+
