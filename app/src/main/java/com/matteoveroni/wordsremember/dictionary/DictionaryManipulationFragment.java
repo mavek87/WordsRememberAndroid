@@ -40,7 +40,6 @@ public class DictionaryManipulationFragment extends Fragment {
     private Unbinder viewInjector;
 
     private Word shownVocable;
-//    private Word previousVocableShownInView;
 
 //    private TranslationsManagementFragment translationsManagementFragment;
 
@@ -53,12 +52,6 @@ public class DictionaryManipulationFragment extends Fragment {
     public DictionaryManipulationFragment() {
     }
 
-    /**********************************************************************************************/
-
-    // Public API
-
-    /**********************************************************************************************/
-
     public Word getCurrentVocableInView() {
         final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
         currentVocableInView.setId(shownVocable.getId());
@@ -67,16 +60,13 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public void populateViewForVocable(Word vocableToShow) {
         if (shownVocable == null || !shownVocable.equals(vocableToShow)) {
-            if (vocableToShow == null || vocableToShow.getName() == null) {
+            if (vocableToShow.getId() < 0) {
                 lbl_title.setText("Create vocable");
-                txt_vocableName.setText("");
-                shownVocable = new Word("");
             } else {
                 lbl_title.setText("Edit vocable");
-                txt_vocableName.setText(vocableToShow.getName());
-                shownVocable = vocableToShow;
             }
-
+            txt_vocableName.setText(vocableToShow.getName());
+            shownVocable = vocableToShow;
 //            passVocableInUseToTranslationsManagementFragment(vocableToShow);
         }
     }

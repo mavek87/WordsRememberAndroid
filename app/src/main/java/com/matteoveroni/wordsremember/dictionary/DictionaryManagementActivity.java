@@ -55,7 +55,7 @@ public class DictionaryManagementActivity
         Intent intent_startManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
         intent_startManipulationActivity.putExtra(
                 Extras.VOCABLE_TO_MANIPULATE,
-                (vocableToManipulate != null) ? Json.getInstance().toJson(vocableToManipulate) : ""
+                Json.getInstance().toJson(vocableToManipulate)
         );
         startActivity(intent_startManipulationActivity);
     }

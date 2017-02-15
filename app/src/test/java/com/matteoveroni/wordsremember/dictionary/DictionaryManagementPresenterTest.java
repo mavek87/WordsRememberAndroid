@@ -42,13 +42,13 @@ public class DictionaryManagementPresenterTest {
         presenter = new DictionaryManagementPresenterFactoryForTests(model).create();
         presenter.onViewAttached(view);
     }
-
-    @Test
-    public void onCreateVocableRequest_View_goToManipulationView() {
-        presenter.onCreateVocableRequest();
-
-        verify(view).goToManipulationView(null);
-    }
+//
+//    @Test
+//    public void onCreateVocableRequest_View_goToManipulationView() {
+//        presenter.onCreateVocableRequest();
+//
+//        verify(view).goToManipulationView(null);
+//    }
 
     @Test
     public void onEventVocableSelected_View_goToManipulationView_Using_Selected_Vocable() {

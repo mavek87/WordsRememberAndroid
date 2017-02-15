@@ -65,7 +65,7 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        view.goToManipulationView(null);
+        view.goToManipulationView(new Word(""));
     }
 
     @Subscribe(sticky = true)
