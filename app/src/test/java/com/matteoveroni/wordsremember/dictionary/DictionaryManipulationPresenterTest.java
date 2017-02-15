@@ -41,14 +41,14 @@ public class DictionaryManipulationPresenterTest {
     public void on_Null_VocableToManipulateRetrieved_View_populateViewFor_Null_Vocable() {
         presenter.onVocableToManipulateRetrieved(null);
 
-        verify(view).populateViewForVocable(null);
+        verify(view).showVocableData(null);
     }
 
     @Test
     public void on_NotNull_VocableToManipulateRetrieved_View_populateViewFor_NotNull_Vocable() {
         presenter.onVocableToManipulateRetrieved(VOCABLE);
 
-        verify(view).populateViewForVocable(VOCABLE);
+        verify(view).showVocableData(VOCABLE);
     }
 
     private class DictionaryManipulationtPresenterFactoryForTests implements PresenterFactory {

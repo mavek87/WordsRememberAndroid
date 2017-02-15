@@ -8,10 +8,9 @@ import com.matteoveroni.wordsremember.pojo.Word;
 
 public interface DictionaryManagementView {
 
-    void onCreateVocableRequest();
+    void createVocableAction();
 
     void goToManipulationView(Word vocableToManipulate);
 
     void showMessage(String message);
-
 }

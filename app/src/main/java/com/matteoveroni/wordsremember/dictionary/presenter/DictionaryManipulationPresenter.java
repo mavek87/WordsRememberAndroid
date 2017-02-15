@@ -62,7 +62,7 @@ public class DictionaryManipulationPresenter implements Presenter {
     /**********************************************************************************************/
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        view.populateViewForVocable(vocableToManipulate);
+        view.showVocableData(vocableToManipulate);
     }
 
     public void onSaveRequest(Word currentVocableInView) {

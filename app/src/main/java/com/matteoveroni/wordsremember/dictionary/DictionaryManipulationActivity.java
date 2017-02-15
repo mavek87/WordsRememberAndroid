@@ -47,8 +47,8 @@ public class DictionaryManipulationActivity
     }
 
     @Override
-    public void populateViewForVocable(Word vocable) {
-        manipulationFragment.populateViewForVocable(vocable);
+    public void showVocableData(Word vocable) {
+        manipulationFragment.showVocableData(vocable);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

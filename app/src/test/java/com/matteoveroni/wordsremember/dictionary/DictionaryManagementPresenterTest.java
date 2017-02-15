@@ -45,7 +45,7 @@ public class DictionaryManagementPresenterTest {
 //
 //    @Test
 //    public void onCreateVocableRequest_View_goToManipulationView() {
-//        presenter.onCreateVocableRequest();
+//        presenter.createVocableAction();
 //
 //        verify(view).goToManipulationView(null);
 //    }

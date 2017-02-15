@@ -38,15 +38,10 @@ public class DictionaryManagementActivity
     public DictionaryManagementActivity() {
     }
 
-    /**********************************************************************************************/
-
-    // DictionaryManagementView interface methods
-
-    /**********************************************************************************************/
-
+    @Override
     @OnClick(R.id.dictionary_management_floating_action_button)
     @SuppressWarnings("unused")
-    public void onCreateVocableRequest() {
+    public void createVocableAction() {
         presenter.onCreateVocableRequest();
     }
 
@@ -64,12 +59,6 @@ public class DictionaryManagementActivity
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
-    /**********************************************************************************************/
-
-    // Android Lifecycle Methods
-
-    /**********************************************************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

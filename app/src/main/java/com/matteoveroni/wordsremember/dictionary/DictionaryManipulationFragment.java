@@ -32,11 +32,10 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);
 
+    private final EventBus eventBus = EventBus.getDefault();
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
-
-    private final EventBus eventBus = EventBus.getDefault();
     private Unbinder viewInjector;
 
     private Word shownVocable;
@@ -58,8 +57,8 @@ public class DictionaryManipulationFragment extends Fragment {
         return currentVocableInView;
     }
 
-    public void populateViewForVocable(Word vocableToShow) {
-        if (shownVocable == null || !shownVocable.equals(vocableToShow)) {
+    public void showVocableData(Word vocableToShow) {
+        if (!shownVocable.equals(vocableToShow)) {
             if (vocableToShow.getId() < 0) {
                 lbl_title.setText("Create vocable");
             } else {
@@ -82,16 +81,9 @@ public class DictionaryManipulationFragment extends Fragment {
 //    public void onEvent(EventVocableSelected event) {
 //        if (isFragmentCreated()) {
 //            Word vocableToShowInView = event.getSelectedVocable();
-//            populateViewForVocable(vocableToShowInView);
+//            showVocableData(vocableToShowInView);
 //        }
 //    }
-
-    /**********************************************************************************************/
-
-    // Android lifecycle methods
-
-    /**********************************************************************************************/
-
     @Override
     public void onResume() {
         super.onResume();
@@ -141,12 +133,6 @@ public class DictionaryManipulationFragment extends Fragment {
             }
         }
     }
-
-    /**********************************************************************************************/
-
-    // Helper methods
-
-    /**********************************************************************************************/
 
     private boolean isFragmentCreated() {
         return getView() != null && lbl_title != null && txt_vocableName != null;
