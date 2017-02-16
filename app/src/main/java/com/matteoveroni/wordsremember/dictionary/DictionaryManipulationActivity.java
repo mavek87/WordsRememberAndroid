@@ -48,9 +48,6 @@ public class DictionaryManipulationActivity
 
     @Override
     public void showVocableData(Word vocable) {
-        if (manipulationFragment == null) {
-            Log.i(TAG, "manipulationFragment is null");
-        }
         manipulationFragment.showVocableData(vocable);
     }
 
@@ -76,7 +73,12 @@ public class DictionaryManipulationActivity
     protected void onStart() {
         super.onStart();
         presenter.onViewAttached(this);
-        presenter.onVocableToManipulateRetrieved(retrieveVocableToManipulate());
+        Word vocableToManipulate = catchVocableToManipulate();
+        if (vocableToManipulate != null) {
+            presenter.onVocableToManipulateRetrieved(vocableToManipulate);
+        } else {
+            returnToPreviousView();
+        }
     }
 
     @Override
@@ -116,12 +118,11 @@ public class DictionaryManipulationActivity
         presenter = null;
     }
 
-    private Word retrieveVocableToManipulate() {
+    private Word catchVocableToManipulate() {
         Intent starterIntent = getIntent();
         if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
-            String str_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
-            if (!str_vocableToManipulate.trim().isEmpty())
-                return Word.fromJson(str_vocableToManipulate);
+            String json_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
+            return Word.fromJson(json_vocableToManipulate);
         }
         return null;
     }

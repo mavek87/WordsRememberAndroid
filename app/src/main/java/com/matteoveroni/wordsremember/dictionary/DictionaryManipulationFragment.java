@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.dictionary;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     public void showVocableData(Word vocableToShow) {
+        Log.i(TAG, "Entro in showVocableData");
         if (!vocableToShow.equals(shownVocable)) {
             if (vocableToShow.getId() <= 0) {
                 lbl_title.setText("Create vocable");
