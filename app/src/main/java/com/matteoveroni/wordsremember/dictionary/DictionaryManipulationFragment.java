@@ -10,20 +10,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Fragment designed to manage CRUD operations on single vocables in a dictionary
+ * Fragment designed to manage CRUD operations on single vocables in restoreViewData dictionary
  *
  * @author Matteo Veroni
  */
@@ -32,7 +28,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);
 
-    private final EventBus eventBus = EventBus.getDefault();
+    //    private final EventBus eventBus = EventBus.getDefault();
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
@@ -51,7 +47,7 @@ public class DictionaryManipulationFragment extends Fragment {
     public DictionaryManipulationFragment() {
     }
 
-    public Word getCurrentVocableInView() {
+    public Word getVocableDataInView() {
         final Word currentVocableInView = new Word(txt_vocableName.getText().toString());
         currentVocableInView.setId(shownVocable.getId());
         return currentVocableInView;
@@ -70,13 +66,7 @@ public class DictionaryManipulationFragment extends Fragment {
         }
     }
 
-    /**********************************************************************************************/
-
-    // System events
-
-    /**********************************************************************************************/
-
-//    @Subscribe(sticky = true)
+    //    @Subscribe(sticky = true)
 //    @SuppressWarnings("unused")
 //    public void onEvent(EventVocableSelected event) {
 //        if (isFragmentCreated()) {
@@ -113,30 +103,62 @@ public class DictionaryManipulationFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(shownVocable));
-        savedInstanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
-        savedInstanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
+        saveViewData(savedInstanceState);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-                shownVocable = Json.getInstance().fromJson(savedInstanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
-            }
-            if (savedInstanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
-                lbl_title.setText(savedInstanceState.getString(VIEW_TITLE_CONTENT_KEY));
-            }
-            if (savedInstanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
-                txt_vocableName.setText(savedInstanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
-            }
+        restoreViewData(savedInstanceState);
+    }
+
+    private void saveViewData(Bundle instanceState) {
+        saveViewTitle(instanceState);
+        saveVocableUsedByView(instanceState);
+        saveVocableNameTextView(instanceState);
+    }
+
+    private void restoreViewData(Bundle instanceState) {
+        if (instanceState != null) {
+            restoreViewTitle(instanceState);
+            restoreVocableUsedByView(instanceState);
+            restoreVocableNameTextView(instanceState);
         }
     }
 
-    private boolean isFragmentCreated() {
-        return getView() != null && lbl_title != null && txt_vocableName != null;
+    private void saveViewTitle(Bundle instanceState) {
+        instanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
     }
+
+    private void restoreViewTitle(Bundle instanceState) {
+        if (instanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
+            lbl_title.setText(instanceState.getString(VIEW_TITLE_CONTENT_KEY));
+        }
+    }
+
+    private void saveVocableUsedByView(Bundle instanceState) {
+        instanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(shownVocable));
+    }
+
+    private void restoreVocableUsedByView(Bundle instanceState) {
+        if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
+            shownVocable = Json.getInstance().fromJson(instanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
+        }
+    }
+
+    private void saveVocableNameTextView(Bundle instanceState) {
+        instanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
+    }
+
+    private void restoreVocableNameTextView(Bundle instanceState) {
+        if (instanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
+            txt_vocableName.setText(instanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
+        }
+    }
+
+//    private boolean isFragmentCreated() {
+//        return getView() != null && lbl_title != null && txt_vocableName != null;
+//    }
 
 //    private void passVocableInUseToTranslationsManagementFragment(Word vocableToShow) {
 //        Bundle bundle = new Bundle();

@@ -32,10 +32,6 @@ public class DictionaryManipulationActivity
 
     private DictionaryManipulationFragment manipulationFragment;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // DictionaryManipulationView interface methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -50,10 +46,6 @@ public class DictionaryManipulationActivity
     public void showVocableData(Word vocable) {
         manipulationFragment.showVocableData(vocable);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Android Lifecycle Methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +88,11 @@ public class DictionaryManipulationActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                presenter.onSaveRequest(manipulationFragment.getCurrentVocableInView());
+                presenter.onSaveRequest(manipulationFragment.getVocableDataInView());
                 return true;
         }
         return false;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Presenter Loader methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
@@ -120,10 +108,6 @@ public class DictionaryManipulationActivity
     public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
         presenter = null;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Word retrieveVocableToManipulate() {
         Intent starterIntent = getIntent();

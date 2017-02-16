@@ -28,12 +28,6 @@ public class DictionaryManipulationPresenter implements Presenter {
         this.model = model;
     }
 
-    /**********************************************************************************************/
-
-    // Presenter interface
-
-    /**********************************************************************************************/
-
     @Override
     public void onViewAttached(Object viewAttached) {
         view = (DictionaryManipulationView) Proxy.newProxyInstance(
@@ -55,36 +49,18 @@ public class DictionaryManipulationPresenter implements Presenter {
         onViewDetached();
     }
 
-    /**********************************************************************************************/
-
-    // Activity's callbacks
-
-    /**********************************************************************************************/
-
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
         view.showVocableData(vocableToManipulate);
     }
 
     public void onSaveRequest(Word currentVocableInView) {
-        if (currentVocableInView != null && !currentVocableInView.getName().trim().isEmpty()) {
-            if (currentVocableInView.getId() < 0) {
-                model.asyncSaveVocable(currentVocableInView);
-                view.returnToPreviousView();
-                return;
-            } else if (currentVocableInView.getId() > 0) {
-                model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
-                view.returnToPreviousView();
-                return;
-            }
+        if (isVocableInvalid(currentVocableInView)) {
+            view.showMessage("You can\'t save an empty vocable. Compile all the data and retry");
+        } else {
+            saveVocable(currentVocableInView);
+            view.returnToPreviousView();
         }
-        view.showMessage("Error occurred during the saving process. Compile all the data and retry");
     }
-
-    /**********************************************************************************************/
-
-    // System Events
-
-    /**********************************************************************************************/
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
@@ -102,17 +78,23 @@ public class DictionaryManipulationPresenter implements Presenter {
         handleAsyncEventAndGoToPreviousView(event);
     }
 
-    /**********************************************************************************************/
-
-    // Helper methods
-
-    /**********************************************************************************************/
-
     private void handleAsyncEventAndGoToPreviousView(Object event) {
         try {
             eventBus.removeStickyEvent(event);
         } finally {
             view.returnToPreviousView();
+        }
+    }
+
+    private boolean isVocableInvalid(Word currentVocableInView) {
+        return currentVocableInView == null || currentVocableInView.getName().trim().isEmpty();
+    }
+
+    private void saveVocable(Word currentVocableInView) {
+        if (currentVocableInView.getId() <= 0) {
+            model.asyncSaveVocable(currentVocableInView);
+        } else {
+            model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
         }
     }
 }
