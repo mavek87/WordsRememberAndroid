@@ -26,6 +26,7 @@ import butterknife.Unbinder;
 
 public class DictionaryManipulationFragment extends Fragment {
 
+    @SuppressWarnings("unused")
     public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);
 
     //    private final EventBus eventBus = EventBus.getDefault();
@@ -54,7 +55,7 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     public void showVocableData(Word vocableToShow) {
-        if (!shownVocable.equals(vocableToShow)) {
+        if (!vocableToShow.equals(shownVocable)) {
             if (vocableToShow.getId() < 0) {
                 lbl_title.setText("Create vocable");
             } else {

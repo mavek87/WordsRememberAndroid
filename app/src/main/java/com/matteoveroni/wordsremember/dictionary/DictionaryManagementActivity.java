@@ -30,8 +30,6 @@ public class DictionaryManagementActivity
         extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryManagementActivity.class);
-
     private DictionaryManagementPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
@@ -47,12 +45,13 @@ public class DictionaryManagementActivity
 
     @Override
     public void goToManipulationView(Word vocableToManipulate) {
-        Intent intent_startManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
-        intent_startManipulationActivity.putExtra(
+        String json_vocableToManipulate = Json.getInstance().toJson(vocableToManipulate);
+        Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
+        intent_goToManipulationActivity.putExtra(
                 Extras.VOCABLE_TO_MANIPULATE,
-                Json.getInstance().toJson(vocableToManipulate)
+                json_vocableToManipulate
         );
-        startActivity(intent_startManipulationActivity);
+        startActivity(intent_goToManipulationActivity);
     }
 
     @Override
@@ -82,12 +81,6 @@ public class DictionaryManagementActivity
         presenter.onViewDetached();
         super.onStop();
     }
-
-    /**********************************************************************************************/
-
-    // Presenter Loader methods
-
-    /**********************************************************************************************/
 
     @Override
     public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
