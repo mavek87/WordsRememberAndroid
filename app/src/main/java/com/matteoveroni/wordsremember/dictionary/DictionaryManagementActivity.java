@@ -63,7 +63,7 @@ public class DictionaryManagementActivity
         setContentView(R.layout.activity_dictionary_management);
         ButterKnife.bind(this);
 
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        loadPresenter();
     }
 
     @Override
@@ -92,5 +92,9 @@ public class DictionaryManagementActivity
     @Override
     public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
         presenter = null;
+    }
+
+    private void loadPresenter() {
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 }

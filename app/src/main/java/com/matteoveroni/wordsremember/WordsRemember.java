@@ -42,10 +42,6 @@ public class WordsRemember extends Application {
         return (WordsRemember) context.getApplicationContext();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     private void printAppSpecs() {
         Log.i(NAME, Str.concat("AUTHORITY = ", AUTHORITY));
         Log.i(NAME, Str.concat("NAME = ", NAME));

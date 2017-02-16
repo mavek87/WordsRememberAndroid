@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import android.util.Log;
+
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
@@ -35,7 +37,7 @@ public class DictionaryManipulationPresenter implements Presenter {
                 new Class[]{DictionaryManipulationView.class},
                 new NullWeakReferenceProxy(viewAttached)
         );
-        eventBus.register(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override

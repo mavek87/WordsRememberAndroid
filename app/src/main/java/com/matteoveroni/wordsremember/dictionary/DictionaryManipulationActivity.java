@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -66,8 +65,10 @@ public class DictionaryManipulationActivity
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        loadPresenter();
     }
+
+
 
     @Override
     protected void onStart() {
@@ -125,5 +126,9 @@ public class DictionaryManipulationActivity
             return Word.fromJson(json_vocableToManipulate);
         }
         return null;
+    }
+
+    private void loadPresenter() {
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 }

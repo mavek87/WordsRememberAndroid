@@ -33,13 +33,13 @@ public class DictionaryManagementPresenterTest {
     @Mock
     private DictionaryManagementView view;
     @Mock
-    private DictionaryDAO model;
+    private DictionaryDAO dictionaryModel;
 
     private Word VOCABLE = new Word(1, "VocableTest");
 
     @Before
     public void setUp() {
-        presenter = new DictionaryManagementPresenterFactoryForTests(model).create();
+        presenter = new DictionaryManagementPresenterFactoryForTests(dictionaryModel).create();
         presenter.onViewAttached(view);
     }
 
@@ -53,13 +53,13 @@ public class DictionaryManagementPresenterTest {
     }
 
     @Test
-    public void onEvent_VocableManipulationDeleteRequest_Model_Starts_asyncDeleteVocable() {
+    public void onEvent_VocableManipulationDeleteRequest_DictionaryModel_Starts_asyncDeleteVocable() {
         EventVocableManipulationRequest vocableDeleteRequest
                 = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
 
         presenter.onEvent(vocableDeleteRequest);
 
-        verify(model).asyncDeleteVocable(VOCABLE.getId());
+        verify(dictionaryModel).asyncDeleteVocable(VOCABLE.getId());
     }
 
     @Test
