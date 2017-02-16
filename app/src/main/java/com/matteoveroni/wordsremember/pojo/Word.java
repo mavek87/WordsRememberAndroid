@@ -2,10 +2,14 @@ package com.matteoveroni.wordsremember.pojo;
 
 import com.matteoveroni.wordsremember.utilities.Json;
 
+/**
+ * @author Matteo Veroni
+ */
+
 public class Word {
 
     private long id = -1;
-    private final String name;
+    private String name = "";
 
     public Word(String name) {
         this.name = name;
@@ -28,9 +32,24 @@ public class Word {
         return name;
     }
 
-    @Override
-    public String toString() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toJson() {
         return Json.getInstance().toJson(this);
+    }
+
+    public static Word fromJson(String json) {
+        return Json.getInstance().fromJson(json, Word.class);
+    }
+
+    public void loadFromJson(String json) {
+        Word wordFromJson = Json.getInstance().fromJson(json, getClass());
+        if (wordFromJson != null) {
+            this.setId(wordFromJson.getId());
+            this.setName(wordFromJson.getName());
+        }
     }
 
     @Override

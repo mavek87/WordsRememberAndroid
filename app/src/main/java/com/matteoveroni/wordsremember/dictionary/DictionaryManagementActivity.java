@@ -12,8 +12,6 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.utilities.Json;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,11 +43,10 @@ public class DictionaryManagementActivity
 
     @Override
     public void goToManipulationView(Word vocableToManipulate) {
-        String json_vocableToManipulate = Json.getInstance().toJson(vocableToManipulate);
         Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
         intent_goToManipulationActivity.putExtra(
                 Extras.VOCABLE_TO_MANIPULATE,
-                json_vocableToManipulate
+                vocableToManipulate.toJson()
         );
         startActivity(intent_goToManipulationActivity);
     }

@@ -6,6 +6,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -17,7 +18,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.utilities.Json;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
  * @author Matteo Veroni
@@ -26,6 +27,9 @@ import com.matteoveroni.wordsremember.utilities.Json;
 public class DictionaryManipulationActivity
         extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+
+    @SuppressWarnings("unused")
+    public static final String TAG = TagGenerator.tag(DictionaryManipulationActivity.class);
 
     private DictionaryManipulationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
@@ -44,6 +48,9 @@ public class DictionaryManipulationActivity
 
     @Override
     public void showVocableData(Word vocable) {
+        if (manipulationFragment == null) {
+            Log.i(TAG, "manipulationFragment is null");
+        }
         manipulationFragment.showVocableData(vocable);
     }
 
@@ -114,7 +121,7 @@ public class DictionaryManipulationActivity
         if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
             String str_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
             if (!str_vocableToManipulate.trim().isEmpty())
-                return Json.getInstance().fromJson(str_vocableToManipulate, Word.class);
+                return Word.fromJson(str_vocableToManipulate);
         }
         return null;
     }

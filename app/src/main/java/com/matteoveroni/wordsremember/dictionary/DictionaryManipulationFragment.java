@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.utilities.Json;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import butterknife.BindView;
@@ -56,7 +55,7 @@ public class DictionaryManipulationFragment extends Fragment {
 
     public void showVocableData(Word vocableToShow) {
         if (!vocableToShow.equals(shownVocable)) {
-            if (vocableToShow.getId() < 0) {
+            if (vocableToShow.getId() <= 0) {
                 lbl_title.setText("Create vocable");
             } else {
                 lbl_title.setText("Edit vocable");
@@ -75,6 +74,7 @@ public class DictionaryManipulationFragment extends Fragment {
 //            showVocableData(vocableToShowInView);
 //        }
 //    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -138,12 +138,12 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     private void saveVocableUsedByView(Bundle instanceState) {
-        instanceState.putString(VOCABLE_CONTENT_KEY, Json.getInstance().toJson(shownVocable));
+        instanceState.putString(VOCABLE_CONTENT_KEY, shownVocable.toJson());
     }
 
     private void restoreVocableUsedByView(Bundle instanceState) {
         if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-            shownVocable = Json.getInstance().fromJson(instanceState.getString(VOCABLE_CONTENT_KEY), Word.class);
+            shownVocable = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
         }
     }
 

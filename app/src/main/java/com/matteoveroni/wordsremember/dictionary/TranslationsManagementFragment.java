@@ -79,7 +79,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 //        final Bundle bundle = this.getArguments();
 //        if (bundle != null) {
 //            String vocableInUse = bundle.getString("vocableInUse");
-//            vocable = Json.getInstance().fromJson(vocableInUse, Word.class);
+//            vocable = Json.getInstance().loadFromJson(vocableInUse, Word.class);
 //        }
         registerForContextMenu(getListView());
     }
