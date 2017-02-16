@@ -38,7 +38,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     public static final String TAG = TagGenerator.tag(DictionaryProvider.class);
 
-
     private DatabaseManager databaseManager;
 
     public static final String SCHEME = "content://";

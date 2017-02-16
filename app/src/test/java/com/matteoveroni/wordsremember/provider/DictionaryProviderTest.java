@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -17,6 +18,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.lang.reflect.Field;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,14 +32,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Config(constants = BuildConfig.class)
 public class DictionaryProviderTest {
 
-    DictionaryProvider provider;
-    Cursor cursor;
-    ContentValues values = new ContentValues();
+    private DictionaryProvider provider;
+    private Cursor cursor;
+    private ContentValues values = new ContentValues();
 
-    final long VOCABLES_VALID_VOCABLE_ID = 1;
-    final String VOCABLES_VALID_VOCABLE = "Name";
+    private final long VOCABLES_VALID_VOCABLE_ID = 1;
+    private final String VOCABLES_VALID_VOCABLE = "Name";
 
-    final String TRANSLATIONS_VALID_TRANSLATION = "Name";
+    private final String TRANSLATIONS_VALID_TRANSLATION = "Name";
 
     @Before
     public void onStart() {
@@ -48,8 +51,8 @@ public class DictionaryProviderTest {
 
     @After
     public void tearDown() {
-        // Reset DatabaseManager Singleton using reflections (second paramether must match DatabaseManager instance name)
-        Util.resetSingletonAttribute(DatabaseManager.class, "DB_INSTANCE");
+        // Reset DatabaseManager Singleton using reflections (second parameter must match DatabaseManager instance name)
+        Util.resetSingletonAttribute(DatabaseManager.class, "DB_UNIQUE_INSTANCE");
         values.clear();
         if (cursor != null) {
             cursor.close();
