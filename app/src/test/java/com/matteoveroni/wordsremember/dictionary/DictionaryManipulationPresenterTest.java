@@ -33,28 +33,21 @@ public class DictionaryManipulationPresenterTest {
 
     @Before
     public void setUp() {
-        presenter = new DictionaryManipulationtPresenterFactoryForTests(model).create();
+        presenter = new DictionaryManipulationPresenterFactoryForTests(model).create();
         presenter.onViewAttached(view);
     }
 
     @Test
-    public void on_Null_VocableToManipulateRetrieved_View_populateViewFor_Null_Vocable() {
-        presenter.onVocableToManipulateRetrieved(null);
-
-        verify(view).showVocableData(null);
-    }
-
-    @Test
-    public void on_NotNull_VocableToManipulateRetrieved_View_populateViewFor_NotNull_Vocable() {
+    public void onVocableToManipulateRetrieved_View_showVocableData() {
         presenter.onVocableToManipulateRetrieved(VOCABLE);
 
         verify(view).showVocableData(VOCABLE);
     }
 
-    private class DictionaryManipulationtPresenterFactoryForTests implements PresenterFactory {
+    private class DictionaryManipulationPresenterFactoryForTests implements PresenterFactory {
         private DictionaryDAO model;
 
-        DictionaryManipulationtPresenterFactoryForTests(DictionaryDAO model) {
+        DictionaryManipulationPresenterFactoryForTests(DictionaryDAO model) {
             this.model = model;
         }
 

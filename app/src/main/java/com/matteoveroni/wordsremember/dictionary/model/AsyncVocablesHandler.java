@@ -5,7 +5,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
@@ -59,6 +59,6 @@ class AsyncVocablesHandler extends AsyncQueryHandler {
 
     @Override
     protected void onDeleteComplete(int token, Object cookie, int numberOfDeletedRows) {
-        eventBus.postSticky(new EventAsyncDeleteVocableCompleted(numberOfDeletedRows));
+        eventBus.postSticky(new EventAsyncVocableDeletionComplete(numberOfDeletedRows));
     }
 }

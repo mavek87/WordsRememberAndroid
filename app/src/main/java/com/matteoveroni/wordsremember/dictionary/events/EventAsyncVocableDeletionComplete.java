@@ -4,11 +4,11 @@ package com.matteoveroni.wordsremember.dictionary.events;
  * @author Matteo Veroni
  */
 
-public class EventAsyncDeleteVocableCompleted {
+public class EventAsyncVocableDeletionComplete {
 
     private final int numberOfRowsDeleted;
 
-    public EventAsyncDeleteVocableCompleted(int numberOfRowsDeleted) {
+    public EventAsyncVocableDeletionComplete(int numberOfRowsDeleted) {
         this.numberOfRowsDeleted = numberOfRowsDeleted;
     }
 

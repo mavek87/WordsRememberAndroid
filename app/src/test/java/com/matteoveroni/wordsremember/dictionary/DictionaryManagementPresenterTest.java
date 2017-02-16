@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -42,38 +42,31 @@ public class DictionaryManagementPresenterTest {
         presenter = new DictionaryManagementPresenterFactoryForTests(model).create();
         presenter.onViewAttached(view);
     }
-//
-//    @Test
-//    public void onCreateVocableRequest_View_goToManipulationView() {
-//        presenter.createVocableAction();
-//
-//        verify(view).goToManipulationView(null);
-//    }
 
     @Test
-    public void onEventVocableSelected_View_goToManipulationView_Using_Selected_Vocable() {
-        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
+    public void onEvent_VocableSelected_View_goToManipulationView_Using_Selected_Vocable() {
+        EventVocableSelected vocableSelected = new EventVocableSelected(VOCABLE);
 
-        presenter.onEvent(eventVocableSelected);
+        presenter.onEvent(vocableSelected);
 
         verify(view).goToManipulationView(VOCABLE);
     }
 
     @Test
-    public void onEventVocableManipulationDeleteRequest_Model_Starts_asyncDeleteVocable() {
-        EventVocableManipulationRequest eventVocableDeleteRequest
+    public void onEvent_VocableManipulationDeleteRequest_Model_Starts_asyncDeleteVocable() {
+        EventVocableManipulationRequest vocableDeleteRequest
                 = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
 
-        presenter.onEvent(eventVocableDeleteRequest);
+        presenter.onEvent(vocableDeleteRequest);
 
         verify(model).asyncDeleteVocable(VOCABLE.getId());
     }
 
     @Test
-    public void onEventAsyncDeleteVocableCompleted_View_Shows_A_Completion_Message() {
-        EventAsyncDeleteVocableCompleted eventAsyncDeleteVocableCompleted = new EventAsyncDeleteVocableCompleted(1);
+    public void onEvent_AsyncVocableDeletionComplete_View_showMessage_for_Deletion_Complete() {
+        EventAsyncVocableDeletionComplete asyncVocableDeletionComplete = new EventAsyncVocableDeletionComplete(1);
 
-        presenter.onEvent(eventAsyncDeleteVocableCompleted);
+        presenter.onEvent(asyncVocableDeletionComplete);
 
         verify(view).showMessage(any(String.class));
     }

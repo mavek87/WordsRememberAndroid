@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -90,7 +90,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEvent(EventAsyncDeleteVocableCompleted event) {
+    public void onEvent(EventAsyncVocableDeletionComplete event) {
         eventBus.removeStickyEvent(event);
         view.showMessage("Vocable removed");
     }
