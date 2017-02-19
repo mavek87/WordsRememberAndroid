@@ -1,8 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import android.util.Log;
-
-import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
@@ -13,7 +10,7 @@ import com.matteoveroni.wordsremember.pojo.Word;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.reflect.Proxy;
+import java.lang.ref.WeakReference;
 
 /**
  * @author Matteo Veroni
@@ -24,7 +21,7 @@ public class DictionaryManipulationPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryManipulationView view;
+    private WeakReference<DictionaryManipulationView> view;
 
     public DictionaryManipulationPresenter(DictionaryDAO model) {
         this.model = model;
@@ -32,11 +29,7 @@ public class DictionaryManipulationPresenter implements Presenter {
 
     @Override
     public void onViewAttached(Object viewAttached) {
-        view = (DictionaryManipulationView) Proxy.newProxyInstance(
-                getClass().getClassLoader(),
-                new Class[]{DictionaryManipulationView.class},
-                new NullWeakReferenceProxy(viewAttached)
-        );
+        view = new WeakReference<>((DictionaryManipulationView) viewAttached);
         EventBus.getDefault().register(this);
     }
 
@@ -52,15 +45,23 @@ public class DictionaryManipulationPresenter implements Presenter {
     }
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        view.showVocableData(vocableToManipulate);
+        try {
+            view.get().showVocableData(vocableToManipulate);
+        } catch (NullPointerException ignored) {
+        }
     }
 
     public void onSaveRequest(Word currentVocableInView) {
         if (isVocableInvalid(currentVocableInView)) {
-            view.showMessage("You can\'t save an empty vocable. Compile all the data and retry");
+            try {
+                view.get().showMessage("You can\'t save an empty vocable. Compile all the data and retry");
+            } catch (NullPointerException ignored) {
+            }
         } else {
-            saveVocable(currentVocableInView);
-            view.returnToPreviousView();
+            try {
+                view.get().returnToPreviousView();
+            } catch (NullPointerException ignored) {
+            }
         }
     }
 
@@ -84,7 +85,10 @@ public class DictionaryManipulationPresenter implements Presenter {
         try {
             eventBus.removeStickyEvent(event);
         } finally {
-            view.returnToPreviousView();
+            try {
+                view.get().returnToPreviousView();
+            } catch (NullPointerException ignored) {
+            }
         }
     }
 

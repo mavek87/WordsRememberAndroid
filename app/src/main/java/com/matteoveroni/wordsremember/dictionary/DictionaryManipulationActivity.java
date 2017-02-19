@@ -23,8 +23,7 @@ import com.matteoveroni.wordsremember.utilities.TagGenerator;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationActivity
-        extends AppCompatActivity
+public class DictionaryManipulationActivity extends AppCompatActivity
         implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
     @SuppressWarnings("unused")
@@ -67,7 +66,6 @@ public class DictionaryManipulationActivity
 
         loadPresenter();
     }
-
 
 
     @Override

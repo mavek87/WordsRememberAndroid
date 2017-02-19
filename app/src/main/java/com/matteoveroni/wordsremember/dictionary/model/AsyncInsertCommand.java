@@ -14,6 +14,8 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * @author Matteo Veroni
  */
+
+//Todo: evaluate refactoring for this class using 3 different abstract classes for type instead of enum
 public class AsyncInsertCommand extends CompletionHandler {
 
     private final EventBus eventBus = EventBus.getDefault();

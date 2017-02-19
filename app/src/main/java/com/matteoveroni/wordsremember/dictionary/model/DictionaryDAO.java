@@ -28,11 +28,9 @@ public class DictionaryDAO {
         this.asyncVocablesHandler = new AsyncVocablesHandler(this.contentResolver);
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Async methods - Vocable
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void asyncSaveVocable(Word vocable) {
         if (isWordValid(vocable) && vocable.getId() < 0) {
@@ -92,11 +90,9 @@ public class DictionaryDAO {
         }
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Async methods - Translations
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
         if (isWordValid(translation) && translation.getId() < 0 && isWordValid(vocable) && vocable.getId() > 0) {
@@ -182,87 +178,86 @@ public class DictionaryDAO {
 //        }
 //    }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Synchronous methods - OLD
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /**********************************************************************************************/
+    public Word getVocableById(long id) {
+        final String str_id = String.valueOf(id);
 
-//    public Word getVocableById(long id) {
-//        final String str_id = String.valueOf(id);
-//
-//        final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
-//        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-//        final String[] selectionArgs = {str_id};
-//
-//        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-//
-//        Cursor cursor = contentResolver.query(
-//                uri,
-//                projection,
-//                selection,
-//                selectionArgs,
-//                null
-//        );
-//
-//        if (cursor != null) {
-//            cursor.moveToFirst();
-//            return cursorToVocable(cursor);
-//        } else {
-//            throw new RuntimeException("duplicated ids for different vocables");
-//        }
-//    }
-//
-//    public long saveVocable(Word vocable) {
-//        long id = -1;
-//        if (isWordValid(vocable) && vocable.getId() < 0) {
-//            final Uri uri = contentResolver.insert(
-//                    VocablesContract.CONTENT_URI,
-//                    vocableToContentValues(vocable)
-//            );
-//
-//            if (uri != null) {
-//                final String createdRowId = uri.getLastPathSegment();
-//
-//                if (!createdRowId.isEmpty()) {
-//                    id = Long.valueOf(createdRowId);
-//                }
-//            }
-//        }
-//        return id;
-//    }
-//
-//    public boolean updateVocable(long vocableID, Word newVocable) {
-//        final String str_id = String.valueOf(vocableID);
-//
-//        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-//        final String[] selectionArgs = {str_id};
-//
-//        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-//
-//        int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
-//
-//        return updatedRecords > 0;
-//    }
-//
-//    public boolean removeVocable(long vocableID) {
-//        int recordDeleted = 0;
-//        if (vocableID > 0) {
-//            final String str_id = String.valueOf(vocableID);
-//
-//            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-//            final String[] selectionArgs = {str_id};
-//
-//            final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-//
-//            recordDeleted = contentResolver.delete(
-//                    vocableUri,
-//                    selection,
-//                    selectionArgs
-//            );
-//        }
-//        return recordDeleted > 0;
-//    }
+        final String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_id};
+
+        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
+
+        Cursor cursor = contentResolver.query(
+                uri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursorToVocable(cursor);
+        } else {
+            throw new RuntimeException("duplicated ids for different vocables");
+        }
+    }
+
+    public long saveVocable(Word vocable) {
+        long id = -1;
+        if (isWordValid(vocable) && vocable.getId() < 0) {
+            final Uri uri = contentResolver.insert(
+                    VocablesContract.CONTENT_URI,
+                    vocableToContentValues(vocable)
+            );
+
+            if (uri != null) {
+                final String createdRowId = uri.getLastPathSegment();
+
+                if (!createdRowId.isEmpty()) {
+                    id = Long.valueOf(createdRowId);
+                }
+            }
+        }
+        return id;
+    }
+
+    public boolean updateVocable(long vocableID, Word newVocable) {
+        final String str_id = String.valueOf(vocableID);
+
+        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
+        final String[] selectionArgs = {str_id};
+
+        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
+
+        int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
+
+        return updatedRecords > 0;
+    }
+
+    public boolean removeVocable(long vocableID) {
+        int recordDeleted = 0;
+        if (vocableID > 0) {
+            final String str_id = String.valueOf(vocableID);
+
+            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
+            final String[] selectionArgs = {str_id};
+
+            final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
+
+            recordDeleted = contentResolver.delete(
+                    vocableUri,
+                    selection,
+                    selectionArgs
+            );
+        }
+        return recordDeleted > 0;
+    }
+
     public static Word cursorToVocable(Cursor cursor) {
         final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
         vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
@@ -275,11 +270,9 @@ public class DictionaryDAO {
         return translation;
     }
 
-    /**********************************************************************************************/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     // Helper methods
-
-    /**********************************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();

@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.NullWeakReferenceProxy;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
@@ -16,10 +15,11 @@ import com.matteoveroni.wordsremember.utilities.Str;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.lang.reflect.Proxy;
+import java.lang.ref.WeakReference;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych
+ * https://community.oracle.com/blogs/enicholas/2006/05/04/understanding-weak-references
  *
  * @author Matteo Veroni
  */
@@ -29,7 +29,7 @@ public class DictionaryManagementPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean isPresenterCreatedForTheFirstTime = true;
     private final DictionaryDAO model;
-    private DictionaryManagementView view;
+    private WeakReference<DictionaryManagementView> view;
 
     public DictionaryManagementPresenter(DictionaryDAO model) {
         this.model = model;
@@ -37,11 +37,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     @Override
     public void onViewAttached(Object viewAttached) {
-        view = (DictionaryManagementView) Proxy.newProxyInstance(
-                getClass().getClassLoader(),
-                new Class[]{DictionaryManagementView.class},
-                new NullWeakReferenceProxy(viewAttached)
-        );
+        view = new WeakReference<>((DictionaryManagementView) viewAttached);
         eventBus.register(this);
     }
 
@@ -65,7 +61,10 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        view.goToManipulationView(new Word(""));
+        try {
+            view.get().goToManipulationView(new Word(""));
+        } catch (NullPointerException ex) {
+        }
     }
 
     @Subscribe(sticky = true)
@@ -73,7 +72,10 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onEvent(EventVocableSelected event) {
         Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        view.goToManipulationView(selectedVocable);
+        try {
+            view.get().goToManipulationView(selectedVocable);
+        } catch (NullPointerException ex) {
+        }
     }
 
     @Subscribe(sticky = true)
@@ -92,13 +94,16 @@ public class DictionaryManagementPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncVocableDeletionComplete event) {
         eventBus.removeStickyEvent(event);
-        view.showMessage("Vocable removed");
+        try {
+            view.get().showMessage("Vocable removed");
+        } catch (NullPointerException ex) {
+        }
     }
 
     private void populateDatabaseForTestPurposes(Context context) {
         for (int i = 0; i < 5; i++) {
             Word vocableToSave = new Word(Str.generateRandomUniqueString());
-            model.asyncSaveVocable(vocableToSave);
+//            model.asyncSaveVocable(vocableToSave);
         }
     }
 

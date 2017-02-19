@@ -80,16 +80,19 @@ public class MainMenuActivity extends AppCompatActivity
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
 
-        // Todo: remove this line in production code
-        // Use this line to reset the database if changes in some contract class schema has occurred
-        DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
+        // Todo: remove this lines in production code
+        // This create a bug, if a vocable is inserted here EventAsyncSaveVocable is erroneously propagated
+        // to DictionaryManipulationFragment and causes "goBackActivity for the firstTime bug"
 
-        Word vocable = new Word("vocable1");
-        Word translation = new Word("translation1");
-
-        DictionaryDAO dao = new DictionaryDAO(getApplicationContext());
-        dao.asyncSaveVocable(vocable);
-        dao.asyncSaveTranslationForVocable(translation, vocable);
+//        // Use this line to reset the database if changes in some contract class schema has occurred
+//        DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
+//
+//        Word vocable = new Word("vocable1");
+//        Word translation = new Word("translation1");
+//
+//        DictionaryDAO dao = new DictionaryDAO(getApplicationContext());
+//        dao.asyncSaveVocable(vocable);
+//        dao.asyncSaveTranslationForVocable(translation, vocable);
     }
 
     @Override

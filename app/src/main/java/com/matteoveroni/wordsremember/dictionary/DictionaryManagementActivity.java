@@ -24,8 +24,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity
-        extends AppCompatActivity
+public class DictionaryManagementActivity extends AppCompatActivity
         implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     private DictionaryManagementPresenter presenter;
