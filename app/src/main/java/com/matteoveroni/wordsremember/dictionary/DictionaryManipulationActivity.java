@@ -96,7 +96,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                presenter.onSaveRequest(manipulationFragment.getVocableDataInView());
+                presenter.onSaveVocableRequest(manipulationFragment.getVocableDataInView());
                 return true;
         }
         return false;

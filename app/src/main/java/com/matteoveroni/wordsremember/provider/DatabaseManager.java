@@ -83,7 +83,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             destination.close();
             Log.i(TAG, "DB Exported!");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Error while exporting db on sd");
         }
     }
 

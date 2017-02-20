@@ -1,10 +1,11 @@
-package com.matteoveroni.wordsremember.dictionary.model;
+package com.matteoveroni.wordsremember.dictionary.model.commands;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -12,7 +13,9 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * @author Matteo Veroni
  */
-public class AsyncQueryCommand extends CompletionHandler {
+
+// TODO: fix this class using new AsyncCommand and CommandTarget api\'s
+public class AsyncQueryCommand extends AsyncCommand {
 
     private final EventBus eventBus = EventBus.getDefault();
 
@@ -24,7 +27,7 @@ public class AsyncQueryCommand extends CompletionHandler {
     private final Object nextCommand;
 
     public AsyncQueryCommand(ContentResolver contentResolver, Uri content_uri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
-        this(contentResolver, content_uri, projection, selection, selectionArgs, orderBy, new NoOperationCommand(contentResolver));
+        this(contentResolver, content_uri, projection, selection, selectionArgs, orderBy, new AsynCommandNoOperation(contentResolver));
     }
 
     public AsyncQueryCommand(
@@ -51,7 +54,7 @@ public class AsyncQueryCommand extends CompletionHandler {
     @Override
     protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
         dispatchCompletionEvent(cursor);
-        ((CompletionHandler) nextCommand).execute();
+        ((AsyncCommand) nextCommand).execute();
     }
 
     private void dispatchCompletionEvent(Cursor cursor) {

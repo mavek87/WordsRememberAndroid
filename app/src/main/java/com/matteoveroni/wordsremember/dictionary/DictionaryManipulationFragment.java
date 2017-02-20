@@ -55,7 +55,6 @@ public class DictionaryManipulationFragment extends Fragment {
     }
 
     public void showVocableData(Word vocableToShow) {
-        Log.i(TAG, "Entro in showVocableData");
         if (!vocableToShow.equals(shownVocable)) {
             if (vocableToShow.getId() <= 0) {
                 lbl_title.setText("Create vocable");

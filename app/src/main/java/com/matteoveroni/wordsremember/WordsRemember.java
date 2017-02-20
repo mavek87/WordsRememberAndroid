@@ -23,7 +23,7 @@ public class WordsRemember extends Application {
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static final String NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_NAME = NAME.toLowerCase();
-    public static final String VERSION = "0.0.30";
+    public static final String VERSION = "0.0.31";
 
     private static ModelComponent MODEL_COMPONENT;
 

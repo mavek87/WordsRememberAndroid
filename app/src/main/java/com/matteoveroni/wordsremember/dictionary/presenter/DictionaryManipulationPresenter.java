@@ -30,7 +30,7 @@ public class DictionaryManipulationPresenter implements Presenter {
     @Override
     public void onViewAttached(Object viewAttached) {
         view = new WeakReference<>((DictionaryManipulationView) viewAttached);
-        EventBus.getDefault().register(this);
+        eventBus.register(this);
     }
 
     @Override
@@ -51,27 +51,36 @@ public class DictionaryManipulationPresenter implements Presenter {
         }
     }
 
-    public void onSaveRequest(Word currentVocableInView) {
-        if (isVocableInvalid(currentVocableInView)) {
-            try {
-                view.get().showMessage("You can\'t save an empty vocable. Compile all the data and retry");
-            } catch (NullPointerException ignored) {
-            }
-        } else {
+    public void onSaveVocableRequest(Word currentVocableInView) {
+        if (isVocableValid(currentVocableInView)) {
+            storeVocableIntoModel(currentVocableInView);
             try {
                 view.get().returnToPreviousView();
             } catch (NullPointerException ignored) {
             }
+        } else {
+            try {
+                view.get().showMessage("You can\'t save an empty vocable. Compile all the data and retry");
+            } catch (NullPointerException ignored) {
+            }
+        }
+    }
+
+    private boolean isVocableValid(Word vocable) {
+        return (vocable != null) && !vocable.getName().trim().isEmpty();
+    }
+
+    private void storeVocableIntoModel(Word vocable) {
+        if (vocable.getId() <= 0) {
+            model.asyncSaveVocable(vocable);
+        } else {
+            model.asyncUpdateVocable(vocable.getId(), vocable);
         }
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
-//        Word translation = new Word("TranslationTest");
-//        Word vocableWithSearchedId = new Word("");
-//        vocableWithSearchedId.setId(event.getIdOfSavedVocable());
-//        model.asyncSaveTranslationForVocable(translation, vocableWithSearchedId);
         handleAsyncEventAndGoToPreviousView(event);
     }
 
@@ -89,18 +98,6 @@ public class DictionaryManipulationPresenter implements Presenter {
                 view.get().returnToPreviousView();
             } catch (NullPointerException ignored) {
             }
-        }
-    }
-
-    private boolean isVocableInvalid(Word currentVocableInView) {
-        return currentVocableInView == null || currentVocableInView.getName().trim().isEmpty();
-    }
-
-    private void saveVocable(Word currentVocableInView) {
-        if (currentVocableInView.getId() <= 0) {
-            model.asyncSaveVocable(currentVocableInView);
-        } else {
-            model.asyncUpdateVocable(currentVocableInView.getId(), currentVocableInView);
         }
     }
 }

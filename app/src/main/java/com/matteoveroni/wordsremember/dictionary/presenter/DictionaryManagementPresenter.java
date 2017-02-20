@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
@@ -11,6 +12,7 @@ import com.matteoveroni.wordsremember.dictionary.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.utilities.Str;
+import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,6 +27,9 @@ import java.lang.ref.WeakReference;
  */
 
 public class DictionaryManagementPresenter implements Presenter {
+
+    @SuppressWarnings("unused")
+    public static final String TAG = TagGenerator.tag(DictionaryManagementPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean isPresenterCreatedForTheFirstTime = true;
@@ -52,6 +57,7 @@ public class DictionaryManagementPresenter implements Presenter {
         onViewDetached();
     }
 
+    //TODO: remove this method in production code
     public void onViewCreated(Context context) {
         if (isPresenterCreatedForTheFirstTime) {
             populateDatabaseForTestPurposes(context);

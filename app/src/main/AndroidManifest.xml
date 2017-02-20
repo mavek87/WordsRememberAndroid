@@ -35,5 +35,4 @@
             android:label="@string/title_activity_dictionary_manipulation"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
 </manifest>

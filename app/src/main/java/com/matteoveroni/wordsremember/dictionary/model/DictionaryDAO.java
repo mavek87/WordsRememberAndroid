@@ -6,6 +6,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncQueryCommand;
+import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTargetFactory;
+import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTarget;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -36,7 +40,7 @@ public class DictionaryDAO {
         if (isWordValid(vocable) && vocable.getId() < 0) {
             ContentValues val = new ContentValues();
             val.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
-            new AsyncInsertCommand(contentResolver, CompletionHandler.Type.vocable, val).execute();
+            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.vocable), val).execute();
         }
     }
 
@@ -104,8 +108,8 @@ public class DictionaryDAO {
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
 
-            new AsyncInsertCommand(contentResolver, CompletionHandler.Type.translation, translationValue,
-                    new AsyncInsertCommand(contentResolver, CompletionHandler.Type.vocableTranslation, vocablesTranslationValue)
+            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.translation), translationValue,
+                    new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.translation), vocablesTranslationValue)
             );
 
 //            new AsyncTranslationsHandler(contentResolver).startInsert(

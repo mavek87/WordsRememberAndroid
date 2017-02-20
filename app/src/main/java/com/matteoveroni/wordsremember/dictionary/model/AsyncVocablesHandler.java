@@ -16,6 +16,8 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * @author Matteo Veroni
  */
+
+//TODO: remove this class
 class AsyncVocablesHandler extends AsyncQueryHandler {
 
     private final EventBus eventBus = EventBus.getDefault();
