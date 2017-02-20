@@ -6,9 +6,9 @@ import android.content.ContentResolver;
  * @author Matteo Veroni
  */
 
-public class AsynCommandNoOperation extends AsyncCommand {
+public class AsyncNoOperationCommand extends AsyncCommand {
 
-    public AsynCommandNoOperation(ContentResolver contentResolver) {
+    public AsyncNoOperationCommand(ContentResolver contentResolver) {
         super(contentResolver);
     }
 

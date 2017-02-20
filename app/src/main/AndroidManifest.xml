@@ -28,10 +28,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".dictionary.DictionaryManagementActivity" />
+        <activity android:name=".dictionary.view.DictionaryManagementActivity" />
 
         <activity
-            android:name=".dictionary.DictionaryManipulationActivity"
+            android:name=".dictionary.view.DictionaryManipulationActivity"
             android:label="@string/title_activity_dictionary_manipulation"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

@@ -15,7 +15,7 @@ public class AsyncInsertCommand extends AsyncCommand {
     private final Object nextCommand;
 
     public AsyncInsertCommand(ContentResolver contentResolver, CommandTarget commandTarget, ContentValues values) {
-        this(contentResolver, commandTarget, values, new AsynCommandNoOperation(contentResolver));
+        this(contentResolver, commandTarget, values, new AsyncNoOperationCommand(contentResolver));
     }
 
     public AsyncInsertCommand(ContentResolver contentResolver, CommandTarget commandTarget, ContentValues values, Object nextCommand) {

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManipulationPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;

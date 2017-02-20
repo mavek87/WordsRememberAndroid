@@ -27,7 +27,7 @@ public class AsyncQueryCommand extends AsyncCommand {
     private final Object nextCommand;
 
     public AsyncQueryCommand(ContentResolver contentResolver, Uri content_uri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
-        this(contentResolver, content_uri, projection, selection, selectionArgs, orderBy, new AsynCommandNoOperation(contentResolver));
+        this(contentResolver, content_uri, projection, selection, selectionArgs, orderBy, new AsyncNoOperationCommand(contentResolver));
     }
 
     public AsyncQueryCommand(

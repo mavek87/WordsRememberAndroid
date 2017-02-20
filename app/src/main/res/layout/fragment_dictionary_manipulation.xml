@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".dictionary.DictionaryManipulationActivity">
+    tools:context=".dictionary.view.DictionaryManipulationActivity">
 
     <TextView
         android:id="@+id/fragment_dictionary_manipulation_title"
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/translations_management_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.TranslationsManagementFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.TranslationsManagementFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="40dp" />

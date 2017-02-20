@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 import android.content.Intent;
 import android.support.v4.app.LoaderManager;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.factories.DictionaryManagementPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import butterknife.ButterKnife;

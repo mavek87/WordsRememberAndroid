@@ -6,6 +6,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulation
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 
 import org.junit.Before;

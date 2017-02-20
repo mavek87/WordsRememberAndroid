@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 /**
  * @author Matteo Veroni

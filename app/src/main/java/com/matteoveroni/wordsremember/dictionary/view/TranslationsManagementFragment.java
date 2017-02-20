@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.view;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
@@ -22,8 +21,6 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsCon
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
 import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
-
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author Matteo Veroni
