@@ -9,6 +9,7 @@ import java.util.Random;
 /**
  * @author Matteo Veroni
  */
+
 public final class Str {
     private static volatile List<String> uniqueRandomGeneratedStrings = new ArrayList<>();
 
@@ -22,6 +23,13 @@ public final class Str {
         final StringBuilder stringBuilder = new StringBuilder();
         concatStrings(strings.toArray(new String[strings.size()]), stringBuilder);
         return stringBuilder.toString();
+    }
+
+    private static StringBuilder concatStrings(String[] strings, StringBuilder stringBuilder) {
+        for (String s : strings) {
+            stringBuilder.append(s);
+        }
+        return stringBuilder;
     }
 
     public synchronized static String generateRandomUniqueString() {
@@ -49,12 +57,5 @@ public final class Str {
             generatedString.append(randomChar);
         }
         return generatedString.toString();
-    }
-
-    private static StringBuilder concatStrings(String[] strings, StringBuilder stringBuilder) {
-        for (String s : strings) {
-            stringBuilder.append(s);
-        }
-        return stringBuilder;
     }
 }

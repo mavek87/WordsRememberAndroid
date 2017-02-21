@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.pojo;
 
-import com.matteoveroni.wordsremember.utilities.Json;
+import com.matteoveroni.myutils.Json;
 
 /**
  * @author Matteo Veroni

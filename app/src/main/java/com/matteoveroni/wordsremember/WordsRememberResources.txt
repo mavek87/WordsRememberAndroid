@@ -13,6 +13,11 @@ INTERFACES NEEDED IN MVP (MOST OF THE TIMES ONLY FOR VIEW)
 http://blog.karumi.com/interfaces-for-presenters-in-mvp-are-a-waste-of-time/
 
 
+INCLUDE LIBRARIES FROM GIT REPOSITORY
+
+https://jitpack.io/
+
+
 UNIT-TEST:
 
 https://www.youtube.com/watch?v=DJDBl0vURD4
