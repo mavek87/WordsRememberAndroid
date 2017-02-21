@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary;
+package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
