@@ -4,11 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.components.ModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
-import com.matteoveroni.wordsremember.utilities.Str;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**

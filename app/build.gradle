@@ -69,5 +69,5 @@ dependencies {
     })
 
     // Dependencies taken from git by jitpack.io
-    compile 'com.github.mavek87:MyUtils:733d068038af2e805d3392c8b4f0ef412fbaf027'
+    compile 'com.github.mavek87:MyUtils:f005fd26758d3a2fb3cc2e6fe3d742e2c8dcd9c0'
 }

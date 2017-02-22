@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.utilities;
 
+import com.matteoveroni.myutils.Str;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

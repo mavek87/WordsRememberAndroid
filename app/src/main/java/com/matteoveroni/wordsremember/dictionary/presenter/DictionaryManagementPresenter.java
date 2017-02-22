@@ -2,6 +2,8 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
 
+import com.matteoveroni.myutils.Range;
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
@@ -10,7 +12,6 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojo.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.utilities.Str;
 import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -107,7 +108,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     private void populateDatabaseForTestPurposes(Context context) {
         for (int i = 0; i < 5; i++) {
-            Word vocableToSave = new Word(Str.generateRandomUniqueString());
+            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new Range(3, 20)));
 //            model.asyncSaveVocable(vocableToSave);
         }
     }

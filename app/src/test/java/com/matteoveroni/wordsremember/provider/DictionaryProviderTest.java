@@ -4,10 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.myutils.Singleton;
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.utilities.Singleton;
 
 import org.junit.After;
 import org.junit.Before;
