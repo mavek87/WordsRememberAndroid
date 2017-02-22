@@ -1,14 +1,13 @@
 package com.matteoveroni.wordsremember.provider;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.utilities.Util;
+import com.matteoveroni.wordsremember.utilities.Singleton;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,8 +16,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import java.lang.reflect.Field;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -52,7 +49,7 @@ public class DictionaryProviderTest {
     @After
     public void tearDown() {
         // Reset DatabaseManager Singleton using reflections (second parameter must match DatabaseManager instance name)
-        Util.resetSingletonAttribute(DatabaseManager.class, "DB_UNIQUE_INSTANCE");
+        Singleton.resetAttribute(DatabaseManager.class, "DB_UNIQUE_INSTANCE");
         values.clear();
         if (cursor != null) {
             cursor.close();

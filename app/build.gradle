@@ -67,4 +67,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+    // Dependencies taken from git by jitpack.io
+    compile 'com.github.mavek87:MyUtils:733d068038af2e805d3392c8b4f0ef412fbaf027'
 }
