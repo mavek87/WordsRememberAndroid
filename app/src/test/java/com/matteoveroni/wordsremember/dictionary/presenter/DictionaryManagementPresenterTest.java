@@ -5,9 +5,8 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletio
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.junit.Before;
 import org.junit.Rule;

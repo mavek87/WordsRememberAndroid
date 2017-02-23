@@ -2,9 +2,8 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationView;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.junit.Before;
 import org.junit.Rule;

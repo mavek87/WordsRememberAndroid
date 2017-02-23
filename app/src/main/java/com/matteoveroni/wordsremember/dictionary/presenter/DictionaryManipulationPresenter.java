@@ -5,7 +5,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCom
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationView;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

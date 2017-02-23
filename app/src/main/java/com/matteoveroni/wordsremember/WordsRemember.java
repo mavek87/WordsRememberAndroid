@@ -4,26 +4,28 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.components.ModelComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.32
- */
+ *
+ * @version 0.0.33
+ *
+ **/
 
 public class WordsRemember extends Application {
 
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static final String NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_NAME = NAME.toLowerCase();
-    public static final String VERSION = "0.0.32";
+    public static final String VERSION = "0.0.33";
 
     private static ModelComponent MODEL_COMPONENT;
 

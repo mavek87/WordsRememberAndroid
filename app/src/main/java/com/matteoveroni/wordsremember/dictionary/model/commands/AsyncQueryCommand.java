@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 

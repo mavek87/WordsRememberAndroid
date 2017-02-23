@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
 import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
  * @author Matteo Veroni

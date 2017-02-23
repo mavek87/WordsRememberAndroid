@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

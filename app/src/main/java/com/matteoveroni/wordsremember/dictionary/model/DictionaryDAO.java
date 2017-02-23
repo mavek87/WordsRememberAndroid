@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertComma
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncQueryCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTargetFactory;
 import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTarget;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;

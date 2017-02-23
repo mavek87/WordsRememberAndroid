@@ -11,13 +11,13 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
-import com.matteoveroni.wordsremember.pojo.Word;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 /**
  * @author Matteo Veroni

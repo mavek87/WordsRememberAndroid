@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletio
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncGetVocableByIdCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 

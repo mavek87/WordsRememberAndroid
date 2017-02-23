@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.Presenter;
@@ -10,9 +11,8 @@ import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulation
 import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
-import com.matteoveroni.wordsremember.pojo.Word;
+import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

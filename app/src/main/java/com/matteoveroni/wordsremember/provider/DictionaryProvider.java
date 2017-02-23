@@ -10,10 +10,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
-import com.matteoveroni.wordsremember.utilities.TagGenerator;
 
 /**
  * Content Provider for the dictionary.
