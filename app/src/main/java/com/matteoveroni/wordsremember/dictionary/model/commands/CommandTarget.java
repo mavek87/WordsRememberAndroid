@@ -7,11 +7,18 @@ import android.net.Uri;
  */
 
 public abstract class CommandTarget {
+
     public enum Type {
-        vocable, translation, vocableTranslation;
+        VOCABLE, TRANSLATION, VOCABLE_TRANSLATION;
     }
 
-    abstract Uri getContentUri();
+    Uri contentUri;
 
-    abstract void dispatchCompletionEvent(Uri uri);
+    void setContentUri(Uri contentUri) {
+        this.contentUri = contentUri;
+    }
+
+    public Uri getContentUri() {
+        return this.contentUri;
+    }
 }

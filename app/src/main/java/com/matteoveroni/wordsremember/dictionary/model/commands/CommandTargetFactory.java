@@ -11,11 +11,11 @@ public class CommandTargetFactory {
 
     public static CommandTarget create(CommandTarget.Type type) {
         switch (type) {
-            case vocable:
+            case VOCABLE:
                 return new CommandTargetVocable();
-            case translation:
+            case TRANSLATION:
                 return new CommandTargetTranslation();
-            case vocableTranslation:
+            case VOCABLE_TRANSLATION:
                 return new CommandTargetVocableTranslation();
             default:
                 throw new RuntimeException("Unknown command type passed to commandFactory");

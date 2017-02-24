@@ -6,10 +6,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncQueryCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTargetFactory;
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTarget;
+import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTargetFactory;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -25,12 +27,13 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsCon
 public class DictionaryDAO {
 
     private final ContentResolver contentResolver;
-    private final AsyncVocablesHandler asyncVocablesHandler;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
-        this.asyncVocablesHandler = new AsyncVocablesHandler(this.contentResolver);
     }
+
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Async methods - Vocable
@@ -38,9 +41,14 @@ public class DictionaryDAO {
 
     public void asyncSaveVocable(Word vocable) {
         if (isWordValid(vocable) && vocable.getId() < 0) {
-            ContentValues val = new ContentValues();
-            val.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
-            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.vocable), val).execute();
+            ContentValues values = new ContentValues();
+            values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
+
+            new AsyncInsertCommand(
+                    contentResolver,
+                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    values
+            ).execute();
         }
     }
 
@@ -51,46 +59,47 @@ public class DictionaryDAO {
             String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             String[] selectionArgs = {str_id};
             Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-            new AsyncQueryCommand(contentResolver, uri, projection, selection, selectionArgs, "").execute();
+
+            new AsyncQueryCommand(
+                    contentResolver,
+                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    projection,
+                    selection,
+                    selectionArgs,
+                    ""
+            ).execute();
         }
     }
 
     public void asyncUpdateVocable(long id, Word updatedVocable) {
         if (id > 0) {
             final String str_id = String.valueOf(id);
-
+            final ContentValues values = vocableToContentValues(updatedVocable);
             final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-
-            asyncVocablesHandler.startUpdate(
-                    1,
-                    null,
-                    uri,
-                    vocableToContentValues(updatedVocable),
+            new AsyncUpdateCommand(
+                    contentResolver,
+                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    values,
                     selection,
                     selectionArgs
-            );
+            ).execute();
         }
     }
 
     public void asyncDeleteVocable(long id) {
         if (id > 0) {
             final String str_id = String.valueOf(id);
-
             final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             final String[] selectionArgs = {str_id};
 
-            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-
-            asyncVocablesHandler.startDelete(
-                    1,
-                    null,
-                    uri,
+            new AsyncDeleteCommand(
+                    contentResolver,
+                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
                     selection,
                     selectionArgs
-            );
+            ).execute();
         }
     }
 
@@ -108,8 +117,8 @@ public class DictionaryDAO {
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
 
-            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.translation), translationValue,
-                    new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.translation), vocablesTranslationValue)
+            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.TRANSLATION), translationValue,
+                    new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.TRANSLATION), vocablesTranslationValue)
             );
 
 //            new AsyncTranslationsHandler(contentResolver).startInsert(
@@ -121,7 +130,7 @@ public class DictionaryDAO {
         }
     }
 
-//    public void asyncGetTranslationById(long id) {
+    public void asyncGetTranslationById(long id) {
 //        if (id > 0) {
 //            final String str_idColumn = String.valueOf(id);
 //
@@ -141,9 +150,9 @@ public class DictionaryDAO {
 //                    null
 //            );
 //        }
-//    }
-//
-//    public void asyncUpdateTranslation(long id, Word updatedTranslation) {
+    }
+
+    public void asyncUpdateTranslation(long id, Word updatedTranslation) {
 //        if (id > 0) {
 //            final String str_id = String.valueOf(id);
 //
@@ -161,9 +170,9 @@ public class DictionaryDAO {
 //                    selectionArgs
 //            );
 //        }
-//    }
-//
-//    public void asyncDeleteTranslation(long id) {
+    }
+
+    public void asyncDeleteTranslation(long id) {
 //        if (id > 0) {
 //            final String str_idColumn = String.valueOf(id);
 //
@@ -180,10 +189,16 @@ public class DictionaryDAO {
 //                    selectionArgs
 //            );
 //        }
-//    }
+    }
+
+
+
+
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Synchronous methods - OLD
+    // Sync methods - Vocables
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Word getVocableById(long id) {
@@ -262,6 +277,10 @@ public class DictionaryDAO {
         return recordDeleted > 0;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods - Translations
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     public static Word cursorToVocable(Cursor cursor) {
         final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
         vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
@@ -274,11 +293,7 @@ public class DictionaryDAO {
         return translation;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private ContentValues vocableToContentValues(Word vocable) {
+    ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
         if (isWordValid(vocable)) {
             values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
@@ -286,7 +301,7 @@ public class DictionaryDAO {
         return values;
     }
 
-    private ContentValues translationToContentValues(Word translation) {
+    ContentValues translationToContentValues(Word translation) {
         final ContentValues values = new ContentValues();
         if (isWordValid(translation)) {
             values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
@@ -294,7 +309,7 @@ public class DictionaryDAO {
         return values;
     }
 
-    private boolean isWordValid(Word word) {
+    boolean isWordValid(Word word) {
         return word != null && word.getName() != null;
     }
 }

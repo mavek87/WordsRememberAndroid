@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;

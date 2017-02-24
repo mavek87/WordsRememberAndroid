@@ -7,7 +7,7 @@ import android.content.ContentResolver;
  * @author Matteo Veroni
  */
 
-public abstract class AsyncCommand extends AsyncQueryHandler{
+public abstract class AsyncCommand extends AsyncQueryHandler {
 
     AsyncCommand(ContentResolver contentResolver) {
         super(contentResolver);
