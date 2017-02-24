@@ -8,6 +8,8 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojos.Word;
 
+import org.greenrobot.eventbus.EventBus;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,8 +17,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest.TypeOfManipulation;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -26,8 +30,6 @@ import static org.mockito.Mockito.verify;
 
 public class DictionaryManagementPresenterTest {
 
-    private DictionaryManagementPresenter presenter;
-
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -35,12 +37,26 @@ public class DictionaryManagementPresenterTest {
     @Mock
     private DictionaryDAO dictionaryModel;
 
+    private DictionaryManagementPresenter presenter;
+
+    private final EventBus eventBus = EventBus.getDefault();
+
     private Word VOCABLE = new Word(1, "VocableTest");
 
     @Before
     public void setUp() {
         presenter = new DictionaryManagementPresenterFactoryForTests(dictionaryModel).create();
+
         presenter.attachView(view);
+
+        assertTrue(eventBus.isRegistered(presenter));
+    }
+
+    @After
+    public void tearDown() {
+        presenter.destroy();
+
+        assertFalse(eventBus.isRegistered(presenter));
     }
 
     @Test

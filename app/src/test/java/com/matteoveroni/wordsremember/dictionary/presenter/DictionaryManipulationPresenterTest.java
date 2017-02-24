@@ -35,6 +35,7 @@ public class DictionaryManipulationPresenterTest {
     private DictionaryDAO model;
 
     private DictionaryManipulationPresenter presenter;
+
     private static final EventBus eventBus = EventBus.getDefault();
 
     private final Word VOCABLE = new Word(1, "VocableTest");
