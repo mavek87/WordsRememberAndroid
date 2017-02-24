@@ -34,7 +34,7 @@ public class DictionaryManipulationPresenterTest {
     @Before
     public void setUp() {
         presenter = new DictionaryManipulationPresenterFactoryForTests(model).create();
-        presenter.onViewAttached(view);
+        presenter.attachView(view);
     }
 
     @Test

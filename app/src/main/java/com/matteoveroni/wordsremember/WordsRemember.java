@@ -16,7 +16,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
  *
  * @author Matteo Veroni
  *
- * @version 0.0.33
+ * @version 0.0.34
  *
  **/
 
@@ -25,14 +25,14 @@ public class WordsRemember extends Application {
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static final String NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_NAME = NAME.toLowerCase();
-    public static final String VERSION = "0.0.33";
+    public static final String VERSION = "0.0.34";
 
     private static ModelComponent MODEL_COMPONENT;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        printAppSpecs();
+        logAppSpecs();
         injectModels();
     }
 
@@ -44,7 +44,7 @@ public class WordsRemember extends Application {
         return (WordsRemember) context.getApplicationContext();
     }
 
-    private void printAppSpecs() {
+    private void logAppSpecs() {
         Log.i(NAME, Str.concat("AUTHORITY = ", AUTHORITY));
         Log.i(NAME, Str.concat("NAME = ", NAME));
         Log.i(NAME, Str.concat("LOWERCASE_NAME = ", LOWERCASE_NAME));

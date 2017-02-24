@@ -55,12 +55,12 @@ public class MainMenuActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onViewAttached(this);
+        presenter.attachView(this);
     }
 
     @Override
     protected void onStop() {
-        presenter.onViewDetached();
+        presenter.destroy();
         super.onStop();
     }
 

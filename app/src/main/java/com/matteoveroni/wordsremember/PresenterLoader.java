@@ -41,7 +41,7 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onReset() {
-        presenter.onViewDestroyed();
+        presenter.destroy();
         presenter = null;
     }
 }

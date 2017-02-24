@@ -68,13 +68,13 @@ public class DictionaryManagementActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onViewAttached(this);
+        presenter.attachView(this);
         presenter.onViewCreated(getApplicationContext());
     }
 
     @Override
     protected void onStop() {
-        presenter.onViewDetached();
+        presenter.destroy();
         super.onStop();
     }
 

@@ -21,48 +21,35 @@ public class DictionaryManipulationPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private WeakReference<DictionaryManipulationView> view;
+    private DictionaryManipulationView view;
 
     public DictionaryManipulationPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
-    public void onViewAttached(Object viewAttached) {
-        view = new WeakReference<>((DictionaryManipulationView) viewAttached);
+    public void attachView(Object view) {
+        this.view = (DictionaryManipulationView) view;
         eventBus.register(this);
     }
 
     @Override
-    public void onViewDetached() {
-        view = null;
+    public void destroy() {
         eventBus.unregister(this);
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        onViewDetached();
+        view = null;
     }
 
     public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        try {
-            view.get().showVocableData(vocableToManipulate);
-        } catch (NullPointerException ignored) {
-        }
+        view.showVocableData(vocableToManipulate);
     }
 
     public void onSaveVocableRequest(Word currentVocableInView) {
         if (isVocableValid(currentVocableInView)) {
             storeVocableIntoModel(currentVocableInView);
-            try {
-                view.get().returnToPreviousView();
-            } catch (NullPointerException ignored) {
-            }
+            view.returnToPreviousView();
+
         } else {
-            try {
-                view.get().showMessage("You can\'t save an empty vocable. Compile all the data and retry");
-            } catch (NullPointerException ignored) {
-            }
+            view.showMessage("You can\'t save an empty vocable. Compile all the data and retry");
         }
     }
 
@@ -94,10 +81,7 @@ public class DictionaryManipulationPresenter implements Presenter {
         try {
             eventBus.removeStickyEvent(event);
         } finally {
-            try {
-                view.get().returnToPreviousView();
-            } catch (NullPointerException ignored) {
-            }
+            view.returnToPreviousView();
         }
     }
 }

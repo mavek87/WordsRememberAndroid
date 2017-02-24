@@ -40,7 +40,7 @@ public class DictionaryManagementPresenterTest {
     @Before
     public void setUp() {
         presenter = new DictionaryManagementPresenterFactoryForTests(dictionaryModel).create();
-        presenter.onViewAttached(view);
+        presenter.attachView(view);
     }
 
     @Test

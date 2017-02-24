@@ -12,27 +12,19 @@ import java.lang.ref.WeakReference;
 
 public class MainMenuPresenter implements Presenter {
 
-    private WeakReference<MainMenuView> view;
+    private MainMenuView view;
 
     @Override
-    public void onViewAttached(Object view) {
-        this.view = new WeakReference<>((MainMenuView) view);
+    public void attachView(Object view) {
+        this.view = (MainMenuView) view;
     }
 
     @Override
-    public void onViewDetached() {
+    public void destroy() {
         this.view = null;
     }
 
-    @Override
-    public void onViewDestroyed() {
-        onViewDetached();
-    }
-
     void onButtonManageDictionaryClicked() {
-        try {
-            view.get().startDictionaryManagement();
-        } catch (NullPointerException ignore) {
-        }
+        view.startDictionaryManagement();
     }
 }

@@ -34,27 +34,22 @@ public class DictionaryManagementPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean isPresenterCreatedForTheFirstTime = true;
     private final DictionaryDAO model;
-    private WeakReference<DictionaryManagementView> view;
+    private DictionaryManagementView view;
 
     public DictionaryManagementPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
-    public void onViewAttached(Object viewAttached) {
-        view = new WeakReference<>((DictionaryManagementView) viewAttached);
+    public void attachView(Object view) {
+        this.view = (DictionaryManagementView) view;
         eventBus.register(this);
     }
 
     @Override
-    public void onViewDetached() {
+    public void destroy() {
         eventBus.unregister(this);
         view = null;
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        onViewDetached();
     }
 
     //TODO: remove this method in production code
@@ -67,10 +62,7 @@ public class DictionaryManagementPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        try {
-            view.get().goToManipulationView(new Word(""));
-        } catch (NullPointerException ex) {
-        }
+        view.goToManipulationView(new Word(""));
     }
 
     @Subscribe(sticky = true)
@@ -78,10 +70,7 @@ public class DictionaryManagementPresenter implements Presenter {
     public void onEvent(EventVocableSelected event) {
         Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        try {
-            view.get().goToManipulationView(selectedVocable);
-        } catch (NullPointerException ex) {
-        }
+        view.goToManipulationView(selectedVocable);
     }
 
     @Subscribe(sticky = true)
@@ -100,10 +89,7 @@ public class DictionaryManagementPresenter implements Presenter {
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncVocableDeletionComplete event) {
         eventBus.removeStickyEvent(event);
-        try {
-            view.get().showMessage("Vocable removed");
-        } catch (NullPointerException ex) {
-        }
+        view.showMessage("Vocable removed");
     }
 
     private void populateDatabaseForTestPurposes(Context context) {

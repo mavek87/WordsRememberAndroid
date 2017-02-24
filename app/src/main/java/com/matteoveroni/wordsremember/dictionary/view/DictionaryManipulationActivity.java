@@ -71,7 +71,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.onViewAttached(this);
+        presenter.attachView(this);
         Word vocableToManipulate = catchVocableToManipulate();
         if (vocableToManipulate != null) {
             presenter.onVocableToManipulateRetrieved(vocableToManipulate);
@@ -82,7 +82,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
-        presenter.onViewDetached();
+        presenter.destroy();
         super.onStop();
     }
 
