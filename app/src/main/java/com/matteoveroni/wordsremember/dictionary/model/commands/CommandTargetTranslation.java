@@ -9,6 +9,6 @@ import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 class CommandTargetTranslation extends CommandTarget {
 
     CommandTargetTranslation() {
-        super.setContentUri(TranslationsContract.CONTENT_URI);
+        super.contentUri = TranslationsContract.CONTENT_URI;
     }
 }

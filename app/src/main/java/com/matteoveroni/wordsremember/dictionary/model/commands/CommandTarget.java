@@ -14,11 +14,7 @@ public abstract class CommandTarget {
 
     Uri contentUri;
 
-    void setContentUri(Uri contentUri) {
-        this.contentUri = contentUri;
-    }
-
-    public Uri getContentUri() {
+    Uri getContentUri() {
         return this.contentUri;
     }
 }

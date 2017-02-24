@@ -18,7 +18,7 @@ public class CommandTargetFactory {
             case VOCABLE_TRANSLATION:
                 return new CommandTargetVocableTranslation();
             default:
-                throw new RuntimeException("Unknown command type passed to commandFactory");
+                throw new RuntimeException("Unknown command target type passed to CommandTargetFactory");
         }
     }
 }
