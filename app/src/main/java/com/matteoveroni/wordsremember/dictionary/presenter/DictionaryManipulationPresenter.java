@@ -46,8 +46,6 @@ public class DictionaryManipulationPresenter implements Presenter {
     public void onSaveVocableRequest(Word currentVocableInView) {
         if (isVocableValid(currentVocableInView)) {
             storeVocableIntoModel(currentVocableInView);
-            view.returnToPreviousView();
-
         } else {
             view.showMessage("You can\'t save an empty vocable. Compile all the data and retry");
         }
