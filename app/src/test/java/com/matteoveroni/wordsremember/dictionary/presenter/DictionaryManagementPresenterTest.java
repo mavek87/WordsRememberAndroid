@@ -1,9 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncVocableDeletionComplete;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -19,7 +19,7 @@ import org.mockito.junit.MockitoRule;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
-import static com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest.TypeOfManipulation;
+import static com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest.TypeOfManipulation;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;

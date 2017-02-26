@@ -10,8 +10,6 @@ import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncDeleteComma
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncQueryCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncUpdateCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTarget;
-import com.matteoveroni.wordsremember.dictionary.model.commands.CommandTargetFactory;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -33,8 +31,6 @@ public class DictionaryDAO {
     }
 
 
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Async methods - Vocable
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +42,7 @@ public class DictionaryDAO {
 
             new AsyncInsertCommand(
                     contentResolver,
-                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    VocablesContract.CONTENT_URI,
                     values
             ).execute();
         }
@@ -58,11 +54,10 @@ public class DictionaryDAO {
             String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
             String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
             String[] selectionArgs = {str_id};
-            Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
 
             new AsyncQueryCommand(
                     contentResolver,
-                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    VocablesContract.CONTENT_URI,
                     projection,
                     selection,
                     selectionArgs,
@@ -80,7 +75,7 @@ public class DictionaryDAO {
 
             new AsyncUpdateCommand(
                     contentResolver,
-                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    VocablesContract.CONTENT_URI,
                     values,
                     selection,
                     selectionArgs
@@ -96,7 +91,7 @@ public class DictionaryDAO {
 
             new AsyncDeleteCommand(
                     contentResolver,
-                    CommandTargetFactory.create(CommandTarget.Type.VOCABLE),
+                    VocablesContract.CONTENT_URI,
                     selection,
                     selectionArgs
             ).execute();
@@ -117,8 +112,8 @@ public class DictionaryDAO {
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
 
-            new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.TRANSLATION), translationValue,
-                    new AsyncInsertCommand(contentResolver, CommandTargetFactory.create(CommandTarget.Type.TRANSLATION), vocablesTranslationValue)
+            new AsyncInsertCommand(contentResolver, TranslationsContract.CONTENT_URI, translationValue,
+                    new AsyncInsertCommand(contentResolver, VocablesContract.CONTENT_URI, vocablesTranslationValue)
             );
 
 //            new AsyncTranslationsHandler(contentResolver).startInsert(
@@ -190,11 +185,6 @@ public class DictionaryDAO {
 //            );
 //        }
     }
-
-
-
-
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

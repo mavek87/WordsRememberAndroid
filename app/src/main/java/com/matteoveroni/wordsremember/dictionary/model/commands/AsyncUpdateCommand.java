@@ -4,7 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -14,37 +15,44 @@ import org.greenrobot.eventbus.EventBus;
 
 public class AsyncUpdateCommand extends AsyncCommand {
 
-    private final CommandTarget commandTarget;
+    private final Uri commandTargetUri;
     private final ContentValues values;
-    private final Object nextCommand;
     private final String selection;
     private final String[] selectionArgs;
+    private final Object nextCommand;
 
-    public AsyncUpdateCommand(ContentResolver contentResolver, CommandTarget commandTarget, ContentValues values, String selection, String[] selectionArgs) {
-        this(contentResolver, commandTarget, values, new AsyncNoOperationCommand(contentResolver), selection, selectionArgs);
+    public AsyncUpdateCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values, String selection, String[] selectionArgs) {
+        this(contentResolver, commandTargetUri, values, selection, selectionArgs, new AsyncNoOperationCommand(contentResolver));
     }
 
-    public AsyncUpdateCommand(ContentResolver contentResolver, CommandTarget commandTarget, ContentValues values, Object nextCommand, String selection, String[] selectionArgs) {
+    public AsyncUpdateCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values, String selection, String[] selectionArgs, Object nextCommand) {
         super(contentResolver);
-        this.commandTarget = commandTarget;
+        this.commandTargetUri = commandTargetUri;
         this.values = values;
-        this.nextCommand = nextCommand;
         this.selection = selection;
         this.selectionArgs = selectionArgs;
+        this.nextCommand = nextCommand;
     }
 
     @Override
     public void execute() {
-        startUpdate(0, nextCommand, commandTarget.getContentUri(), values, selection, selectionArgs);
+        startUpdate(0, nextCommand, commandTargetUri, values, selection, selectionArgs);
     }
 
     @Override
-    protected void onInsertComplete(int token, Object nextCommand, Uri uriOfInsertedRow) {
-        dispatchCompletionEvent();
-        ((AsyncCommand) nextCommand).execute();
+    protected void onUpdateComplete(int token, Object cookie, int result) {
+        dispatchCompletionEvent(result);
+        executeAsyncCommand((AsyncCommand) nextCommand);
     }
 
-    private void dispatchCompletionEvent() {
-        EventBus.getDefault().postSticky(new EventAsyncUpdateVocableCompleted(1));
+    private void dispatchCompletionEvent(int result) {
+
+        if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
+            EventBus.getDefault().postSticky(new EventAsyncUpdateVocableCompleted(result));
+        }
+    }
+
+    private void executeAsyncCommand(AsyncCommand asyncCommand) {
+        asyncCommand.execute();
     }
 }

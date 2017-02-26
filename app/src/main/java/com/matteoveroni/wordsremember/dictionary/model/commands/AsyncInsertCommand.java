@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -14,52 +14,38 @@ import org.greenrobot.eventbus.EventBus;
 
 public class AsyncInsertCommand extends AsyncCommand {
 
-    private final CommandTarget target;
+    private final Uri commandTargetUri;
     private final ContentValues values;
     private final Object nextCommand;
 
-    public AsyncInsertCommand(ContentResolver contentResolver, CommandTarget target, ContentValues values) {
-        this(contentResolver, target, values, new AsyncNoOperationCommand(contentResolver));
+    public AsyncInsertCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values) {
+        this(contentResolver, commandTargetUri, values, new AsyncNoOperationCommand(contentResolver));
     }
 
-    public AsyncInsertCommand(ContentResolver contentResolver, CommandTarget target, ContentValues values, Object nextCommand) {
+    public AsyncInsertCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values, Object nextCommand) {
         super(contentResolver);
-        this.target = target;
+        this.commandTargetUri = commandTargetUri;
         this.values = values;
         this.nextCommand = nextCommand;
     }
 
     @Override
     public void execute() {
-        startInsert(0, nextCommand, target.getContentUri(), values);
+        startInsert(0, null, commandTargetUri, values);
     }
 
     @Override
-    protected void onInsertComplete(int token, Object nextCommand, Uri uriOfInsertedRow) {
-        dispatchCompletionEvent(uriOfInsertedRow);
-        executeNextCommand();
+    protected void onInsertComplete(int token, Object cookie, Uri uri) {
+        dispatchCompletionEvent(uri);
+        executeCommand((AsyncCommand) nextCommand);
     }
 
-    private void executeNextCommand() {
-        ((AsyncCommand) nextCommand).execute();
+    private void dispatchCompletionEvent(Uri uri) {
+        long id = Long.valueOf(uri.getLastPathSegment());
+        EventBus.getDefault().postSticky(new EventAsyncSaveVocableCompleted(id));
     }
 
-    private void dispatchCompletionEvent(Uri uriOfInsertedRow) {
-        EventAsyncSaveVocableCompleted event = null;
-        String errorMessage = "Insertion failed";
-        try {
-            String idOfInsertedRow = uriOfInsertedRow.getLastPathSegment();
-            if (!idOfInsertedRow.isEmpty())
-                event = new EventAsyncSaveVocableCompleted(Long.valueOf(idOfInsertedRow));
-
-        } catch (Exception ex) {
-            errorMessage += "\n" + ex.getMessage();
-        } finally {
-            if (event == null) {
-                event = new EventAsyncSaveVocableCompleted(-1);
-                event.setErrorMessage(errorMessage);
-            }
-        }
-        EventBus.getDefault().postSticky(event);
+    private void executeCommand(AsyncCommand command) {
+        command.execute();
     }
 }

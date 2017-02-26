@@ -1,15 +1,14 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncVocableDeletionComplete;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.events.EventVocableSelected;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncVocableDeletionComplete;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -17,8 +16,6 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.lang.ref.WeakReference;
 
 /**
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.tt4usoych

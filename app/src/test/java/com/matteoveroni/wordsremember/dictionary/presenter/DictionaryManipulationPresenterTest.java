@@ -1,8 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.EventAsyncUpdateVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojos.Word;

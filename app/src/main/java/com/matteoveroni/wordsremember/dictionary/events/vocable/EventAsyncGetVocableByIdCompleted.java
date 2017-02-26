@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.events;
+package com.matteoveroni.wordsremember.dictionary.events.vocable;
 
 import com.matteoveroni.wordsremember.pojos.Word;
 
