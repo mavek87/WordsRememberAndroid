@@ -41,11 +41,11 @@ public class AsyncDeleteCommand extends AsyncCommand {
         executeCommand((AsyncCommand) nextCommand);
     }
 
-    private void executeCommand(AsyncCommand command) {
-        command.execute();
-    }
-
     private void dispatchCompletionEvent(int result) {
         EventBus.getDefault().postSticky(new EventAsyncVocableDeletionComplete(result));
+    }
+
+    private void executeCommand(AsyncCommand command) {
+        command.execute();
     }
 }

@@ -46,7 +46,6 @@ public class AsyncUpdateCommand extends AsyncCommand {
     }
 
     private void dispatchCompletionEvent(int result) {
-
         if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
             EventBus.getDefault().postSticky(new EventAsyncUpdateVocableCompleted(result));
         }
