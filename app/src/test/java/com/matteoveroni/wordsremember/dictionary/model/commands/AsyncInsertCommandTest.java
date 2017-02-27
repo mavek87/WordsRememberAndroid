@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
@@ -40,9 +41,6 @@ public class AsyncInsertCommandTest {
 
     private Word vocable = new Word("testVocable");
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-
     @Before
     public void setUp() {
         application = Shadows.shadowOf(RuntimeEnvironment.application);
@@ -51,7 +49,7 @@ public class AsyncInsertCommandTest {
     }
 
     @Test
-    public void test_asyncInsertVocableCommand_Fires_AsyncSaveVocableCompleted_onInsertComplete() {
+    public void test_asyncInsertVocableCommand_onInsertComplete_Fires_AsyncSaveVocableCompleted() {
         ContentValues values = new ContentValues();
         values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
@@ -65,5 +63,31 @@ public class AsyncInsertCommandTest {
         asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VocablesContract.CONTENT_URI + "/1"));
 
         assertNotNull(eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class));
+    }
+
+    @Test
+    public void test_asyncUpdateVocableCommand_onUpdateComplete_Fires_AsyncUpdateVocableCompleted() {
+        ContentValues values = new ContentValues();
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, "updatedVocableName");
+
+        AsyncUpdateCommand asyncUpdateCommand = new AsyncUpdateCommand(
+                contentResolver,
+                VocablesContract.CONTENT_URI,
+                values,
+                VocablesContract.Schema.COLUMN_ID + " = ?",
+                new String[]{Long.toString(vocable.getId())}
+        );
+
+        assertNull(
+                "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+        );
+
+        asyncUpdateCommand.onUpdateComplete(0, null, 1);
+
+        assertNotNull(
+                "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+        );
     }
 }
