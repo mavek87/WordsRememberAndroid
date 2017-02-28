@@ -11,12 +11,10 @@ import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
@@ -25,7 +23,6 @@ import org.robolectric.shadows.ShadowApplication;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by Matteo Veroni
@@ -35,22 +32,38 @@ import static org.mockito.Mockito.verify;
 @Config(constants = BuildConfig.class)
 public class AsyncInsertCommandTest {
 
-    private ShadowApplication application;
+    private ShadowApplication app;
     private ContentResolver contentResolver;
-    private EventBus eventBus;
 
+    private EventBus eventBus = EventBus.getDefault();
+    private ContentValues values = new ContentValues();
     private Word vocable = new Word("testVocable");
 
     @Before
     public void setUp() {
-        application = Shadows.shadowOf(RuntimeEnvironment.application);
-        contentResolver = application.getApplicationContext().getContentResolver();
-        eventBus = EventBus.getDefault();
+        app = Shadows.shadowOf(RuntimeEnvironment.application);
+        contentResolver = app.getApplicationContext().getContentResolver();
+    }
+
+    @After
+    public void tearDown() {
+        eventBus.removeAllStickyEvents();
+        values.clear();
     }
 
     @Test
-    public void test_asyncInsertVocableCommand_onInsertComplete_Fires_AsyncSaveVocableCompleted() {
-        ContentValues values = new ContentValues();
+    public void test_NoStickyEvent_In_EventuBus_If_AnyOperationIsComplete() {
+        assertNull("EventAsyncSaveVocableCompleted should NOT be fired before onInsertComplete",
+                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
+        );
+        assertNull(
+                "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+        );
+    }
+
+    @Test
+    public void test_asyncInsertVocableCommand_Fires_EventAsyncSaveVocableCompleted_onInsertComplete() {
         values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
                 contentResolver,
@@ -58,29 +71,23 @@ public class AsyncInsertCommandTest {
                 values
         );
 
-        assertNull(eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class));
-
         asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VocablesContract.CONTENT_URI + "/1"));
 
-        assertNotNull(eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class));
+        assertNotNull(
+                "EventAsyncSaveVocableCompleted should be fired after onInsertComplete",
+                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
+        );
     }
 
     @Test
-    public void test_asyncUpdateVocableCommand_onUpdateComplete_Fires_AsyncUpdateVocableCompleted() {
-        ContentValues values = new ContentValues();
+    public void test_asyncUpdateVocableCommand_Fires_EventAsyncUpdateVocableCompleted_onUpdateComplete_() {
         values.put(VocablesContract.Schema.COLUMN_VOCABLE, "updatedVocableName");
-
         AsyncUpdateCommand asyncUpdateCommand = new AsyncUpdateCommand(
                 contentResolver,
                 VocablesContract.CONTENT_URI,
                 values,
                 VocablesContract.Schema.COLUMN_ID + " = ?",
                 new String[]{Long.toString(vocable.getId())}
-        );
-
-        assertNull(
-                "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
-                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
         );
 
         asyncUpdateCommand.onUpdateComplete(0, null, 1);
