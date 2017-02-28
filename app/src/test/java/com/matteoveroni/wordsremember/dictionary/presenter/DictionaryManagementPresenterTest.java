@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.PresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncVocableDeletionComplete;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableComplete;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -80,7 +80,7 @@ public class DictionaryManagementPresenterTest {
 
     @Test
     public void onEvent_AsyncVocableDeletionComplete_View_showMessage_for_Deletion_Complete() {
-        EventAsyncVocableDeletionComplete asyncVocableDeletionComplete = new EventAsyncVocableDeletionComplete(1);
+        EventAsyncDeleteVocableComplete asyncVocableDeletionComplete = new EventAsyncDeleteVocableComplete(1);
 
         presenter.onEvent(asyncVocableDeletionComplete);
 

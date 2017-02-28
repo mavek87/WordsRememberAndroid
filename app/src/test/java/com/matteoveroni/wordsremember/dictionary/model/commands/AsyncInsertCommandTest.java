@@ -7,14 +7,19 @@ import android.net.Uri;
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableComplete;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
@@ -23,6 +28,13 @@ import org.robolectric.shadows.ShadowApplication;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Created by Matteo Veroni
@@ -36,8 +48,10 @@ public class AsyncInsertCommandTest {
     private ContentResolver contentResolver;
 
     private EventBus eventBus = EventBus.getDefault();
-    private ContentValues values = new ContentValues();
     private Word vocable = new Word("testVocable");
+
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Before
     public void setUp() {
@@ -48,7 +62,6 @@ public class AsyncInsertCommandTest {
     @After
     public void tearDown() {
         eventBus.removeAllStickyEvents();
-        values.clear();
     }
 
     @Test
@@ -60,15 +73,16 @@ public class AsyncInsertCommandTest {
                 "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
                 eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
         );
+        assertNull(
+                "EventAsyncDeleteVocableCompleted should NOT be fired before onDeleteComplete",
+                eventBus.getStickyEvent(EventAsyncDeleteVocableComplete.class)
+        );
     }
 
     @Test
     public void test_asyncInsertVocableCommand_Fires_EventAsyncSaveVocableCompleted_onInsertComplete() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
-                contentResolver,
-                VocablesContract.CONTENT_URI,
-                values
+                contentResolver, VocablesContract.CONTENT_URI, new ContentValues()
         );
 
         asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VocablesContract.CONTENT_URI + "/1"));
@@ -81,13 +95,8 @@ public class AsyncInsertCommandTest {
 
     @Test
     public void test_asyncUpdateVocableCommand_Fires_EventAsyncUpdateVocableCompleted_onUpdateComplete_() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, "updatedVocableName");
         AsyncUpdateCommand asyncUpdateCommand = new AsyncUpdateCommand(
-                contentResolver,
-                VocablesContract.CONTENT_URI,
-                values,
-                VocablesContract.Schema.COLUMN_ID + " = ?",
-                new String[]{Long.toString(vocable.getId())}
+                contentResolver, VocablesContract.CONTENT_URI, new ContentValues(), "", new String[]{""}
         );
 
         asyncUpdateCommand.onUpdateComplete(0, null, 1);
@@ -95,6 +104,20 @@ public class AsyncInsertCommandTest {
         assertNotNull(
                 "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
                 eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+        );
+    }
+
+    @Test
+    public void test_asyncDeleteVocableCommand_Fires_EventAsyncDeleteVocableCompleted_onDeleteComplete_() {
+        AsyncDeleteCommand asyncDeleteCommand = new AsyncDeleteCommand(
+                contentResolver, VocablesContract.CONTENT_URI, "", new String[]{""}
+        );
+
+        asyncDeleteCommand.onDeleteComplete(0, null, 1);
+
+        assertNotNull(
+                "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncDeleteVocableComplete.class)
         );
     }
 }

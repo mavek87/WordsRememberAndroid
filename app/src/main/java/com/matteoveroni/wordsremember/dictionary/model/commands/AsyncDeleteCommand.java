@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.dictionary.model.commands;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncVocableDeletionComplete;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableComplete;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -36,13 +36,13 @@ public class AsyncDeleteCommand extends AsyncCommand {
     }
 
     @Override
-    protected void onDeleteComplete(int token, Object nextCommand, int result) {
+    protected void onDeleteComplete(int token, Object cookie, int result) {
         dispatchCompletionEvent(result);
         executeCommand((AsyncCommand) nextCommand);
     }
 
     private void dispatchCompletionEvent(int result) {
-        EventBus.getDefault().postSticky(new EventAsyncVocableDeletionComplete(result));
+        EventBus.getDefault().postSticky(new EventAsyncDeleteVocableComplete(result));
     }
 
     private void executeCommand(AsyncCommand command) {
