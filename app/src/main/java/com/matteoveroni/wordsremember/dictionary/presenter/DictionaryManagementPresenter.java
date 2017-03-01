@@ -6,7 +6,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.Presenter;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableComplete;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -85,7 +85,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
-    public void onEvent(EventAsyncDeleteVocableComplete event) {
+    public void onEvent(EventAsyncDeleteVocableCompleted event) {
         eventBus.removeStickyEvent(event);
         view.showMessage("Vocable removed");
     }

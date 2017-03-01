@@ -4,7 +4,11 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -42,7 +46,15 @@ public class AsyncInsertCommand extends AsyncCommand {
 
     private void dispatchCompletionEvent(Uri uri) {
         long id = Long.valueOf(uri.getLastPathSegment());
-        EventBus.getDefault().postSticky(new EventAsyncSaveVocableCompleted(id));
+
+        if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
+            EventBus.getDefault().postSticky(new EventAsyncSaveVocableCompleted(id));
+
+        } else if (commandTargetUri.equals(TranslationsContract.CONTENT_URI)) {
+            EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
+
+        } else if (commandTargetUri.equals(VocablesTranslationsContract.CONTENT_URI)) {
+        }
     }
 
     private void executeCommand(AsyncCommand command) {

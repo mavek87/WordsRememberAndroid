@@ -5,8 +5,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
@@ -33,7 +32,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class AsyncInsertCommandTest {
+public class AsyncUpdateCommandTest {
 
     private ShadowApplication app;
     private ContentResolver contentResolver;
@@ -42,7 +41,6 @@ public class AsyncInsertCommandTest {
 
     private static final ContentValues VALUES = new ContentValues();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
-    private static final Uri TRANSLATIONS_URI = TranslationsContract.CONTENT_URI;
 
     @Before
     public void setUp() {
@@ -52,42 +50,29 @@ public class AsyncInsertCommandTest {
 
     @After
     public void tearDown() {
-        VALUES.clear();
         eventBus.removeAllStickyEvents();
+        VALUES.clear();
     }
 
     @Test
     public void test_NoStickyEvent_In_EventuBus_If_AnyOperationIsComplete() {
-        assertNull("EventAsyncSaveVocableCompleted should NOT be fired before onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
+        assertNull(
+                "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
         );
     }
 
     @Test
-    public void test_asyncInsertVocableCommand_Fires_EventAsyncSaveVocableCompleted_onInsertComplete() {
-        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
-                contentResolver, VOCABLES_URI, VALUES
+    public void test_asyncUpdateVocableCommand_Fires_EventAsyncUpdateVocableCompleted_onUpdateComplete_() {
+        AsyncUpdateCommand asyncUpdateCommand = new AsyncUpdateCommand(
+                contentResolver, VOCABLES_URI, VALUES, "", new String[]{""}
         );
 
-        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VOCABLES_URI + "/1"));
+        asyncUpdateCommand.onUpdateComplete(0, null, 1);
 
         assertNotNull(
-                "EventAsyncSaveVocableCompleted should be fired after onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
-        );
-    }
-
-    @Test
-    public void test_asyncInsertTranslationCommand_Fires_EventAsyncSaveTranslationCompleted_onInsertComplete() {
-        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
-                contentResolver, TRANSLATIONS_URI, VALUES
-        );
-
-        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(TRANSLATIONS_URI + "/1"));
-
-        assertNotNull(
-                "EventAsyncSaveTranslationCompleted should be fired after onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class)
+                "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
+                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
         );
     }
 }

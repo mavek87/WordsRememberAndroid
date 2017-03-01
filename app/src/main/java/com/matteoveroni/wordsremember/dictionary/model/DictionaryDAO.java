@@ -48,24 +48,6 @@ public class DictionaryDAO {
         }
     }
 
-    public void asyncGetVocableById(long id) {
-        if (id > 0) {
-            String str_id = String.valueOf(id);
-            String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
-            String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-            String[] selectionArgs = {str_id};
-
-            new AsyncQueryCommand(
-                    contentResolver,
-                    VocablesContract.CONTENT_URI,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    ""
-            ).execute();
-        }
-    }
-
     public void asyncUpdateVocable(long id, Word updatedVocable) {
         if (id > 0) {
             final String str_id = String.valueOf(id);
@@ -94,6 +76,24 @@ public class DictionaryDAO {
                     VocablesContract.CONTENT_URI,
                     selection,
                     selectionArgs
+            ).execute();
+        }
+    }
+
+    public void asyncGetVocableById(long id) {
+        if (id > 0) {
+            String str_id = String.valueOf(id);
+            String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
+            String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
+            String[] selectionArgs = {str_id};
+
+            new AsyncQueryCommand(
+                    contentResolver,
+                    VocablesContract.CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    ""
             ).execute();
         }
     }
