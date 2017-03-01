@@ -33,10 +33,10 @@ public class DictionaryProviderTest {
     private Cursor cursor;
     private ContentValues values = new ContentValues();
 
-    private final long VOCABLES_VALID_VOCABLE_ID = 1;
-    private final String VOCABLES_VALID_VOCABLE = "Name";
+    private final long VALID_VOCABLE_ID = 1;
+    private final String VALID_VOCABLE_NAME = "Name";
 
-    private final String TRANSLATIONS_VALID_TRANSLATION = "Name";
+    private final String VALID_TRANSLATION_NAME = "Name";
 
     @Before
     public void onStart() {
@@ -64,21 +64,21 @@ public class DictionaryProviderTest {
 
     @Test
     public void insert_vocable_in_vocables_table_returns_expected_uri() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VOCABLES_VALID_VOCABLE);
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
         Uri generatedUri = provider.insert(VocablesContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + 1), generatedUri);
     }
 
     @Test
     public void insert_translation_in_translations_table_returns_expected_uri() {
-        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, TRANSLATIONS_VALID_TRANSLATION);
+        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
         Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
 
     @Test
     public void insert_record_in_vocablestranslations_table_returns_expected_uri() {
-        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, TRANSLATIONS_VALID_TRANSLATION);
+        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
         Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
@@ -92,7 +92,7 @@ public class DictionaryProviderTest {
     @Test
     public void select_vocable_by_id_on_empty_db_return_zero_results() {
         cursor = provider.query(
-                Uri.parse(VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID),
+                Uri.parse(VocablesContract.CONTENT_URI + "/" + VALID_VOCABLE_ID),
                 VocablesContract.Schema.ALL_COLUMNS,
                 null,
                 null,
@@ -103,11 +103,11 @@ public class DictionaryProviderTest {
 
     @Test
     public void select_vocable_by_id_on_db_containing_element_with_this_id_retrieve_the_right_vocable() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VOCABLES_VALID_VOCABLE);
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
         Uri uri = provider.insert(VocablesContract.CONTENT_URI, values);
         assertEquals(
                 "uri of inserted vocable is like expected",
-                uri.toString(), VocablesContract.CONTENT_URI + "/" + VOCABLES_VALID_VOCABLE_ID
+                uri.toString(), VocablesContract.CONTENT_URI + "/" + VALID_VOCABLE_ID
         );
 
         cursor = provider.query(
@@ -120,6 +120,6 @@ public class DictionaryProviderTest {
         cursor.moveToFirst();
         assertEquals("query should return one result", 1, cursor.getCount());
         assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), 1);
-        assertEquals("query should return the right vocable", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VOCABLES_VALID_VOCABLE);
+        assertEquals("query should return the right vocable", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VALID_VOCABLE_NAME);
     }
 }

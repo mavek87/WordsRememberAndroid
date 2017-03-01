@@ -65,7 +65,6 @@ public class AsyncDeleteCommandTest {
         asyncDeleteCommand.onDeleteComplete(0, null, FAKE_NUMBER_OF_ROWS_DELETED);
 
         EventAsyncDeleteVocableCompleted event = eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class);
-
         assertEquals(
                 "EventAsyncDeleteVocableCompleted should be fired after onDeleteComplete with right number of rows deleted",
                 FAKE_NUMBER_OF_ROWS_DELETED, event.getNumberOfRowsDeleted()
