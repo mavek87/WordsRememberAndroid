@@ -21,8 +21,10 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -40,9 +42,10 @@ public class AsyncInsertCommandTest {
 
     private EventBus eventBus = EventBus.getDefault();
 
-    private static final ContentValues VALUES = new ContentValues();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final Uri TRANSLATIONS_URI = TranslationsContract.CONTENT_URI;
+    private static final ContentValues VALUES = new ContentValues();
+    private static final long FAKE_INSERTED_ID = 1;
 
     @Before
     public void setUp() {
@@ -61,33 +64,34 @@ public class AsyncInsertCommandTest {
         assertNull("EventAsyncSaveVocableCompleted should NOT be fired before onInsertComplete",
                 eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
         );
+        assertNull("EventAsyncSaveTranslationCompleted should NOT be fired before onInsertComplete",
+                eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class)
+        );
     }
 
     @Test
     public void test_asyncInsertVocableCommand_Fires_EventAsyncSaveVocableCompleted_onInsertComplete() {
-        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
-                contentResolver, VOCABLES_URI, VALUES
-        );
+        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(contentResolver, VOCABLES_URI, VALUES);
 
-        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VOCABLES_URI + "/1"));
+        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VOCABLES_URI + "/" + FAKE_INSERTED_ID));
 
-        assertNotNull(
-                "EventAsyncSaveVocableCompleted should be fired after onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
+        EventAsyncSaveVocableCompleted event = eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class);
+        assertEquals(
+                "EventAsyncSaveVocableCompleted should be fired onInsertComplete with right id",
+                FAKE_INSERTED_ID, event.getSavedVocableId()
         );
     }
 
     @Test
     public void test_asyncInsertTranslationCommand_Fires_EventAsyncSaveTranslationCompleted_onInsertComplete() {
-        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(
-                contentResolver, TRANSLATIONS_URI, VALUES
-        );
+        AsyncInsertCommand asyncInsertCommand = new AsyncInsertCommand(contentResolver, TRANSLATIONS_URI, VALUES);
 
-        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(TRANSLATIONS_URI + "/1"));
+        asyncInsertCommand.onInsertComplete(0, null, Uri.parse(TRANSLATIONS_URI + "/" + FAKE_INSERTED_ID));
 
-        assertNotNull(
-                "EventAsyncSaveTranslationCompleted should be fired after onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class)
+        EventAsyncSaveTranslationCompleted event = eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class);
+        assertEquals(
+                "EventAsyncSaveTranslationCompleted should be fired onInsertComplete with right id",
+                FAKE_INSERTED_ID, event.getSavedTranslationId()
         );
     }
 }

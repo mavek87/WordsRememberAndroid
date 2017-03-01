@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +19,7 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.Matchers.any;
@@ -41,6 +41,7 @@ public class AsyncUpdateCommandTest {
 
     private static final ContentValues VALUES = new ContentValues();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
+    private static final int FAKE_NUMBER_OF_ROWS_UPDATED = 1;
 
     @Before
     public void setUp() {
@@ -68,11 +69,12 @@ public class AsyncUpdateCommandTest {
                 contentResolver, VOCABLES_URI, VALUES, "", new String[]{""}
         );
 
-        asyncUpdateCommand.onUpdateComplete(0, null, 1);
+        asyncUpdateCommand.onUpdateComplete(0, null, FAKE_NUMBER_OF_ROWS_UPDATED);
 
-        assertNotNull(
-                "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
-                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+        EventAsyncUpdateVocableCompleted event = eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class);
+        assertEquals(
+                "EventAsyncUpdateVocableCompleted should be fired onUpdateComplete with right number of rows updated",
+                FAKE_NUMBER_OF_ROWS_UPDATED, event.getNumberOfVocablesUpdated()
         );
     }
 }

@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.model.commands;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
@@ -19,7 +18,7 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 /**
@@ -36,6 +35,7 @@ public class AsyncDeleteCommandTest {
     private EventBus eventBus = EventBus.getDefault();
 
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
+    private static final int FAKE_NUMBER_OF_ROWS_DELETED = 1;
 
     @Before
     public void setUp() {
@@ -62,11 +62,13 @@ public class AsyncDeleteCommandTest {
                 contentResolver, VOCABLES_URI, "", new String[]{""}
         );
 
-        asyncDeleteCommand.onDeleteComplete(0, null, 1);
+        asyncDeleteCommand.onDeleteComplete(0, null, FAKE_NUMBER_OF_ROWS_DELETED);
 
-        assertNotNull(
-                "EventAsyncUpdateVocableCompleted should be fired after onUpdateComplete",
-                eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class)
+        EventAsyncDeleteVocableCompleted event = eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class);
+
+        assertEquals(
+                "EventAsyncDeleteVocableCompleted should be fired after onDeleteComplete with right number of rows deleted",
+                FAKE_NUMBER_OF_ROWS_DELETED, event.getNumberOfRowsDeleted()
         );
     }
 }
