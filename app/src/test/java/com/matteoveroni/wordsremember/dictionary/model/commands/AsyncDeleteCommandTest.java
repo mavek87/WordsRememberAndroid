@@ -32,7 +32,7 @@ public class AsyncDeleteCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private EventBus eventBus = EventBus.getDefault();
+    private final EventBus eventBus = EventBus.getDefault();
 
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final int FAKE_NUMBER_OF_ROWS_DELETED = 1;

@@ -88,7 +88,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String whereSelection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
@@ -96,7 +96,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
-                selection = VocablesContract.Schema.COLUMN_ID + " = ? ";
+                whereSelection = VocablesContract.Schema.COLUMN_ID + " = ? ";
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case TRANSLATIONS:
@@ -104,23 +104,22 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case TRANSLATION_ID:
                 queryBuilder.setTables(TranslationsContract.Schema.TABLE_NAME);
-                selection = TranslationsContract.Schema.COLUMN_ID + " = ? ";
+                whereSelection = TranslationsContract.Schema.COLUMN_ID + " = ? ";
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLE_TRANSLATIONS:
-                //  SELECT translations.translation FROM vocables LEFT JOIN translations ON (vocables._id=translations._id) WHERE (vocables._id=1)
-                projection = TranslationsContract.Schema.ALL_COLUMNS;
+                // SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE vocables_translations.vocable_id=2;
+                projection = new String[]{TranslationsContract.Schema.COLUMN_TRANSLATION};
                 queryBuilder.setTables(
-                        VocablesContract.Schema.TABLE_NAME + " LEFT JOIN " + TranslationsContract.Schema.TABLE_NAME
+                        TranslationsContract.Schema.TABLE_NAME + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
                                 + " ON ("
-                                + VocablesContract.Schema.TABLE_DOT_COLUMN_ID
-                                + " = "
                                 + TranslationsContract.Schema.TABLE_DOT_COLUMN_ID
+                                + " = "
+                                + VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_ID
                                 + ")"
                 );
-                selection = VocablesContract.Schema.TABLE_DOT_COLUMN_ID + " = ?";
-
-                if (selectionArgs == null) {
+                whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + " = ?";
+                if (selectionArgs == null || selectionArgs.length == 0) {
                     selectionArgs = new String[]{uri.getLastPathSegment()};
                 }
                 break;
@@ -132,7 +131,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
-                selection,
+                whereSelection,
                 selectionArgs,
                 null,
                 null,

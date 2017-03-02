@@ -32,8 +32,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     private volatile static DatabaseManager DB_UNIQUE_INSTANCE;
 
+    private final Context context;
+
     private DatabaseManager(Context context) {
         super(context, DatabaseManager.DB_NAME, null, DatabaseManager.VERSION);
+        this.context = context;
     }
 
     public static final DatabaseManager getInstance(Context appContext) {
@@ -71,6 +74,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         File data = Environment.getDataDirectory();
         FileChannel source;
         FileChannel destination;
+//        String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
         String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
         String backupDBPath = DB_NAME;
         File currentDB = new File(data, currentDBPath);
@@ -83,7 +87,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
             destination.close();
             Log.i(TAG, "DB Exported!");
         } catch (IOException e) {
-            Log.d(TAG, "Error while exporting db on sd");
+            Log.d(TAG, "Error while exporting db on sd \n" + e);
         }
     }
 
