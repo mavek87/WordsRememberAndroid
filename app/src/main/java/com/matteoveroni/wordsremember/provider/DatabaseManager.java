@@ -18,6 +18,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import static android.os.Environment.DIRECTORY_DCIM;
+
 /**
  * Singleton helper class that manages SQLiteDatabase creation, reset, export and upgrade operations
  * and which contains db attributes.
@@ -62,33 +64,15 @@ public class DatabaseManager extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
+    public void deleteDatabase() {
+        context.deleteDatabase(DB_NAME);
+    }
+
     public void resetDatabase() {
         SQLiteDatabase db = getWritableDatabase();
         dropAllTables(db);
         createAllTables(db);
         db.close();
-    }
-
-    public void exportDatabaseOnSD() {
-        File sd = Environment.getExternalStorageDirectory();
-        File data = Environment.getDataDirectory();
-        FileChannel source;
-        FileChannel destination;
-//        String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
-        String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
-        String backupDBPath = DB_NAME;
-        File currentDB = new File(data, currentDBPath);
-        File backupDB = new File(sd, backupDBPath);
-        try {
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backupDB).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-            Log.i(TAG, "DB Exported!");
-        } catch (IOException e) {
-            Log.d(TAG, "Error while exporting db on sd \n" + e);
-        }
     }
 
     private void createAllTables(SQLiteDatabase db) {
@@ -102,4 +86,35 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.execSQL(TranslationsContract.Query.DROP_TABLE);
         db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
     }
+
+    /**
+     * How to see database in android from terminal
+     *
+     * http://stackoverflow.com/questions/17529766/view-contents-of-database-file-in-android-studio
+     */
+    public void exportDatabaseOnSD() {
+        File sd = Environment.getExternalStorageDirectory();
+//        File sd = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +
+//                File.separator + "Your Backup Folder" +
+//                File.separator);
+        File data = Environment.getDataDirectory();
+        FileChannel source;
+        FileChannel destination;
+        String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
+        String backupDBPath = DB_NAME;
+        File currentDB = new File(data, currentDBPath);
+        File backupDB = new File(sd, backupDBPath);
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            source.close();
+            destination.close();
+            Log.i(TAG, "DB Exported in " + backupDB.getAbsolutePath());
+        } catch (IOException e) {
+            Log.d(TAG, "Error while exporting db on sd (" + backupDB.getAbsolutePath() + ")" + "\n" + e);
+        }
+    }
+
+
 }

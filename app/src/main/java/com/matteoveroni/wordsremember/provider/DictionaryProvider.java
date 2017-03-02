@@ -141,16 +141,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 getQueryParameterLimitValue(uri)
         );
 
-        // TODO: remove this snippet
-        try {
-            cursor.moveToFirst();
-            String s = cursor.getString(cursor.getColumnIndexOrThrow(TranslationsContract.Schema.COLUMN_TRANSLATION));
-            Log.i(TAG, s);
-        }catch (Exception ex) {
-            Log.e(TAG, "ABBBBBBBBBBBBBBBBBBBBB", ex);
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
         if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
