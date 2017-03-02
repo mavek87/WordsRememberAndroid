@@ -56,17 +56,26 @@ public class DictionaryManipulationActivity extends AppCompatActivity
 
         manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
 
+        setupAndShowToolbar();
+        disableAutoShowInputKeyboardWhenActivityShowsUp();
+        loadPresenter();
+    }
+
+    private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle(WordsRemember.NAME + " - Details");
         }
         setSupportActionBar(toolbar);
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        loadPresenter();
     }
 
+    private void disableAutoShowInputKeyboardWhenActivityShowsUp() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void loadPresenter() {
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    }
 
     @Override
     protected void onStart() {
@@ -124,9 +133,5 @@ public class DictionaryManipulationActivity extends AppCompatActivity
             return Word.fromJson(json_vocableToManipulate);
         }
         return null;
-    }
-
-    private void loadPresenter() {
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 }

@@ -35,9 +35,9 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     private TranslationsListViewAdapter translationsListViewAdapter;
     private Word selectedVocable;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Android lifecycle methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * Android lifecycle methods
+     **********************************************************************************************/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,9 +99,9 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // LoaderManager callbacks
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * LoaderManager callbacks
+     **********************************************************************************************/
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -127,9 +127,9 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         translationsListViewAdapter.swapCursor(null);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * Helper methods
+     **********************************************************************************************/
 
     private boolean isFragmentCreated() {
         return getView() != null;
