@@ -119,7 +119,13 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        translationsListViewAdapter.swapCursor(cursor);
+        // SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE (vocables_translations.vocable_id=?) ORDER BY translation ASC
+        try {
+            Cursor c = cursor;
+            translationsListViewAdapter.swapCursor(cursor);
+        } catch (Exception ex) {
+            Log.e(TAG, "AAAAAAAAAAAAAAAAAAAAA !!!!!!!!!!!!!!!!!! \n" + ex);
+        }
     }
 
     @Override

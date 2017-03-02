@@ -114,15 +114,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                         TranslationsContract.Schema.TABLE_NAME + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
                                 + " ON ("
                                 + TranslationsContract.Schema.TABLE_DOT_COLUMN_ID
-                                + " = "
-                                + VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_ID
+                                + "="
+                                + VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION_ID
                                 + ")"
                 );
-                whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + " = ?";
+                whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "=?";
                 if (selectionArgs == null || selectionArgs.length == 0) {
                     selectionArgs = new String[]{uri.getLastPathSegment()};
                 }
-                break;
+                Cursor cursor =
+                        databaseManager.getWritableDatabase().rawQuery("SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE vocables_translations.vocable_id=2", null);
+                return cursor;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
@@ -138,6 +140,16 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParameterLimitValue(uri)
         );
+
+        // TODO: remove this snippet
+        try {
+            cursor.moveToFirst();
+            String s = cursor.getString(cursor.getColumnIndexOrThrow(TranslationsContract.Schema.COLUMN_TRANSLATION));
+            Log.i(TAG, s);
+        }catch (Exception ex) {
+            Log.e(TAG, "ABBBBBBBBBBBBBBBBBBBBB", ex);
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);

@@ -35,8 +35,8 @@ public class VocablesTranslationsContract {
         public static final String COLUMN_TRANSLATION_ID = "translation_id";
 
         public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + _ID;
-        public static final String TABLE_DOT_COLUMN_VOCABLE_ID = TABLE_NAME + "." + "vocable_id";
-        public static final String TABLE_DOT_COLUMN_TRANSLATION_ID = TABLE_NAME + "." + "translation_id";
+        public static final String TABLE_DOT_COLUMN_VOCABLE_ID = TABLE_NAME + "." + COLUMN_VOCABLE_ID;
+        public static final String TABLE_DOT_COLUMN_TRANSLATION_ID = TABLE_NAME + "." + COLUMN_TRANSLATION_ID;
 
         public static final String[] ALL_COLUMNS =
                 {

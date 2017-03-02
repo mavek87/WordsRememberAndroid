@@ -32,8 +32,8 @@ public final class TranslationsContract {
         public static final String COLUMN_ID = _ID;
         public static final String COLUMN_TRANSLATION = "translation";
 
-        public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + _ID;
-        public static final String TABLE_DOT_COLUMN_TRANSLATION = TABLE_NAME + "." + "translation";
+        public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + COLUMN_ID;
+        public static final String TABLE_DOT_COLUMN_TRANSLATION = TABLE_NAME + "." + COLUMN_TRANSLATION;
 
         public static final String[] ALL_COLUMNS =
                 {
