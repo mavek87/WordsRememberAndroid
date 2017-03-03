@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -46,7 +47,6 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
         // Todo:
         // 1) get vocable from extra passed by dictionaryManipulationFragment
@@ -73,11 +73,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
         // Todo: take bundle sent from DictionaryManipulationActivity
         //http://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
-//        final Bundle bundle = this.getArguments();
-//        if (bundle != null) {
-//            String vocableInUse = bundle.getString("vocableInUse");
-//            vocable = Json.getInstance().loadFromJson(vocableInUse, Word.class);
-//        }
+        final Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String vocableInUse = bundle.getString("vocableInUse");
+            selectedVocable = Json.getInstance().fromJson(vocableInUse, Word.class);
+            getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        }
         registerForContextMenu(getListView());
     }
 
@@ -112,19 +113,14 @@ public class TranslationsManagementFragment extends ListFragment implements Load
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 null,
-                new String[]{"" + 3},
+                new String[]{"" + selectedVocable.getId()},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
         );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        // SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE (vocables_translations.vocable_id=?) ORDER BY translation ASC
-        try {
-            translationsListViewAdapter.swapCursor(cursor);
-        } catch (Exception ex) {
-            Log.e(TAG, "AAAAAAAAAAAAAAAAAAAAA !!!!!!!!!!!!!!!!!! \n" + ex);
-        }
+        translationsListViewAdapter.swapCursor(cursor);
     }
 
     @Override

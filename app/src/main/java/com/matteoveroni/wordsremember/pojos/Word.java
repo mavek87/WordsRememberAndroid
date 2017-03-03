@@ -11,6 +11,9 @@ public class Word {
     private long id = -1;
     private String name = "";
 
+    public Word() {
+    }
+
     public Word(String name) {
         this.name = name;
     }

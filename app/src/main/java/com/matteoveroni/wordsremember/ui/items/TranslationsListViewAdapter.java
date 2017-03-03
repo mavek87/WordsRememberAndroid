@@ -28,6 +28,6 @@ public class TranslationsListViewAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View itemView, Context context, Cursor cursor) {
-        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(TranslationsContract.Schema.COLUMN_TRANSLATION)));
+        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(TranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION)));
     }
 }
