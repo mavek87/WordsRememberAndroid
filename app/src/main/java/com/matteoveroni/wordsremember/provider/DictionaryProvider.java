@@ -15,6 +15,9 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 /**
  * Content Provider for the dictionary.
  *
@@ -108,8 +111,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 selectionArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLE_TRANSLATIONS:
-                // SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE vocables_translations.vocable_id=2;
-                projection = new String[]{TranslationsContract.Schema.COLUMN_TRANSLATION};
+                // SELECT translations._id, translations.translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE vocables_translations.vocable_id=2;
+
+                // SELECT translations._id, translations.translation
+                projection = new String[]{
+                        TranslationsContract.Schema.TABLE_DOT_COLUMN_ID,
+                        TranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION
+                };
+                // FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id)
                 queryBuilder.setTables(
                         TranslationsContract.Schema.TABLE_NAME + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
                                 + " ON ("
@@ -118,13 +127,12 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                                 + VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION_ID
                                 + ")"
                 );
+                // WHERE vocables_translations.vocable_id=?
                 whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "=?";
                 if (selectionArgs == null || selectionArgs.length == 0) {
                     selectionArgs = new String[]{uri.getLastPathSegment()};
                 }
-                Cursor cursor =
-                        databaseManager.getWritableDatabase().rawQuery("SELECT translation FROM translations LEFT JOIN vocables_translations ON (translations._id=vocables_translations.translation_id) WHERE vocables_translations.vocable_id=2", null);
-                return cursor;
+                break;
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
         }
@@ -232,17 +240,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return deletedRowsCounter;
     }
 
-//    private void checkColumnsExistence(String[] projection) {
-//        if (projection != null) {
-//            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
-//            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
-//
-//            // check if all columns which are requested are available
-//            if (!availableColumns.containsAll(requestedColumns)) {
-//                throw new IllegalArgumentException("Unknown columns in projection");
-//            }
-//        }
-//    }
+    private void checkColumnsExistence(String[] projection) {
+        if (projection != null) {
+            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
+            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
+
+            // check if all columns which are requested are available
+            if (!availableColumns.containsAll(requestedColumns)) {
+                throw new IllegalArgumentException("Unknown columns in projection");
+            }
+        }
+    }
 
     private void notifyChangeToObservers(Uri uri) {
         if (isContentResolverNotNull())

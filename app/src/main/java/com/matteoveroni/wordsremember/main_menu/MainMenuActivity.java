@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,8 +82,8 @@ public class MainMenuActivity extends AppCompatActivity
         // This create a bug, if a vocable is inserted here EventAsyncSaveVocable is erroneously propagated
         // to DictionaryManipulationFragment and causes "goBackActivity for the firstTime bug"
 
-//        // Use this line to reset the database if changes in some contract class schema has occurred
-//        DatabaseManager.getInstance(getApplicationContext()).resetDatabase();
+        // Use this line to reset the database if changes in some contract class schema has occurred
+//        DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
 //
 //        Word vocable = new Word("vocable1");
 //        Word translation = new Word("translation1");
