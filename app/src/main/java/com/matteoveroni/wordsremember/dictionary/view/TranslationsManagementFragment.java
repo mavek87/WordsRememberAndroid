@@ -14,9 +14,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.interfaces.view.ViewPojoUser;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -27,59 +27,53 @@ import com.matteoveroni.wordsremember.ui.adapters.VocableListViewAdapter;
  * @author Matteo Veroni
  */
 
-public class TranslationsManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TranslationsManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewPojoUser<Word> {
 
     public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
 
     private final int CURSOR_LOADER_ID = 1;
 
     private TranslationsListViewAdapter translationsListViewAdapter;
-    private Word selectedVocable;
-
-    /***********************************************************************************************
-     * Android lifecycle methods
-     **********************************************************************************************/
+    private Word vocableInView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.i(TAG, "Creating the view");
-
         View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
-
-        // Todo:
-        // 1) get vocable from extra passed by dictionaryManipulationFragment
-        // 2)
-        ////////////////////////////////
-//        vocable.setId(1);
-        /////////////////////////////////
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.i(TAG, "View created");
-
-        Toast.makeText(getActivity().getApplicationContext(), TAG, Toast.LENGTH_SHORT).show();
         getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "Activity created");
-
-        // Todo: take bundle sent from DictionaryManipulationActivity
-        //http://stackoverflow.com/questions/15392261/android-pass-dataextras-to-a-fragment
-        final Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            String vocableInUse = bundle.getString("vocableInUse");
-            selectedVocable = Json.getInstance().fromJson(vocableInUse, Word.class);
-            getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-        }
         registerForContextMenu(getListView());
+    }
+
+    @Override
+    public Word getPojoUsedByView() {
+        return vocableInView;
+    }
+
+    @Override
+    public void setPojoUsedInView(Word vocable) {
+        if (vocable == null) {
+            throw new IllegalArgumentException("Error setting pojo for TranslationsManagementFragment. Vocable passed cannot be null!");
+        }
+
+        if (vocableInView == null) {
+            this.vocableInView = vocable;
+            getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+        } else {
+            this.vocableInView = vocable;
+            getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -92,11 +86,11 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = ((VocableListViewAdapter) listView.getAdapter()).getCursor();
+        Cursor cursor = translationsListViewAdapter.getCursor();
         cursor.moveToPosition(position);
 
+        //TODO: implement real behaviours clicking on translations
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
-
         Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -106,14 +100,12 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.i(TAG, "Creating loader");
-
         return new CursorLoader(
                 getContext(),
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 null,
-                new String[]{"" + selectedVocable.getId()},
+                new String[]{String.valueOf(vocableInView.getId())},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC"
         );
     }
@@ -126,13 +118,5 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         translationsListViewAdapter.swapCursor(null);
-    }
-
-    /***********************************************************************************************
-     * Helper methods
-     **********************************************************************************************/
-
-    private boolean isFragmentCreated() {
-        return getView() != null;
     }
 }

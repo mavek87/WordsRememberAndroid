@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.presenters;
+package com.matteoveroni.wordsremember.interfaces.presenters;
 
 import android.content.Context;
 import android.support.v4.content.Loader;

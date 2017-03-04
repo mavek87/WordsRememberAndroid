@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.main_menu;
 
-import com.matteoveroni.wordsremember.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 
 /**
  * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4

@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 
-import com.matteoveroni.wordsremember.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;

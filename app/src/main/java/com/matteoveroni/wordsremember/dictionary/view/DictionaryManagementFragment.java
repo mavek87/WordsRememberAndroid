@@ -101,10 +101,11 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        final String[] columns = new String[]{VocablesContract.Schema.COLUMN_ID, VocablesContract.Schema.COLUMN_VOCABLE};
         return new CursorLoader(
                 getActivity(),
                 VocablesContract.CONTENT_URI,
-                VocablesContract.Schema.ALL_COLUMNS,
+                columns,
                 null,
                 null,
                 VocablesContract.Schema.COLUMN_VOCABLE + " ASC"

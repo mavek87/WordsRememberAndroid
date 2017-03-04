@@ -6,6 +6,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
@@ -33,6 +34,13 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     private final int PRESENTER_LOADER_ID = 1;
 
     private DictionaryManipulationFragment manipulationFragment;
+    private TranslationsManagementFragment translationsManagementFragment;
+
+    @Override
+    public void showVocableData(Word vocable) {
+        manipulationFragment.setPojoUsedInView(vocable);
+        translationsManagementFragment.setPojoUsedInView(vocable);
+    }
 
     @Override
     public void showMessage(String message) {
@@ -45,20 +53,16 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     }
 
     @Override
-    public void showVocableData(Word vocable) {
-        manipulationFragment.showVocableData(vocable);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_manipulation);
 
-        manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.activity_dictionary_manipulation_fragment);
+        manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_manipulation_fragment);
+        translationsManagementFragment = (TranslationsManagementFragment) getSupportFragmentManager().findFragmentById(R.id.translations_management_fragment);
 
         setupAndShowToolbar();
-        disableAutoShowInputKeyboardWhenActivityShowsUp();
-        loadPresenter();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     private void setupAndShowToolbar() {
@@ -69,23 +73,23 @@ public class DictionaryManipulationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
     }
 
-    private void disableAutoShowInputKeyboardWhenActivityShowsUp() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    private void loadPresenter() {
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
         presenter.attachView(this);
-        Word vocableToManipulate = catchVocableToManipulate();
-        if (vocableToManipulate != null) {
-            presenter.onVocableToManipulateRetrieved(vocableToManipulate);
+        Word vocableToManipulate = findVocableToManipulate();
+        presenter.onVocableToManipulateRetrieved(vocableToManipulate);
+    }
+
+    private Word findVocableToManipulate() {
+        Intent activityStarterIntent = getIntent();
+        if (activityStarterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
+            String json_vocableToManipulate = activityStarterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
+            return Word.fromJson(json_vocableToManipulate);
         } else {
-            returnToPreviousView();
+            final String errorMessage = "Unexpected Error: Any vocable to manipulate retrieved.";
+            Log.e(TAG, errorMessage);
+            throw new RuntimeException(errorMessage);
         }
     }
 
@@ -105,7 +109,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                presenter.onSaveVocableRequest(manipulationFragment.getVocableDataInView());
+                presenter.onSaveVocableRequest(manipulationFragment.getPojoUsedByView());
                 return true;
         }
         return false;
@@ -124,14 +128,5 @@ public class DictionaryManipulationActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
         presenter = null;
-    }
-
-    private Word catchVocableToManipulate() {
-        Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE_TO_MANIPULATE)) {
-            String json_vocableToManipulate = starterIntent.getStringExtra(Extras.VOCABLE_TO_MANIPULATE);
-            return Word.fromJson(json_vocableToManipulate);
-        }
-        return null;
     }
 }
