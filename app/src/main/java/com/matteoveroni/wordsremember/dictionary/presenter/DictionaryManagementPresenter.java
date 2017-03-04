@@ -5,7 +5,7 @@ import android.content.Context;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.Presenter;
+import com.matteoveroni.wordsremember.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
@@ -30,7 +30,7 @@ public class DictionaryManagementPresenter implements Presenter {
     public static final String TAG = TagGenerator.tag(DictionaryManagementPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
-    private static boolean isPresenterCreatedForTheFirstTime = true;
+    private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
     private final DictionaryDAO model;
     private DictionaryManagementView view;
 
@@ -52,10 +52,10 @@ public class DictionaryManagementPresenter implements Presenter {
 
     //TODO: remove this method in production code
     public void onViewCreated(Context context) {
-        if (isPresenterCreatedForTheFirstTime) {
+        if (IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME) {
             populateDatabaseForTestPurposes(context);
             exportDatabaseOnSd(context);
-            isPresenterCreatedForTheFirstTime = false;
+            IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = false;
         }
     }
 

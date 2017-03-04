@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.PresenterFactory;
+import com.matteoveroni.wordsremember.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;

@@ -20,8 +20,8 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
-import com.matteoveroni.wordsremember.ui.items.TranslationsListViewAdapter;
-import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
+import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
+import com.matteoveroni.wordsremember.ui.adapters.VocableListViewAdapter;
 
 /**
  * @author Matteo Veroni

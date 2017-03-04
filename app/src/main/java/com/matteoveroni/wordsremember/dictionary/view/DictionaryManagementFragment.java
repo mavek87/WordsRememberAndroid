@@ -20,7 +20,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableMani
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojos.Word;
-import com.matteoveroni.wordsremember.ui.items.VocableListViewAdapter;
+import com.matteoveroni.wordsremember.ui.adapters.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;

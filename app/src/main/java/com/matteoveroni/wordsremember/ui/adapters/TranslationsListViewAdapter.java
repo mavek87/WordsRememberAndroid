@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.items;
+package com.matteoveroni.wordsremember.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.ui.items.WordsListViewItem;
 
 /**
  * @author Matteo Veroni

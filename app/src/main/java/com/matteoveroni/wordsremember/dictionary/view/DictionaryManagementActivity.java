@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.PresenterLoader;
+import com.matteoveroni.wordsremember.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenterFactory;

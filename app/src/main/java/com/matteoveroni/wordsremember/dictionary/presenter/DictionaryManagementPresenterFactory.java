@@ -1,8 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.PresenterFactory;
+import com.matteoveroni.wordsremember.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 
 import javax.inject.Inject;
