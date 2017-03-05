@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncFindVocablesWithNameCommand;
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncUpdateCommand;
@@ -17,7 +17,6 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -88,7 +87,7 @@ public class DictionaryDAO {
         if (Str.isNullOrEmpty(vocableName)) {
             throw new IllegalArgumentException("AsyncFindVocablesWithName error: null or empty vocable name.");
         }
-        new AsyncFindVocablesWithNameCommand(contentResolver, vocableName, "").execute();
+        new AsyncSearchVocablesByNameCommand(contentResolver, vocableName, "").execute();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

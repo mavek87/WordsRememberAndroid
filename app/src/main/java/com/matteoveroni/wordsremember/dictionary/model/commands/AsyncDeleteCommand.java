@@ -40,6 +40,7 @@ public class AsyncDeleteCommand extends AsyncCommand {
     @Override
     protected void onDeleteComplete(int token, Object cookie, int result) {
         this.rowDeletedResult = result;
+        dispatchCompletionEvent();
         executeCommand((AsyncCommand) nextCommand);
     }
 

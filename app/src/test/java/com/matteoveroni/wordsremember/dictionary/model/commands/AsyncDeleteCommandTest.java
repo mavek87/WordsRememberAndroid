@@ -49,7 +49,7 @@ public class AsyncDeleteCommandTest {
     }
 
     @Test
-    public void test_NoStickyEvent_In_EventuBus_If_AnyOperationIsComplete() {
+    public void test_NoStickyEvent_In_EventBus_If_AnyOperationIsComplete() {
         assertNull(
                 "EventAsyncDeleteVocableCompleted should NOT be fired before onDeleteComplete",
                 eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class)
