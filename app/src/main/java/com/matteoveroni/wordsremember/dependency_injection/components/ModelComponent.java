@@ -4,6 +4,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationsManipulationPresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -21,4 +22,5 @@ public interface ModelComponent {
 
     void inject(DictionaryManipulationPresenterFactory manipulationPresenterFactory);
 
+    void inject(DictionaryTranslationsManipulationPresenterFactory translationsManipulationPresenterFactory);
 }

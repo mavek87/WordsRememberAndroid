@@ -49,6 +49,12 @@ public class DictionaryManipulationPresenter implements Presenter {
         }
     }
 
+    public void onCreateTranslationRequest() {
+        // TODO: this is wrong and temporary. Should get the vocable used by the view or store the used
+        // vocable inside the presenter and passing it to translations manipulation view
+        view.goToTranslationsManipulationView(new Word());
+    }
+
     private boolean isVocableValid(Word vocable) {
         return (vocable != null) && !vocable.getName().trim().isEmpty();
     }

@@ -3,6 +3,13 @@ REMEMBERING WORDS:
 http://www.thepolyglotdream.com/forget-it-the-secret-of-remembering-words/
 
 
+
+SURVIVING ORIENTATION CHANGES WITH LOADERS ON ANDROID:
+
+https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
+
+
+
 FRAGMENTS:
 
 https://github.com/StevenByle/Android-Phone-Tablet-Demo

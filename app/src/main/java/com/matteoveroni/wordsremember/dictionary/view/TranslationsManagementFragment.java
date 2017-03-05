@@ -66,12 +66,11 @@ public class TranslationsManagementFragment extends ListFragment implements Load
         if (vocable == null) {
             throw new IllegalArgumentException("Error setting pojo for TranslationsManagementFragment. Vocable passed cannot be null!");
         }
-
         if (vocableInView == null) {
-            this.vocableInView = vocable;
+            vocableInView = vocable;
             getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         } else {
-            this.vocableInView = vocable;
+            vocableInView = vocable;
             getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
         }
     }

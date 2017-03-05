@@ -240,17 +240,17 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return deletedRowsCounter;
     }
 
-    private void checkColumnsExistence(String[] projection) {
-        if (projection != null) {
-            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
-            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
-
-            // check if all columns which are requested are available
-            if (!availableColumns.containsAll(requestedColumns)) {
-                throw new IllegalArgumentException("Unknown columns in projection");
-            }
-        }
-    }
+//    private void checkColumnsExistence(String[] projection) {
+//        if (projection != null) {
+//            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
+//            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
+//
+//            // check if all columns which are requested are available
+//            if (!availableColumns.containsAll(requestedColumns)) {
+//                throw new IllegalArgumentException("Unknown columns in projection");
+//            }
+//        }
+//    }
 
     private void notifyChangeToObservers(Uri uri) {
         if (isContentResolverNotNull())

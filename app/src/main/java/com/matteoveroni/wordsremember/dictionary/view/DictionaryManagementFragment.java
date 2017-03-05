@@ -47,7 +47,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
         View view = inflater.inflate(R.layout.fragment_dictionary_management, container, false);
         vocablesListViewAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(vocablesListViewAdapter);
-        loadPresenter();
+        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
         return view;
     }
 
@@ -65,7 +65,7 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
     @Override
     public void onResume() {
-        reloadPresenter();
+        getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
         super.onResume();
     }
 
@@ -91,12 +91,18 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
 
         switch (item.getItemId()) {
             case R.id.menu_dictionary_management_long_press_remove:
-                eventBus.postSticky(new EventVocableManipulationRequest(
-                        getSelectedVocable(cursor, position), EventVocableManipulationRequest.TypeOfManipulation.REMOVE
-                ));
+                eventBus.postSticky(
+                        new EventVocableManipulationRequest(
+                                getSelectedVocable(cursor, position), EventVocableManipulationRequest.TypeOfManipulation.REMOVE
+                        ));
                 return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private Word getSelectedVocable(Cursor cursor, int position) {
+        cursor.moveToPosition(position);
+        return DictionaryDAO.cursorToVocable(cursor);
     }
 
     @Override
@@ -121,20 +127,6 @@ public class DictionaryManagementFragment extends ListFragment implements Loader
     public void onLoaderReset(Loader<Cursor> loader) {
         vocablesListViewAdapter.swapCursor(null);
     }
-
-    private Word getSelectedVocable(Cursor cursor, int position) {
-        cursor.moveToPosition(position);
-        return DictionaryDAO.cursorToVocable(cursor);
-    }
-
-    private void loadPresenter() {
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
-    }
-
-    private void reloadPresenter() {
-        getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
-    }
-
 }
 
 

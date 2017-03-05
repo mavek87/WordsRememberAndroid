@@ -20,6 +20,9 @@
     <string name="create_vocable">Create vocable</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
-    <string name="title_activity_dictionary_manipulation">DictionaryManipulationActivity</string>
+
+    <string name="title_activity_dictionary_management">WR - Dictionary</string>
+    <string name="title_activity_dictionary_manipulation">WR - Vocables editor</string>
+    <string name="title_activity_dictionary_translations">WR - Add translation</string>
 
 </resources>

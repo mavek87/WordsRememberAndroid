@@ -5,6 +5,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
@@ -18,14 +19,11 @@ import butterknife.OnClick;
 
 /**
  * Dictionary Management Activity
- * <p>
- * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
  *
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity
-        implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     private DictionaryManagementPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
@@ -44,7 +42,7 @@ public class DictionaryManagementActivity extends AppCompatActivity
     public void goToManipulationView(Word vocableToManipulate) {
         Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
         intent_goToManipulationActivity.putExtra(
-                Extras.VOCABLE_TO_MANIPULATE,
+                Extras.VOCABLE,
                 vocableToManipulate.toJson()
         );
         startActivity(intent_goToManipulationActivity);
