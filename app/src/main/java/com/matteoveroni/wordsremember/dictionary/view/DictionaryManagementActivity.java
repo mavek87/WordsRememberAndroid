@@ -5,7 +5,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
@@ -23,7 +22,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity implements DictionaryManagementView, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+public class DictionaryManagementActivity extends AppCompatActivity implements ViewDictionaryManagement, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
 
     private DictionaryManagementPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;

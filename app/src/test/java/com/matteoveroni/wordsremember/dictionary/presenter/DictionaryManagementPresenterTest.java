@@ -5,7 +5,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDelete
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
+import com.matteoveroni.wordsremember.dictionary.view.ViewDictionaryManagement;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -33,7 +33,7 @@ public class DictionaryManagementPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryManagementView view;
+    private ViewDictionaryManagement view;
     @Mock
     private DictionaryDAO dictionaryModel;
 

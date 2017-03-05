@@ -5,12 +5,12 @@ import android.content.Context;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.dictionary.view.ViewDictionaryManagement;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementView;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
@@ -32,7 +32,7 @@ public class DictionaryManagementPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
     private final DictionaryDAO model;
-    private DictionaryManagementView view;
+    private ViewDictionaryManagement view;
 
     public DictionaryManagementPresenter(DictionaryDAO model) {
         this.model = model;
@@ -40,7 +40,7 @@ public class DictionaryManagementPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryManagementView) view;
+        this.view = (ViewDictionaryManagement) view;
         eventBus.register(this);
     }
 

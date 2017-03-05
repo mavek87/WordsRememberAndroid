@@ -24,9 +24,9 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationFragment extends Fragment implements ViewPojoUser<Word> {
+public class VocableManipulationFragment extends Fragment implements ViewPojoUser<Word> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryManipulationFragment.class);
+    public static final String TAG = TagGenerator.tag(VocableManipulationFragment.class);
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
@@ -41,7 +41,7 @@ public class DictionaryManipulationFragment extends Fragment implements ViewPojo
     @BindView(R.id.fragment_dictionary_manipulation_txt_vocable_name)
     EditText txt_vocableName;
 
-    public DictionaryManipulationFragment() {
+    public VocableManipulationFragment() {
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DictionaryManipulationFragment extends Fragment implements ViewPojo
     @Override
     public void setPojoUsedInView(Word vocableToShow) {
         if (vocableToShow == null) {
-            throw new IllegalArgumentException("Error setting pojo for DictionaryManipulationFragment. Vocable passed cannot be null!");
+            throw new IllegalArgumentException("Error setting pojo for VocableManipulationFragment. Vocable passed cannot be null!");
         }
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");

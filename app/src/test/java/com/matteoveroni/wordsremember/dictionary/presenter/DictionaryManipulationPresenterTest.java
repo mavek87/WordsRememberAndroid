@@ -1,11 +1,11 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.view.ViewDictionaryManipulation;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationView;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,7 +38,7 @@ public class DictionaryManipulationPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryManipulationView view;
+    private ViewDictionaryManipulation view;
     @Mock
     private DictionaryDAO model;
 

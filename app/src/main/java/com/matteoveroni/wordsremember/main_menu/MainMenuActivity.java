@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 
 import butterknife.BindView;
@@ -79,7 +79,7 @@ public class MainMenuActivity extends AppCompatActivity
 
         // Todo: remove this lines in production code
         // This create a bug, if a vocable is inserted here EventAsyncSaveVocable is erroneously propagated
-        // to DictionaryManipulationFragment and causes "goBackActivity for the firstTime bug"
+        // to VocableManipulationFragment and causes "goBackActivity for the firstTime bug"
 
         // Use this line to reset the database if changes in some contract class schema has occurred
 //        DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();

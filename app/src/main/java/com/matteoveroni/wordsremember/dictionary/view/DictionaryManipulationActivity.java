@@ -26,11 +26,11 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationActivity extends AppCompatActivity implements DictionaryManipulationView, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+public class DictionaryManipulationActivity extends AppCompatActivity implements ViewDictionaryManipulation, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryManipulationActivity.class);
 
-    private DictionaryManipulationFragment manipulationFragment;
+    private VocableManipulationFragment vocableManipulationFragment;
     private TranslationsManagementFragment translationsManagementFragment;
 
     private DictionaryManipulationPresenter presenter;
@@ -38,12 +38,12 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
 
     @Override
     public Word getPojoUsedByView() {
-        return manipulationFragment.getPojoUsedByView();
+        return vocableManipulationFragment.getPojoUsedByView();
     }
 
     @Override
     public void setPojoUsedInView(Word vocable) {
-        manipulationFragment.setPojoUsedInView(vocable);
+        vocableManipulationFragment.setPojoUsedInView(vocable);
         translationsManagementFragment.setPojoUsedInView(vocable);
     }
 
@@ -56,7 +56,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
 
     @Override
     public void goToTranslationsManipulationView(Word vocable) {
-        Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationsActivity.class);
+        Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationsManipulationActivity.class);
         intent_goToTranslationsManipulationView.putExtra(
                 Extras.VOCABLE,
                 vocable.toJson()
@@ -80,7 +80,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_dictionary_manipulation);
         ButterKnife.bind(this);
 
-        manipulationFragment = (DictionaryManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_manipulation_fragment);
+        vocableManipulationFragment = (VocableManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_manipulation_fragment);
         translationsManagementFragment = (TranslationsManagementFragment) getSupportFragmentManager().findFragmentById(R.id.translations_management_fragment);
 
         setupAndShowToolbar();

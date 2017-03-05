@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * @author Matteo Veroni
  */
 
-public interface DictionaryManipulationView extends ViewPojoUser<Word>{
+public interface ViewDictionaryManipulation extends ViewPojoUser<Word>{
 
     void createTranslationAction();
 

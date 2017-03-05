@@ -32,14 +32,14 @@ import org.greenrobot.eventbus.EventBus;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class VocableManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final EventBus eventBus = EventBus.getDefault();
     private final int CURSOR_LOADER_ID = 1;
 
     private VocableListViewAdapter vocablesListViewAdapter;
 
-    public DictionaryManagementFragment() {
+    public VocableManagementFragment() {
     }
 
     @Override

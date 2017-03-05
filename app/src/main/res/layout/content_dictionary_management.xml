@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/activity_dictionary_management_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.VocableManagementFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/dictionary_manipulation_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.DictionaryManipulationFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.VocableManipulationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50" />

@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class DictionaryTranslationsActivity extends AppCompatActivity
-        implements DictionaryTranslationsManipulationView, LoaderManager.LoaderCallbacks<DictionaryTranslationsManipulationPresenter> {
+public class DictionaryTranslationsManipulationActivity extends AppCompatActivity
+        implements ViewDictionaryTranslationsManipulation, LoaderManager.LoaderCallbacks<DictionaryTranslationsManipulationPresenter> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryTranslationsActivity.class);
+    public static final String TAG = TagGenerator.tag(DictionaryTranslationsManipulationActivity.class);
 
     private DictionaryTranslationsManipulationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
