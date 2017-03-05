@@ -15,4 +15,6 @@ public abstract class AsyncCommand extends AsyncQueryHandler {
     }
 
     abstract void execute();
+
+    abstract void dispatchCompletionEvent();
 }

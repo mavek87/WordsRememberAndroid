@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesWithSearchedNameCompleted;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -9,6 +10,8 @@ import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 /**
  * @author Matteo Veroni
@@ -20,6 +23,8 @@ public class DictionaryManipulationPresenter implements Presenter {
 
     private final DictionaryDAO model;
     private DictionaryManipulationView view;
+
+    private Word persistedVocableInView;
 
     public DictionaryManipulationPresenter(DictionaryDAO model) {
         this.model = model;
@@ -37,53 +42,70 @@ public class DictionaryManipulationPresenter implements Presenter {
         view = null;
     }
 
-    public void onVocableToManipulateRetrieved(Word vocableToManipulate) {
-        view.showVocableData(vocableToManipulate);
-    }
-
-    public void onSaveVocableRequest(Word currentVocableInView) {
-        if (isVocableValid(currentVocableInView)) {
-            storeVocableIntoModel(currentVocableInView);
-        } else {
-            view.showMessage("You can\'t save an empty vocable. Compile all the data and retry");
-        }
+    public void onVocableToManipulateRetrieved(Word vocable) {
+        persistedVocableInView = vocable;
+        view.setPojoUsedInView(vocable);
     }
 
     public void onCreateTranslationRequest() {
-        // TODO: this is wrong and temporary. Should get the vocable used by the view or store the used
-        // vocable inside the presenter and passing it to translations manipulation view
-        view.goToTranslationsManipulationView(new Word());
+        view.goToTranslationsManipulationView(persistedVocableInView);
     }
 
-    private boolean isVocableValid(Word vocable) {
-        return (vocable != null) && !vocable.getName().trim().isEmpty();
-    }
-
-    private void storeVocableIntoModel(Word vocable) {
-        if (vocable.getId() <= 0) {
-            model.asyncSaveVocable(vocable);
+    public void onSaveVocableRequest() {
+        if (isVocableValid(view.getPojoUsedByView())) {
+            storeCurrentVocableInView();
         } else {
-            model.asyncUpdateVocable(vocable.getId(), vocable);
+            view.showMessage("You cannot save a vocable with an empty name. Compile all the data and retry");
+        }
+    }
+
+    public void storeCurrentVocableInView() {
+        Word vocableInViewToStore = view.getPojoUsedByView();
+        if (vocableInViewToStore.getId() > 0) {
+            model.asyncUpdateVocable(vocableInViewToStore.getId(), vocableInViewToStore);
+        } else {
+            model.asyncFindVocablesWithName(vocableInViewToStore.getName());
+        }
+    }
+
+    @Subscribe(sticky = true)
+    @SuppressWarnings("unused")
+    public void onEvent(EventAsyncFindVocablesWithSearchedNameCompleted event) {
+        List<Word> vocablesWithSearchedName = event.getVocablesWithSearchedName();
+        int numberOfVocablesWithSearchedName = vocablesWithSearchedName.size();
+        saveVocableIfHasUniqueName(numberOfVocablesWithSearchedName);
+    }
+
+    private void saveVocableIfHasUniqueName(int numberOfVocablesWithSameName) {
+        if (numberOfVocablesWithSameName == 0) {
+            model.asyncSaveVocable(view.getPojoUsedByView());
+        } else {
+            view.showMessage("You cannot save a vocable with this vocable name, it is already used.");
         }
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
-        handleAsyncEventAndGoToPreviousView(event);
+        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
     }
 
     @Subscribe(sticky = true)
     @SuppressWarnings("unused")
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        handleAsyncEventAndGoToPreviousView(event);
+        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
     }
 
-    private void handleAsyncEventAndGoToPreviousView(Object event) {
+    private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
+        persistedVocableInView = view.getPojoUsedByView();
         try {
             eventBus.removeStickyEvent(event);
         } finally {
             view.returnToPreviousView();
         }
+    }
+
+    private boolean isVocableValid(Word vocable) {
+        return (vocable != null) && !vocable.getName().trim().isEmpty();
     }
 }

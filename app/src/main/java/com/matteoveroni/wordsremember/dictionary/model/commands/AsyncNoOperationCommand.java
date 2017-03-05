@@ -15,4 +15,9 @@ public class AsyncNoOperationCommand extends AsyncCommand {
     @Override
     public void execute() {
     }
+
+    @Override
+    void dispatchCompletionEvent() {
+    }
+
 }

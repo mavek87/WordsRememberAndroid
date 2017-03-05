@@ -22,6 +22,8 @@ public class AsyncInsertCommand extends AsyncCommand {
     private final ContentValues values;
     private final Object nextCommand;
 
+    private Uri insertCompleteUri;
+
     public AsyncInsertCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values) {
         this(contentResolver, commandTargetUri, values, new AsyncNoOperationCommand(contentResolver));
     }
@@ -40,12 +42,14 @@ public class AsyncInsertCommand extends AsyncCommand {
 
     @Override
     protected void onInsertComplete(int token, Object cookie, Uri uri) {
-        dispatchCompletionEvent(uri);
+        insertCompleteUri = uri;
+        dispatchCompletionEvent();
         executeCommand((AsyncCommand) nextCommand);
     }
 
-    private void dispatchCompletionEvent(Uri uri) {
-        long id = Long.valueOf(uri.getLastPathSegment());
+    @Override
+    public void dispatchCompletionEvent() {
+        long id = Long.valueOf(insertCompleteUri.getLastPathSegment());
 
         if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
             EventBus.getDefault().postSticky(new EventAsyncSaveVocableCompleted(id));

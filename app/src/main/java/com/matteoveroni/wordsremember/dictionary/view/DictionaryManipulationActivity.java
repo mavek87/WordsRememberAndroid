@@ -30,14 +30,19 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
 
     public static final String TAG = TagGenerator.tag(DictionaryManipulationActivity.class);
 
-    private DictionaryManipulationPresenter presenter;
-    private final int PRESENTER_LOADER_ID = 1;
-
     private DictionaryManipulationFragment manipulationFragment;
     private TranslationsManagementFragment translationsManagementFragment;
 
+    private DictionaryManipulationPresenter presenter;
+    private final int PRESENTER_LOADER_ID = 1;
+
     @Override
-    public void showVocableData(Word vocable) {
+    public Word getPojoUsedByView() {
+        return manipulationFragment.getPojoUsedByView();
+    }
+
+    @Override
+    public void setPojoUsedInView(Word vocable) {
         manipulationFragment.setPojoUsedInView(vocable);
         translationsManagementFragment.setPojoUsedInView(vocable);
     }
@@ -127,7 +132,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                presenter.onSaveVocableRequest(manipulationFragment.getPojoUsedByView());
+                presenter.onSaveVocableRequest();
                 return true;
         }
         return false;

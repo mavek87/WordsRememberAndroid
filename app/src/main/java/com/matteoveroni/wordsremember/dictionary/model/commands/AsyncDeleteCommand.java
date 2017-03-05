@@ -18,6 +18,8 @@ public class AsyncDeleteCommand extends AsyncCommand {
     private final String selectonArgs[];
     private final Object nextCommand;
 
+    private int rowDeletedResult;
+
     public AsyncDeleteCommand(ContentResolver contentResolver, Uri commandTargetUri, String selection, String[] selectonArgs) {
         this(contentResolver, commandTargetUri, selection, selectonArgs, new AsyncNoOperationCommand(contentResolver));
     }
@@ -37,12 +39,13 @@ public class AsyncDeleteCommand extends AsyncCommand {
 
     @Override
     protected void onDeleteComplete(int token, Object cookie, int result) {
-        dispatchCompletionEvent(result);
+        this.rowDeletedResult = result;
         executeCommand((AsyncCommand) nextCommand);
     }
 
-    private void dispatchCompletionEvent(int result) {
-        EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(result));
+    @Override
+    public void dispatchCompletionEvent() {
+        EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));
     }
 
     private void executeCommand(AsyncCommand command) {

@@ -6,14 +6,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncFindVocablesWithNameCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncQueryCommand;
 import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+
+import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
+import java.util.List;
 
 /**
  * Class that allows CRUD operations on dictionary data using a content resolver to communicate with
@@ -30,9 +35,9 @@ public class DictionaryDAO {
         this.contentResolver = context.getContentResolver();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Async methods - Vocable
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * Async methods - Vocables
+     **********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
         if (isWordValid(vocable) && vocable.getId() < 0) {
@@ -79,22 +84,11 @@ public class DictionaryDAO {
         }
     }
 
-    public void asyncGetVocableById(long id) {
-        if (id > 0) {
-            String str_id = String.valueOf(id);
-            String[] projection = {VocablesContract.Schema.COLUMN_VOCABLE};
-            String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-            String[] selectionArgs = {str_id};
-
-            new AsyncQueryCommand(
-                    contentResolver,
-                    VocablesContract.CONTENT_URI,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    ""
-            ).execute();
+    public void asyncFindVocablesWithName(String vocableName) throws IllegalArgumentException {
+        if (Str.isNullOrEmpty(vocableName)) {
+            throw new IllegalArgumentException("AsyncFindVocablesWithName error: null or empty vocable name.");
         }
+        new AsyncFindVocablesWithNameCommand(contentResolver, vocableName, "").execute();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,10 +179,9 @@ public class DictionaryDAO {
 //        }
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Sync methods - Vocables
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * Sync methods - Vocables
+     **********************************************************************************************/
 
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
@@ -266,14 +259,28 @@ public class DictionaryDAO {
         return recordDeleted > 0;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper methods - Translations
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /***********************************************************************************************
+     * Helper methods
+     **********************************************************************************************/
 
     public static Word cursorToVocable(Cursor cursor) {
         final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
         vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
         return vocable;
+    }
+
+    public static List<Word> cursorToListOfVocables(Cursor cursor) {
+        List<Word> vocablesWithSameName = new ArrayList<>();
+        if (cursor == null) {
+            return vocablesWithSameName;
+        }
+        while (cursor.moveToNext()) {
+            Word vocable = new Word("");
+            vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)));
+            vocable.setName(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)));
+            vocablesWithSameName.add(vocable);
+        }
+        return vocablesWithSameName;
     }
 
     public static Word cursorToTranslation(Cursor cursor) {

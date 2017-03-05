@@ -20,6 +20,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Matteo Veroni
@@ -60,16 +61,18 @@ public class DictionaryManipulationPresenterTest {
     public void onVocableToManipulateRetrieved_OrderToViewTo_showVocableData() {
         presenter.onVocableToManipulateRetrieved(VOCABLE);
 
-        verify(view).showVocableData(VOCABLE);
+        verify(view).setPojoUsedInView(VOCABLE);
     }
 
     @Test
-    public void onSaveVocableRequest_ForNewVocableToCreate_OrderToModelToCall_asyncSaveVocableRequest() {
+    public void onSaveVocableRequest_ForNewVocableToCreate_OrderToModelToCall_asyncFindVocablesWithName() {
         final Word NEW_VOCABLE_TO_CREATE = new Word(-1, "newVocable");
 
-        presenter.onSaveVocableRequest(NEW_VOCABLE_TO_CREATE);
+        when(view.getPojoUsedByView()).thenReturn(NEW_VOCABLE_TO_CREATE);
 
-        verify(model).asyncSaveVocable(NEW_VOCABLE_TO_CREATE);
+        presenter.onSaveVocableRequest();
+
+        verify(model).asyncFindVocablesWithName(NEW_VOCABLE_TO_CREATE.getName());
     }
 
     @Test
@@ -77,14 +80,18 @@ public class DictionaryManipulationPresenterTest {
         final Word INITIAL_VOCABLE_IN_VIEW = VOCABLE;
         final Word UPDATED_VOCABLE_IN_VIEW = new Word(INITIAL_VOCABLE_IN_VIEW.getId(), "modifiedText");
 
-        presenter.onSaveVocableRequest(UPDATED_VOCABLE_IN_VIEW);
+        when(view.getPojoUsedByView()).thenReturn(UPDATED_VOCABLE_IN_VIEW);
+
+        presenter.onSaveVocableRequest();
 
         verify(model).asyncUpdateVocable(INITIAL_VOCABLE_IN_VIEW.getId(), UPDATED_VOCABLE_IN_VIEW);
     }
 
     @Test
     public void onSaveVocableRequest_UsingNullVocable_OrderToViewTo_showErrorMessage() {
-        presenter.onSaveVocableRequest(null);
+        when(view.getPojoUsedByView()).thenReturn(null);
+
+        presenter.onSaveVocableRequest();
 
         verify(view).showMessage(String.valueOf(any()));
     }
@@ -93,9 +100,20 @@ public class DictionaryManipulationPresenterTest {
     public void onSaveVocableRequest_UsingVocableWithEmptyName_OrderToViewTo_showErrorMessage() {
         final Word VOCABLE_WITH_EMPTY_NAME = new Word(1, " ");
 
-        presenter.onSaveVocableRequest(VOCABLE_WITH_EMPTY_NAME);
+        when(view.getPojoUsedByView()).thenReturn(VOCABLE_WITH_EMPTY_NAME);
+
+        presenter.onSaveVocableRequest();
 
         verify(view).showMessage(String.valueOf(any()));
+    }
+
+    @Test
+    public void onCreateTranslationsRequest_OrderToViewTo_goToTranslationsManipulationView() {
+        presenter.onVocableToManipulateRetrieved(VOCABLE);
+
+        presenter.onCreateTranslationRequest();
+
+        verify(view).goToTranslationsManipulationView(VOCABLE);
     }
 
     @Test

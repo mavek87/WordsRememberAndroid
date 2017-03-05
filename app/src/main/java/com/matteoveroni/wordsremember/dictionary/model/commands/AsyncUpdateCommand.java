@@ -21,6 +21,8 @@ public class AsyncUpdateCommand extends AsyncCommand {
     private final String[] selectionArgs;
     private final Object nextCommand;
 
+    private int updateResult;
+
     public AsyncUpdateCommand(ContentResolver contentResolver, Uri commandTargetUri, ContentValues values, String selection, String[] selectionArgs) {
         this(contentResolver, commandTargetUri, values, selection, selectionArgs, new AsyncNoOperationCommand(contentResolver));
     }
@@ -41,13 +43,15 @@ public class AsyncUpdateCommand extends AsyncCommand {
 
     @Override
     protected void onUpdateComplete(int token, Object cookie, int result) {
-        dispatchCompletionEvent(result);
+        updateResult = result;
+        dispatchCompletionEvent();
         executeAsyncCommand((AsyncCommand) nextCommand);
     }
 
-    private void dispatchCompletionEvent(int result) {
+    @Override
+    public void dispatchCompletionEvent() {
         if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
-            EventBus.getDefault().postSticky(new EventAsyncUpdateVocableCompleted(result));
+            EventBus.getDefault().postSticky(new EventAsyncUpdateVocableCompleted(updateResult));
         }
     }
 
