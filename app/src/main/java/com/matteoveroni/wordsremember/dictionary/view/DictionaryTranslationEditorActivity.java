@@ -14,6 +14,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
 
@@ -29,6 +30,21 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     private final int PRESENTER_LOADER_ID = 1;
 
     private TranslationEditorFragment TranslationEditorFragment;
+
+    @Override
+    public void saveTranslationAction() {
+        presenter.onSaveTranslationRequest();
+    }
+
+    @Override
+    public Word getPojoUsedByView() {
+        return null;
+    }
+
+    @Override
+    public void setPojoUsedInView(Word translation) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -60,7 +60,7 @@ public class DictionaryVocablesManagerPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        view.goToManipulationView(new Word(""));
+        view.goToVocableEditView(new Word(""));
     }
 
     @Subscribe(sticky = true)
@@ -68,7 +68,7 @@ public class DictionaryVocablesManagerPresenter implements Presenter {
     public void onEvent(EventVocableSelected event) {
         Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        view.goToManipulationView(selectedVocable);
+        view.goToVocableEditView(selectedVocable);
     }
 
     @Subscribe(sticky = true)

@@ -37,14 +37,8 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
-    public Word getPojoUsedByView() {
-        return vocableEditorFragment.getPojoUsedByView();
-    }
-
-    @Override
-    public void setPojoUsedInView(Word vocable) {
-        vocableEditorFragment.setPojoUsedInView(vocable);
-        translationsListFragment.setPojoUsedInView(vocable);
+    public void saveVocableAction() {
+        presenter.onSaveVocableRequest();
     }
 
     @Override
@@ -55,7 +49,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void goToTranslationsManipulationView(Word vocable) {
+    public void goToTranslationEditView(Word vocable) {
         Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationEditorActivity.class);
         intent_goToTranslationsManipulationView.putExtra(
                 Extras.VOCABLE,
@@ -72,6 +66,17 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Word getPojoUsedByView() {
+        return vocableEditorFragment.getPojoUsedByView();
+    }
+
+    @Override
+    public void setPojoUsedInView(Word vocable) {
+        vocableEditorFragment.setPojoUsedInView(vocable);
+        translationsListFragment.setPojoUsedInView(vocable);
     }
 
     @Override
@@ -132,7 +137,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                presenter.onSaveVocableRequest();
+                saveVocableAction();
                 return true;
         }
         return false;

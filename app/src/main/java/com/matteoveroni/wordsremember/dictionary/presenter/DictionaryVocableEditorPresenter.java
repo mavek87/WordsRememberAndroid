@@ -48,7 +48,7 @@ public class DictionaryVocableEditorPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.goToTranslationsManipulationView(persistedVocableInView);
+        view.goToTranslationEditView(persistedVocableInView);
     }
 
     public void onSaveVocableRequest() {

@@ -61,14 +61,14 @@ public class DictionaryVocableEditorPresenterTest {
 
         presenter.attachView(view);
 
-        assertTrue(eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to eventbus before each test", eventBus.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
 
-        assertFalse(eventBus.isRegistered(presenter));
+        assertFalse("Presenter should be unregistered to eventbus after each test", eventBus.isRegistered(presenter));
 
         PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME.clear();
     }
@@ -116,7 +116,7 @@ public class DictionaryVocableEditorPresenterTest {
 
         presenter.onCreateTranslationRequest();
 
-        verify(view).goToTranslationsManipulationView(VOCABLE);
+        verify(view).goToTranslationEditView(VOCABLE);
     }
 
     @Test

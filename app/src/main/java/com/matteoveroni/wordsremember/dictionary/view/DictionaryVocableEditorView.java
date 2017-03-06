@@ -9,9 +9,11 @@ import com.matteoveroni.wordsremember.pojos.Word;
 
 public interface DictionaryVocableEditorView extends ViewPojoUser<Word>{
 
+    void saveVocableAction();
+
     void createTranslationAction();
 
-    void goToTranslationsManipulationView(Word vocable);
+    void goToTranslationEditView(Word vocable);
 
     void returnToPreviousView();
 

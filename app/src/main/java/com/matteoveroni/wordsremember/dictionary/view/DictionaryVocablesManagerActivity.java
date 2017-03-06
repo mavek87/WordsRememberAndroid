@@ -38,11 +38,11 @@ public class DictionaryVocablesManagerActivity extends AppCompatActivity impleme
     }
 
     @Override
-    public void goToManipulationView(Word vocableToManipulate) {
+    public void goToVocableEditView(Word vocableToEdit) {
         Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryVocableEditorActivity.class);
         intent_goToManipulationActivity.putExtra(
                 Extras.VOCABLE,
-                vocableToManipulate.toJson()
+                vocableToEdit.toJson()
         );
         startActivity(intent_goToManipulationActivity);
     }

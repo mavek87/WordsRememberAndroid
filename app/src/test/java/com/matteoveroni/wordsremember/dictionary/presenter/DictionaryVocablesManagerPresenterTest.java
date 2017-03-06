@@ -49,14 +49,14 @@ public class DictionaryVocablesManagerPresenterTest {
 
         presenter.attachView(view);
 
-        assertTrue(eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to eventbus before each test", eventBus.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
 
-        assertFalse(eventBus.isRegistered(presenter));
+        assertFalse("Presenter should be unregistered to eventbus after each test", eventBus.isRegistered(presenter));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class DictionaryVocablesManagerPresenterTest {
 
         presenter.onEvent(vocableSelected);
 
-        verify(view).goToManipulationView(VOCABLE);
+        verify(view).goToVocableEditView(VOCABLE);
     }
 
     @Test
