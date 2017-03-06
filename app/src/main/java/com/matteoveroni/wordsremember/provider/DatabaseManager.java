@@ -115,6 +115,4 @@ public class DatabaseManager extends SQLiteOpenHelper {
             Log.d(TAG, "Error while exporting db on sd (" + backupDB.getAbsolutePath() + ")" + "\n" + e);
         }
     }
-
-
 }

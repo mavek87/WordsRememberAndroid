@@ -6,7 +6,6 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +20,14 @@ import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
-import com.matteoveroni.wordsremember.ui.adapters.VocableListViewAdapter;
 
 /**
  * @author Matteo Veroni
  */
 
-public class TranslationsManagementFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewPojoUser<Word> {
+public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewPojoUser<Word> {
 
-    public static final String TAG = TagGenerator.tag(TranslationsManagementFragment.class);
+    public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
 
     private final int CURSOR_LOADER_ID = 1;
 
@@ -38,7 +36,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_translations_management, container, false);
+        View view = inflater.inflate(R.layout.fragment_translations_list, container, false);
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
         return view;
@@ -64,7 +62,7 @@ public class TranslationsManagementFragment extends ListFragment implements Load
     @Override
     public void setPojoUsedInView(Word vocable) {
         if (vocable == null) {
-            throw new IllegalArgumentException("Error setting pojo for TranslationsManagementFragment. Vocable passed cannot be null!");
+            throw new IllegalArgumentException("Error setting pojo for TranslationsListFragment. Vocable passed cannot be null!");
         }
         if (vocableInView == null) {
             vocableInView = vocable;

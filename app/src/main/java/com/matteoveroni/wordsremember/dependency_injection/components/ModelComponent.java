@@ -2,9 +2,9 @@ package com.matteoveroni.wordsremember.dependency_injection.components;
 
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationsManipulationPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocablesManagerPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -18,9 +18,9 @@ import dagger.Component;
 @Component(modules = {AppModule.class, ModelModule.class})
 public interface ModelComponent {
 
-    void inject(DictionaryManagementPresenterFactory managementPresenterFactory);
+    void inject(DictionaryVocablesManagerPresenterFactory managementPresenterFactory);
 
-    void inject(DictionaryManipulationPresenterFactory manipulationPresenterFactory);
+    void inject(DictionaryVocableEditorPresenterFactory manipulationPresenterFactory);
 
-    void inject(DictionaryTranslationsManipulationPresenterFactory translationsManipulationPresenterFactory);
+    void inject(DictionaryTranslationEditorPresenterFactory translationsManipulationPresenterFactory);
 }

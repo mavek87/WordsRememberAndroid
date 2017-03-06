@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dictionary.view.DictionaryManipulationActivity">
+    tools:context=".dictionary.view.DictionaryVocableEditorActivity">
 
     <TextView
         android:id="@+id/fragment_dictionary_manipulation_title"

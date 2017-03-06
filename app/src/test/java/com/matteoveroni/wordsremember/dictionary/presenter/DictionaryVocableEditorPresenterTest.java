@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.view.ViewDictionaryManipulation;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditorView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -33,16 +33,16 @@ import static org.mockito.Mockito.when;
  * Created by Matteo Veroni
  */
 
-public class DictionaryManipulationPresenterTest {
+public class DictionaryVocableEditorPresenterTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private ViewDictionaryManipulation view;
+    private DictionaryVocableEditorView view;
     @Mock
     private DictionaryDAO model;
 
-    private DictionaryManipulationPresenter presenter;
+    private DictionaryVocableEditorPresenter presenter;
 
     private static final EventBus eventBus = EventBus.getDefault();
 
@@ -223,8 +223,8 @@ public class DictionaryManipulationPresenterTest {
         }
 
         @Override
-        public DictionaryManipulationPresenter create() {
-            return new DictionaryManipulationPresenter(model);
+        public DictionaryVocableEditorPresenter create() {
+            return new DictionaryVocableEditorPresenter(model);
         }
     }
 }

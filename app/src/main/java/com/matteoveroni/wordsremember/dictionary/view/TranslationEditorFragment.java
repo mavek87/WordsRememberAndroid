@@ -16,18 +16,18 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class TranslationsManipulationFragment extends Fragment {
+public class TranslationEditorFragment extends Fragment {
 
-    public static final String TAG = TagGenerator.tag(TranslationsManipulationFragment.class);
+    public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
     private Unbinder viewInjector;
 
-    public TranslationsManipulationFragment() {
+    public TranslationEditorFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dictionary_translations_manipulation, container, false);
+        View view = inflater.inflate(R.layout.fragment_translation_editor, container, false);
         viewInjector = ButterKnife.bind(this, view);
         return view;
     }

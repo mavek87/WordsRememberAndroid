@@ -10,14 +10,14 @@ import javax.inject.Inject;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationPresenterFactory implements PresenterFactory {
+public class DictionaryVocableEditorPresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO injectedModel;
 
     @Override
-    public DictionaryManipulationPresenter create() {
+    public DictionaryVocableEditorPresenter create() {
         WordsRemember.getModelComponent().inject(this);
-        return new DictionaryManipulationPresenter(injectedModel);
+        return new DictionaryVocableEditorPresenter(injectedModel);
     }
 }

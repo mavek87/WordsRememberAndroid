@@ -13,10 +13,10 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManipulationPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenter;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -26,29 +26,29 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManipulationActivity extends AppCompatActivity implements ViewDictionaryManipulation, LoaderManager.LoaderCallbacks<DictionaryManipulationPresenter> {
+public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditorView, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryManipulationActivity.class);
+    public static final String TAG = TagGenerator.tag(DictionaryVocableEditorActivity.class);
 
-    private VocableManipulationFragment vocableManipulationFragment;
-    private TranslationsManagementFragment translationsManagementFragment;
+    private VocableEditorFragment vocableEditorFragment;
+    private TranslationsListFragment translationsListFragment;
 
-    private DictionaryManipulationPresenter presenter;
+    private DictionaryVocableEditorPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
     public Word getPojoUsedByView() {
-        return vocableManipulationFragment.getPojoUsedByView();
+        return vocableEditorFragment.getPojoUsedByView();
     }
 
     @Override
     public void setPojoUsedInView(Word vocable) {
-        vocableManipulationFragment.setPojoUsedInView(vocable);
-        translationsManagementFragment.setPojoUsedInView(vocable);
+        vocableEditorFragment.setPojoUsedInView(vocable);
+        translationsListFragment.setPojoUsedInView(vocable);
     }
 
     @Override
-    @OnClick(R.id.dictionary_manipulation_floating_action_button)
+    @OnClick(R.id.dictionary_editor_floating_action_button)
     @SuppressWarnings("unused")
     public void createTranslationAction() {
         presenter.onCreateTranslationRequest();
@@ -56,7 +56,7 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
 
     @Override
     public void goToTranslationsManipulationView(Word vocable) {
-        Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationsManipulationActivity.class);
+        Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationEditorActivity.class);
         intent_goToTranslationsManipulationView.putExtra(
                 Extras.VOCABLE,
                 vocable.toJson()
@@ -77,11 +77,11 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary_manipulation);
+        setContentView(R.layout.activity_dictionary_vocable_editor);
         ButterKnife.bind(this);
 
-        vocableManipulationFragment = (VocableManipulationFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_manipulation_fragment);
-        translationsManagementFragment = (TranslationsManagementFragment) getSupportFragmentManager().findFragmentById(R.id.translations_management_fragment);
+        vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
+        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -139,17 +139,17 @@ public class DictionaryManipulationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public Loader<DictionaryManipulationPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManipulationPresenterFactory());
+    public Loader<DictionaryVocableEditorPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryVocableEditorPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManipulationPresenter> loader, DictionaryManipulationPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryVocableEditorPresenter> loader, DictionaryVocableEditorPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManipulationPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryVocableEditorPresenter> loader) {
         presenter = null;
     }
 }

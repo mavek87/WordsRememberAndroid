@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryManagementActivity;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocablesManagerActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
@@ -20,12 +20,10 @@ import butterknife.OnClick;
 /**
  * Main Menu Activity
  */
-public class MainMenuActivity extends AppCompatActivity
-        implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
-
-    private static final int PRESENTER_LOADER_ID = 1;
+public class MainMenuActivity extends AppCompatActivity implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
 
     private MainMenuPresenter presenter;
+    private static final int PRESENTER_LOADER_ID = 1;
 
     @BindView(R.id.main_menu_btn_start)
     Button btn_start;
@@ -79,7 +77,7 @@ public class MainMenuActivity extends AppCompatActivity
 
         // Todo: remove this lines in production code
         // This create a bug, if a vocable is inserted here EventAsyncSaveVocable is erroneously propagated
-        // to VocableManipulationFragment and causes "goBackActivity for the firstTime bug"
+        // to VocableEditorFragment and causes "goBackActivity for the firstTime bug"
 
         // Use this line to reset the database if changes in some contract class schema has occurred
 //        DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
@@ -109,7 +107,7 @@ public class MainMenuActivity extends AppCompatActivity
 
     @Override
     public void startDictionaryManagement() {
-        Intent intentStartDictionary = new Intent(getBaseContext(), DictionaryManagementActivity.class);
+        Intent intentStartDictionary = new Intent(getBaseContext(), DictionaryVocablesManagerActivity.class);
         startActivity(intentStartDictionary);
     }
 }

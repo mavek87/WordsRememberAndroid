@@ -14,20 +14,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.view.DictionaryManipulationActivity"
-    tools:showIn="@layout/activity_dictionary_manipulation">
+    tools:context=".dictionary.view.DictionaryVocableEditorActivity"
+    tools:showIn="@layout/activity_dictionary_vocable_editor">
 
     <fragment
-        android:id="@+id/dictionary_manipulation_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.VocableManipulationFragment"
+        android:id="@+id/dictionary_vocable_editor_fragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.VocableEditorFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50" />
 
     <fragment
-        android:id="@+id/translations_management_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.TranslationsManagementFragment"
+        android:id="@+id/dictionary_translations_list_fragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.TranslationsListFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50" />
+
 </LinearLayout>

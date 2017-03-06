@@ -29,16 +29,16 @@
         </activity>
 
         <activity
-            android:name=".dictionary.view.DictionaryManagementActivity"
+            android:name=".dictionary.view.DictionaryVocablesManagerActivity"
             android:label="@string/title_activity_dictionary_management" />
 
         <activity
-            android:name=".dictionary.view.DictionaryManipulationActivity"
+            android:name=".dictionary.view.DictionaryVocableEditorActivity"
             android:label="@string/title_activity_dictionary_manipulation"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.DictionaryTranslationsManipulationActivity"
+            android:name=".dictionary.view.DictionaryTranslationEditorActivity"
             android:label="@string/title_activity_dictionary_translations"
             android:theme="@style/AppTheme.NoActionBar" />
 

@@ -1,8 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 
 import javax.inject.Inject;
 
@@ -10,14 +10,14 @@ import javax.inject.Inject;
  * @author Matteo Veroni
  */
 
-public class DictionaryTranslationsManipulationPresenterFactory implements PresenterFactory {
+public class DictionaryVocablesManagerPresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO injectedModel;
 
     @Override
-    public DictionaryTranslationsManipulationPresenter create() {
+    public DictionaryVocablesManagerPresenter create() {
         WordsRemember.getModelComponent().inject(this);
-        return new DictionaryTranslationsManipulationPresenter(injectedModel);
+        return new DictionaryVocablesManagerPresenter(injectedModel);
     }
 }

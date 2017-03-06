@@ -24,9 +24,9 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class VocableManipulationFragment extends Fragment implements ViewPojoUser<Word> {
+public class VocableEditorFragment extends Fragment implements ViewPojoUser<Word> {
 
-    public static final String TAG = TagGenerator.tag(VocableManipulationFragment.class);
+    public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
@@ -41,12 +41,12 @@ public class VocableManipulationFragment extends Fragment implements ViewPojoUse
     @BindView(R.id.fragment_dictionary_manipulation_txt_vocable_name)
     EditText txt_vocableName;
 
-    public VocableManipulationFragment() {
+    public VocableEditorFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dictionary_manipulation, container, false);
+        View view = inflater.inflate(R.layout.fragment_vocable_editor, container, false);
         viewInjector = ButterKnife.bind(this, view);
         return view;
     }
@@ -67,7 +67,7 @@ public class VocableManipulationFragment extends Fragment implements ViewPojoUse
     @Override
     public void setPojoUsedInView(Word vocableToShow) {
         if (vocableToShow == null) {
-            throw new IllegalArgumentException("Error setting pojo for VocableManipulationFragment. Vocable passed cannot be null!");
+            throw new IllegalArgumentException("Error setting pojo for VocableEditorFragment. Vocable passed cannot be null!");
         }
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");

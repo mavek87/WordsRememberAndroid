@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocablesManagerPresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryManagementPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocablesManagerPresenter;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -22,12 +22,12 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryManagementActivity extends AppCompatActivity implements ViewDictionaryManagement, LoaderManager.LoaderCallbacks<DictionaryManagementPresenter> {
+public class DictionaryVocablesManagerActivity extends AppCompatActivity implements DictionaryVocablesManagerView, LoaderManager.LoaderCallbacks<DictionaryVocablesManagerPresenter> {
 
-    private DictionaryManagementPresenter presenter;
+    private DictionaryVocablesManagerPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
-    public DictionaryManagementActivity() {
+    public DictionaryVocablesManagerActivity() {
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DictionaryManagementActivity extends AppCompatActivity implements V
 
     @Override
     public void goToManipulationView(Word vocableToManipulate) {
-        Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryManipulationActivity.class);
+        Intent intent_goToManipulationActivity = new Intent(getApplicationContext(), DictionaryVocableEditorActivity.class);
         intent_goToManipulationActivity.putExtra(
                 Extras.VOCABLE,
                 vocableToManipulate.toJson()
@@ -56,7 +56,7 @@ public class DictionaryManagementActivity extends AppCompatActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_dictionary_management);
+        setContentView(R.layout.activity_dictionary_vocables_manager);
         ButterKnife.bind(this);
 
         loadPresenter();
@@ -76,17 +76,17 @@ public class DictionaryManagementActivity extends AppCompatActivity implements V
     }
 
     @Override
-    public Loader<DictionaryManagementPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryManagementPresenterFactory());
+    public Loader<DictionaryVocablesManagerPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new DictionaryVocablesManagerPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryManagementPresenter> loader, DictionaryManagementPresenter presenter) {
+    public void onLoadFinished(Loader<DictionaryVocablesManagerPresenter> loader, DictionaryVocablesManagerPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryManagementPresenter> loader) {
+    public void onLoaderReset(Loader<DictionaryVocablesManagerPresenter> loader) {
         presenter = null;
     }
 
