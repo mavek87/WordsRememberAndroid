@@ -14,7 +14,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
 
 import butterknife.ButterKnife;
 
@@ -22,28 +22,28 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class DictionaryTranslationEditorActivity extends AppCompatActivity implements DictionaryTranslationEditorView, LoaderManager.LoaderCallbacks<DictionaryTranslationEditorPresenter> {
+public class DictionaryTranslationEditorActivity extends AppCompatActivity implements DictionaryTranslationEditor, LoaderManager.LoaderCallbacks<DictionaryTranslationEditorPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryTranslationEditorActivity.class);
 
     private DictionaryTranslationEditorPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
-    private TranslationEditorFragment TranslationEditorFragment;
+    private TranslationEditorFragment translationEditorFragment;
 
     @Override
     public void saveTranslationAction() {
-        presenter.onSaveTranslationRequest();
+        presenter.onSaveTranslationForVocableRequest();
     }
 
     @Override
-    public Word getPojoUsedByView() {
-        return null;
+    public TranslationForVocable getPojoUsedByView() {
+        return translationEditorFragment.getPojoUsedByView();
     }
 
     @Override
-    public void setPojoUsedInView(Word translation) {
-
+    public void setPojoUsedInView(TranslationForVocable translationForVocable) {
+        this.translationEditorFragment.setPojoUsedInView(translationForVocable);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
         setContentView(R.layout.activity_dictionary_translation_editor);
         ButterKnife.bind(this);
 
-        TranslationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
+        TranslationEditorFragment translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

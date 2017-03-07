@@ -10,7 +10,7 @@
     tools:context=".dictionary.view.DictionaryTranslationEditorActivity">
 
     <TextView
-        android:id="@+id/fragment_dictionary_manipulation_title"
+        android:id="@+id/fragment_translation_editor_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -19,7 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/fragment_dictionary_manipulation_txt_vocable_name"
+        android:id="@+id/fragment_translation_editor_txt_vocable_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"

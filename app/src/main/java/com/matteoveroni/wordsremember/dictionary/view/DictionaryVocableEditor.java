@@ -1,13 +1,13 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
-import com.matteoveroni.wordsremember.interfaces.view.ViewPojoUser;
+import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 /**
  * @author Matteo Veroni
  */
 
-public interface DictionaryVocableEditorView extends ViewPojoUser<Word>{
+public interface DictionaryVocableEditor extends PojoManipulable<Word> {
 
     void saveVocableAction();
 

@@ -26,7 +26,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditorView, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
+public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditor, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryVocableEditorActivity.class);
 

@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditorView;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditor;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -38,7 +38,7 @@ public class DictionaryVocableEditorPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryVocableEditorView view;
+    private DictionaryVocableEditor view;
     @Mock
     private DictionaryDAO model;
 

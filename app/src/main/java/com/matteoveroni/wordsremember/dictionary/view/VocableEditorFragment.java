@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.ViewPojoUser;
+import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.BindView;
@@ -24,21 +24,21 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class VocableEditorFragment extends Fragment implements ViewPojoUser<Word> {
+public class VocableEditorFragment extends Fragment implements PojoManipulable<Word> {
 
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
     private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
-    private Unbinder viewInjector;
 
+    private Unbinder viewInjector;
     private Word vocableInView;
 
-    @BindView(R.id.fragment_dictionary_manipulation_title)
+    @BindView(R.id.fragment_vocable_editor_title)
     TextView lbl_title;
 
-    @BindView(R.id.fragment_dictionary_manipulation_txt_vocable_name)
+    @BindView(R.id.fragment_vocable_editor_txt_vocable_name)
     EditText txt_vocableName;
 
     public VocableEditorFragment() {
@@ -59,9 +59,7 @@ public class VocableEditorFragment extends Fragment implements ViewPojoUser<Word
 
     @Override
     public Word getPojoUsedByView() {
-        Word currentVocableInView = new Word(txt_vocableName.getText().toString());
-        currentVocableInView.setId(vocableInView.getId());
-        return currentVocableInView;
+        return new Word(vocableInView.getId(), txt_vocableName.getText().toString());
     }
 
     @Override
@@ -71,11 +69,10 @@ public class VocableEditorFragment extends Fragment implements ViewPojoUser<Word
         }
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");
-            txt_vocableName.setText("");
         } else {
             lbl_title.setText("Edit vocable");
-            txt_vocableName.setText(vocableToShow.getName());
         }
+        txt_vocableName.setText(vocableToShow.getName());
         vocableInView = vocableToShow;
     }
 

@@ -2,9 +2,9 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditor;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,7 +18,7 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryTranslationEditorView view;
+    private DictionaryTranslationEditor view;
 
     public DictionaryTranslationEditorPresenter(DictionaryDAO model) {
         this.model = model;
@@ -26,7 +26,7 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryTranslationEditorView) view;
+        this.view = (DictionaryTranslationEditor) view;
         eventBus.register(this);
     }
 
@@ -36,13 +36,16 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
         view = null;
     }
 
-    public void onSaveTranslationRequest() {
-        Word translationInView = view.getPojoUsedByView();
-        model.asyncSaveTranslationForVocable(translationInView, new Word("fakeVocable"));
+    public void onSaveTranslationForVocableRequest() {
+        TranslationForVocable translationForVocableInView = view.getPojoUsedByView();
+        model.asyncSaveTranslationForVocable(
+                translationForVocableInView.getTranslation(),
+                translationForVocableInView.getVocable()
+        );
     }
 
     @Subscribe
-    public void Event(EventAsyncSaveTranslationCompleted event){
+    public void Event(EventAsyncSaveTranslationCompleted event) {
 //        return view;
     }
 }

@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.interfaces.view.ViewPojoUser;
+import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -25,7 +25,7 @@ import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
  * @author Matteo Veroni
  */
 
-public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, ViewPojoUser<Word> {
+public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulable<Word> {
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
 
