@@ -13,4 +13,5 @@ public interface DictionaryTranslationEditorView extends PojoManipulable<Transla
 
     void returnToPreviousView();
 
+    void showMessage(String s);
 }

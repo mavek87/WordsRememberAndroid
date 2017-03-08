@@ -60,9 +60,6 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public void setPojoUsedInView(TranslationForVocable pojo) {
-        if (pojo == null || pojo.getVocable() == null || pojo.getTranslation() == null) {
-            throw new IllegalArgumentException("Error setting pojo for TranslationEditorFragment.");
-        }
         if (pojo.getTranslation().getName().trim().isEmpty()) {
             lbl_title.setText("Create translation for " + pojo.getVocable().getName());
         } else {

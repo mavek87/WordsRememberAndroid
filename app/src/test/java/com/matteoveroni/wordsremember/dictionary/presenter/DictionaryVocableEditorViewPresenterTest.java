@@ -25,6 +25,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,7 +97,7 @@ public class DictionaryVocableEditorViewPresenterTest {
         presenter.onSaveVocableRequest();
 
         verify(view).showMessage(String.valueOf(any()));
-        verify(model, never()).asyncFindVocablesByName(any(String.class));
+        verify(model, never()).asyncFindVocablesByName(anyString());
     }
 
     @Test
@@ -107,7 +108,7 @@ public class DictionaryVocableEditorViewPresenterTest {
         presenter.onSaveVocableRequest();
 
         verify(view).showMessage(any(String.class));
-        verify(model, never()).asyncFindVocablesByName(any(String.class));
+        verify(model, never()).asyncFindVocablesByName(anyString());
     }
 
     @Test
@@ -163,7 +164,7 @@ public class DictionaryVocableEditorViewPresenterTest {
 
         presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
 
-        verify(view).showMessage(any(String.class));
+        verify(view).showMessage(anyString());
         verify(model, never()).asyncSaveVocable(any(Word.class));
     }
 
@@ -193,7 +194,7 @@ public class DictionaryVocableEditorViewPresenterTest {
 
         presenter.onEvent(event);
 
-        verify(view).showMessage(any(String.class));
+        verify(view).showMessage(anyString());
         verify(model, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
 

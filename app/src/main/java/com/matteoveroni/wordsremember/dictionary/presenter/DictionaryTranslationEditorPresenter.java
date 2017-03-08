@@ -21,8 +21,6 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
     private final DictionaryDAO model;
     private DictionaryTranslationEditorView view;
 
-    private TranslationForVocable persistedTranslationForVocableUsedByView;
-
     public DictionaryTranslationEditorPresenter(DictionaryDAO model) {
         this.model = model;
     }
@@ -40,22 +38,21 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
     }
 
     public void onSaveTranslationForVocableRequest() {
-        TranslationForVocable translationForVocableInView = view.getPojoUsedByView();
-        model.asyncSaveTranslationForVocable(
-                translationForVocableInView.getTranslation(),
-                translationForVocableInView.getVocable()
-        );
+        TranslationForVocable translationForVocable = view.getPojoUsedByView();
+        if (translationForVocable.getTranslation().getName().trim().isEmpty()) {
+            view.showMessage("Is not possible to save empty translations for vocables.");
+            return;
+        }
+        model.asyncSaveTranslationForVocable(translationForVocable.getTranslation(), translationForVocable.getVocable());
     }
 
-    public void onVocableForTranslationRetrieved(Word vocable){
-        Word translation = new Word("");
-        TranslationForVocable translationForVocable = new TranslationForVocable(vocable, translation);
-        view.setPojoUsedInView(translationForVocable);
+    public void onVocableForTranslationRetrieved(Word vocable) {
+        Word newEmptyTranslation = new Word("");
+        view.setPojoUsedInView(new TranslationForVocable(vocable, newEmptyTranslation));
     }
 
     @Subscribe
-    public void Event(EventAsyncSaveTranslationCompleted event) {
-        persistedTranslationForVocableUsedByView = view.getPojoUsedByView();
+    public void onEvent(EventAsyncSaveTranslationCompleted event) {
         eventBus.removeStickyEvent(event);
         view.returnToPreviousView();
     }

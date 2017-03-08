@@ -22,6 +22,7 @@ import static junit.framework.Assert.assertNotNull;
 import static com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest.TypeOfManipulation;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -84,7 +85,7 @@ public class DictionaryVocablesManagerPresenterTest {
 
         presenter.onEvent(asyncVocableDeletionComplete);
 
-        verify(view).showMessage(any(String.class));
+        verify(view).showMessage(anyString());
     }
 
     private class DictionaryVocablesManagerPresenterFactoryForTests implements PresenterFactory {
