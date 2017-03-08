@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary.view.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

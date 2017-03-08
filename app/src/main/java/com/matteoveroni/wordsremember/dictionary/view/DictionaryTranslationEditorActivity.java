@@ -15,6 +15,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -60,7 +61,7 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
         setContentView(R.layout.activity_dictionary_translation_editor);
         ButterKnife.bind(this);
 
-        TranslationEditorFragment translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
+        translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -102,7 +103,7 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_management_editing, menu);
+        getMenuInflater().inflate(R.menu.menu_dictionary_vocable_editor, menu);
         return true;
     }
 

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenter;
@@ -128,7 +130,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_management_editing, menu);
+        getMenuInflater().inflate(R.menu.menu_dictionary_vocable_editor, menu);
         return true;
     }
 

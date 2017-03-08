@@ -45,7 +45,7 @@ public class DictionaryVocablesManagerPresenterTest {
 
     @Before
     public void setUp() {
-        presenter = new DictionaryManagementPresenterFactoryForTests(dictionaryModel).create();
+        presenter = new DictionaryVocablesManagerPresenterFactoryForTests(dictionaryModel).create();
 
         presenter.attachView(view);
 
@@ -87,10 +87,10 @@ public class DictionaryVocablesManagerPresenterTest {
         verify(view).showMessage(any(String.class));
     }
 
-    private class DictionaryManagementPresenterFactoryForTests implements PresenterFactory {
+    private class DictionaryVocablesManagerPresenterFactoryForTests implements PresenterFactory {
         private DictionaryDAO model;
 
-        DictionaryManagementPresenterFactoryForTests(DictionaryDAO model) {
+        DictionaryVocablesManagerPresenterFactoryForTests(DictionaryDAO model) {
             this.model = model;
         }
 
