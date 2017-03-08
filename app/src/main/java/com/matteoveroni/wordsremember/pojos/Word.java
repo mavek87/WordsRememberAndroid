@@ -71,4 +71,8 @@ public class Word {
         result = 31 * result + getName().hashCode();
         return result;
     }
+
+    public static final boolean isValid(Word word) {
+        return word != null && word.getName() != null;
+    }
 }

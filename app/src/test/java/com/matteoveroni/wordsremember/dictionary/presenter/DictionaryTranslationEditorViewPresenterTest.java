@@ -11,10 +11,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -54,14 +57,24 @@ public class DictionaryTranslationEditorViewPresenterTest {
     }
 
     @Test
-    public void onSaveTranslationForVocableInViewRequest_WithValidTranslationForExistingVocable_Call_asyncSaveTranslationForVocable() {
+    public void onSaveTranslationForVocableRequest_WithValidTranslationForExistingVocable_Call_asyncSaveTranslationForVocable() {
         when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         presenter.onSaveTranslationForVocableRequest();
 
-        verify(model).asyncSaveTranslationForVocable(
-                view.getPojoUsedByView().getVocable(),
-                view.getPojoUsedByView().getTranslation()
+        final ArgumentCaptor<Word> argTranslation = ArgumentCaptor.forClass(Word.class);
+        final ArgumentCaptor<Word> argVocable = ArgumentCaptor.forClass(Word.class);
+
+        verify(model).asyncSaveTranslationForVocable(argTranslation.capture(), argVocable.capture());
+
+        assertEquals(
+                "Model should save translation taken from view",
+                TRANSLATION_FOR_VOCABLE.getTranslation(), argTranslation.getValue()
+        );
+        assertEquals(
+                "Model should save translation for vocable used by view",
+                TRANSLATION_FOR_VOCABLE.getVocable(),
+                argVocable.getValue()
         );
     }
 
