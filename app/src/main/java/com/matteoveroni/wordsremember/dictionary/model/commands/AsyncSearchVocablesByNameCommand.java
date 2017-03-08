@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.model.commands;
 
 import android.content.ContentResolver;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
@@ -32,8 +32,8 @@ public class AsyncSearchVocablesByNameCommand extends AsyncQueryCommand {
 
     @Override
     public void dispatchCompletionEvent() {
-        EventAsyncSearchVocablesByNameCompleted event =
-                new EventAsyncSearchVocablesByNameCompleted(DictionaryDAO.cursorToListOfVocables(queryCompleteCursor));
+        EventAsyncFindVocablesByNameCompleted event =
+                new EventAsyncFindVocablesByNameCompleted(DictionaryDAO.cursorToListOfVocables(queryCompleteCursor));
         EventBus.getDefault().postSticky(event);
     }
 }

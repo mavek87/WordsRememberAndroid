@@ -18,9 +18,9 @@ import dagger.Component;
 @Component(modules = {AppModule.class, ModelModule.class})
 public interface ModelComponent {
 
-    void inject(DictionaryVocablesManagerPresenterFactory managementPresenterFactory);
+    void inject(DictionaryVocablesManagerPresenterFactory vocableManagerPresenterFactory);
 
-    void inject(DictionaryVocableEditorPresenterFactory manipulationPresenterFactory);
+    void inject(DictionaryVocableEditorPresenterFactory vocableEditorPresenterFactory);
 
-    void inject(DictionaryTranslationEditorPresenterFactory translationsManipulationPresenterFactory);
+    void inject(DictionaryTranslationEditorPresenterFactory translationEditorPresenterFactory);
 }

@@ -30,16 +30,16 @@
 
         <activity
             android:name=".dictionary.view.DictionaryVocablesManagerActivity"
-            android:label="@string/title_activity_dictionary_management" />
+            android:label="@string/title_activity_dictionary_vocables_manager" />
 
         <activity
             android:name=".dictionary.view.DictionaryVocableEditorActivity"
-            android:label="@string/title_activity_dictionary_manipulation"
+            android:label="@string/title_activity_dictionary_vocable_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".dictionary.view.DictionaryTranslationEditorActivity"
-            android:label="@string/title_activity_dictionary_translations"
+            android:label="@string/title_activity_dictionary_translation_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

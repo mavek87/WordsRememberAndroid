@@ -2,9 +2,10 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditor;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
+import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,7 +19,9 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryTranslationEditor view;
+    private DictionaryTranslationEditorView view;
+
+    private TranslationForVocable persistedTranslationForVocableUsedByView;
 
     public DictionaryTranslationEditorPresenter(DictionaryDAO model) {
         this.model = model;
@@ -26,7 +29,7 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryTranslationEditor) view;
+        this.view = (DictionaryTranslationEditorView) view;
         eventBus.register(this);
     }
 
@@ -44,8 +47,16 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
         );
     }
 
+    public void onVocableForTranslationRetrieved(Word vocable){
+        Word translation = new Word("");
+        TranslationForVocable translationForVocable = new TranslationForVocable(vocable, translation);
+        view.setPojoUsedInView(translationForVocable);
+    }
+
     @Subscribe
     public void Event(EventAsyncSaveTranslationCompleted event) {
-//        return view;
+        persistedTranslationForVocableUsedByView = view.getPojoUsedByView();
+        eventBus.removeStickyEvent(event);
+        view.returnToPreviousView();
     }
 }

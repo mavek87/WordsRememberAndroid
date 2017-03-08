@@ -8,10 +8,10 @@ import java.util.List;
  * @author Matteo Veroni
  */
 
-public class EventAsyncSearchVocablesByNameCompleted {
+public class EventAsyncFindVocablesByNameCompleted {
     private List<Word> vocablesWithSearchedName;
 
-    public EventAsyncSearchVocablesByNameCompleted(List<Word> vocablesWithSearchedName) {
+    public EventAsyncFindVocablesByNameCompleted(List<Word> vocablesWithSearchedName) {
         this.vocablesWithSearchedName = vocablesWithSearchedName;
     }
 

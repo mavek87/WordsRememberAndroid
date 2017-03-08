@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditor;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditorView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -22,9 +22,9 @@ public class DictionaryVocableEditorPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryVocableEditor view;
+    private DictionaryVocableEditorView view;
 
-    private Word persistedVocableInView;
+    private Word persistedVocableUsedByView;
 
     public DictionaryVocableEditorPresenter(DictionaryDAO model) {
         this.model = model;
@@ -32,7 +32,7 @@ public class DictionaryVocableEditorPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryVocableEditor) view;
+        this.view = (DictionaryVocableEditorView) view;
         eventBus.register(this);
     }
 
@@ -42,28 +42,26 @@ public class DictionaryVocableEditorPresenter implements Presenter {
         view = null;
     }
 
-    public void onVocableToManipulateRetrieved(Word vocable) {
-        persistedVocableInView = vocable;
+    public void onVocableToEditRetrieved(Word vocable) {
+        persistedVocableUsedByView = vocable;
         view.setPojoUsedInView(vocable);
     }
 
     public void onCreateTranslationRequest() {
-        view.goToTranslationEditView(persistedVocableInView);
+        view.goToTranslationEditView(persistedVocableUsedByView);
     }
 
     public void onSaveVocableRequest() {
         Word vocableInView = view.getPojoUsedByView();
         if (isVocableValid(vocableInView)) {
-            model.asyncFindVocablesWithName(vocableInView.getName());
-//            storeCurrentVocableInView();
+            model.asyncFindVocablesByName(vocableInView.getName());
         } else {
             view.showMessage("You cannot save a vocable with an empty name. Compile all the data and retry");
         }
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
-    public void onEvent(EventAsyncSearchVocablesByNameCompleted event) {
+    public void onEvent(EventAsyncFindVocablesByNameCompleted event) {
         List<Word> vocablesWithSearchedName = event.getVocablesWithSearchedName();
         int numberOfVocablesWithSearchedName = vocablesWithSearchedName.size();
 
@@ -100,24 +98,19 @@ public class DictionaryVocableEditorPresenter implements Presenter {
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
     public void onEvent(EventAsyncSaveVocableCompleted event) {
         handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
         handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
     }
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
-        persistedVocableInView = view.getPojoUsedByView();
-        try {
-            eventBus.removeStickyEvent(event);
-        } finally {
-            view.returnToPreviousView();
-        }
+        persistedVocableUsedByView = view.getPojoUsedByView();
+        eventBus.removeStickyEvent(event);
+        view.returnToPreviousView();
     }
 
     private boolean isVocableValid(Word vocable) {

@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditor;
+import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Matteo Veroni
  */
-public class DictionaryTranslationEditorPresenterTest {
+public class DictionaryTranslationEditorViewPresenterTest {
 
     private DictionaryTranslationEditorPresenter presenter;
     private static final EventBus EVENT_BUS = EventBus.getDefault();
@@ -31,12 +31,13 @@ public class DictionaryTranslationEditorPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryTranslationEditor view;
+    private DictionaryTranslationEditorView view;
     @Mock
     private DictionaryDAO model;
 
     private final Word VOCABLE = new Word(1, "vocable");
     private final Word VOCABLE_TRANSLATION = new Word("translationForVocable");
+    private final TranslationForVocable TRANSLATION_FOR_VOCABLE = new TranslationForVocable(VOCABLE, VOCABLE_TRANSLATION);
 
     @Before
     public void setUp() {
@@ -53,9 +54,8 @@ public class DictionaryTranslationEditorPresenterTest {
     }
 
     @Test
-    public void onSaveTranslationForVocableInViewRequest_WithValidTranslationForExistingVocable_asyncSaveTranslationForVocableIsCalled() {
-        TranslationForVocable translationForVocable = new TranslationForVocable(VOCABLE, VOCABLE_TRANSLATION);
-        when(view.getPojoUsedByView()).thenReturn(translationForVocable);
+    public void onSaveTranslationForVocableInViewRequest_WithValidTranslationForExistingVocable_Call_asyncSaveTranslationForVocable() {
+        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         presenter.onSaveTranslationForVocableRequest();
 

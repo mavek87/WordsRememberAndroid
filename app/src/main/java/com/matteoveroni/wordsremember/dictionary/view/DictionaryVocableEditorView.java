@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * @author Matteo Veroni
  */
 
-public interface DictionaryVocableEditor extends PojoManipulable<Word> {
+public interface DictionaryVocableEditorView extends PojoManipulable<Word> {
 
     void saveVocableAction();
 

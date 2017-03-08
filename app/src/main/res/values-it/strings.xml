@@ -8,10 +8,10 @@
     <string name="main_menu_settings">Impostazioni</string>
     <string name="main_menu_start_training">Inizia Allenamento</string>
     <string name="title_activity_main_menu">Menù Principale</string>
-    <string name="fragment_dictionary_management_title">Dizionario</string>
+    <string name="fragment_vocables_manager_title">Dizionario</string>
     <string name="remove">Elimina</string>
     <string name="edit">Modifica</string>
     <string name="create_vocable">Crea vocabolo</string>
     <string name="done">Fatto</string>
-    <string name="fragment_translations_management_title">Traduzioni</string>
+    <string name="fragment_translations_manager_title">Traduzioni</string>
 </resources>

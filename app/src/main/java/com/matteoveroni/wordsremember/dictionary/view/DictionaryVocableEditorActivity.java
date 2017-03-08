@@ -26,7 +26,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditor, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
+public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditorView, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
 
     public static final String TAG = TagGenerator.tag(DictionaryVocableEditorActivity.class);
 
@@ -50,12 +50,12 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
 
     @Override
     public void goToTranslationEditView(Word vocable) {
-        Intent intent_goToTranslationsManipulationView = new Intent(getApplicationContext(), DictionaryTranslationEditorActivity.class);
-        intent_goToTranslationsManipulationView.putExtra(
+        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), DictionaryTranslationEditorActivity.class);
+        intent_goToTranslationsEditView.putExtra(
                 Extras.VOCABLE,
                 vocable.toJson()
         );
-        startActivity(intent_goToTranslationsManipulationView);
+        startActivity(intent_goToTranslationsEditView);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(R.string.title_activity_dictionary_manipulation);
+            toolbar.setTitle(R.string.title_activity_dictionary_vocable_editor);
         }
         setSupportActionBar(toolbar);
     }
@@ -105,17 +105,17 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     protected void onStart() {
         super.onStart();
         presenter.attachView(this);
-        Word vocableToManipulate = findVocableToManipulate();
-        presenter.onVocableToManipulateRetrieved(vocableToManipulate);
+        Word vocableToEdit = findVocableToEdit();
+        presenter.onVocableToEditRetrieved(vocableToEdit);
     }
 
-    private Word findVocableToManipulate() {
-        Intent activityStarterIntent = getIntent();
-        if (activityStarterIntent.hasExtra(Extras.VOCABLE)) {
-            String json_vocableToManipulate = activityStarterIntent.getStringExtra(Extras.VOCABLE);
-            return Word.fromJson(json_vocableToManipulate);
+    private Word findVocableToEdit() {
+        Intent starterIntent = getIntent();
+        if (starterIntent.hasExtra(Extras.VOCABLE)) {
+            String json_vocableToEdit = starterIntent.getStringExtra(Extras.VOCABLE);
+            return Word.fromJson(json_vocableToEdit);
         } else {
-            final String errorMessage = "Unexpected Error: Any vocable to manipulate retrieved.";
+            final String errorMessage = "Unexpected Error: No vocable to edit retrieved.";
             Log.e(TAG, errorMessage);
             throw new RuntimeException(errorMessage);
         }
