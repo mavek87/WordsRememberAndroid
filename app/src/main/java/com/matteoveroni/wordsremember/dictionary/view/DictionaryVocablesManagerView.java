@@ -13,4 +13,5 @@ public interface DictionaryVocablesManagerView {
     void goToVocableEditView(Word vocableToEdit);
 
     void showMessage(String message);
+
 }

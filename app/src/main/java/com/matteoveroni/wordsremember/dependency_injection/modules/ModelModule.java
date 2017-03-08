@@ -18,7 +18,6 @@ public class ModelModule {
     }
 
     @Provides
-    @SuppressWarnings("unused")
     public DictionaryDAO provideDictionaryModel(Context context) {
         return new DictionaryDAO(context);
     }

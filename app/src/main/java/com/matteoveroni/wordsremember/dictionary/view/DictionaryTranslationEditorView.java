@@ -8,7 +8,9 @@ import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
  */
 
 public interface DictionaryTranslationEditorView extends PojoManipulable<TranslationForVocable> {
+
     void saveTranslationAction();
 
     void returnToPreviousView();
+
 }

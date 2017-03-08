@@ -41,9 +41,8 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
         presenter.onSaveVocableRequest();
     }
 
-    @Override
     @OnClick(R.id.dictionary_editor_floating_action_button)
-    @SuppressWarnings("unused")
+    @Override
     public void createTranslationAction() {
         presenter.onCreateTranslationRequest();
     }

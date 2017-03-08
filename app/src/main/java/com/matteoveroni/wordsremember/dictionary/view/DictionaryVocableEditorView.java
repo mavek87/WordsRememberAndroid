@@ -18,5 +18,6 @@ public interface DictionaryVocableEditorView extends PojoManipulable<Word> {
     void returnToPreviousView();
 
     void showMessage(String message);
+
 }
 

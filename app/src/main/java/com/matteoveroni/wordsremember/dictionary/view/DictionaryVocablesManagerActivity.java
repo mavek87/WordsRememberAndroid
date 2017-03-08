@@ -30,9 +30,8 @@ public class DictionaryVocablesManagerActivity extends AppCompatActivity impleme
     public DictionaryVocablesManagerActivity() {
     }
 
-    @Override
     @OnClick(R.id.dictionary_management_floating_action_button)
-    @SuppressWarnings("unused")
+    @Override
     public void createVocableAction() {
         presenter.onCreateVocableRequest();
     }

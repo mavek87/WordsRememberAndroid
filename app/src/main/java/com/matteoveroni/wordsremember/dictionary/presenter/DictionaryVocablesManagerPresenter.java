@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class DictionaryVocablesManagerPresenter implements Presenter {
 
-    @SuppressWarnings("unused")
     public static final String TAG = TagGenerator.tag(DictionaryVocablesManagerPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
@@ -64,7 +63,6 @@ public class DictionaryVocablesManagerPresenter implements Presenter {
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
     public void onEvent(EventVocableSelected event) {
         Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
@@ -72,7 +70,6 @@ public class DictionaryVocablesManagerPresenter implements Presenter {
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
     public void onEvent(EventVocableManipulationRequest event) {
         Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
@@ -84,7 +81,6 @@ public class DictionaryVocablesManagerPresenter implements Presenter {
     }
 
     @Subscribe(sticky = true)
-    @SuppressWarnings("unused")
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
         eventBus.removeStickyEvent(event);
         view.showMessage("Vocable removed");
