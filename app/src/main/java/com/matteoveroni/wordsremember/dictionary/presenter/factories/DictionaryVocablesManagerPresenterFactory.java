@@ -1,5 +1,6 @@
-package com.matteoveroni.wordsremember.dictionary.presenter;
+package com.matteoveroni.wordsremember.dictionary.presenter.factories;
 
+import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocablesManagerPresenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;

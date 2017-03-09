@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryTranslationEditorPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;

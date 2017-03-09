@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryVocableEditorPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;

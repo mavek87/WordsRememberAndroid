@@ -2,9 +2,9 @@ package com.matteoveroni.wordsremember.dependency_injection.components;
 
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocablesManagerPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryVocableEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryVocablesManagerPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryTranslationEditorPresenterFactory;
 
 import javax.inject.Singleton;
 

@@ -99,7 +99,7 @@ public class DictionaryDAO {
 
 
     public void asyncSaveTranslation(Word translation) {
-        if (!Word.isValid(translation) || translation.getId() < 1) {
+        if (!Word.isValid(translation)) {
             throw new RuntimeException("");
         }
         final ContentValues translationValue = new ContentValues();
@@ -110,8 +110,7 @@ public class DictionaryDAO {
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
         final Word translation = vocableTranslation.getTranslation();
         final Word vocable = vocableTranslation.getVocable();
-        if (Word.isValid(translation) && translation.getId() < 0 && Word.isValid(vocable) && vocable.getId() > 0) {
-
+        if (Word.isValid(translation) && translation.getId() > 0 && Word.isValid(vocable) && vocable.getId() > 0) {
 
             final ContentValues vocablesTranslationValue = new ContentValues();
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
