@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
-import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
+import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.BindView;
@@ -22,12 +22,12 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class TranslationEditorFragment extends Fragment implements PojoManipulable<TranslationForVocable> {
+public class TranslationEditorFragment extends Fragment implements PojoManipulable<VocableTranslation> {
 
     public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
     private Unbinder viewInjector;
-    private TranslationForVocable translationForVocable;
+    private VocableTranslation vocableTranslation;
 
     @BindView(R.id.fragment_translation_editor_title)
     TextView lbl_title;
@@ -52,19 +52,22 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     }
 
     @Override
-    public TranslationForVocable getPojoUsedByView() {
-        // TODO how to know translation id???
-        return translationForVocable;
+    public VocableTranslation getPojoUsedByView() {
+        long currentTranslationId = vocableTranslation.getTranslation().getId();
+        String currentTranslationName = txt_translationName.getText().toString();
+        Word translation = new Word(currentTranslationId, currentTranslationName);
+        vocableTranslation.setTranslation(translation);
+        return vocableTranslation;
     }
 
     @Override
-    public void setPojoUsedInView(TranslationForVocable pojo) {
+    public void setPojoUsedInView(VocableTranslation pojo) {
         if (pojo.getTranslation().getName().trim().isEmpty()) {
             lbl_title.setText("Create translation for " + pojo.getVocable().getName());
         } else {
             lbl_title.setText("Edit translation for " + pojo.getVocable().getName());
         }
         txt_translationName.setText(pojo.getTranslation().getName());
-        this.translationForVocable = pojo;
+        this.vocableTranslation = pojo;
     }
 }

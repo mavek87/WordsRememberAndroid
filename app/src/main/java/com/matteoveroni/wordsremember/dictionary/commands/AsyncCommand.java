@@ -1,8 +1,7 @@
-package com.matteoveroni.wordsremember.dictionary.model.commands;
+package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
-import android.content.UriMatcher;
 
 /**
  * @author Matteo Veroni

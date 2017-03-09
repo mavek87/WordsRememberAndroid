@@ -1,13 +1,13 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
 import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
-import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
+import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 
 /**
  * Created by Matteo Veroni
  */
 
-public interface DictionaryTranslationEditorView extends PojoManipulable<TranslationForVocable> {
+public interface DictionaryTranslationEditorView extends PojoManipulable<VocableTranslation> {
 
     void saveTranslationAction();
 

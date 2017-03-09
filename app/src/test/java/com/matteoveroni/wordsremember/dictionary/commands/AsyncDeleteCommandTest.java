@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.model.commands;
+package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 import android.net.Uri;

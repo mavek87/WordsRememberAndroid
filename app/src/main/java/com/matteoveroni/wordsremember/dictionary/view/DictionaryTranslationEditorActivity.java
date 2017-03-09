@@ -18,7 +18,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslation
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
+import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -52,13 +52,13 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     }
 
     @Override
-    public TranslationForVocable getPojoUsedByView() {
+    public VocableTranslation getPojoUsedByView() {
         return translationEditorFragment.getPojoUsedByView();
     }
 
     @Override
-    public void setPojoUsedInView(TranslationForVocable translationForVocable) {
-        this.translationEditorFragment.setPojoUsedInView(translationForVocable);
+    public void setPojoUsedInView(VocableTranslation vocableTranslation) {
+        this.translationEditorFragment.setPojoUsedInView(vocableTranslation);
     }
 
     @Override

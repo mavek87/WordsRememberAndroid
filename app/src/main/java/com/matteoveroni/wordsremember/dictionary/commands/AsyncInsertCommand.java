@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.model.commands;
+package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -58,6 +58,7 @@ public class AsyncInsertCommand extends AsyncCommand {
             EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
 
         } else if (commandTargetUri.equals(VocablesTranslationsContract.CONTENT_URI)) {
+            EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
         }
     }
 

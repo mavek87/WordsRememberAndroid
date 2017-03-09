@@ -87,7 +87,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
 //
 //        DictionaryDAO dao = new DictionaryDAO(getApplicationContext());
 //        dao.asyncSaveVocable(vocable);
-//        dao.asyncSaveTranslationForVocable(translation, vocable);
+//        dao.asyncSaveVocableTranslation(translation, vocable);
     }
 
     @Override

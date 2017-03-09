@@ -7,10 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncSearchVocablesByNameCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncDeleteCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncInsertCommand;
-import com.matteoveroni.wordsremember.dictionary.model.commands.AsyncUpdateCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
+import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -96,7 +97,9 @@ public class DictionaryDAO {
     // Async methods - Translations
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void asyncSaveTranslationForVocable(Word translation, Word vocable) {
+    public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
+        final Word translation = vocableTranslation.getTranslation();
+        final Word vocable = vocableTranslation.getVocable();
         if (Word.isValid(translation) && translation.getId() < 0 && Word.isValid(vocable) && vocable.getId() > 0) {
 
             final ContentValues translationValue = new ContentValues();
@@ -107,7 +110,7 @@ public class DictionaryDAO {
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
 
             new AsyncInsertCommand(contentResolver, TranslationsContract.CONTENT_URI, translationValue,
-                    new AsyncInsertCommand(contentResolver, VocablesContract.CONTENT_URI, vocablesTranslationValue)
+                    new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue)
             ).execute();
         }
     }
