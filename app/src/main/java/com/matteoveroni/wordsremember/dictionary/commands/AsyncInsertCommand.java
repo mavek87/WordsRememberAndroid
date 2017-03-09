@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -58,7 +59,7 @@ public class AsyncInsertCommand extends AsyncCommand {
             EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
 
         } else if (commandTargetUri.equals(VocablesTranslationsContract.CONTENT_URI)) {
-            EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
+            EventBus.getDefault().postSticky(new EventAsyncSaveVocableTranslationCompleted(1,1));
         }
     }
 

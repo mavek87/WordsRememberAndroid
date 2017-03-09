@@ -97,21 +97,27 @@ public class DictionaryDAO {
     // Async methods - Translations
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    public void asyncSaveTranslation(Word translation) {
+        if (!Word.isValid(translation) || translation.getId() < 1) {
+            throw new RuntimeException("");
+        }
+        final ContentValues translationValue = new ContentValues();
+        translationValue.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
+        new AsyncInsertCommand(contentResolver, TranslationsContract.CONTENT_URI, translationValue).execute();
+    }
+
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
         final Word translation = vocableTranslation.getTranslation();
         final Word vocable = vocableTranslation.getVocable();
         if (Word.isValid(translation) && translation.getId() < 0 && Word.isValid(vocable) && vocable.getId() > 0) {
 
-            final ContentValues translationValue = new ContentValues();
-            translationValue.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
 
             final ContentValues vocablesTranslationValue = new ContentValues();
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, vocable.getId());
             vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, translation.getId());
 
-            new AsyncInsertCommand(contentResolver, TranslationsContract.CONTENT_URI, translationValue,
-                    new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue)
-            ).execute();
+            new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue).execute();
         }
     }
 

@@ -53,9 +53,9 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public VocableTranslation getPojoUsedByView() {
-        long currentTranslationId = vocableTranslation.getTranslation().getId();
-        String currentTranslationName = txt_translationName.getText().toString();
-        Word translation = new Word(currentTranslationId, currentTranslationName);
+        long translationId = vocableTranslation.getTranslation().getId();
+        String translationName = txt_translationName.getText().toString();
+        Word translation = new Word(translationId, translationName);
         vocableTranslation.setTranslation(translation);
         return vocableTranslation;
     }

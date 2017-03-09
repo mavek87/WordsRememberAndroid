@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
@@ -48,6 +49,13 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
             view.showMessage("Is not possible to save empty translations for vocables.");
             return;
         }
+        model.asyncSaveTranslation(vocableTranslation.getTranslation());
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSaveTranslationCompleted event) {
+        VocableTranslation vocableTranslation = view.getPojoUsedByView();
+        vocableTranslation.getTranslation().setId(event.getSavedTranslationId());
         model.asyncSaveVocableTranslation(vocableTranslation);
     }
 
