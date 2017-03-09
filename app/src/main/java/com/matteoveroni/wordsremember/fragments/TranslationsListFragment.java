@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view.fragments;
+package com.matteoveroni.wordsremember.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -61,9 +61,6 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public void setPojoUsedInView(Word vocable) {
-        if (vocable == null) {
-            throw new IllegalArgumentException("Error setting pojo for TranslationsListFragment. Vocable passed cannot be null!");
-        }
         if (vocableInView == null) {
             vocableInView = vocable;
             getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);

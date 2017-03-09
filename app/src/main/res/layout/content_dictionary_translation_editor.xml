@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/dictionary_translation_editor_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment"
+        android:name="com.matteoveroni.wordsremember.fragments.TranslationEditorFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

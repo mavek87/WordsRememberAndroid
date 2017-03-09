@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view.fragments;
+package com.matteoveroni.wordsremember.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -58,7 +58,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         registerForContextMenu(getListView());
     }
@@ -90,12 +90,15 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
         Cursor cursor = vocablesListViewAdapter.getCursor();
 
         switch (item.getItemId()) {
+
             case R.id.menu_dictionary_management_long_press_remove:
+
+                Word selectedVocable = getSelectedVocable(cursor, position);
                 eventBus.postSticky(
-                        new EventVocableManipulationRequest(
-                                getSelectedVocable(cursor, position), EventVocableManipulationRequest.TypeOfManipulation.REMOVE
-                        ));
+                        new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE)
+                );
                 return true;
+
         }
         return super.onContextItemSelected(item);
     }

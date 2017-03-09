@@ -37,6 +37,11 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
         view = null;
     }
 
+    public void onVocableToTranslateRetrieved(Word vocable) {
+        Word newEmptyTranslation = new Word("");
+        view.setPojoUsedInView(new TranslationForVocable(vocable, newEmptyTranslation));
+    }
+
     public void onSaveTranslationForVocableRequest() {
         TranslationForVocable translationForVocable = view.getPojoUsedByView();
         if (translationForVocable.getTranslation().getName().trim().isEmpty()) {
@@ -44,11 +49,6 @@ public class DictionaryTranslationEditorPresenter implements Presenter {
             return;
         }
         model.asyncSaveTranslationForVocable(translationForVocable.getTranslation(), translationForVocable.getVocable());
-    }
-
-    public void onVocableForTranslationRetrieved(Word vocable) {
-        Word newEmptyTranslation = new Word("");
-        view.setPojoUsedInView(new TranslationForVocable(vocable, newEmptyTranslation));
     }
 
     @Subscribe

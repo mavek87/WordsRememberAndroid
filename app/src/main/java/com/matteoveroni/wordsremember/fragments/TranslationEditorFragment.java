@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view.fragments;
+package com.matteoveroni.wordsremember.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,7 +28,6 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     private Unbinder viewInjector;
     private TranslationForVocable translationForVocable;
-    private Word vocableUsedByView;
 
     @BindView(R.id.fragment_translation_editor_title)
     TextView lbl_title;
@@ -66,6 +65,6 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
             lbl_title.setText("Edit translation for " + pojo.getVocable().getName());
         }
         txt_translationName.setText(pojo.getTranslation().getName());
-        translationForVocable = pojo;
+        this.translationForVocable = pojo;
     }
 }

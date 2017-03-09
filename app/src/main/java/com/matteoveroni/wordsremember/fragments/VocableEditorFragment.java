@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view.fragments;
+package com.matteoveroni.wordsremember.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -64,9 +64,6 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
 
     @Override
     public void setPojoUsedInView(Word vocableToShow) {
-        if (vocableToShow == null) {
-            throw new IllegalArgumentException("Error setting pojo for VocableEditorFragment. Vocable passed cannot be null!");
-        }
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");
         } else {
@@ -77,56 +74,32 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        saveViewData(savedInstanceState);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        restoreViewData(savedInstanceState);
+    public void onSaveInstanceState(Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+        saveViewData(instanceState);
     }
 
     private void saveViewData(Bundle instanceState) {
-        saveViewTitle(instanceState);
-        saveVocableUsedByView(instanceState);
-        saveVocableNameTextView(instanceState);
-    }
-
-    private void restoreViewData(Bundle instanceState) {
-        if (instanceState != null) {
-            restoreViewTitle(instanceState);
-            restoreVocableUsedByView(instanceState);
-            restoreVocableNameTextView(instanceState);
-        }
-    }
-
-    private void saveViewTitle(Bundle instanceState) {
         instanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
-    }
-
-    private void restoreViewTitle(Bundle instanceState) {
-        if (instanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
-            lbl_title.setText(instanceState.getString(VIEW_TITLE_CONTENT_KEY));
-        }
-    }
-
-    private void saveVocableUsedByView(Bundle instanceState) {
         instanceState.putString(VOCABLE_CONTENT_KEY, vocableInView.toJson());
-    }
-
-    private void restoreVocableUsedByView(Bundle instanceState) {
-        if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-            vocableInView = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
-        }
-    }
-
-    private void saveVocableNameTextView(Bundle instanceState) {
         instanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
     }
 
-    private void restoreVocableNameTextView(Bundle instanceState) {
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            restoreViewData(savedInstanceState);
+        }
+    }
+
+    private void restoreViewData(Bundle instanceState) {
+        if (instanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
+            lbl_title.setText(instanceState.getString(VIEW_TITLE_CONTENT_KEY));
+        }
+        if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
+            vocableInView = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
+        }
         if (instanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
             txt_vocableName.setText(instanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
         }

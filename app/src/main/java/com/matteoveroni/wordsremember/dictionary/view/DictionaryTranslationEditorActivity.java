@@ -16,7 +16,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
+import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.TranslationForVocable;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -31,10 +31,10 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
 
     public static final String TAG = TagGenerator.tag(DictionaryTranslationEditorActivity.class);
 
+    private TranslationEditorFragment translationEditorFragment;
+
     private DictionaryTranslationEditorPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
-
-    private TranslationEditorFragment translationEditorFragment;
 
     @Override
     public void saveTranslationAction() {
@@ -62,14 +62,40 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.attachView(this);
+        presenter.onVocableToTranslateRetrieved(findVocableToTranslate());
+    }
+
+    private Word findVocableToTranslate() {
+        Intent starterIntent = getIntent();
+        if (starterIntent.hasExtra(Extras.VOCABLE)) {
+            String json_vocableToTranslate = starterIntent.getStringExtra(Extras.VOCABLE);
+            return Word.fromJson(json_vocableToTranslate);
+        } else {
+            final String errorMessage = "Unexpected Error: No vocable to translate retrieved.";
+            Log.e(TAG, errorMessage);
+            throw new RuntimeException(errorMessage);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.destroy();
+        super.onStop();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dictionary_translation_editor);
         ButterKnife.bind(this);
+        setupAndShowToolbar();
 
         translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
 
-        setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
@@ -83,31 +109,6 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-        presenter.onVocableForTranslationRetrieved(findVocableToUseForTranslation());
-    }
-
-    private Word findVocableToUseForTranslation() {
-        Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE)) {
-            String json_vocableForTranslation = starterIntent.getStringExtra(Extras.VOCABLE);
-            return Word.fromJson(json_vocableForTranslation);
-        } else {
-            final String errorMessage = "Unexpected Error: No vocable for translation retrieved.";
-            Log.e(TAG, errorMessage);
-            throw new RuntimeException(errorMessage);
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dictionary_vocable_editor, menu);
         return true;
@@ -116,8 +117,8 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_done:
-//                presenter.onSaveVocableRequest(TranslationEditorFragment.getPojoUsedByView());
+            case R.id.menu_action_done:
+                saveTranslationAction();
                 return true;
         }
         return false;

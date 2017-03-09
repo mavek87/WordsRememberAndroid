@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
-import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
+import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
+import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenter;
@@ -137,7 +137,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_done:
+            case R.id.menu_action_done:
                 saveVocableAction();
                 return true;
         }

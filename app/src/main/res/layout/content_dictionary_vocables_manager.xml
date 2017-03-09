@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/dictionary_manager_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.VocablesListFragment"
+        android:name="com.matteoveroni.wordsremember.fragments.VocablesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

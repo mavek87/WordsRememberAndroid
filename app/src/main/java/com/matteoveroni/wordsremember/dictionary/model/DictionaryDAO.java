@@ -112,67 +112,6 @@ public class DictionaryDAO {
         }
     }
 
-    public void asyncGetTranslationById(long id) {
-//        if (id > 0) {
-//            final String str_idColumn = String.valueOf(id);
-//
-//            final String[] projection = {TranslationsContract.Schema.COLUMN_TRANSLATION};
-//            final String selection = TranslationsContract.Schema.COLUMN_ID + " = ?";
-//            final String[] selectionArgs = {str_idColumn};
-//
-//            final Uri uri = Uri.withAppendedPath(TranslationsContract.CONTENT_URI, str_idColumn).buildUpon().build();
-//
-//            asyncVocablesHandler.startQuery(
-//                    1,
-//                    null,
-//                    uri,
-//                    projection,
-//                    selection,
-//                    selectionArgs,
-//                    null
-//            );
-//        }
-    }
-
-    public void asyncUpdateTranslation(long id, Word updatedTranslation) {
-//        if (id > 0) {
-//            final String str_id = String.valueOf(id);
-//
-//            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-//            final String[] selectionArgs = {str_id};
-//
-//            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-//
-//            asyncVocablesHandler.startUpdate(
-//                    1,
-//                    null,
-//                    uri,
-//                    vocableToContentValues(updatedTranslation),
-//                    selection,
-//                    selectionArgs
-//            );
-//        }
-    }
-
-    public void asyncDeleteTranslation(long id) {
-//        if (id > 0) {
-//            final String str_idColumn = String.valueOf(id);
-//
-//            final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-//            final String[] selectionArgs = {str_idColumn};
-//
-//            final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_idColumn).buildUpon().build();
-//
-//            asyncVocablesHandler.startDelete(
-//                    1,
-//                    null,
-//                    uri,
-//                    selection,
-//                    selectionArgs
-//            );
-//        }
-    }
-
     /***********************************************************************************************
      * Sync methods - Vocables
      **********************************************************************************************/
