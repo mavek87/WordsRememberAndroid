@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
  * Created by Matteo Veroni
  */
 
-public class VocableEditViewPresenterTest {
+public class VocableEditPresenterTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();

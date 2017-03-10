@@ -43,7 +43,7 @@ public class TranslationEditPresenter implements Presenter {
         view.setPojoUsedInView(new VocableTranslation(vocable, newEmptyTranslation));
     }
 
-    public void onSaveTranslationForVocableRequest() {
+    public void onSaveTranslationRequest() {
         VocableTranslation vocableTranslation = view.getPojoUsedByView();
         if (vocableTranslation.getTranslation().getName().trim().isEmpty()) {
             view.showMessage("Is not possible to save empty translations for vocables.");

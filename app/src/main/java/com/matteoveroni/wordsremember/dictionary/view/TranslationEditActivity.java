@@ -38,7 +38,7 @@ public class TranslationEditActivity extends AppCompatActivity implements Transl
 
     @Override
     public void saveTranslationAction() {
-        presenter.onSaveTranslationForVocableRequest();
+        presenter.onSaveTranslationRequest();
     }
 
     @Override

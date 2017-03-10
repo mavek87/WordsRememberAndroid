@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.view.TranslationEditView;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Matteo Veroni
  */
-public class TranslationEditViewPresenterTest {
+public class TranslationEditPresenterTest {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
@@ -60,22 +61,34 @@ public class TranslationEditViewPresenterTest {
     }
 
     @Test
-    public void onSaveTranslationForVocableRequestCompletedSuccesfully_Call_asyncSaveTranslationForVocable() {
+    public void onSaveTranslationValidRequest_Call_asyncSaveTranslation() {
         when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
-        presenter.onSaveTranslationForVocableRequest();
+        presenter.onSaveTranslationRequest();
 
         verify(dictionary).asyncSaveTranslation(TRANSLATION_FOR_VOCABLE.getTranslation());
     }
 
     @Test
-    public void onSaveTranslationForVocableRequest_WithEmptyTranslationName_OrderToViewToShowErrorMessage() {
+    public void onSaveTranslationRequest_WithEmptyTranslationName_ViewShowsErrorMessage() {
         when(view.getPojoUsedByView()).thenReturn(EMPTY_TRANSLATION_NAME_FOR_VOCABLE);
 
-        presenter.onSaveTranslationForVocableRequest();
+        presenter.onSaveTranslationRequest();
 
         verify(view).showMessage(anyString());
+        verify(dictionary, never()).asyncSaveTranslation(any(Word.class));
         verify(dictionary, never()).asyncSaveVocableTranslation(any(VocableTranslation.class));
+    }
+
+    @Test
+    public void onEventAsyncSaveTranslationCompleted_Call_asyncSaveVocableTranslationIsCalled() {
+        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
+
+        long fakeTranslationID = 1;
+        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeTranslationID));
+        TRANSLATION_FOR_VOCABLE.getTranslation().setId(fakeTranslationID);
+
+        verify(dictionary).asyncSaveVocableTranslation(TRANSLATION_FOR_VOCABLE);
     }
 
     @Test
