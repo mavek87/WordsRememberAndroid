@@ -13,7 +13,9 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
@@ -103,7 +105,8 @@ public class TranslationEditActivity extends AppCompatActivity implements Transl
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(R.string.title_activity_dictionary_translation_editor);
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_translation_editor));
+            toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
     }

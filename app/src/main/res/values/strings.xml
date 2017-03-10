@@ -21,8 +21,8 @@
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
 
-    <string name="title_activity_dictionary_vocables_manager">WR - Dictionary</string>
-    <string name="title_activity_dictionary_vocable_editor">WR - Vocables editor</string>
-    <string name="title_activity_dictionary_translation_editor">WR - Add translation</string>
+    <string name="title_activity_dictionary_vocables_manager">Dictionary</string>
+    <string name="title_activity_dictionary_vocable_editor">Vocables editor</string>
+    <string name="title_activity_dictionary_translation_editor">Add translation</string>
 
 </resources>

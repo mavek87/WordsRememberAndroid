@@ -13,6 +13,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.VocableEditPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
@@ -97,7 +99,8 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(R.string.title_activity_dictionary_vocable_editor);
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_vocable_editor));
+            toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
     }
