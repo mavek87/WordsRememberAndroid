@@ -1,11 +1,11 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocablesManagerView;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,16 +29,16 @@ import static org.mockito.Mockito.verify;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocablesManagerPresenterTest {
+public class VocablesManagerPresenterTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryVocablesManagerView view;
+    private VocablesManagerView view;
     @Mock
     private DictionaryDAO dictionaryModel;
 
-    private DictionaryVocablesManagerPresenter presenter;
+    private VocablesManagerPresenter presenter;
 
     private final EventBus eventBus = EventBus.getDefault();
 
@@ -96,8 +96,8 @@ public class DictionaryVocablesManagerPresenterTest {
         }
 
         @Override
-        public DictionaryVocablesManagerPresenter create() {
-            return new DictionaryVocablesManagerPresenter(model);
+        public VocablesManagerPresenter create() {
+            return new VocablesManagerPresenter(model);
         }
     }
 }

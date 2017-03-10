@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dictionary.view.DictionaryVocableEditorActivity">
+    tools:context=".dictionary.view.VocableEditActivity">
 
     <TextView
         android:id="@+id/fragment_vocable_editor_title"

@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
+import com.matteoveroni.wordsremember.dictionary.view.TranslationEditView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -15,20 +15,20 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class DictionaryTranslationEditorPresenter implements Presenter {
+public class TranslationEditPresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryTranslationEditorView view;
+    private TranslationEditView view;
 
-    public DictionaryTranslationEditorPresenter(DictionaryDAO model) {
+    public TranslationEditPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryTranslationEditorView) view;
+        this.view = (TranslationEditView) view;
         eventBus.register(this);
     }
 

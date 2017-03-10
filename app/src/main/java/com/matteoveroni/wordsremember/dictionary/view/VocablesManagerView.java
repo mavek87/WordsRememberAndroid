@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * @author Matteo Veroni
  */
 
-public interface DictionaryVocablesManagerView {
+public interface VocablesManagerView {
 
     void createVocableAction();
 

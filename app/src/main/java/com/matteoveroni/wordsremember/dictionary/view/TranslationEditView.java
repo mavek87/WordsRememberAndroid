@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.pojos.VocableTranslation;
  * Created by Matteo Veroni
  */
 
-public interface DictionaryTranslationEditorView extends PojoManipulable<VocableTranslation> {
+public interface TranslationEditView extends PojoManipulable<VocableTranslation> {
 
     void saveTranslationAction();
 

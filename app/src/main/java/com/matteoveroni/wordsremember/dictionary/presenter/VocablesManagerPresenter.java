@@ -5,7 +5,7 @@ import android.content.Context;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocablesManagerView;
+import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
@@ -24,22 +24,22 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocablesManagerPresenter implements Presenter {
+public class VocablesManagerPresenter implements Presenter {
 
-    public static final String TAG = TagGenerator.tag(DictionaryVocablesManagerPresenter.class);
+    public static final String TAG = TagGenerator.tag(VocablesManagerPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
     private final DictionaryDAO model;
-    private DictionaryVocablesManagerView view;
+    private VocablesManagerView view;
 
-    public DictionaryVocablesManagerPresenter(DictionaryDAO model) {
+    public VocablesManagerPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryVocablesManagerView) view;
+        this.view = (VocablesManagerView) view;
         eventBus.register(this);
     }
 

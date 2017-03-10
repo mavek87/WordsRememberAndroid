@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryTranslationEditorView;
+import com.matteoveroni.wordsremember.dictionary.view.TranslationEditView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -27,16 +27,16 @@ import static org.mockito.Mockito.when;
 /**
  * @author Matteo Veroni
  */
-public class DictionaryTranslationEditorViewPresenterTest {
+public class TranslationEditViewPresenterTest {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private DictionaryTranslationEditorPresenter presenter;
+    private TranslationEditPresenter presenter;
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private DictionaryTranslationEditorView view;
+    private TranslationEditView view;
     @Mock
     private DictionaryDAO dictionary;
 
@@ -93,8 +93,8 @@ public class DictionaryTranslationEditorViewPresenterTest {
         }
 
         @Override
-        public DictionaryTranslationEditorPresenter create() {
-            return new DictionaryTranslationEditorPresenter(dictionaryDAO);
+        public TranslationEditPresenter create() {
+            return new TranslationEditPresenter(dictionaryDAO);
         }
     }
 }

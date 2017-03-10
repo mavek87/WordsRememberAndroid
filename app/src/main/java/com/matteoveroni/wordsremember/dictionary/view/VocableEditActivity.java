@@ -13,12 +13,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryVocableEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.VocableEditPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryVocableEditorPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.VocableEditPresenter;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -28,14 +28,14 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocableEditorActivity extends AppCompatActivity implements DictionaryVocableEditorView, LoaderManager.LoaderCallbacks<DictionaryVocableEditorPresenter> {
+public class VocableEditActivity extends AppCompatActivity implements VocableEditView, LoaderManager.LoaderCallbacks<VocableEditPresenter> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryVocableEditorActivity.class);
+    public static final String TAG = TagGenerator.tag(VocableEditActivity.class);
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
 
-    private DictionaryVocableEditorPresenter presenter;
+    private VocableEditPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
@@ -51,7 +51,7 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
 
     @Override
     public void goToTranslationEditView(Word vocable) {
-        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), DictionaryTranslationEditorActivity.class);
+        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), TranslationEditActivity.class);
         intent_goToTranslationsEditView.putExtra(
                 Extras.VOCABLE,
                 vocable.toJson()
@@ -145,17 +145,17 @@ public class DictionaryVocableEditorActivity extends AppCompatActivity implement
     }
 
     @Override
-    public Loader<DictionaryVocableEditorPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryVocableEditorPresenterFactory());
+    public Loader<VocableEditPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new VocableEditPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryVocableEditorPresenter> loader, DictionaryVocableEditorPresenter presenter) {
+    public void onLoadFinished(Loader<VocableEditPresenter> loader, VocableEditPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryVocableEditorPresenter> loader) {
+    public void onLoaderReset(Loader<VocableEditPresenter> loader) {
         presenter = null;
     }
 }

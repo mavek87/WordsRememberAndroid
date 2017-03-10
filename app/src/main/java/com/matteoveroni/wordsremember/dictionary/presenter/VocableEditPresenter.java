@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.view.DictionaryVocableEditorView;
+import com.matteoveroni.wordsremember.dictionary.view.VocableEditView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -17,22 +17,22 @@ import java.util.List;
  * @author Matteo Veroni
  */
 
-public class DictionaryVocableEditorPresenter implements Presenter {
+public class VocableEditPresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private DictionaryVocableEditorView view;
+    private VocableEditView view;
 
     private Word persistedVocableUsedByView;
 
-    public DictionaryVocableEditorPresenter(DictionaryDAO model) {
+    public VocableEditPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
     public void attachView(Object view) {
-        this.view = (DictionaryVocableEditorView) view;
+        this.view = (VocableEditView) view;
         eventBus.register(this);
     }
 

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dictionary.view.DictionaryTranslationEditorActivity">
+    tools:context=".dictionary.view.TranslationEditActivity">
 
     <TextView
         android:id="@+id/fragment_translation_editor_title"

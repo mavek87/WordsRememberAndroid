@@ -4,6 +4,12 @@ http://www.thepolyglotdream.com/forget-it-the-secret-of-remembering-words/
 
 
 
+VIEW CONTENTS OF DATABASE FROM ANDROID STUDIO:
+
+stackoverflow.com/questions/17529766/view-contents-of-database-file-in-android-studio
+
+
+
 SURVIVING ORIENTATION CHANGES WITH LOADERS ON ANDROID:
 
 https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4

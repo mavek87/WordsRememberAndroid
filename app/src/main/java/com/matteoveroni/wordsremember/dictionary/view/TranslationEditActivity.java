@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.DictionaryTranslationEditorPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.DictionaryTranslationEditorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
@@ -27,13 +27,13 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class DictionaryTranslationEditorActivity extends AppCompatActivity implements DictionaryTranslationEditorView, LoaderManager.LoaderCallbacks<DictionaryTranslationEditorPresenter> {
+public class TranslationEditActivity extends AppCompatActivity implements TranslationEditView, LoaderManager.LoaderCallbacks<TranslationEditPresenter> {
 
-    public static final String TAG = TagGenerator.tag(DictionaryTranslationEditorActivity.class);
+    public static final String TAG = TagGenerator.tag(TranslationEditActivity.class);
 
     private TranslationEditorFragment translationEditorFragment;
 
-    private DictionaryTranslationEditorPresenter presenter;
+    private TranslationEditPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
@@ -125,17 +125,17 @@ public class DictionaryTranslationEditorActivity extends AppCompatActivity imple
     }
 
     @Override
-    public Loader<DictionaryTranslationEditorPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new DictionaryTranslationEditorPresenterFactory());
+    public Loader<TranslationEditPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new TranslationEditPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<DictionaryTranslationEditorPresenter> loader, DictionaryTranslationEditorPresenter presenter) {
+    public void onLoadFinished(Loader<TranslationEditPresenter> loader, TranslationEditPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<DictionaryTranslationEditorPresenter> loader) {
+    public void onLoaderReset(Loader<TranslationEditPresenter> loader) {
         presenter = null;
     }
 }
