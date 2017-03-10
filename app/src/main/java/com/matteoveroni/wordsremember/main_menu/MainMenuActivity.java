@@ -11,7 +11,6 @@ import android.widget.Button;
 import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.main_menu.factory.MainMenuPresenterFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

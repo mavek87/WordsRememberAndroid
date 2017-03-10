@@ -60,12 +60,12 @@ public class TranslationEditViewPresenterTest {
     }
 
     @Test
-    public void onSaveTranslationForVocableRequest_Succeed_Call_asyncSaveTranslationForVocable() {
+    public void onSaveTranslationForVocableRequestCompletedSuccesfully_Call_asyncSaveTranslationForVocable() {
         when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         presenter.onSaveTranslationForVocableRequest();
 
-        verify(dictionary).asyncSaveVocableTranslation(TRANSLATION_FOR_VOCABLE);
+        verify(dictionary).asyncSaveTranslation(TRANSLATION_FOR_VOCABLE.getTranslation());
     }
 
     @Test

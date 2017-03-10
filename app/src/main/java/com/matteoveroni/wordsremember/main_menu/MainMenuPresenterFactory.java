@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.main_menu.factory;
+package com.matteoveroni.wordsremember.main_menu;
 
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.main_menu.MainMenuPresenter;

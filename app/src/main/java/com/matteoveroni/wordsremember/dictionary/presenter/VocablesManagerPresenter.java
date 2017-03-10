@@ -53,7 +53,6 @@ public class VocablesManagerPresenter implements Presenter {
     public void onViewCreated(Context context) {
         if (IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME) {
             populateDatabaseForTestPurposes(context);
-            exportDatabaseOnSd(context);
             IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = false;
         }
     }
@@ -90,12 +89,6 @@ public class VocablesManagerPresenter implements Presenter {
         for (int i = 0; i < 5; i++) {
             Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new Range(3, 20)));
 //            model.asyncSaveVocable(vocableToSave);
-        }
-    }
-
-    private void exportDatabaseOnSd(Context context) {
-        if (context != null) {
-            DatabaseManager.getInstance(context).exportDatabaseOnSD();
         }
     }
 }

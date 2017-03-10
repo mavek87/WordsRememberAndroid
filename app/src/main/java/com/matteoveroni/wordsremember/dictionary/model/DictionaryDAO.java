@@ -57,14 +57,13 @@ public class DictionaryDAO {
             throw new IllegalArgumentException("asyncUpdateVocable error: impossible to update a vocable with an id negative or equal to zero.");
         }
         final String str_id = String.valueOf(id);
-        final ContentValues values = vocableToContentValues(updatedVocable);
         final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
         final String[] selectionArgs = {str_id};
 
         new AsyncUpdateCommand(
                 contentResolver,
                 VocablesContract.CONTENT_URI,
-                values,
+                vocableToContentValues(updatedVocable),
                 selection,
                 selectionArgs
         ).execute();
@@ -102,9 +101,11 @@ public class DictionaryDAO {
         if (!Word.isValid(translation)) {
             throw new RuntimeException("");
         }
-        final ContentValues translationValue = new ContentValues();
-        translationValue.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
-        new AsyncInsertCommand(contentResolver, TranslationsContract.CONTENT_URI, translationValue).execute();
+        new AsyncInsertCommand(
+                contentResolver,
+                TranslationsContract.CONTENT_URI,
+                translationToContentValues(translation)
+        ).execute();
     }
 
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
@@ -232,17 +233,13 @@ public class DictionaryDAO {
 
     ContentValues vocableToContentValues(Word vocable) {
         final ContentValues values = new ContentValues();
-        if (Word.isValid(vocable)) {
-            values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
-        }
+        values.put(VocablesContract.Schema.COLUMN_VOCABLE, vocable.getName());
         return values;
     }
 
     ContentValues translationToContentValues(Word translation) {
         final ContentValues values = new ContentValues();
-        if (Word.isValid(translation)) {
-            values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
-        }
+        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, translation.getName());
         return values;
     }
 }

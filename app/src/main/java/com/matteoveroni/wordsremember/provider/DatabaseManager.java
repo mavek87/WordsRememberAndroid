@@ -3,22 +3,13 @@ package com.matteoveroni.wordsremember.provider;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-
-import static android.os.Environment.DIRECTORY_DCIM;
 
 /**
  * Singleton helper class that manages SQLiteDatabase creation, reset, export and upgrade operations
@@ -92,27 +83,4 @@ public class DatabaseManager extends SQLiteOpenHelper {
      *
      * http://stackoverflow.com/questions/17529766/view-contents-of-database-file-in-android-studio
      */
-    public void exportDatabaseOnSD() {
-        File sd = Environment.getExternalStorageDirectory();
-//        File sd = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +
-//                File.separator + "Your Backup Folder" +
-//                File.separator);
-        File data = Environment.getDataDirectory();
-        FileChannel source;
-        FileChannel destination;
-        String currentDBPath = "/data/" + WordsRemember.AUTHORITY + "/databases/" + DB_NAME;
-        String backupDBPath = DB_NAME;
-        File currentDB = new File(data, currentDBPath);
-        File backupDB = new File(sd, backupDBPath);
-        try {
-            source = new FileInputStream(currentDB).getChannel();
-            destination = new FileOutputStream(backupDB).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            source.close();
-            destination.close();
-            Log.i(TAG, "DB Exported in " + backupDB.getAbsolutePath());
-        } catch (IOException e) {
-            Log.d(TAG, "Error while exporting db on sd (" + backupDB.getAbsolutePath() + ")" + "\n" + e);
-        }
-    }
 }
