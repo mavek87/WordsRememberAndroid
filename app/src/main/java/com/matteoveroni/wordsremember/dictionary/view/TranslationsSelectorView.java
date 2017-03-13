@@ -7,9 +7,13 @@ import com.matteoveroni.wordsremember.pojos.VocableTranslation;
  * Created by Matteo Veroni
  */
 
-public interface TranslationEditView extends PojoManipulable<VocableTranslation> {
+public interface TranslationsSelectorView extends PojoManipulable<VocableTranslation> {
 
-    void saveTranslationAction();
+    void selectTranslationAction();
+
+    void createTranslactionAction();
+
+    void goToTranslationCreateView();
 
     void returnToPreviousView();
 

@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.view.TranslationEditView;
+import com.matteoveroni.wordsremember.dictionary.view.TranslationCreateView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -20,7 +20,7 @@ public class TranslationEditPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO model;
-    private TranslationEditView view;
+    private TranslationCreateView view;
 
     public TranslationEditPresenter(DictionaryDAO model) {
         this.model = model;
@@ -28,7 +28,7 @@ public class TranslationEditPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (TranslationEditView) view;
+        this.view = (TranslationCreateView) view;
         eventBus.register(this);
     }
 

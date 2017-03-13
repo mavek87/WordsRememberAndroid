@@ -53,7 +53,7 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
 
     @Override
     public void goToTranslationEditView(Word vocable) {
-        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), TranslationEditActivity.class);
+        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), TranslationCreateActivity.class);
         intent_goToTranslationsEditView.putExtra(
                 Extras.VOCABLE,
                 vocable.toJson()

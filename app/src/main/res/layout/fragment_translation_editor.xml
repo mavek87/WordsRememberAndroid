@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Dictionary Manipulation Fragment -->
+<!-- Dictionary Translation Editor Fragment -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".dictionary.view.TranslationEditActivity">
+    tools:context=".dictionary.view.TranslationCreateActivity">
 
     <TextView
         android:id="@+id/fragment_translation_editor_title"

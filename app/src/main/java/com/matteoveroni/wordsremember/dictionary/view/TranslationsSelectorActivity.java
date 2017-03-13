@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -18,7 +17,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
-import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
+import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -29,18 +28,26 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class TranslationEditActivity extends AppCompatActivity implements TranslationEditView, LoaderManager.LoaderCallbacks<TranslationEditPresenter> {
+public class TranslationsSelectorActivity extends AppCompatActivity implements TranslationsSelectorView, LoaderManager.LoaderCallbacks<TranslationEditPresenter> {
 
-    public static final String TAG = TagGenerator.tag(TranslationEditActivity.class);
+    public static final String TAG = TagGenerator.tag(TranslationsSelectorActivity.class);
 
-    private TranslationEditorFragment translationEditorFragment;
+    private TranslationsListFragment translationsListFragment;
 
     private TranslationEditPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
+
     @Override
-    public void saveTranslationAction() {
-        presenter.onSaveTranslationRequest();
+    public void selectTranslationAction() {
+    }
+
+    @Override
+    public void createTranslactionAction() {
+    }
+
+    @Override
+    public void goToTranslationCreateView() {
     }
 
     @Override
@@ -55,12 +62,13 @@ public class TranslationEditActivity extends AppCompatActivity implements Transl
 
     @Override
     public VocableTranslation getPojoUsedByView() {
-        return translationEditorFragment.getPojoUsedByView();
+        return null;
+//        return translationEditorFragment.getPojoUsedByView();
     }
 
     @Override
     public void setPojoUsedInView(VocableTranslation vocableTranslation) {
-        this.translationEditorFragment.setPojoUsedInView(vocableTranslation);
+//        this.translationEditorFragment.setPojoUsedInView(vocableTranslation);
     }
 
     @Override
@@ -96,7 +104,7 @@ public class TranslationEditActivity extends AppCompatActivity implements Transl
         ButterKnife.bind(this);
         setupAndShowToolbar();
 
-        translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
+        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
@@ -117,15 +125,15 @@ public class TranslationEditActivity extends AppCompatActivity implements Transl
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_action_done:
-                saveTranslationAction();
-                return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.menu_action_done:
+//                saveTranslationAction();
+//                return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public Loader<TranslationEditPresenter> onCreateLoader(int id, Bundle arg) {

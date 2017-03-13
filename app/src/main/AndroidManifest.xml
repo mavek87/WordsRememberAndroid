@@ -38,7 +38,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.TranslationEditActivity"
+            android:name=".dictionary.view.TranslationCreateActivity"
             android:label="@string/title_activity_dictionary_translation_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
