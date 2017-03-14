@@ -42,7 +42,7 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     }
 
     @Override
-    public void createTranslactionAction() {
+    public void createTranslationAction() {
     }
 
     @Override
@@ -64,8 +64,7 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
 
     @Override
     public VocableTranslation getPojoUsedByView() {
-        return null;
-//        return translationEditorFragment.getPojoUsedByView();
+        return translationsListFragment.getPojoUsedByView();
     }
 
     @Override

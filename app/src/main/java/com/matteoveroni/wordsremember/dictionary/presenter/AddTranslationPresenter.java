@@ -37,6 +37,6 @@ public class AddTranslationPresenter implements Presenter {
 
     public void onVocableToTranslateRetrieved(Word vocable) {
         Word newEmptyTranslation = new Word("");
-//        view.setPojoUsedInView(new VocableTranslation(vocable, newEmptyTranslation));
+        view.setPojoUsedInView(new VocableTranslation(vocable, newEmptyTranslation));
     }
 }
