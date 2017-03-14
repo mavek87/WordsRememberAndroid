@@ -47,18 +47,15 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
 
     @OnClick(R.id.dictionary_editor_floating_action_button)
     @Override
-    public void createTranslationAction() {
+    public void addTranslationAction() {
         presenter.onCreateTranslationRequest();
     }
 
     @Override
-    public void goToTranslationEditView(Word vocable) {
-        Intent intent_goToTranslationsEditView = new Intent(getApplicationContext(), TranslationCreateActivity.class);
-        intent_goToTranslationsEditView.putExtra(
-                Extras.VOCABLE,
-                vocable.toJson()
-        );
-        startActivity(intent_goToTranslationsEditView);
+    public void goToTranslationSelectorView(Word vocable) {
+        Intent intent_goToTranslationsSelectorView = new Intent(getApplicationContext(), TranslationSelectorActivity.class);
+        intent_goToTranslationsSelectorView.putExtra(Extras.VOCABLE, vocable.toJson());
+        startActivity(intent_goToTranslationsSelectorView);
     }
 
     @Override

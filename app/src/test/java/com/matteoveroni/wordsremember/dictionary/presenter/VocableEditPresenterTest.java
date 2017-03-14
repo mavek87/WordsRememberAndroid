@@ -117,7 +117,7 @@ public class VocableEditPresenterTest {
 
         presenter.onCreateTranslationRequest();
 
-        verify(view).goToTranslationEditView(VOCABLE);
+        verify(view).goToTranslationSelectorView(VOCABLE);
     }
 
     @Test

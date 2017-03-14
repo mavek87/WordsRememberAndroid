@@ -48,7 +48,7 @@ public class VocableEditPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.goToTranslationEditView(persistedVocableUsedByView);
+        view.goToTranslationSelectorView(persistedVocableUsedByView);
     }
 
     public void onSaveVocableRequest() {

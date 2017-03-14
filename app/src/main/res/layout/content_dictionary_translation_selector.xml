@@ -15,7 +15,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".dictionary.view.VocableEditActivity"
-    tools:showIn="@layout/activity_dictionary_translations_selector">
+    tools:showIn="@layout/activity_dictionary_translation_selector">
 
     <fragment
         android:id="@+id/dictionary_translations_list_fragment"

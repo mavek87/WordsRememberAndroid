@@ -16,7 +16,9 @@ import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.TranslationSelectorPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationSelectorPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
@@ -28,13 +30,13 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class TranslationsSelectorActivity extends AppCompatActivity implements TranslationsSelectorView, LoaderManager.LoaderCallbacks<TranslationEditPresenter> {
+public class TranslationSelectorActivity extends AppCompatActivity implements TranslationSelectorView, LoaderManager.LoaderCallbacks<TranslationSelectorPresenter> {
 
-    public static final String TAG = TagGenerator.tag(TranslationsSelectorActivity.class);
+    public static final String TAG = TagGenerator.tag(TranslationSelectorActivity.class);
 
     private TranslationsListFragment translationsListFragment;
 
-    private TranslationEditPresenter presenter;
+    private TranslationSelectorPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
 
@@ -47,7 +49,10 @@ public class TranslationsSelectorActivity extends AppCompatActivity implements T
     }
 
     @Override
-    public void goToTranslationCreateView() {
+    public void goToTranslationCreateView(Word vocable) {
+        Intent intent_goToTranslationCreateView = new Intent(getApplicationContext(), TranslationCreateActivity.class);
+        intent_goToTranslationCreateView.putExtra(Extras.VOCABLE, vocable.toJson());
+        startActivity(intent_goToTranslationCreateView);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class TranslationsSelectorActivity extends AppCompatActivity implements T
 
     @Override
     public void setPojoUsedInView(VocableTranslation vocableTranslation) {
-//        this.translationEditorFragment.setPojoUsedInView(vocableTranslation);
+        translationsListFragment.setPojoUsedInView(vocableTranslation.getVocable());
     }
 
     @Override
@@ -80,14 +85,8 @@ public class TranslationsSelectorActivity extends AppCompatActivity implements T
 
     private Word findVocableToTranslate() {
         Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE)) {
-            String json_vocableToTranslate = starterIntent.getStringExtra(Extras.VOCABLE);
-            return Word.fromJson(json_vocableToTranslate);
-        } else {
-            final String errorMessage = "Unexpected Error: No vocable to translate retrieved.";
-            Log.e(TAG, errorMessage);
-            throw new RuntimeException(errorMessage);
-        }
+        String json_vocableToTranslate = starterIntent.getStringExtra(Extras.VOCABLE);
+        return Word.fromJson(json_vocableToTranslate);
     }
 
     @Override
@@ -136,17 +135,17 @@ public class TranslationsSelectorActivity extends AppCompatActivity implements T
 //    }
 
     @Override
-    public Loader<TranslationEditPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new TranslationEditPresenterFactory());
+    public Loader<TranslationSelectorPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new TranslationSelectorPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<TranslationEditPresenter> loader, TranslationEditPresenter presenter) {
+    public void onLoadFinished(Loader<TranslationSelectorPresenter> loader, TranslationSelectorPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<TranslationEditPresenter> loader) {
+    public void onLoaderReset(Loader<TranslationSelectorPresenter> loader) {
         presenter = null;
     }
 }
