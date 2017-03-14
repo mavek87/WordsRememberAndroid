@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * @author Matteo Veroni
  */
 
-public interface VocableEditView extends PojoManipulable<Word> {
+public interface EditVocableView extends PojoManipulable<Word> {
 
     void saveVocableAction();
 

@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.view.VocableEditView;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -34,16 +34,16 @@ import static org.mockito.Mockito.when;
  * Created by Matteo Veroni
  */
 
-public class VocableEditPresenterTest {
+public class EditVocablePresenterTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private VocableEditView view;
+    private EditVocableView view;
     @Mock
     private DictionaryDAO model;
 
-    private VocableEditPresenter presenter;
+    private EditVocablePresenter presenter;
 
     private static final EventBus eventBus = EventBus.getDefault();
 
@@ -224,8 +224,8 @@ public class VocableEditPresenterTest {
         }
 
         @Override
-        public VocableEditPresenter create() {
-            return new VocableEditPresenter(model);
+        public EditVocablePresenter create() {
+            return new EditVocablePresenter(model);
         }
     }
 }

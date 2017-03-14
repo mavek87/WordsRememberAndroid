@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dictionary.view.VocableEditActivity">
+    tools:context=".dictionary.view.EditVocableActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_dictionary_vocable_editor" />
+    <include layout="@layout/content_dictionary_edit_vocable" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/dictionary_editor_floating_action_button"

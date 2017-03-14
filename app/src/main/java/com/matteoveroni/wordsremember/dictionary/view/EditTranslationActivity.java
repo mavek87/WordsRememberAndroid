@@ -16,8 +16,9 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.Extras;
+import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
@@ -29,13 +30,13 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class TranslationCreateActivity extends AppCompatActivity implements TranslationCreateView, LoaderManager.LoaderCallbacks<TranslationEditPresenter> {
+public class EditTranslationActivity extends AppCompatActivity implements EditTranslationView, LoaderManager.LoaderCallbacks<EditTranslationPresenter> {
 
-    public static final String TAG = TagGenerator.tag(TranslationCreateActivity.class);
+    public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 
     private TranslationEditorFragment translationEditorFragment;
 
-    private TranslationEditPresenter presenter;
+    private EditTranslationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
@@ -92,7 +93,7 @@ public class TranslationCreateActivity extends AppCompatActivity implements Tran
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_dictionary_translation_editor);
+        setContentView(R.layout.activity_dictionary_edit_translation);
         ButterKnife.bind(this);
         setupAndShowToolbar();
 
@@ -105,7 +106,7 @@ public class TranslationCreateActivity extends AppCompatActivity implements Tran
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_translation_editor));
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_dictionary_add_translation_activity));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
@@ -128,17 +129,17 @@ public class TranslationCreateActivity extends AppCompatActivity implements Tran
     }
 
     @Override
-    public Loader<TranslationEditPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new TranslationEditPresenterFactory());
+    public Loader<EditTranslationPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new EditTranslationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<TranslationEditPresenter> loader, TranslationEditPresenter presenter) {
+    public void onLoadFinished(Loader<EditTranslationPresenter> loader, EditTranslationPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<TranslationEditPresenter> loader) {
+    public void onLoaderReset(Loader<EditTranslationPresenter> loader) {
         presenter = null;
     }
 }

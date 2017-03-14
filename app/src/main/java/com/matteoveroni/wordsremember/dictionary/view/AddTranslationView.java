@@ -8,13 +8,13 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * Created by Matteo Veroni
  */
 
-public interface TranslationSelectorView extends PojoManipulable<VocableTranslation> {
+public interface AddTranslationView extends PojoManipulable<VocableTranslation> {
 
     void selectTranslationAction();
 
     void createTranslactionAction();
 
-    void goToTranslationCreateView(Word vocable);
+    void goToEditTranslationView(Word vocable);
 
     void returnToPreviousView();
 

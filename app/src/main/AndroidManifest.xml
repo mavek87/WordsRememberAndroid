@@ -29,17 +29,22 @@
         </activity>
 
         <activity
-            android:name=".dictionary.view.VocablesManagerActivity"
+            android:name=".dictionary.view.ManageVocablesActivity"
             android:label="@string/title_activity_dictionary_vocables_manager" />
 
         <activity
-            android:name=".dictionary.view.VocableEditActivity"
+            android:name=".dictionary.view.EditVocableActivity"
             android:label="@string/title_activity_dictionary_vocable_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.TranslationCreateActivity"
-            android:label="@string/title_activity_dictionary_translation_editor"
+            android:name=".dictionary.view.AddTranslationActivity"
+            android:label="@string/title_dictionary_add_translation_activity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".dictionary.view.EditTranslationActivity"
+            android:label="@string/title_dictionary_edit_translation_activity"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

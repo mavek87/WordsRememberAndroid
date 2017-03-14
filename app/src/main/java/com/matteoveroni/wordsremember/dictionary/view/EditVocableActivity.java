@@ -15,12 +15,13 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.VocableEditPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.Extras;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.dictionary.presenter.VocableEditPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -30,14 +31,14 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class VocableEditActivity extends AppCompatActivity implements VocableEditView, LoaderManager.LoaderCallbacks<VocableEditPresenter> {
+public class EditVocableActivity extends AppCompatActivity implements EditVocableView, LoaderManager.LoaderCallbacks<EditVocablePresenter> {
 
-    public static final String TAG = TagGenerator.tag(VocableEditActivity.class);
+    public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
 
-    private VocableEditPresenter presenter;
+    private EditVocablePresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
@@ -53,9 +54,9 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
 
     @Override
     public void goToTranslationSelectorView(Word vocable) {
-        Intent intent_goToTranslationsSelectorView = new Intent(getApplicationContext(), TranslationSelectorActivity.class);
-        intent_goToTranslationsSelectorView.putExtra(Extras.VOCABLE, vocable.toJson());
-        startActivity(intent_goToTranslationsSelectorView);
+        Intent intent_goToTranslationsSelectorActivity = new Intent(getApplicationContext(), AddTranslationActivity.class);
+        intent_goToTranslationsSelectorActivity.putExtra(Extras.VOCABLE, vocable.toJson());
+        startActivity(intent_goToTranslationsSelectorActivity);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary_vocable_editor);
+        setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
 
         vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
@@ -145,17 +146,17 @@ public class VocableEditActivity extends AppCompatActivity implements VocableEdi
     }
 
     @Override
-    public Loader<VocableEditPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new VocableEditPresenterFactory());
+    public Loader<EditVocablePresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new EditVocablePresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<VocableEditPresenter> loader, VocableEditPresenter presenter) {
+    public void onLoadFinished(Loader<EditVocablePresenter> loader, EditVocablePresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<VocableEditPresenter> loader) {
+    public void onLoaderReset(Loader<EditVocablePresenter> loader) {
         presenter = null;
     }
 }

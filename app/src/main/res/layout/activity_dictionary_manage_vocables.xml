@@ -8,9 +8,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dictionary.view.VocablesManagerActivity">
+    tools:context=".dictionary.view.ManageVocablesActivity">
 
-    <include layout="@layout/content_dictionary_vocables_manager" />
+    <include layout="@layout/content_dictionary_manage_vocables" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/dictionary_management_floating_action_button"

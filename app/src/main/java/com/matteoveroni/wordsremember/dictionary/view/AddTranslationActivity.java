@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -15,10 +14,9 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.presenter.TranslationEditPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.TranslationSelectorPresenter;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationEditPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.TranslationSelectorPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.Extras;
+import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
@@ -30,15 +28,14 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class TranslationSelectorActivity extends AppCompatActivity implements TranslationSelectorView, LoaderManager.LoaderCallbacks<TranslationSelectorPresenter> {
+public class AddTranslationActivity extends AppCompatActivity implements AddTranslationView, LoaderManager.LoaderCallbacks<AddTranslationPresenter> {
 
-    public static final String TAG = TagGenerator.tag(TranslationSelectorActivity.class);
+    public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
     private TranslationsListFragment translationsListFragment;
 
-    private TranslationSelectorPresenter presenter;
+    private AddTranslationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
-
 
     @Override
     public void selectTranslationAction() {
@@ -49,10 +46,10 @@ public class TranslationSelectorActivity extends AppCompatActivity implements Tr
     }
 
     @Override
-    public void goToTranslationCreateView(Word vocable) {
-        Intent intent_goToTranslationCreateView = new Intent(getApplicationContext(), TranslationCreateActivity.class);
-        intent_goToTranslationCreateView.putExtra(Extras.VOCABLE, vocable.toJson());
-        startActivity(intent_goToTranslationCreateView);
+    public void goToEditTranslationView(Word vocable) {
+        Intent intent_goToEditTranslationView = new Intent(getApplicationContext(), EditTranslationActivity.class);
+        intent_goToEditTranslationView.putExtra(Extras.VOCABLE, vocable.toJson());
+        startActivity(intent_goToEditTranslationView);
     }
 
     @Override
@@ -99,7 +96,7 @@ public class TranslationSelectorActivity extends AppCompatActivity implements Tr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_dictionary_translation_editor);
+        setContentView(R.layout.activity_dictionary_add_translation);
         ButterKnife.bind(this);
         setupAndShowToolbar();
 
@@ -112,7 +109,7 @@ public class TranslationSelectorActivity extends AppCompatActivity implements Tr
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_translation_editor));
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_dictionary_add_translation_activity));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
@@ -135,17 +132,17 @@ public class TranslationSelectorActivity extends AppCompatActivity implements Tr
 //    }
 
     @Override
-    public Loader<TranslationSelectorPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new TranslationSelectorPresenterFactory());
+    public Loader<AddTranslationPresenter> onCreateLoader(int id, Bundle arg) {
+        return new PresenterLoader<>(this, new AddTranslationPresenterFactory());
     }
 
     @Override
-    public void onLoadFinished(Loader<TranslationSelectorPresenter> loader, TranslationSelectorPresenter presenter) {
+    public void onLoadFinished(Loader<AddTranslationPresenter> loader, AddTranslationPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void onLoaderReset(Loader<TranslationSelectorPresenter> loader) {
+    public void onLoaderReset(Loader<AddTranslationPresenter> loader) {
         presenter = null;
     }
 }

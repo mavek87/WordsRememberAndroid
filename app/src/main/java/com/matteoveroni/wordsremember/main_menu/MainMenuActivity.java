@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 
-import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerActivity;
+import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 
@@ -106,7 +106,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
 
     @Override
     public void startDictionaryManagement() {
-        Intent intentStartDictionary = new Intent(getBaseContext(), VocablesManagerActivity.class);
+        Intent intentStartDictionary = new Intent(getBaseContext(), ManageVocablesActivity.class);
         startActivity(intentStartDictionary);
     }
 }

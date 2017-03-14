@@ -14,12 +14,15 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author Matteo Veroni
@@ -83,9 +86,9 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         Cursor cursor = translationsListViewAdapter.getCursor();
         cursor.moveToPosition(position);
 
-        //TODO: implement real behaviours clicking on translations
+        //TODO: check behaviour
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
-        Toast.makeText(getContext(), selectedTranslation.getName(), Toast.LENGTH_SHORT).show();
+        EventBus.getDefault().postSticky(new EventTranslationSelected(selectedTranslation));
     }
 
     /***********************************************************************************************

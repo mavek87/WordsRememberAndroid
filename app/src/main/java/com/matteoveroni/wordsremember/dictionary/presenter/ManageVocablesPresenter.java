@@ -5,14 +5,13 @@ import android.content.Context;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerView;
+import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.pojos.Word;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,22 +23,22 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class VocablesManagerPresenter implements Presenter {
+public class ManageVocablesPresenter implements Presenter {
 
-    public static final String TAG = TagGenerator.tag(VocablesManagerPresenter.class);
+    public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
     private final DictionaryDAO model;
-    private VocablesManagerView view;
+    private ManageVocablesView view;
 
-    public VocablesManagerPresenter(DictionaryDAO model) {
+    public ManageVocablesPresenter(DictionaryDAO model) {
         this.model = model;
     }
 
     @Override
     public void attachView(Object view) {
-        this.view = (VocablesManagerView) view;
+        this.view = (ManageVocablesView) view;
         eventBus.register(this);
     }
 

@@ -26,8 +26,8 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * Fragment that lists all the vocables in the dictionary using getSelectedVocable Cursor Loader.
- * Is also possible to remove vocables using getSelectedVocable long press touch.
+ * Fragment that lists all the vocables in the dictionary using getSelectedTranslation Cursor Loader.
+ * Is also possible to remove vocables using getSelectedTranslation long press touch.
  *
  * @author Matteo Veroni
  */

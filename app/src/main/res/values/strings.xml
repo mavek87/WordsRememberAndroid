@@ -23,6 +23,7 @@
 
     <string name="title_activity_dictionary_vocables_manager">Dictionary</string>
     <string name="title_activity_dictionary_vocable_editor">Vocables editor</string>
-    <string name="title_activity_dictionary_translation_editor">Add translation</string>
+    <string name="title_dictionary_add_translation_activity">Add translation</string>
+    <string name="title_dictionary_edit_translation_activity">Edit translation</string>
 
 </resources>

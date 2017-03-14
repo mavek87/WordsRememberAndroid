@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.dictionary.view.VocablesManagerView;
+import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
@@ -29,16 +29,16 @@ import static org.mockito.Mockito.verify;
  * @author Matteo Veroni
  */
 
-public class VocablesManagerPresenterTest {
+public class ManageVocablesPresenterTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private VocablesManagerView view;
+    private ManageVocablesView view;
     @Mock
     private DictionaryDAO dictionaryModel;
 
-    private VocablesManagerPresenter presenter;
+    private ManageVocablesPresenter presenter;
 
     private final EventBus eventBus = EventBus.getDefault();
 
@@ -96,8 +96,8 @@ public class VocablesManagerPresenterTest {
         }
 
         @Override
-        public VocablesManagerPresenter create() {
-            return new VocablesManagerPresenter(model);
+        public ManageVocablesPresenter create() {
+            return new ManageVocablesPresenter(model);
         }
     }
 }

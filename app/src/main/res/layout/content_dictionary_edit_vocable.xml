@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Content of Dictionary Translations Selector Activity -->
+<!-- Content of Dictionary Manipulation Activity -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,13 +14,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.view.VocableEditActivity"
-    tools:showIn="@layout/activity_dictionary_translation_selector">
+    tools:context=".dictionary.view.EditVocableActivity"
+    tools:showIn="@layout/activity_dictionary_edit_vocable">
+
+    <fragment
+        android:id="@+id/dictionary_vocable_editor_fragment"
+        android:name="com.matteoveroni.wordsremember.fragments.VocableEditorFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="50" />
 
     <fragment
         android:id="@+id/dictionary_translations_list_fragment"
         android:name="com.matteoveroni.wordsremember.fragments.TranslationsListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_weight="50" />
 
 </LinearLayout>
