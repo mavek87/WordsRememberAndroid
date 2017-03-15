@@ -64,7 +64,8 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
 
     @Override
     public VocableTranslation getPojoUsedByView() {
-        return translationsListFragment.getPojoUsedByView();
+//        return translationsListFragment.getPojoUsedByView();
+        return null;
     }
 
     @Override

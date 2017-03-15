@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.dictionary.Extras;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
@@ -28,38 +29,12 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
     private ManageVocablesPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
 
-    public ManageVocablesActivity() {
-    }
-
-    @OnClick(R.id.dictionary_management_floating_action_button)
-    @Override
-    public void createVocableAction() {
-        presenter.onCreateVocableRequest();
-    }
-
-    @Override
-    public void goToVocableEditView(Word vocableToEdit) {
-        Intent intent_goToVocableEditor = new Intent(getApplicationContext(), EditVocableActivity.class);
-        intent_goToVocableEditor.putExtra(
-                Extras.VOCABLE,
-                vocableToEdit.toJson()
-        );
-        startActivity(intent_goToVocableEditor);
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_dictionary_manage_vocables);
         ButterKnife.bind(this);
-
-        loadPresenter();
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     @Override
@@ -75,6 +50,23 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
         super.onStop();
     }
 
+    @OnClick(R.id.dictionary_management_floating_action_button)
+    @Override
+    public void createVocableAction() {
+        presenter.onCreateVocableRequest();
+    }
+
+    @Override
+    public void goToEditVocableView() {
+        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
+        startActivity(intent_goToEditVocableView);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public Loader<ManageVocablesPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new ManageVocablesPresenterFactory());
@@ -88,9 +80,5 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
     @Override
     public void onLoaderReset(Loader<ManageVocablesPresenter> loader) {
         presenter = null;
-    }
-
-    private void loadPresenter() {
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 }

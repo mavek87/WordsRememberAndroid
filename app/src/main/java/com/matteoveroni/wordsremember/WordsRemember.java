@@ -6,18 +6,17 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dependency_injection.components.DaggerModelComponent;
-import com.matteoveroni.wordsremember.dependency_injection.components.ModelComponent;
+import com.matteoveroni.wordsremember.dependency_injection.components.DAOComponent;
+import com.matteoveroni.wordsremember.dependency_injection.components.DaggerDAOComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
-import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 
 /**
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- *
- * @version 0.0.61
- *
+ * @version 0.0.62
  **/
 
 public class WordsRemember extends Application {
@@ -26,38 +25,43 @@ public class WordsRemember extends Application {
     public static final String NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_NAME = NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.0.61";
+    public static final String VERSION = "0.0.62";
 
-    private static ModelComponent MODEL_COMPONENT;
+    private static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
+    private static DAOComponent DAO_COMPONENT;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        logAppSpecs();
-        injectModels();
+        printAppSpecs();
+        buildDAOComponent();
     }
 
-    public static ModelComponent getModelComponent() {
-        return MODEL_COMPONENT;
+    public static DictionaryModel getDictionaryModel() {
+        return DICTIONARY_MODEL;
+    }
+
+    public static DAOComponent getDAOComponent() {
+        return DAO_COMPONENT;
     }
 
     public static WordsRemember getInjectorsForApp(Context context) {
         return (WordsRemember) context.getApplicationContext();
     }
 
-    private void logAppSpecs() {
+    private void printAppSpecs() {
         Log.i(NAME, Str.concat("AUTHORITY = ", AUTHORITY));
         Log.i(NAME, Str.concat("NAME = ", NAME));
         Log.i(NAME, Str.concat("LOWERCASE_NAME = ", LOWERCASE_NAME));
         Log.i(NAME, Str.concat("VERSION = ", VERSION));
     }
 
-    private void injectModels() {
-        // Dagger2 component. Used for injecting models to each class specified by ModelComponent interface.
-        MODEL_COMPONENT = DaggerModelComponent
+    private void buildDAOComponent() {
+        // buildDAOComponent Dagger2 component
+        DAO_COMPONENT = DaggerDAOComponent
                 .builder()
                 .appModule(new AppModule(this))
-                .modelModule(new ModelModule())
+                .daoModule(new DaoModule())
                 .build();
     }
 

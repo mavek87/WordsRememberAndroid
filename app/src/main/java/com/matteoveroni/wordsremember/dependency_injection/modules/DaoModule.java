@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 import android.content.Context;
 
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,13 +13,13 @@ import dagger.Provides;
  */
 
 @Module
-public class ModelModule {
+public class DaoModule {
 
-    public ModelModule() {
+    public DaoModule() {
     }
 
     @Provides
-    public DictionaryDAO provideDictionaryModel(Context context) {
+    public DictionaryDAO provideDictionaryDAO(Context context) {
         return new DictionaryDAO(context);
     }
 }

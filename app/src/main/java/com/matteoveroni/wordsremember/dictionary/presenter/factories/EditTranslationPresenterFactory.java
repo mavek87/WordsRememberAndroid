@@ -18,7 +18,7 @@ public class EditTranslationPresenterFactory implements PresenterFactory {
 
     @Override
     public EditTranslationPresenter create() {
-        WordsRemember.getModelComponent().inject(this);
+        WordsRemember.getDAOComponent().inject(this);
         return new EditTranslationPresenter(injectedModel);
     }
 }

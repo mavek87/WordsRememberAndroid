@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dependency_injection.components;
 
-import com.matteoveroni.wordsremember.dependency_injection.modules.ModelModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
@@ -16,8 +16,8 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {AppModule.class, ModelModule.class})
-public interface ModelComponent {
+@Component(modules = {AppModule.class, DaoModule.class})
+public interface DAOComponent {
 
     void inject(ManageVocablesPresenterFactory vocableManagerPresenterFactory);
 

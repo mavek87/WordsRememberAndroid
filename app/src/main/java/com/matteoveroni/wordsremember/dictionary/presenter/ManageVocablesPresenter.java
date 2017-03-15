@@ -5,6 +5,8 @@ import android.content.Context;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
@@ -29,11 +31,11 @@ public class ManageVocablesPresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
     private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
-    private final DictionaryDAO model;
+    private final DictionaryDAO dao;
     private ManageVocablesView view;
 
-    public ManageVocablesPresenter(DictionaryDAO model) {
-        this.model = model;
+    public ManageVocablesPresenter(DictionaryDAO dao) {
+        this.dao = dao;
     }
 
     @Override
@@ -57,14 +59,16 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        view.goToVocableEditView(new Word(""));
+        WordsRemember.getDictionaryModel().setSelectedVocable(new Word(""));
+        view.goToEditVocableView();
     }
 
     @Subscribe(sticky = true)
     public void onEvent(EventVocableSelected event) {
-        Word selectedVocable = event.getSelectedVocable();
+        final Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        view.goToVocableEditView(selectedVocable);
+        WordsRemember.getDictionaryModel().setSelectedVocable(selectedVocable);
+        view.goToEditVocableView();
     }
 
     @Subscribe(sticky = true)
@@ -72,8 +76,10 @@ public class ManageVocablesPresenter implements Presenter {
         Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
-                model.asyncDeleteVocable(vocableToManipulate.getId());
+                dao.asyncDeleteVocable(vocableToManipulate.getId());
                 break;
+            default:
+                throw new UnsupportedOperationException("Unsupported vocable manipulation exception");
         }
         eventBus.removeStickyEvent(event);
     }
@@ -87,7 +93,7 @@ public class ManageVocablesPresenter implements Presenter {
     private void populateDatabaseForTestPurposes(Context context) {
         for (int i = 0; i < 5; i++) {
             Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new Range(3, 20)));
-//            model.asyncSaveVocable(vocableToSave);
+//            dao.asyncSaveVocable(vocableToSave);
         }
     }
 }

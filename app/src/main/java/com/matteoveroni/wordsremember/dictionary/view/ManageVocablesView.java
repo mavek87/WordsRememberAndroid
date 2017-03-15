@@ -10,7 +10,7 @@ public interface ManageVocablesView {
 
     void createVocableAction();
 
-    void goToVocableEditView(Word vocableToEdit);
+    void goToEditVocableView();
 
     void showMessage(String message);
 
