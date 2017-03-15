@@ -41,7 +41,6 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
     protected void onStart() {
         super.onStart();
         presenter.attachView(this);
-        presenter.onViewCreated(getApplicationContext());
     }
 
     @Override

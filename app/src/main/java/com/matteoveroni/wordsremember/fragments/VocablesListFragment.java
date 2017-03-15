@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -35,19 +34,19 @@ import org.greenrobot.eventbus.EventBus;
 public class VocablesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private final EventBus eventBus = EventBus.getDefault();
-    private final int CURSOR_LOADER_ID = 1;
+    private VocableListViewAdapter vocableListAdapter;
 
-    private VocableListViewAdapter vocablesListViewAdapter;
-
-    public VocablesListFragment() {
-    }
+    private static final int ID_CURSOR_LOADER = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocables_list, container, false);
-        vocablesListViewAdapter = new VocableListViewAdapter(getContext(), null);
-        setListAdapter(vocablesListViewAdapter);
-        getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
+
+        vocableListAdapter = new VocableListViewAdapter(getContext(), null);
+        setListAdapter(vocableListAdapter);
+
+        getLoaderManager().initLoader(ID_CURSOR_LOADER, null, this);
+
         return view;
     }
 
@@ -65,14 +64,14 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public void onResume() {
-        getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
+        getLoaderManager().restartLoader(ID_CURSOR_LOADER, null, this);
         super.onResume();
     }
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
-        Cursor cursor = vocablesListViewAdapter.getCursor();
+//        super.onListItemClick(listView, view, position, id);
+        Cursor cursor = vocableListAdapter.getCursor();
         eventBus.postSticky(new EventVocableSelected(getSelectedVocable(cursor, position)));
     }
 
@@ -87,7 +86,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
         AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         int position = contextMenuInfo.position;
-        Cursor cursor = vocablesListViewAdapter.getCursor();
+        Cursor cursor = vocableListAdapter.getCursor();
 
         switch (item.getItemId()) {
 
@@ -123,12 +122,12 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        vocablesListViewAdapter.swapCursor(cursor);
+        vocableListAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        vocablesListViewAdapter.swapCursor(null);
+        vocableListAdapter.swapCursor(null);
     }
 }
 

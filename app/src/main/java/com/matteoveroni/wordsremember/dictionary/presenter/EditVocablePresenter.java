@@ -1,6 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
@@ -21,18 +23,21 @@ public class EditVocablePresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 
-    private final DictionaryDAO model;
+    private final DictionaryModel model;
+    private final DictionaryDAO dao;
     private EditVocableView view;
 
-    private Word persistedVocableUsedByView;
+    private Word vocableInViewToValidateForSaveRequest = null;
 
-    public EditVocablePresenter(DictionaryDAO model) {
-        this.model = model;
+    public EditVocablePresenter(DictionaryDAO dao) {
+        this.model = WordsRemember.getDictionaryModel();
+        this.dao = dao;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (EditVocableView) view;
+        this.view.setPojoUsedInView(model.getSelectedVocable());
         eventBus.register(this);
     }
 
@@ -42,58 +47,53 @@ public class EditVocablePresenter implements Presenter {
         view = null;
     }
 
-    public void onVocableToEditRetrieved(Word vocable) {
-        persistedVocableUsedByView = vocable;
-        view.setPojoUsedInView(vocable);
-    }
-
-    public void onCreateTranslationRequest() {
-        view.goToTranslationSelectorView(persistedVocableUsedByView);
+    public void onAddTranslationRequest() {
+        view.goToAddTranslationView();
     }
 
     public void onSaveVocableRequest() {
-        Word vocableInView = view.getPojoUsedByView();
-        if (isVocableValid(vocableInView)) {
-            model.asyncFindVocablesByName(vocableInView.getName());
+        vocableInViewToValidateForSaveRequest = view.getPojoUsedByView();
+        if (isVocableValid(vocableInViewToValidateForSaveRequest)) {
+            dao.asyncSearchVocablesByName(vocableInViewToValidateForSaveRequest.getName());
         } else {
-            view.showMessage("You cannot save a vocable with an empty name. Compile all the data and retry");
+            view.showMessage("Invalid vocable. Cannot save. Compile all the data and retry");
         }
     }
 
     @Subscribe(sticky = true)
-    public void onEvent(EventAsyncFindVocablesByNameCompleted event) {
-        List<Word> vocablesWithSearchedName = event.getVocablesWithSearchedName();
-        int numberOfVocablesWithSearchedName = vocablesWithSearchedName.size();
+    public void onEvent(EventAsyncSearchVocablesByNameCompleted event) {
+        final List<Word> vocablesWithSameName = event.getVocablesWithSearchedName();
 
-        Word vocableInViewToStore = view.getPojoUsedByView();
-        long idOfVocableToStore = vocableInViewToStore.getId();
-
-        if (idOfVocableToStore <= 0) {
-            saveVocableIfHasUniqueName(vocableInViewToStore, numberOfVocablesWithSearchedName);
+        if (isVocableSaved(vocableInViewToValidateForSaveRequest)) {
+            updateVocableIfHasUniqueNameOrShowError(vocableInViewToValidateForSaveRequest, vocablesWithSameName);
         } else {
-            updateVocableIfHasUniqueName(vocableInViewToStore, vocablesWithSearchedName);
+            saveVocableIfHasUniqueNameOrShowError(vocableInViewToValidateForSaveRequest, vocablesWithSameName);
         }
     }
 
-    private void updateVocableIfHasUniqueName(Word vocableToUpdate, List<Word> storedVocablesWithSameName) {
-        int numberOfVocablesWithSameName = storedVocablesWithSameName.size();
+    private boolean isVocableSaved(Word vocable) {
+        return vocable.getId() > 0;
+    }
+
+    private void saveVocableIfHasUniqueNameOrShowError(Word vocableToSave, List<Word> vocablesWithSameName) {
+        if (vocablesWithSameName.isEmpty()) {
+            dao.asyncSaveVocable(vocableToSave);
+        } else {
+            view.showMessage("Cannot save the vocable using this vocable name, it is already in use.");
+        }
+    }
+
+    private void updateVocableIfHasUniqueNameOrShowError(Word vocableToUpdate, List<Word> vocablesWithSameName) {
+        int numberOfVocablesWithSameName = vocablesWithSameName.size();
 
         if (numberOfVocablesWithSameName > 1) {
             throw new RuntimeException("There are duplicated vocables names");
         }
 
-        if ((numberOfVocablesWithSameName == 1) && (vocableToUpdate.getId() != storedVocablesWithSameName.get(0).getId())) {
+        if ((numberOfVocablesWithSameName == 1) && (vocableToUpdate.getId() == vocablesWithSameName.get(0).getId())) {
+            dao.asyncUpdateVocable(vocableToUpdate.getId(), vocableToUpdate);
+        } else {
             view.showMessage("Cannot update the vocable using this vocable name, it is already in use.");
-        } else {
-            model.asyncUpdateVocable(vocableToUpdate.getId(), vocableToUpdate);
-        }
-    }
-
-    private void saveVocableIfHasUniqueName(Word vocableToSave, int numberOfStoredVocablesWithSameName) {
-        if (numberOfStoredVocablesWithSameName == 0) {
-            model.asyncSaveVocable(vocableToSave);
-        } else {
-            view.showMessage("Cannot save the vocable using this vocable name, it is already in use.");
         }
     }
 
@@ -108,8 +108,8 @@ public class EditVocablePresenter implements Presenter {
     }
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
-        persistedVocableUsedByView = view.getPojoUsedByView();
         eventBus.removeStickyEvent(event);
+        model.setSelectedVocable(vocableInViewToValidateForSaveRequest);
         view.returnToPreviousView();
     }
 

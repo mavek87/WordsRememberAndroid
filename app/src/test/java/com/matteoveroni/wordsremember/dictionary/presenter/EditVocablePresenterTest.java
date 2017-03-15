@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncFindVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
@@ -87,7 +87,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(model).asyncFindVocablesByName(VOCABLE.getName());
+        verify(model).asyncSearchVocablesByName(VOCABLE.getName());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class EditVocablePresenterTest {
         presenter.onSaveVocableRequest();
 
         verify(view).showMessage(String.valueOf(any()));
-        verify(model, never()).asyncFindVocablesByName(anyString());
+        verify(model, never()).asyncSearchVocablesByName(anyString());
     }
 
     @Test
@@ -108,16 +108,16 @@ public class EditVocablePresenterTest {
         presenter.onSaveVocableRequest();
 
         verify(view).showMessage(any(String.class));
-        verify(model, never()).asyncFindVocablesByName(anyString());
+        verify(model, never()).asyncSearchVocablesByName(anyString());
     }
 
     @Test
     public void onCreateTranslationsRequest_OrderToViewTo_goToTranslationEditorView() {
         presenter.onVocableToEditRetrieved(VOCABLE);
 
-        presenter.onCreateTranslationRequest();
+        presenter.onAddTranslationRequest();
 
-        verify(view).goToTranslationSelectorView(VOCABLE);
+        verify(view).goToAddTranslationView(VOCABLE);
     }
 
     @Test
@@ -145,10 +145,10 @@ public class EditVocablePresenterTest {
     public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_SaveItIfHisNameIsUnique() {
         when(view.getPojoUsedByView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
 
-        EventAsyncFindVocablesByNameCompleted eventAsyncFindVocablesByNameCompleted =
-                new EventAsyncFindVocablesByNameCompleted(Collections.emptyList());
+        EventAsyncSearchVocablesByNameCompleted eventAsyncSearchVocablesByNameCompleted =
+                new EventAsyncSearchVocablesByNameCompleted(Collections.emptyList());
 
-        presenter.onEvent(eventAsyncFindVocablesByNameCompleted);
+        presenter.onEvent(eventAsyncSearchVocablesByNameCompleted);
 
         verify(model).asyncSaveVocable(NOT_PERSISTED_VOCABLE_IN_VIEW);
     }
@@ -159,8 +159,8 @@ public class EditVocablePresenterTest {
 
         populatePersistentListOfVocablesWithSameName(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID);
 
-        EventAsyncFindVocablesByNameCompleted eventAsyncSearchVocableByNameCompleted =
-                new EventAsyncFindVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
+        EventAsyncSearchVocablesByNameCompleted eventAsyncSearchVocableByNameCompleted =
+                new EventAsyncSearchVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
 
         presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
 
@@ -177,10 +177,10 @@ public class EditVocablePresenterTest {
                 ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME
         );
 
-        EventAsyncFindVocablesByNameCompleted eventAsyncFindVocablesByNameCompleted =
-                new EventAsyncFindVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
+        EventAsyncSearchVocablesByNameCompleted eventAsyncSearchVocablesByNameCompleted =
+                new EventAsyncSearchVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
 
-        presenter.onEvent(eventAsyncFindVocablesByNameCompleted);
+        presenter.onEvent(eventAsyncSearchVocablesByNameCompleted);
     }
 
     @Test
@@ -189,8 +189,8 @@ public class EditVocablePresenterTest {
 
         populatePersistentListOfVocablesWithSameName(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME);
 
-        EventAsyncFindVocablesByNameCompleted event =
-                new EventAsyncFindVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
+        EventAsyncSearchVocablesByNameCompleted event =
+                new EventAsyncSearchVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
 
         presenter.onEvent(event);
 
@@ -204,10 +204,10 @@ public class EditVocablePresenterTest {
 
         when(view.getPojoUsedByView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);
 
-        EventAsyncFindVocablesByNameCompleted eventAsyncFindVocablesByNameCompleted =
-                new EventAsyncFindVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
+        EventAsyncSearchVocablesByNameCompleted eventAsyncSearchVocablesByNameCompleted =
+                new EventAsyncSearchVocablesByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
 
-        presenter.onEvent(eventAsyncFindVocablesByNameCompleted);
+        presenter.onEvent(eventAsyncSearchVocablesByNameCompleted);
 
         verify(model).asyncUpdateVocable(VOCABLE_WITH_UPDATED_NAME.getId(), VOCABLE_WITH_UPDATED_NAME);
     }

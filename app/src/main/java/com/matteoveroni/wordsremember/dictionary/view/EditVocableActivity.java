@@ -6,7 +6,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
@@ -39,34 +37,57 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     private TranslationsListFragment translationsListFragment;
 
     private EditVocablePresenter presenter;
-    private final int PRESENTER_LOADER_ID = 1;
+    private final int ID_PRESENTER_LOADER = 1;
 
     @Override
-    public void saveVocableAction() {
-        presenter.onSaveVocableRequest();
-    }
-
-    @OnClick(R.id.dictionary_editor_floating_action_button)
-    @Override
-    public void addTranslationAction() {
-        presenter.onCreateTranslationRequest();
+    protected void onStart() {
+        super.onStart();
+        presenter.attachView(this);
     }
 
     @Override
-    public void goToTranslationSelectorView(Word vocable) {
-        Intent intent_goToTranslationsSelectorActivity = new Intent(getApplicationContext(), AddTranslationActivity.class);
-        intent_goToTranslationsSelectorActivity.putExtra(Extras.VOCABLE, vocable.toJson());
-        startActivity(intent_goToTranslationsSelectorActivity);
+    protected void onStop() {
+        presenter.destroy();
+        super.onStop();
     }
 
     @Override
-    public void returnToPreviousView() {
-        onBackPressed();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dictionary_edit_vocable);
+        ButterKnife.bind(this);
+        setupAndShowToolbar();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
+        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
+
+        getSupportLoaderManager().initLoader(ID_PRESENTER_LOADER, null, this);
+    }
+
+    private void setupAndShowToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_vocable_editor));
+            toolbar.setTitle(title);
+        }
+        setSupportActionBar(toolbar);
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dictionary_edit_vocable, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_action_done:
+                saveVocableAction();
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -81,68 +102,30 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary_edit_vocable);
-        ButterKnife.bind(this);
-
-        vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
-        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
-
-        setupAndShowToolbar();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    public void saveVocableAction() {
+        presenter.onSaveVocableRequest();
     }
 
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_vocable_editor));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
+    @OnClick(R.id.edit_vocable_view_add_translation_action_button)
+    @Override
+    public void addTranslationAction() {
+        presenter.onAddTranslationRequest();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-        Word vocableToEdit = findVocableToEdit();
-        presenter.onVocableToEditRetrieved(vocableToEdit);
-    }
-
-    private Word findVocableToEdit() {
-        Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE)) {
-            String json_vocableToEdit = starterIntent.getStringExtra(Extras.VOCABLE);
-            return Word.fromJson(json_vocableToEdit);
-        } else {
-            final String errorMessage = "Unexpected Error: No vocable to edit retrieved.";
-            Log.e(TAG, errorMessage);
-            throw new RuntimeException(errorMessage);
-        }
+    public void goToAddTranslationView() {
+        Intent intent_goToAddTranslationActivity = new Intent(getApplicationContext(), AddTranslationActivity.class);
+        startActivity(intent_goToAddTranslationActivity);
     }
 
     @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
+    public void returnToPreviousView() {
+        onBackPressed();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_vocable_editor, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_action_done:
-                saveVocableAction();
-                return true;
-        }
-        return false;
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

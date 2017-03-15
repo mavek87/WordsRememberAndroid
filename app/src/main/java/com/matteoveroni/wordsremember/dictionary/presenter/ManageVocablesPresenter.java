@@ -30,7 +30,6 @@ public class ManageVocablesPresenter implements Presenter {
     public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
 
     private final EventBus eventBus = EventBus.getDefault();
-    private static boolean IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = true;
     private final DictionaryDAO dao;
     private ManageVocablesView view;
 
@@ -50,14 +49,6 @@ public class ManageVocablesPresenter implements Presenter {
         view = null;
     }
 
-    //TODO: remove this method in production code
-    public void onViewCreated(Context context) {
-        if (IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME) {
-            populateDatabaseForTestPurposes(context);
-            IS_PRESENTER_CREATED_FOR_THE_FIRST_TIME = false;
-        }
-    }
-
     public void onCreateVocableRequest() {
         WordsRemember.getDictionaryModel().setSelectedVocable(new Word(""));
         view.goToEditVocableView();
@@ -73,7 +64,7 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe(sticky = true)
     public void onEvent(EventVocableManipulationRequest event) {
-        Word vocableToManipulate = event.getVocableToManipulate();
+        final Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
                 dao.asyncDeleteVocable(vocableToManipulate.getId());
@@ -88,12 +79,5 @@ public class ManageVocablesPresenter implements Presenter {
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
         eventBus.removeStickyEvent(event);
         view.showMessage("Vocable removed");
-    }
-
-    private void populateDatabaseForTestPurposes(Context context) {
-        for (int i = 0; i < 5; i++) {
-            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new Range(3, 20)));
-//            dao.asyncSaveVocable(vocableToSave);
-        }
     }
 }
