@@ -20,7 +20,7 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.63
+ * @version 0.0.64
  **/
 
 public class WordsRemember extends Application {
@@ -29,7 +29,7 @@ public class WordsRemember extends Application {
     public static final String NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_NAME = NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.0.63";
+    public static final String VERSION = "0.0.64";
 
     private static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
     private static DAOComponent DAO_COMPONENT;

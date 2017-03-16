@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter.factories;
 
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;
@@ -14,11 +15,13 @@ import javax.inject.Inject;
 public class EditVocablePresenterFactory implements PresenterFactory {
 
     @Inject
-    DictionaryDAO injectedModel;
+    DictionaryDAO dao;
+
+    private final DictionaryModel model = WordsRemember.getDictionaryModel();
 
     @Override
     public EditVocablePresenter create() {
         WordsRemember.getDAOComponent().inject(this);
-        return new EditVocablePresenter(injectedModel);
+        return new EditVocablePresenter(model, dao);
     }
 }

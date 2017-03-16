@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocablesByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
@@ -12,8 +11,6 @@ import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
 
 /**
  * @author Matteo Veroni
@@ -29,8 +26,8 @@ public class EditVocablePresenter implements Presenter {
 
     private Word vocableInViewToPersist = null;
 
-    public EditVocablePresenter(DictionaryDAO dao) {
-        this.model = WordsRemember.getDictionaryModel();
+    public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
+        this.model = model;
         this.dao = dao;
     }
 
@@ -54,46 +51,39 @@ public class EditVocablePresenter implements Presenter {
     public void onSaveVocableRequest() {
         vocableInViewToPersist = view.getPojoUsedByView();
         if (isVocableValid(vocableInViewToPersist)) {
-            dao.asyncSearchVocablesByName(vocableInViewToPersist.getName());
+            dao.asyncSearchVocableByName(vocableInViewToPersist.getName());
         } else {
             view.showMessage("Invalid vocable. Cannot save. Compile all the data and retry");
         }
     }
 
     @Subscribe(sticky = true)
-    public void onEvent(EventAsyncSearchVocablesByNameCompleted event) {
-        final List<Word> vocablesWithSameName = event.getVocablesWithSearchedName();
-
-        if (isVocableSaved(vocableInViewToPersist)) {
-            updateVocableIfHasUniqueNameOrShowError(vocableInViewToPersist, vocablesWithSameName);
+    public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
+        final Word vocableFoundByName = event.getVocableWithSearchedName();
+        if (wasVocableSavedBefore(vocableInViewToPersist)) {
+            updateVocableIfPossibleOrShowError(vocableFoundByName);
         } else {
-            saveVocableIfHasUniqueNameOrShowError(vocableInViewToPersist, vocablesWithSameName);
+            saveVocableIfPossibleOrShowError(vocableFoundByName);
         }
     }
 
-    private boolean isVocableSaved(Word vocable) {
+    private boolean wasVocableSavedBefore(Word vocable) {
         return vocable.getId() > 0;
     }
 
-    private void saveVocableIfHasUniqueNameOrShowError(Word vocableToSave, List<Word> vocablesWithSameName) {
-        if (vocablesWithSameName.isEmpty()) {
-            dao.asyncSaveVocable(vocableToSave);
+    private void updateVocableIfPossibleOrShowError(Word uniquePersistentVocableWithSameName) {
+        if ((uniquePersistentVocableWithSameName != null) && (vocableInViewToPersist.getId() == uniquePersistentVocableWithSameName.getId())) {
+            dao.asyncUpdateVocable(uniquePersistentVocableWithSameName.getId(), vocableInViewToPersist);
         } else {
-            view.showMessage("Cannot save the vocable using this vocable name, it is already in use.");
+            view.showMessage("Cannot update the vocable using this vocable name, this name is already used.");
         }
     }
 
-    private void updateVocableIfHasUniqueNameOrShowError(Word vocableToUpdate, List<Word> vocablesWithSameName) {
-        int numberOfVocablesWithSameName = vocablesWithSameName.size();
-
-        if (numberOfVocablesWithSameName > 1) {
-            throw new RuntimeException("There are duplicated vocables names");
-        }
-
-        if ((numberOfVocablesWithSameName == 1) && (vocableToUpdate.getId() == vocablesWithSameName.get(0).getId())) {
-            dao.asyncUpdateVocable(vocableToUpdate.getId(), vocableToUpdate);
+    private void saveVocableIfPossibleOrShowError(Word uniquePersistentVocabledWithSameName) {
+        if (uniquePersistentVocabledWithSameName == null) {
+            dao.asyncSaveVocable(vocableInViewToPersist);
         } else {
-            view.showMessage("Cannot update the vocable using this vocable name, it is already in use.");
+            view.showMessage("Cannot save the vocable using this vocable name, this name is already used.");
         }
     }
 

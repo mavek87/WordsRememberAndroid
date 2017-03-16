@@ -85,7 +85,7 @@ public class DictionaryDAO {
         ).execute();
     }
 
-    public void asyncSearchVocablesByName(String vocableName) throws IllegalArgumentException {
+    public void asyncSearchVocableByName(String vocableName) throws IllegalArgumentException {
         if (Str.isNullOrEmpty(vocableName)) {
             throw new IllegalArgumentException("AsyncFindVocablesWithName error: null or empty vocable name.");
         }

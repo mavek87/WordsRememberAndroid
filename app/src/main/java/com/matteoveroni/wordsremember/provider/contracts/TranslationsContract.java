@@ -47,7 +47,8 @@ public final class TranslationsContract {
                 + Schema.TABLE_NAME
                 + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COLUMN_TRANSLATION + " TEXT NOT NULL"
+                + Schema.COLUMN_TRANSLATION + " TEXT NOT NULL, "
+                + "CONSTRAINT UQ_Translation UNIQUE (" + Schema.COLUMN_TRANSLATION + ")"
                 + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }

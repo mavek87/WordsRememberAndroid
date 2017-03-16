@@ -47,7 +47,8 @@ public final class VocablesContract {
                 + Schema.TABLE_NAME
                 + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COLUMN_VOCABLE + " TEXT NOT NULL"
+                + Schema.COLUMN_VOCABLE + " TEXT NOT NULL, "
+                + "CONSTRAINT UQ_Vocable UNIQUE (" + Schema.COLUMN_VOCABLE + ")"
                 + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
