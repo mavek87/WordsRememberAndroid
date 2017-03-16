@@ -40,10 +40,7 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
 
     @BindView(R.id.fragment_vocable_editor_txt_vocable_name)
     EditText txt_vocableName;
-
-    public VocableEditorFragment() {
-    }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocable_editor, container, false);

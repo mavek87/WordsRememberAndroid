@@ -75,14 +75,14 @@ public class EditVocablePresenterTest {
     }
 
     @Test
-    public void onVocableToEditRetrieved_OrderToViewTo_showVocableData() {
+    public void onVocableToEditRetrieved_View_showVocableData() {
         presenter.onVocableToEditRetrieved(VOCABLE);
 
         verify(view).setPojoUsedInView(VOCABLE);
     }
 
     @Test
-    public void onSaveVocableRequest_ForNewVocableToCreate_OrderToModelToCall_asyncFindVocablesWithName() {
+    public void onSaveVocableRequest_ForNewVocableToCreate_Model_asyncFindVocablesWithName() {
         when(view.getPojoUsedByView()).thenReturn(VOCABLE);
 
         presenter.onSaveVocableRequest();
@@ -91,7 +91,7 @@ public class EditVocablePresenterTest {
     }
 
     @Test
-    public void onSaveVocableRequest_UsingNullVocable_OrderToViewTo_showErrorMessage() {
+    public void onSaveVocableRequest_UsingNullVocable_View_showErrorMessage() {
         when(view.getPojoUsedByView()).thenReturn(null);
 
         presenter.onSaveVocableRequest();
@@ -101,7 +101,7 @@ public class EditVocablePresenterTest {
     }
 
     @Test
-    public void onSaveVocableRequest_UsingVocableWithEmptyName_OrderToViewTo_showErrorMessage() {
+    public void onSaveVocableRequest_UsingVocableWithEmptyName_View_showErrorMessage() {
         final Word VOCABLE_WITH_EMPTY_NAME = new Word(1, " ");
         when(view.getPojoUsedByView()).thenReturn(VOCABLE_WITH_EMPTY_NAME);
 
@@ -112,7 +112,7 @@ public class EditVocablePresenterTest {
     }
 
     @Test
-    public void onCreateTranslationsRequest_OrderToViewTo_goToTranslationEditorView() {
+    public void onCreateTranslationsRequest_View_goToTranslationEditorView() {
         presenter.onVocableToEditRetrieved(VOCABLE);
 
         presenter.onAddTranslationRequest();

@@ -27,7 +27,7 @@ public class EditVocablePresenter implements Presenter {
     private final DictionaryDAO dao;
     private EditVocableView view;
 
-    private Word vocableInViewToValidateForSaveRequest = null;
+    private Word vocableInViewToPersist = null;
 
     public EditVocablePresenter(DictionaryDAO dao) {
         this.model = WordsRemember.getDictionaryModel();
@@ -52,9 +52,9 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onSaveVocableRequest() {
-        vocableInViewToValidateForSaveRequest = view.getPojoUsedByView();
-        if (isVocableValid(vocableInViewToValidateForSaveRequest)) {
-            dao.asyncSearchVocablesByName(vocableInViewToValidateForSaveRequest.getName());
+        vocableInViewToPersist = view.getPojoUsedByView();
+        if (isVocableValid(vocableInViewToPersist)) {
+            dao.asyncSearchVocablesByName(vocableInViewToPersist.getName());
         } else {
             view.showMessage("Invalid vocable. Cannot save. Compile all the data and retry");
         }
@@ -64,10 +64,10 @@ public class EditVocablePresenter implements Presenter {
     public void onEvent(EventAsyncSearchVocablesByNameCompleted event) {
         final List<Word> vocablesWithSameName = event.getVocablesWithSearchedName();
 
-        if (isVocableSaved(vocableInViewToValidateForSaveRequest)) {
-            updateVocableIfHasUniqueNameOrShowError(vocableInViewToValidateForSaveRequest, vocablesWithSameName);
+        if (isVocableSaved(vocableInViewToPersist)) {
+            updateVocableIfHasUniqueNameOrShowError(vocableInViewToPersist, vocablesWithSameName);
         } else {
-            saveVocableIfHasUniqueNameOrShowError(vocableInViewToValidateForSaveRequest, vocablesWithSameName);
+            saveVocableIfHasUniqueNameOrShowError(vocableInViewToPersist, vocablesWithSameName);
         }
     }
 
@@ -109,7 +109,7 @@ public class EditVocablePresenter implements Presenter {
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
         eventBus.removeStickyEvent(event);
-        model.setSelectedVocable(vocableInViewToValidateForSaveRequest);
+        model.setSelectedVocable(vocableInViewToPersist);
         view.returnToPreviousView();
     }
 
