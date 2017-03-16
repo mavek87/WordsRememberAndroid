@@ -52,8 +52,10 @@ public class VocablesTranslationsContract {
                 + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
-                + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL"
+                + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL, "
+                + "CONSTRAINT uq_VocID_TraID UNIQUE (" + Schema.COLUMN_VOCABLE_ID + ", " + Schema.COLUMN_TRANSLATION_ID + ")"
                 + ");";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
 }
