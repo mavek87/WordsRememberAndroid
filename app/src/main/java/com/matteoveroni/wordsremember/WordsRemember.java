@@ -3,7 +3,6 @@ package com.matteoveroni.wordsremember;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Range;
@@ -31,6 +30,8 @@ public class WordsRemember extends Application {
     public static final String ABBREVIATED_NAME = "WR";
     public static final String VERSION = "0.0.64";
 
+    private static final boolean PRODUCTION_MODE = true;
+
     private static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
     private static DAOComponent DAO_COMPONENT;
 
@@ -39,7 +40,9 @@ public class WordsRemember extends Application {
         super.onCreate();
         printAppSpecs();
         buildDAOComponent();
-        populateDatabaseForTestPurposes(getApplicationContext());
+        if (!PRODUCTION_MODE) {
+            populateDatabaseForTestPurposes(getApplicationContext());
+        }
     }
 
     public static DictionaryModel getDictionaryModel() {

@@ -204,7 +204,7 @@ public class EditVocablePresenterTest {
     }
 
     @Test
-    public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfCurrentVocableInViewStillPersistent_AndNewNameToUpdateNotDuplicated_UpdateVocable() {
+    public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewAlreadySavedAndHasUniqueName_Update() {
         populatePersistentListOfVocablesWithSameName(VOCABLE);
 
         when(view.getPojoUsedByView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);

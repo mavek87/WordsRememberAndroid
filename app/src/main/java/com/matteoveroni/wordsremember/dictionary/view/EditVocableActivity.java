@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -35,6 +36,7 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
+    private ProgressDialog progressDialog;
 
     private EditVocablePresenter presenter;
     private final int ID_PRESENTER_LOADER = 1;
@@ -126,6 +128,16 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void blockUIWithMessage(String message) {
+        progressDialog = ProgressDialog.show(this, "Loading", message, true, false);
+    }
+
+    @Override
+    public void unblockUI() {
+        progressDialog.dismiss();
     }
 
     @Override

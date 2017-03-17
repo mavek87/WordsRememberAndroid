@@ -51,8 +51,8 @@ public class VocablesTranslationsContract {
                 + Schema.TABLE_NAME
                 + "("
                 + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COLUMN_VOCABLE_ID + " TEXT NOT NULL, "
-                + Schema.COLUMN_TRANSLATION_ID + " TEXT NOT NULL, "
+                + Schema.COLUMN_VOCABLE_ID + " INTEGER NOT NULL, "
+                + Schema.COLUMN_TRANSLATION_ID + " INTEGER NOT NULL, "
                 + "CONSTRAINT UQ_VocID_TraID UNIQUE (" + Schema.COLUMN_VOCABLE_ID + ", " + Schema.COLUMN_TRANSLATION_ID + ")"
                 + ");";
 

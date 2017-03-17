@@ -19,5 +19,8 @@ public interface EditVocableView extends PojoManipulable<Word> {
 
     void showMessage(String message);
 
+    void blockUIWithMessage(String message);
+
+    void unblockUI();
 }
 

@@ -42,6 +42,7 @@ import static junit.framework.Assert.assertTrue;
 @Config(constants = BuildConfig.class)
 public class DatabaseManagerTest {
 
+    private ShadowApplication app = Shadows.shadowOf(RuntimeEnvironment.application);
     private DatabaseManager dbManager;
     private Cursor queryResults;
     private ContentValues values = new ContentValues();
@@ -60,54 +61,54 @@ public class DatabaseManagerTest {
 
     @Before
     public void setUp() {
-        dbManager = null;
+        dbManager = DatabaseManager.getInstance(app.getApplicationContext());
+        assertNotNull("DbManager should be created before each test", dbManager);
+
+        final SQLiteDatabase database = dbManager.getReadableDatabase();
+        assertNotNull("Database should be created before each test", database);
+        database.close();
+
         queryResults = null;
-
-        ShadowApplication application = Shadows.shadowOf(RuntimeEnvironment.application);
-        dbManager = DatabaseManager.getInstance(application.getApplicationContext());
-
-        assertNotNull("DbManager should not be null after setUp", dbManager);
     }
 
     @After
     public void tearDown() {
-        values.clear();
         if (dbManager != null) {
             dbManager.close();
         }
         if (queryResults != null) {
             queryResults.close();
         }
+        values.clear();
     }
 
     @Test
-    public void WHEN_DB_MANAGER_IS_CREATED_DB_NAME_SHOULD_BE_SET() {
+    public void test_AfterDbManagerIsCreated_DbNameShouldBeSet() {
         assertEquals("DbManager name should be equal to expected name", DATABASE_NAME, dbManager.getDatabaseName());
     }
 
     @Test
-    public void WHEN_DB_MANAGER_IS_CREATED_VOCABLES_TABLE_SHOULD_BE_CREATED() {
-        queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
-        assertNotNull(TABLE_VOCABLES.getName() + "QueryResults shouldn't be null after selection query on existing table", queryResults);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
+    public void test_AfterDbManagerCreation_TableVocables_ShouldBeCreatedAndEmpty() {
+        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
     }
 
     @Test
-    public void WHEN_DB_MANAGER_IS_CREATED_TRANSLATIONS_TABLE_SHOULD_BE_CREATED() {
-        queryResults = getQueryResultsFromTable(TABLE_TRANSLATIONS);
-        assertNotNull(TABLE_VOCABLES.getName() + "QueryResults shouldn't be null after selection query on existing table", queryResults);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
+    public void test_AfterDbManagerIsCreated_TableTranslations_ShouldBeCreatedAndEmpty() {
+        checkIfTableIsCreatedAndEmpty(TABLE_TRANSLATIONS);
     }
 
     @Test
-    public void WHEN_DB_MANAGER_IS_CREATED_VOCABLESTRANSLATIONS_TABLE_SHOULD_BE_CREATED() {
-        queryResults = getQueryResultsFromTable(TABLE_VOCABLESTRANSLATIONS);
-        assertNotNull(TABLE_VOCABLES.getName() + "QueryResults shouldn't be null after selection query on existing table", queryResults);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
+    public void test_AfterDbManagerIsCreated_TableVocablesTranslations_ShouldBeCreatedAndEmpty() {
+        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLESTRANSLATIONS);
+    }
+
+    private void checkIfTableIsCreatedAndEmpty(Table table) {
+        queryResults = getQueryResultsFromTable(table);
+        assertTrue(table.getName() + " QueryResults shouldn't contain any query result", queryResults.getCount() == 0);
     }
 
     @Test(expected = SQLiteException.class)
-    public void SQLITE_EXCEPTION_SHOULD_BE_THROWN_WHEN_QUERY_EXECUTED_ON_INVALID_TABLE() {
+    public void test_WhenQueryExecutedUsingInvalidTable_SQliteExceptionShouldBeThrown() {
         queryResults = dbManager.getReadableDatabase().query(
                 INVALID_TABLE,
                 VocablesContract.Schema.ALL_COLUMNS,
@@ -116,7 +117,7 @@ public class DatabaseManagerTest {
     }
 
     @Test(expected = SQLiteException.class)
-    public void SQLITE_EXCEPTION_SHOULD_BE_THROWN_WHEN_QUERY_EXECUTED_ON_INVALID_COLUMN() {
+    public void test_WhenQueryExecutedUsingInvalidColumn_SQliteExceptionShouldBeThrown() {
         queryResults = dbManager.getReadableDatabase().query(
                 VocablesContract.Schema.TABLE_NAME,
                 INVALID_COLUMN,
@@ -125,12 +126,10 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void SELECT_INSERTED_VOCABLE_SUCCEED() {
-        long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
-
+    public void test_InsertValidVocableSucceed() {
+        final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
         queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
-
-        assertTrue("QueryResults should return just one value", queryResults.getCount() == 1);
+        assertTrue("After inserting valid vocable table should contains one value", queryResults.getCount() == 1);
         assertTrue("Should move to the first retrieved vocable position", queryResults.moveToFirst());
         assertEquals("The id of the only record existing should be equal to the id of data inserted",
                 idOfDataInserted,
@@ -143,40 +142,40 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void DELETE_EXISTING_VOCABLE_SUCCEED() {
-        long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
-        assertEquals("Id generated from insert should be equal to one", 1, idOfDataInserted);
+    public void test_DeleteExistingVocableSucceed() {
+        final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
 
-        int rowDeleted = dbManager.getWritableDatabase().delete(
+        final int rowDeleted = dbManager.getWritableDatabase().delete(
                 VocablesContract.Schema.TABLE_NAME,
-                VocablesContract.Schema.COLUMN_ID + " = " + idOfDataInserted,
+                VocablesContract.Schema.COLUMN_ID + "=" + idOfDataInserted,
                 null
         );
+
         assertEquals("Should delete only one row", 1, rowDeleted);
 
-        queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
-        assertTrue("QueryResults should return no values because the vocable should be deleted", queryResults.getCount() == 0);
+        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
     }
 
     @Test
-    public void UPDATE_EXISTING_VOCABLE_SUCCEED() {
+    public void test_UpdateExistingVocableSucceed() {
         final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
+
         final String UPDATED_VOCABLE_NAME = "UpdatedVocableName";
         values.put(VocablesContract.Schema.COLUMN_VOCABLE, UPDATED_VOCABLE_NAME);
 
         final int rowsUpdated = dbManager.getWritableDatabase().update(
                 VocablesContract.Schema.TABLE_NAME,
                 values,
-                VocablesContract.Schema.COLUMN_ID + " = " + idOfDataInserted, null);
+                VocablesContract.Schema.COLUMN_ID + "=" + idOfDataInserted, null);
         assertEquals("Rows updated should be only one", 1, rowsUpdated);
 
         queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
         assertTrue("QueryResults must return just one vocable", queryResults.getCount() == 1);
 
         queryResults.moveToFirst();
-        assertEquals(
-                "The only existing vocable should be updated like expected",
-                UPDATED_VOCABLE_NAME, queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
+        assertEquals("The only existing vocable should be updated like expected",
+                UPDATED_VOCABLE_NAME,
+                queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
         );
     }
 
@@ -197,10 +196,6 @@ public class DatabaseManagerTest {
         queryResults = getQueryResultsFromTable(TABLE_VOCABLESTRANSLATIONS);
         assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Helper Methods
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Cursor getQueryResultsFromTable(Table table) {
         return dbManager.getReadableDatabase().query(table.getName(), table.getColumns(), null, null, null, null, null, null);
@@ -226,7 +221,7 @@ public class DatabaseManagerTest {
         return idOfDataInserted;
     }
 
-    class Table {
+    private class Table {
         private final String name;
         private final String[] columns;
 
