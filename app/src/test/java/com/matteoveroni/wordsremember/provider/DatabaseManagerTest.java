@@ -150,7 +150,6 @@ public class DatabaseManagerTest {
                 VocablesContract.Schema.COLUMN_ID + "=" + idOfDataInserted,
                 null
         );
-
         assertEquals("Should delete only one row", 1, rowDeleted);
 
         checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
@@ -180,21 +179,16 @@ public class DatabaseManagerTest {
     }
 
     @Test
-    public void RESET_DATABASE_SHOULD_CLEAR_ALL_THE_TABLES() {
+    public void test_resetDatabase_ShouldClearAllTables() {
         insertValidRecordInTable(TABLE_VOCABLES);
         insertValidRecordInTable(TABLE_TRANSLATIONS);
         insertValidRecordInTable(TABLE_VOCABLESTRANSLATIONS);
 
         dbManager.resetDatabase();
 
-        queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
-
-        queryResults = getQueryResultsFromTable(TABLE_TRANSLATIONS);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
-
-        queryResults = getQueryResultsFromTable(TABLE_VOCABLESTRANSLATIONS);
-        assertTrue(TABLE_VOCABLES.getName() + " QueryResults shouldn't contains any query result", queryResults.getCount() == 0);
+        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
+        checkIfTableIsCreatedAndEmpty(TABLE_TRANSLATIONS);
+        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLESTRANSLATIONS);
     }
 
     private Cursor getQueryResultsFromTable(Table table) {
