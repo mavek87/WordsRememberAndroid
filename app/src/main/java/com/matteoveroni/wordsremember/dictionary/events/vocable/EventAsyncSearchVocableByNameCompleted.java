@@ -19,8 +19,4 @@ public class EventAsyncSearchVocableByNameCompleted {
     public Word getVocableWithSearchedName() {
         return vocablesWithSearchedName;
     }
-//
-//    public boolean isUniqueVocableWithSearchedNamePresent() {
-//        return vocablesWithSearchedName.size() == 1;
-//    }
 }

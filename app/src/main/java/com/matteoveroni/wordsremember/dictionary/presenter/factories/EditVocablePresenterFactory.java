@@ -16,7 +16,6 @@ public class EditVocablePresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO dao;
-
     private final DictionaryModel model = WordsRemember.getDictionaryModel();
 
     @Override

@@ -38,6 +38,51 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     private final int PRESENTER_LOADER_ID = 1;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.destroy();
+        super.onStop();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dictionary_add_translation);
+        ButterKnife.bind(this);
+
+        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
+
+        setupAndShowToolbar();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    }
+
+    private void setupAndShowToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_dictionary_add_translation_activity));
+            toolbar.setTitle(title);
+        }
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public VocableTranslation getPojoUsedByView() {
+//        return translationsListFragment.getPojoUsedByView();
+        return null;
+    }
+
+    @Override
+    public void setPojoUsedInView(VocableTranslation vocableTranslation) {
+        translationsListFragment.setPojoUsedInView(vocableTranslation.getVocable());
+    }
+
+    @Override
     public void selectTranslationAction() {
     }
 
@@ -60,59 +105,6 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public VocableTranslation getPojoUsedByView() {
-//        return translationsListFragment.getPojoUsedByView();
-        return null;
-    }
-
-    @Override
-    public void setPojoUsedInView(VocableTranslation vocableTranslation) {
-        translationsListFragment.setPojoUsedInView(vocableTranslation.getVocable());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-        presenter.onVocableToTranslateRetrieved(findVocableToTranslate());
-    }
-
-    private Word findVocableToTranslate() {
-        Intent starterIntent = getIntent();
-        String json_vocableToTranslate = starterIntent.getStringExtra(Extras.VOCABLE);
-        return Word.fromJson(json_vocableToTranslate);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_dictionary_add_translation);
-        ButterKnife.bind(this);
-        setupAndShowToolbar();
-
-        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_dictionary_add_translation_activity));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

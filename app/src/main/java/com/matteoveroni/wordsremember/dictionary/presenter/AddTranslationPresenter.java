@@ -1,12 +1,11 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author Matteo Veroni
@@ -16,11 +15,16 @@ public class AddTranslationPresenter implements Presenter {
 
 //    private final EventBus eventBus = EventBus.getDefault();
 
-    private final DictionaryDAO model;
+    private final DictionaryDAO dao;
+    private final DictionaryModel model;
     private AddTranslationView view;
 
-    public AddTranslationPresenter(DictionaryDAO model) {
+    public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
+        this.dao = dao;
+
+        Word newEmptyTranslation = new Word("");
+        view.setPojoUsedInView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
     }
 
     @Override

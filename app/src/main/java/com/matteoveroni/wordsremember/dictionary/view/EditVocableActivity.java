@@ -36,7 +36,6 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
-    private ProgressDialog progressDialog;
 
     private EditVocablePresenter presenter;
     private final int ID_PRESENTER_LOADER = 1;
@@ -58,12 +57,12 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
-        setupAndShowToolbar();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
         translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
 
+        setupAndShowToolbar();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getSupportLoaderManager().initLoader(ID_PRESENTER_LOADER, null, this);
     }
 
@@ -128,16 +127,6 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void blockUIWithMessage(String message) {
-        progressDialog = ProgressDialog.show(this, "Loading", message, true, false);
-    }
-
-    @Override
-    public void unblockUI() {
-        progressDialog.dismiss();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import android.util.Log;
+
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
@@ -27,6 +29,9 @@ public class ManageVocablesPresenter implements Presenter {
     private final EventBus eventBus = EventBus.getDefault();
     private final DictionaryDAO dao;
     private ManageVocablesView view;
+
+    private static final String MSG_VOCABLE_REMOVED = "Vocable removed";
+    private static final String UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION = "Unsupported vocable manipulation exception";
 
     public ManageVocablesPresenter(DictionaryDAO dao) {
         this.dao = dao;
@@ -65,14 +70,13 @@ public class ManageVocablesPresenter implements Presenter {
                 dao.asyncDeleteVocable(vocableToManipulate.getId());
                 break;
             default:
-                throw new UnsupportedOperationException("Unsupported vocable manipulation exception");
+                Log.e(TAG, UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
+                throw new UnsupportedOperationException(UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
         }
         eventBus.removeStickyEvent(event);
     }
 
-    @Subscribe(sticky = true)
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        eventBus.removeStickyEvent(event);
-        view.showMessage("Vocable removed");
+        view.showMessage(MSG_VOCABLE_REMOVED);
     }
 }
