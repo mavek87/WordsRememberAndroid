@@ -24,9 +24,9 @@ public class EditVocablePresenter implements Presenter {
     private final DictionaryDAO dao;
     private EditVocableView view;
 
-    private static final String MSG_VOCABLE_SAVED = "Vocable saved";
-    private static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "Invalid vocable. Cannot save it. Compile all the data and retry";
-    private static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "Cannot save the vocable using this vocable name. Name already used";
+    public static final String MSG_VOCABLE_SAVED = "Vocable saved";
+    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "Invalid vocable. Cannot save it. Compile all the data and retry";
+    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "Cannot save the vocable using this vocable name. Name already used";
 
     public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -60,7 +60,7 @@ public class EditVocablePresenter implements Presenter {
         }
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe
     public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
         final Word persistentVocableWithSameName = event.getVocableWithSearchedName();
         if (storeVocableInViewIfHasUniqueName(persistentVocableWithSameName)) {
@@ -68,7 +68,6 @@ public class EditVocablePresenter implements Presenter {
         } else {
             view.showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
-        eventBus.removeStickyEvent(event);
     }
 
     private boolean storeVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
@@ -96,18 +95,17 @@ public class EditVocablePresenter implements Presenter {
         return false;
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe
     public void onEvent(EventAsyncSaveVocableCompleted event) {
-        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
+        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView();
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(event);
+        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView();
     }
 
-    private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
-        eventBus.removeStickyEvent(event);
+    private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
         model.setLastValidVocableSelected(model.getEditedVocableInView());
         view.returnToPreviousView();
     }

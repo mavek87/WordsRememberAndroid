@@ -21,12 +21,9 @@ import org.mockito.junit.MockitoRule;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -54,8 +51,8 @@ public class EditVocablePresenterTest {
     private final Word VOCABLE = new Word(1, "VocableTest");
     private final Word VOCABLE_WITH_UPDATED_NAME = new Word(1, "VocableNameUpdated");
     private final Word VOCABLE_WITH_EMPTY_NAME = new Word(1, " ");
-    private final Word NOT_PERSISTED_VOCABLE_IN_VIEW = new Word(-1, "name");
-    private final Word PERSISTED_VOCABLE_IN_VIEW = new Word(1, "name");
+    private final Word NOT_PERSISTENT_VOCABLE_IN_VIEW = new Word(-1, "name");
+    private final Word PERSISTENT_VOCABLE_IN_VIEW = new Word(1, "name");
     private final Word ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME = new Word(2, "name");
     private final Word PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID = new Word(1, "name");
 
@@ -81,16 +78,17 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onViewAttached_populateViewUsingModelData() {
+        presenter.destroy();
+
         when(model.getLastValidVocableSelected()).thenReturn(VOCABLE);
 
-        presenter.destroy();
         presenter.attachView(view);
 
         verify(view, times(1)).setPojoUsedInView(VOCABLE);
     }
 
     @Test
-    public void onSaveVocableRequest_ForNewVocableToCreate_Model_asyncFindVocablesWithName() {
+    public void onSaveVocableRequest_ForNewVocableToCreate_DAOCalls_asyncFindVocablesWithName() {
         when(view.getPojoUsedByView()).thenReturn(VOCABLE);
 
         presenter.onSaveVocableRequest();
@@ -104,8 +102,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(String.valueOf(any()));
-        verify(dao, never()).asyncSearchVocableByName(anyString());
+        verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -114,15 +111,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(any(String.class));
-        verify(dao, never()).asyncSearchVocableByName(anyString());
-    }
-
-    @Test
-    public void onCreateTranslationsRequest_View_goToTranslationEditorView() {
-        presenter.onAddTranslationRequest();
-
-        verify(view).goToAddTranslationView();
+        verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -136,74 +125,63 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onEventAsyncUpdateVocableCompleted_returnToPreviousView() {
-        final int FAKE_NUMBER_OF_VOCABLES_UPDATED = 1;
-
-        EventAsyncUpdateVocableCompleted eventAsyncUpdateVocableCompleted =
-                new EventAsyncUpdateVocableCompleted(FAKE_NUMBER_OF_VOCABLES_UPDATED);
-
-        presenter.onEvent(eventAsyncUpdateVocableCompleted);
+        int FAKE_NUMBER_OF_VOCABLES_UPDATED = 1;
+        EventAsyncUpdateVocableCompleted updateVocableCompleted = new EventAsyncUpdateVocableCompleted(FAKE_NUMBER_OF_VOCABLES_UPDATED);
+        presenter.onEvent(updateVocableCompleted);
 
         verify(view).returnToPreviousView();
     }
 
     @Test
-    public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_SaveItIfHisNameIsUnique() {
-        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
+    public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasUniqueName_SaveIt() {
+        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTENT_VOCABLE_IN_VIEW);
 
-        EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
-                new EventAsyncSearchVocableByNameCompleted(Collections.emptyList());
+        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(null);
+        presenter.onEvent(searchVocableByNameCompleted);
 
-        presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
-
-        verify(dao).asyncSaveVocable(NOT_PERSISTED_VOCABLE_IN_VIEW);
-    }
-
-    @Test
-    public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_DontSaveItIfHisNameIsDuplicated() {
-        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
-
-        populatePersistentListOfVocablesWithSameName(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID);
-
-        EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
-                new EventAsyncSearchVocableByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
-
-        presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
-
-        verify(view).showMessage(anyString());
-        verify(dao, never()).asyncSaveVocable(any(Word.class));
-    }
-
-    @Test
-    public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted__IfCurrentVocableInViewStillPersistent_ButHisNewNameToUpdateIsDuplicatedForOtherVocable_DontUpdateAndViewShowError() {
-        when(model.getEditedVocableInView()).thenReturn(PERSISTED_VOCABLE_IN_VIEW);
-
-        populatePersistentListOfVocablesWithSameName(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME);
-
-        EventAsyncSearchVocableByNameCompleted event =
-                new EventAsyncSearchVocableByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
-
-        presenter.onEvent(event);
-
-        verify(view).showMessage(anyString());
+        verify(dao).asyncSaveVocable(NOT_PERSISTENT_VOCABLE_IN_VIEW);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
 
     @Test
-    public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewAlreadySavedAndHasUniqueName_Update() {
-        populatePersistentListOfVocablesWithSameName(VOCABLE);
+    public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasDuplicateName_DontSaveItAndShowError() {
+        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTENT_VOCABLE_IN_VIEW);
 
+        EventAsyncSearchVocableByNameCompleted searchVocableByNameComplete = new EventAsyncSearchVocableByNameCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID);
+        presenter.onEvent(searchVocableByNameComplete);
+
+        verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(dao, never()).asyncSaveVocable(any(Word.class));
+        verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
+    }
+
+    @Test
+    public void onEventAsyncSearchVocablesByNameCompleted__IfVocableInViewStillPersistent_AndNewNameDuplicated_DontUpdateItAndShowError() {
+        when(model.getEditedVocableInView()).thenReturn(PERSISTENT_VOCABLE_IN_VIEW);
+
+        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME);
+        presenter.onEvent(searchVocableByNameCompleted);
+
+        verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
+        verify(dao, never()).asyncSaveVocable(any(Word.class));
+    }
+
+    @Test
+    public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewStillPersistent_AndHasUniqueName_UpdateIt() {
         when(model.getEditedVocableInView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);
 
-        EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
-                new EventAsyncSearchVocableByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
-
-        presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
+        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(VOCABLE_WITH_UPDATED_NAME);
+        presenter.onEvent(searchVocableByNameCompleted);
 
         verify(dao).asyncUpdateVocable(VOCABLE_WITH_UPDATED_NAME.getId(), VOCABLE_WITH_UPDATED_NAME);
     }
 
-    private void populatePersistentListOfVocablesWithSameName(Word... words) {
-        Collections.addAll(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME, words);
+    @Test
+    public void onCreateTranslationsRequest_View_goToTranslationEditorView() {
+        presenter.onAddTranslationRequest();
+
+        verify(view).goToAddTranslationView();
     }
 
     private class DictionaryEditVocablePresenterFactoryForTests implements PresenterFactory {

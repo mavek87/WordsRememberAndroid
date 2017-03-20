@@ -10,20 +10,17 @@ import java.util.concurrent.ExecutionException;
  */
 
 public class EventAsyncSearchVocableByNameCompleted {
-    private final List<Word> vocablesWithSearchedName;
+    private final Word vocablesWithSearchedName;
 
-    public EventAsyncSearchVocableByNameCompleted(List<Word> vocablesWithSearchedName) {
+    public EventAsyncSearchVocableByNameCompleted(Word vocablesWithSearchedName) {
         this.vocablesWithSearchedName = vocablesWithSearchedName;
     }
 
     public Word getVocableWithSearchedName() {
-        if (vocablesWithSearchedName.size() == 1) {
-            return vocablesWithSearchedName.get(0);
-        }
-        return null;
+        return vocablesWithSearchedName;
     }
-
-    public boolean isUniqueVocableWithSearchedNamePresent() {
-        return vocablesWithSearchedName.size() == 1;
-    }
+//
+//    public boolean isUniqueVocableWithSearchedNamePresent() {
+//        return vocablesWithSearchedName.size() == 1;
+//    }
 }
