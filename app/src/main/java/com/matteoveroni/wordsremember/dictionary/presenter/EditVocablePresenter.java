@@ -36,7 +36,7 @@ public class EditVocablePresenter implements Presenter {
     @Override
     public void attachView(Object view) {
         this.view = (EditVocableView) view;
-        this.view.setPojoUsedInView(model.getSelectedVocable());
+        this.view.setPojoUsedInView(model.getLastValidVocableSelected());
         eventBus.register(this);
     }
 
@@ -52,8 +52,8 @@ public class EditVocablePresenter implements Presenter {
 
     public void onSaveVocableRequest() {
         Word vocableInViewToPersist = view.getPojoUsedByView();
+        model.setVocableInView(vocableInViewToPersist);
         if (isVocableValid(vocableInViewToPersist)) {
-//            view.blockUIWithMessage("Saving vocable");
             dao.asyncSearchVocableByName(vocableInViewToPersist.getName());
         } else {
             view.showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
@@ -67,12 +67,12 @@ public class EditVocablePresenter implements Presenter {
             view.showMessage(MSG_VOCABLE_SAVED);
         } else {
             view.showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
-//            view.unblockUI();
         }
+        eventBus.removeStickyEvent(event);
     }
 
     private boolean storeVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
-        if (view.getPojoUsedByView().getId() <= 0) {
+        if (model.getEditedVocableInView().getId() <= 0) {
             return saveVocableInViewIfHasUniqueName(persistentVocableWithSameName);
         } else {
             return updateVocableInViewIfHasUniqueName(persistentVocableWithSameName);
@@ -81,16 +81,16 @@ public class EditVocablePresenter implements Presenter {
 
     private boolean saveVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
         if (persistentVocableWithSameName == null) {
-            dao.asyncSaveVocable(view.getPojoUsedByView());
+            dao.asyncSaveVocable(model.getEditedVocableInView());
             return true;
         }
         return false;
     }
 
     private boolean updateVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
-        Word vocableInViewToPersist = view.getPojoUsedByView();
-        if (persistentVocableWithSameName != null && vocableInViewToPersist.getId() == persistentVocableWithSameName.getId()) {
-            dao.asyncUpdateVocable(persistentVocableWithSameName.getId(), vocableInViewToPersist);
+        Word vocableInViewToPersist = model.getEditedVocableInView();
+        if (persistentVocableWithSameName == null || vocableInViewToPersist.getId() == persistentVocableWithSameName.getId()) {
+            dao.asyncUpdateVocable(vocableInViewToPersist.getId(), vocableInViewToPersist);
             return true;
         }
         return false;
@@ -108,8 +108,7 @@ public class EditVocablePresenter implements Presenter {
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView(Object event) {
         eventBus.removeStickyEvent(event);
-        model.setSelectedVocable(view.getPojoUsedByView());
-//        view.unblockUI();
+        model.setLastValidVocableSelected(model.getEditedVocableInView());
         view.returnToPreviousView();
     }
 

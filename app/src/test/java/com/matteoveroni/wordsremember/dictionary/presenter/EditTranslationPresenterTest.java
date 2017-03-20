@@ -39,7 +39,7 @@ public class EditTranslationPresenterTest {
     @Mock
     private EditTranslationView view;
     @Mock
-    private DictionaryDAO dictionary;
+    private DictionaryDAO dictionaryDAO;
 
     private final Word VOCABLE = new Word(1, "vocable");
     private final Word TRANSLATION = new Word("translation");
@@ -49,7 +49,7 @@ public class EditTranslationPresenterTest {
 
     @Before
     public void setUp() {
-        presenter = new PresenterFactoryForTests(dictionary).create();
+        presenter = new PresenterFactoryForTests(dictionaryDAO).create();
         presenter.attachView(view);
         assertTrue("Presenter should be registered to eventbus before each test", EVENT_BUS.isRegistered(presenter));
     }
@@ -66,7 +66,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onSaveTranslationRequest();
 
-        verify(dictionary).asyncSaveTranslation(TRANSLATION_FOR_VOCABLE.getTranslation());
+        verify(dictionaryDAO).asyncSaveTranslation(TRANSLATION_FOR_VOCABLE.getTranslation());
     }
 
     @Test
@@ -76,19 +76,19 @@ public class EditTranslationPresenterTest {
         presenter.onSaveTranslationRequest();
 
         verify(view).showMessage(anyString());
-        verify(dictionary, never()).asyncSaveTranslation(any(Word.class));
-        verify(dictionary, never()).asyncSaveVocableTranslation(any(VocableTranslation.class));
+        verify(dictionaryDAO, never()).asyncSaveTranslation(any(Word.class));
+        verify(dictionaryDAO, never()).asyncSaveVocableTranslation(any(VocableTranslation.class));
     }
 
     @Test
-    public void onEventAsyncSaveTranslationCompleted_Call_asyncSaveVocableTranslationIsCalled() {
+    public void onEventAsyncSaveTranslationCompleted_Call_asyncSaveVocableTranslation() {
         when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         long fakeTranslationID = 1;
         presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeTranslationID));
         TRANSLATION_FOR_VOCABLE.getTranslation().setId(fakeTranslationID);
 
-        verify(dictionary).asyncSaveVocableTranslation(TRANSLATION_FOR_VOCABLE);
+        verify(dictionaryDAO).asyncSaveVocableTranslation(TRANSLATION_FOR_VOCABLE);
     }
 
     @Test

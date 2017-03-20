@@ -81,7 +81,7 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onViewAttached_populateViewUsingModelData() {
-        when(model.getSelectedVocable()).thenReturn(VOCABLE);
+        when(model.getLastValidVocableSelected()).thenReturn(VOCABLE);
 
         presenter.destroy();
         presenter.attachView(view);
@@ -148,7 +148,7 @@ public class EditVocablePresenterTest {
 
     @Test
     public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_SaveItIfHisNameIsUnique() {
-        when(view.getPojoUsedByView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
+        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
 
         EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
                 new EventAsyncSearchVocableByNameCompleted(Collections.emptyList());
@@ -160,7 +160,7 @@ public class EditVocablePresenterTest {
 
     @Test
     public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_DontSaveItIfHisNameIsDuplicated() {
-        when(view.getPojoUsedByView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
+        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTED_VOCABLE_IN_VIEW);
 
         populatePersistentListOfVocablesWithSameName(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID);
 
@@ -173,24 +173,9 @@ public class EditVocablePresenterTest {
         verify(dao, never()).asyncSaveVocable(any(Word.class));
     }
 
-    @Test(expected = RuntimeException.class)
-    public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted_IfCurrentVocableInViewStillPersistent_ButVocablesWithSameNameAreMoreThanOne_ThrowRuntimeException() {
-        when(view.getPojoUsedByView()).thenReturn(PERSISTED_VOCABLE_IN_VIEW);
-
-        populatePersistentListOfVocablesWithSameName(
-                PERSISTED_VOCABLE_IN_VIEW,
-                ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME
-        );
-
-        EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
-                new EventAsyncSearchVocableByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);
-
-        presenter.onEvent(eventAsyncSearchVocableByNameCompleted);
-    }
-
     @Test
     public void after_onSaveVocableRequest_onEventAsyncSearchVocablesByNameCompleted__IfCurrentVocableInViewStillPersistent_ButHisNewNameToUpdateIsDuplicatedForOtherVocable_DontUpdateAndViewShowError() {
-        when(view.getPojoUsedByView()).thenReturn(PERSISTED_VOCABLE_IN_VIEW);
+        when(model.getEditedVocableInView()).thenReturn(PERSISTED_VOCABLE_IN_VIEW);
 
         populatePersistentListOfVocablesWithSameName(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME);
 
@@ -207,7 +192,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewAlreadySavedAndHasUniqueName_Update() {
         populatePersistentListOfVocablesWithSameName(VOCABLE);
 
-        when(view.getPojoUsedByView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);
+        when(model.getEditedVocableInView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);
 
         EventAsyncSearchVocableByNameCompleted eventAsyncSearchVocableByNameCompleted =
                 new EventAsyncSearchVocableByNameCompleted(PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME);

@@ -70,7 +70,7 @@ public class ManageVocablesPresenterTest {
 
         presenter.onEvent(eventVocableSelected);
 
-        assertEquals(eventVocableSelected.getSelectedVocable(), model.getSelectedVocable());
+        assertEquals(eventVocableSelected.getSelectedVocable(), model.getLastValidVocableSelected());
     }
 
     @Test

@@ -1,12 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import android.content.Context;
-
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Range;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
@@ -50,7 +45,7 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        WordsRemember.getDictionaryModel().setSelectedVocable(new Word(""));
+        WordsRemember.getDictionaryModel().setLastValidVocableSelected(new Word(""));
         view.goToEditVocableView();
     }
 
@@ -58,7 +53,7 @@ public class ManageVocablesPresenter implements Presenter {
     public void onEvent(EventVocableSelected event) {
         final Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        WordsRemember.getDictionaryModel().setSelectedVocable(selectedVocable);
+        WordsRemember.getDictionaryModel().setLastValidVocableSelected(selectedVocable);
         view.goToEditVocableView();
     }
 
