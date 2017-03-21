@@ -40,6 +40,7 @@ public class ManageVocablesPresenter implements Presenter {
     @Override
     public void attachView(Object view) {
         this.view = (ManageVocablesView) view;
+        WordsRemember.getDictionaryModel().reset();
         eventBus.register(this);
     }
 

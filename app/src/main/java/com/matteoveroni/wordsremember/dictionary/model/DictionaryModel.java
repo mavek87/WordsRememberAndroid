@@ -1,5 +1,8 @@
 package com.matteoveroni.wordsremember.dictionary.model;
 
+import android.util.Log;
+
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 /**
@@ -7,6 +10,8 @@ import com.matteoveroni.wordsremember.pojos.Word;
  */
 
 public class DictionaryModel {
+
+    public static final String TAG = TagGenerator.tag(DictionaryModel.class);
 
     private Word lastValidVocableSelected;
     private Word vocableInView;
@@ -25,5 +30,11 @@ public class DictionaryModel {
 
     public void setVocableInView(Word vocableInView) {
         this.vocableInView = vocableInView;
+    }
+
+    public void reset() {
+        lastValidVocableSelected = null;
+        vocableInView = null;
+        Log.i(TAG, "Model resetted");
     }
 }

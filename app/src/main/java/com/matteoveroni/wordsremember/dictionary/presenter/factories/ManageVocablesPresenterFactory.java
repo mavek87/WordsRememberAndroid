@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter.factories;
 
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.WordsRemember;

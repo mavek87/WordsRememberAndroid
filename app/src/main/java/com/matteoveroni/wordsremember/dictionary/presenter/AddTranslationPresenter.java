@@ -22,14 +22,13 @@ public class AddTranslationPresenter implements Presenter {
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
         this.dao = dao;
-
-        Word newEmptyTranslation = new Word("");
-        view.setPojoUsedInView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (AddTranslationView) view;
+        Word newEmptyTranslation = new Word("");
+        this.view.setPojoUsedInView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
 //        eventBus.register(this);
     }
 
