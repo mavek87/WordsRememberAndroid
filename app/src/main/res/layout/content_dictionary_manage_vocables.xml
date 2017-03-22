@@ -13,12 +13,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.view.ManageVocablesActivity"
+    tools:context=".dictionary.view.activities.ManageVocablesActivity"
     tools:showIn="@layout/activity_dictionary_manage_vocables">
 
     <fragment
         android:id="@+id/dictionary_manager_fragment"
-        android:name="com.matteoveroni.wordsremember.fragments.VocablesListFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.VocablesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

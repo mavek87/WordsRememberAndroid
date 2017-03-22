@@ -1,8 +1,8 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary.view.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +16,9 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
-import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
-import com.matteoveroni.wordsremember.fragments.VocableEditorFragment;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditVocablePresenter;
@@ -34,6 +35,7 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
+    private FragmentManager fragmentManager;
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
 
@@ -58,8 +60,17 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
 
-        vocableEditorFragment = (VocableEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_vocable_editor_fragment);
-        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
+        fragmentManager = getSupportFragmentManager();
+
+        vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
+
+        translationsListFragment = new TranslationsListFragment();
+        final Bundle bundle = new Bundle();
+        bundle.putString(TranslationsListFragment.KEY_TRANSLATIONS_FOR_VOCABLE, null);
+        translationsListFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
+        fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

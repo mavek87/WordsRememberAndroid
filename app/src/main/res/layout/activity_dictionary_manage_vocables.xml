@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".dictionary.view.ManageVocablesActivity">
+    tools:context=".dictionary.view.activities.ManageVocablesActivity">
 
     <include layout="@layout/content_dictionary_manage_vocables" />
 

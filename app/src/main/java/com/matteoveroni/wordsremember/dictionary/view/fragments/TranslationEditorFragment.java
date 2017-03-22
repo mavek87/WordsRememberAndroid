@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.fragments;
+package com.matteoveroni.wordsremember.dictionary.view.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
+import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
@@ -22,7 +22,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class TranslationEditorFragment extends Fragment implements PojoManipulable<VocableTranslation> {
+public class TranslationEditorFragment extends Fragment implements PojoManipulableView<VocableTranslation> {
 
     public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
@@ -34,9 +34,6 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     @BindView(R.id.fragment_translation_editor_txt_vocable_name)
     EditText txt_translationName;
-
-    public TranslationEditorFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -14,21 +14,27 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".dictionary.view.EditVocableActivity"
+    tools:context=".dictionary.view.activities.EditVocableActivity"
     tools:showIn="@layout/activity_dictionary_edit_vocable">
 
     <fragment
         android:id="@+id/dictionary_vocable_editor_fragment"
-        android:name="com.matteoveroni.wordsremember.fragments.VocableEditorFragment"
+        android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50" />
 
-    <fragment
-        android:id="@+id/dictionary_translations_list_fragment"
-        android:name="com.matteoveroni.wordsremember.fragments.TranslationsListFragment"
+    <FrameLayout
+        android:id="@+id/dictionary_translations_list_framelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="50" />
+
+    <!--<fragment-->
+        <!--android:id="@+id/dictionary_translations_list_fragment"-->
+        <!--android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="50" />-->
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary.view.activities;
 
 import android.content.Intent;
 import android.support.v4.app.LoaderManager;
@@ -7,13 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.dictionary.Extras;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
-import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

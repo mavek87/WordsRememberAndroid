@@ -1,7 +1,6 @@
-package com.matteoveroni.wordsremember.fragments;
+package com.matteoveroni.wordsremember.dictionary.view.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.PojoManipulable;
+import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.BindView;
@@ -24,7 +23,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class VocableEditorFragment extends Fragment implements PojoManipulable<Word> {
+public class VocableEditorFragment extends Fragment implements PojoManipulableView<Word> {
 
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 

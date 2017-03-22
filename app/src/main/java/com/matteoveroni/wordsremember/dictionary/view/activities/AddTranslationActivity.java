@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.view;
+package com.matteoveroni.wordsremember.dictionary.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +17,8 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.fragments.TranslationsListFragment;
+import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;

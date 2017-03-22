@@ -24,9 +24,6 @@ public class VocablesTranslationsContract {
     // Mime type
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
-    private VocablesTranslationsContract() {
-    }
-
     public static final class Schema implements BaseColumns {
         public static final String TABLE_NAME = NAME;
 

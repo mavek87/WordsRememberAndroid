@@ -55,7 +55,7 @@ public class ManageVocablesPresenter implements Presenter {
         view.goToEditVocableView();
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe
     public void onEvent(EventVocableSelected event) {
         final Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
@@ -63,7 +63,6 @@ public class ManageVocablesPresenter implements Presenter {
         view.goToEditVocableView();
     }
 
-    @Subscribe(sticky = true)
     public void onEvent(EventVocableManipulationRequest event) {
         final Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {

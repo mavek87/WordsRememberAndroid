@@ -7,7 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".dictionary.view.EditVocableActivity">
+    tools:context=".dictionary.view.activities.EditVocableActivity">
 
     <TextView
         android:id="@+id/fragment_translations_management_title"
