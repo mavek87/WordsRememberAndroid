@@ -78,7 +78,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_vocables_manager_long_press, menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
         switch (item.getItemId()) {
 
-            case R.id.menu_dictionary_management_long_press_remove:
+            case R.id.menu_dictionary_list_long_press_remove:
                 Word selectedVocable = getSelectedVocable(cursor, position);
                 eventBus.post(
                         new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE)

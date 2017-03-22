@@ -4,8 +4,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +36,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     private final int CURSOR_LOADER_ID = 1;
 
-    private Word vocableInView;
+    private Word vocableTranslated;
 
     public static final String KEY_TRANSLATIONS_FOR_VOCABLE = "TranslationsForVocable";
     public static final String KEY_TRANSLATIONS_NOT_FOR_VOCABLE = "TranslationsNotForVocable";
@@ -63,12 +63,12 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public Word getPojoUsedByView() {
-        return vocableInView;
+        return vocableTranslated;
     }
 
     @Override
     public void setPojoUsedInView(Word vocable) {
-        vocableInView = vocable;
+        vocableTranslated = vocable;
     }
 
     @Override
@@ -93,15 +93,46 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         if (args == null || args.isEmpty()) {
             return getCursorForAllTheTranslations();
         } else if (args.containsKey(KEY_TRANSLATIONS_FOR_VOCABLE)) {
-            return getCursorForAllTheTranslationsOfVocable();
+            return getCursorForAllTheTranslationsForVocable();
         } else if (args.containsKey(KEY_TRANSLATIONS_NOT_FOR_VOCABLE)) {
             return getCursorForAllTheTranslationsExceptThoseForVocable();
         } else {
-            final String error = "Unexpected error during onCreateLoader";
+            final String error = "Bundle not null or empty, but any known key passed to fragment during onCreateLoader";
             Log.e(TAG, error);
             throw new RuntimeException(error);
         }
     }
+
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
+//    }
+//
+//    @Override
+//    public boolean onContextItemSelected(MenuItem item) {
+//        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+//
+//        int position = contextMenuInfo.position;
+//        Cursor cursor = vocableListAdapter.getCursor();
+//
+//        switch (item.getItemId()) {
+//
+//            case R.id.menu_dictionary_list_long_press_remove:
+//                Word selectedVocable = getSelectedVocable(cursor, position);
+//                eventBus.post(
+//                        new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE)
+//                );
+//                return true;
+//
+//        }
+//        return super.onContextItemSelected(item);
+//    }
+//
+//    private Word getSelectedVocable(Cursor cursor, int position) {
+//        cursor.moveToPosition(position);
+//        return DictionaryDAO.cursorToVocable(cursor);
+//    }
 
     private Loader<Cursor> getCursorForAllTheTranslations() {
         return new CursorLoader(
@@ -113,13 +144,13 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
     }
 
-    private Loader<Cursor> getCursorForAllTheTranslationsOfVocable() {
+    private Loader<Cursor> getCursorForAllTheTranslationsForVocable() {
         return new CursorLoader(
                 getContext(),
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 null,
-                new String[]{String.valueOf(vocableInView.getId())},
+                new String[]{String.valueOf(vocableTranslated.getId())},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
 
     }
@@ -130,7 +161,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "!=?",
-                new String[]{String.valueOf(vocableInView.getId())},
+                new String[]{String.valueOf(vocableTranslated.getId())},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
     }
 

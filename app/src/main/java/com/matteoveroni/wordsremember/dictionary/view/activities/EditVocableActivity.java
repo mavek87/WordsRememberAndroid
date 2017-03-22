@@ -61,20 +61,22 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
         ButterKnife.bind(this);
 
         fragmentManager = getSupportFragmentManager();
-
         vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
-
-        translationsListFragment = new TranslationsListFragment();
-        final Bundle bundle = new Bundle();
-        bundle.putString(TranslationsListFragment.KEY_TRANSLATIONS_FOR_VOCABLE, null);
-        translationsListFragment.setArguments(bundle);
-
+        translationsListFragment = createTranslationListFragmentForVocable();
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
         fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getSupportLoaderManager().initLoader(ID_PRESENTER_LOADER, null, this);
+    }
+
+    private TranslationsListFragment createTranslationListFragmentForVocable() {
+        final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
+        final Bundle typeOfFragment = new Bundle();
+        typeOfFragment.putString(TranslationsListFragment.KEY_TRANSLATIONS_FOR_VOCABLE, null);
+        fragmentToBuild.setArguments(typeOfFragment);
+        return fragmentToBuild;
     }
 
     private void setupAndShowToolbar() {
@@ -88,7 +90,7 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_edit_vocable, menu);
+        getMenuInflater().inflate(R.menu.menu_dictionary_top_bar, menu);
         return true;
     }
 

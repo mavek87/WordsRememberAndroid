@@ -115,7 +115,7 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_edit_vocable, menu);
+        getMenuInflater().inflate(R.menu.menu_dictionary_top_bar, menu);
         return true;
     }
 
