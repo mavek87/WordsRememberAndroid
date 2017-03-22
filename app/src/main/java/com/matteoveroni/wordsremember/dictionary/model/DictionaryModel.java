@@ -14,6 +14,7 @@ public class DictionaryModel {
     public static final String TAG = TagGenerator.tag(DictionaryModel.class);
 
     private Word lastValidVocableSelected;
+    private Word lastValidTranslationSelected;
     private Word vocableInView;
 
     public Word getLastValidVocableSelected() {
@@ -36,5 +37,13 @@ public class DictionaryModel {
         lastValidVocableSelected = null;
         vocableInView = null;
         Log.i(TAG, "Model resetted");
+    }
+
+    public Word getLastValidTranslationSelected() {
+        return lastValidTranslationSelected;
+    }
+
+    public void setLastValidTranslationSelected(Word lastValidTranslationSelected) {
+        this.lastValidTranslationSelected = lastValidTranslationSelected;
     }
 }

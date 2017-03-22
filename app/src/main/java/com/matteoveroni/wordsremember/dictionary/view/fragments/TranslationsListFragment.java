@@ -85,7 +85,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         cursor.moveToPosition(position);
 
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
-        EventBus.getDefault().postSticky(new EventTranslationSelected(selectedTranslation));
+        EventBus.getDefault().post(new EventTranslationSelected(selectedTranslation));
     }
 
     @Override

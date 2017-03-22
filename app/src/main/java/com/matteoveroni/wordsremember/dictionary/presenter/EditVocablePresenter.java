@@ -7,6 +7,7 @@ import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,8 +36,17 @@ public class EditVocablePresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
+        Word lastValidVocableSelected = model.getLastValidVocableSelected();
+        Word lastValidTranslationSelected = model.getLastValidTranslationSelected();
+
         this.view = (EditVocableView) view;
-        this.view.setPojoUsedInView(model.getLastValidVocableSelected());
+        this.view.setPojoUsedInView(lastValidVocableSelected);
+
+        if (lastValidTranslationSelected != null) {
+            dao.asyncSaveVocableTranslation(new VocableTranslation(lastValidVocableSelected, lastValidTranslationSelected));
+            model.setLastValidTranslationSelected(null);
+        }
+
         eventBus.register(this);
     }
 
