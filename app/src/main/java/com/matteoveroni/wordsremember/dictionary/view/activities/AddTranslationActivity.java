@@ -2,12 +2,11 @@ package com.matteoveroni.wordsremember.dictionary.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -57,11 +56,20 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
         setContentView(R.layout.activity_dictionary_add_translation);
         ButterKnife.bind(this);
 
-        translationsListFragment = (TranslationsListFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translations_list_fragment);
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        translationsListFragment = createTranslationListFragmentNotForVocable();
+        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
+        fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    }
+
+    private TranslationsListFragment createTranslationListFragmentNotForVocable() {
+        final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
+        fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_NOT_FOR_VOCABLE;
+        return fragmentToBuild;
     }
 
     private void setupAndShowToolbar() {
@@ -80,8 +88,8 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     }
 
     @Override
-    public void setPojoUsedInView(VocableTranslation vocableTranslation) {
-        translationsListFragment.setPojoUsedInView(vocableTranslation.getVocable());
+    public void setPojoUsedByView(VocableTranslation vocableTranslation) {
+        translationsListFragment.setPojoUsedByView(vocableTranslation.getVocable());
     }
 
     @Override

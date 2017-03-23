@@ -61,8 +61,8 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     }
 
     @Override
-    public void setPojoUsedInView(VocableTranslation vocableTranslation) {
-        this.translationEditorFragment.setPojoUsedInView(vocableTranslation);
+    public void setPojoUsedByView(VocableTranslation vocableTranslation) {
+        this.translationEditorFragment.setPojoUsedByView(vocableTranslation);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
@@ -68,6 +69,20 @@ public class ManageVocablesPresenter implements Presenter {
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
                 dao.asyncDeleteVocable(vocableToManipulate.getId());
+                break;
+            default:
+                Log.e(TAG, UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
+                throw new UnsupportedOperationException(UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
+        }
+        eventBus.removeStickyEvent(event);
+    }
+
+    public void onEvent(EventVocableTranslationManipulationRequest event) {
+        final Word vocableToManipulate = event.getVocableToManipulate();
+        final Word translationToManipulate = event.getTranslationToManipulate();
+        switch (event.getTypeOfManipulation()) {
+            case REMOVE:
+//                dao.asyncDeleteVocableTranslation(vocableToManipulate.getId());
                 break;
             default:
                 Log.e(TAG, UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);

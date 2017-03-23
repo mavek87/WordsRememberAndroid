@@ -59,7 +59,7 @@ public class VocableEditorFragment extends Fragment implements PojoManipulableVi
     }
 
     @Override
-    public void setPojoUsedInView(Word vocableToShow) {
+    public void setPojoUsedByView(Word vocableToShow) {
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");
         } else {

@@ -40,7 +40,7 @@ public class EditTranslationPresenter implements Presenter {
 
     public void onVocableToTranslateRetrieved(Word vocable) {
         Word newEmptyTranslation = new Word("");
-        view.setPojoUsedInView(new VocableTranslation(vocable, newEmptyTranslation));
+        view.setPojoUsedByView(new VocableTranslation(vocable, newEmptyTranslation));
     }
 
     public void onSaveTranslationRequest() {

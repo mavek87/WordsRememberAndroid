@@ -14,8 +14,8 @@ public class EventVocableManipulationRequest {
         REMOVE;
     }
 
-    public EventVocableManipulationRequest(Word vocableIDToManipulate, TypeOfManipulation typeOfManipulation) {
-        this.vocableToManipulate = vocableIDToManipulate;
+    public EventVocableManipulationRequest(Word vocableToManipulate, TypeOfManipulation typeOfManipulation) {
+        this.vocableToManipulate = vocableToManipulate;
         this.typeOfManipulation = typeOfManipulation;
     }
 

@@ -58,7 +58,7 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     }
 
     @Override
-    public void setPojoUsedInView(VocableTranslation pojo) {
+    public void setPojoUsedByView(VocableTranslation pojo) {
         if (pojo.getTranslation().getName().trim().isEmpty()) {
             lbl_title.setText("Create translation for " + pojo.getVocable().getName());
         } else {

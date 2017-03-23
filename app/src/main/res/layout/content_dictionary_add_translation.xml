@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Content of Dictionary Translations Selector Activity -->
+<!-- Content of Dictionary Add Translation Activity -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,9 +17,8 @@
     tools:context=".dictionary.view.activities.EditVocableActivity"
     tools:showIn="@layout/activity_dictionary_add_translation">
 
-    <fragment
-        android:id="@+id/dictionary_translations_list_fragment"
-        android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment"
+    <FrameLayout
+        android:id="@+id/dictionary_translations_list_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

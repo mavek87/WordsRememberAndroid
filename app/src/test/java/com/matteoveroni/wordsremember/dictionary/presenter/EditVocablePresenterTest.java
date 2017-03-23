@@ -84,7 +84,7 @@ public class EditVocablePresenterTest {
 
         presenter.attachView(view);
 
-        verify(view, times(1)).setPojoUsedInView(VOCABLE);
+        verify(view, times(1)).setPojoUsedByView(VOCABLE);
     }
 
     @Test

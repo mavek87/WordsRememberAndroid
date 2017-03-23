@@ -8,5 +8,5 @@ public interface PojoManipulableView<T> {
 
     T getPojoUsedByView();
 
-    void setPojoUsedInView(T pojo);
+    void setPojoUsedByView(T pojo);
 }

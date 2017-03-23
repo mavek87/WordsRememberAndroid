@@ -73,9 +73,7 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     private TranslationsListFragment createTranslationListFragmentForVocable() {
         final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
-        final Bundle typeOfFragment = new Bundle();
-        typeOfFragment.putString(TranslationsListFragment.KEY_TRANSLATIONS_FOR_VOCABLE, null);
-        fragmentToBuild.setArguments(typeOfFragment);
+        fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_FOR_VOCABLE;
         return fragmentToBuild;
     }
 
@@ -110,9 +108,9 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     }
 
     @Override
-    public void setPojoUsedInView(Word vocable) {
-        vocableEditorFragment.setPojoUsedInView(vocable);
-        translationsListFragment.setPojoUsedInView(vocable);
+    public void setPojoUsedByView(Word vocable) {
+        vocableEditorFragment.setPojoUsedByView(vocable);
+        translationsListFragment.setPojoUsedByView(vocable);
     }
 
     @Override

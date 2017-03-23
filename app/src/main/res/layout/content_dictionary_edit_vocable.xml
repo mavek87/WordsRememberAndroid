@@ -30,11 +30,4 @@
         android:layout_height="wrap_content"
         android:layout_weight="50" />
 
-    <!--<fragment-->
-        <!--android:id="@+id/dictionary_translations_list_fragment"-->
-        <!--android:name="com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="50" />-->
-
 </LinearLayout>

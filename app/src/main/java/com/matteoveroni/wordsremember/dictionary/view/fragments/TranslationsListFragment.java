@@ -7,14 +7,20 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -32,14 +38,19 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
 
+    private static final EventBus eventBus = EventBus.getDefault();
+
     private TranslationsListViewAdapter translationsListViewAdapter;
 
     private final int CURSOR_LOADER_ID = 1;
 
-    private Word vocableTranslated;
+    public enum Type {
+        ONLY_TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
+    }
 
-    public static final String KEY_TRANSLATIONS_FOR_VOCABLE = "TranslationsForVocable";
-    public static final String KEY_TRANSLATIONS_NOT_FOR_VOCABLE = "TranslationsNotForVocable";
+    public Type type = Type.ONLY_TRANSLATIONS;
+
+    private Word vocableAssociatedToView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,19 +73,19 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     }
 
     @Override
-    public Word getPojoUsedByView() {
-        return vocableTranslated;
-    }
-
-    @Override
-    public void setPojoUsedInView(Word vocable) {
-        vocableTranslated = vocable;
-    }
-
-    @Override
     public void onResume() {
         getLoaderManager().restartLoader(CURSOR_LOADER_ID, getArguments(), this);
         super.onResume();
+    }
+
+    @Override
+    public Word getPojoUsedByView() {
+        return vocableAssociatedToView;
+    }
+
+    @Override
+    public void setPojoUsedByView(Word vocable) {
+        this.vocableAssociatedToView = vocable;
     }
 
     @Override
@@ -90,49 +101,29 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (args == null || args.isEmpty()) {
-            return getCursorForAllTheTranslations();
-        } else if (args.containsKey(KEY_TRANSLATIONS_FOR_VOCABLE)) {
-            return getCursorForAllTheTranslationsForVocable();
-        } else if (args.containsKey(KEY_TRANSLATIONS_NOT_FOR_VOCABLE)) {
-            return getCursorForAllTheTranslationsExceptThoseForVocable();
-        } else {
-            final String error = "Bundle not null or empty, but any known key passed to fragment during onCreateLoader";
-            Log.e(TAG, error);
-            throw new RuntimeException(error);
+        switch (type) {
+            case ONLY_TRANSLATIONS:
+                return getCursorForAllTheTranslations();
+            case TRANSLATIONS_FOR_VOCABLE:
+                return getCursorForAllTheTranslationsForVocable();
+            case TRANSLATIONS_NOT_FOR_VOCABLE:
+                return getCursorForAllTheTranslationsExceptThoseForVocable();
+            default:
+                final String error = "Error during onCreateLoader. Unknown type of fragment set.";
+                Log.e(TAG, error);
+                throw new RuntimeException(error);
         }
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
-//    }
-//
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        int position = contextMenuInfo.position;
-//        Cursor cursor = vocableListAdapter.getCursor();
-//
-//        switch (item.getItemId()) {
-//
-//            case R.id.menu_dictionary_list_long_press_remove:
-//                Word selectedVocable = getSelectedVocable(cursor, position);
-//                eventBus.post(
-//                        new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE)
-//                );
-//                return true;
-//
-//        }
-//        return super.onContextItemSelected(item);
-//    }
-//
-//    private Word getSelectedVocable(Cursor cursor, int position) {
-//        cursor.moveToPosition(position);
-//        return DictionaryDAO.cursorToVocable(cursor);
-//    }
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        translationsListViewAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        translationsListViewAdapter.swapCursor(null);
+    }
 
     private Loader<Cursor> getCursorForAllTheTranslations() {
         return new CursorLoader(
@@ -150,7 +141,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 null,
-                new String[]{String.valueOf(vocableTranslated.getId())},
+                new String[]{String.valueOf(vocableAssociatedToView.getId())},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
 
     }
@@ -161,17 +152,48 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 VocablesTranslationsContract.CONTENT_URI,
                 null,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "!=?",
-                new String[]{String.valueOf(vocableTranslated.getId())},
+                new String[]{String.valueOf(vocableAssociatedToView.getId())},
                 TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        translationsListViewAdapter.swapCursor(cursor);
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (type != Type.TRANSLATIONS_NOT_FOR_VOCABLE) {
+            getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        translationsListViewAdapter.swapCursor(null);
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final int position = contextMenuInfo.position;
+        final Cursor cursor = translationsListViewAdapter.getCursor();
+        switch (item.getItemId()) {
+            case R.id.menu_dictionary_list_long_press_remove:
+                Word selectedTranslation = getSelectedTranslation(cursor, position);
+                removeTranslationAction(selectedTranslation);
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private Word getSelectedTranslation(Cursor cursor, int position) {
+        cursor.moveToPosition(position);
+        return DictionaryDAO.cursorToTranslation(cursor);
+    }
+
+    private void removeTranslationAction(Word translation) {
+        switch (type) {
+            case ONLY_TRANSLATIONS:
+                eventBus.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
+                eventBus.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
+                break;
+            case TRANSLATIONS_FOR_VOCABLE:
+                eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView, translation, TypeOfManipulationRequest.REMOVE));
+                break;
+            default:
+                throw new RuntimeException("Unexpected type");
+        }
     }
 }

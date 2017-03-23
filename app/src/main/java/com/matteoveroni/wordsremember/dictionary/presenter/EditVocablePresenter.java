@@ -40,7 +40,7 @@ public class EditVocablePresenter implements Presenter {
         Word lastValidTranslationSelected = model.getLastValidTranslationSelected();
 
         this.view = (EditVocableView) view;
-        this.view.setPojoUsedInView(lastValidVocableSelected);
+        this.view.setPojoUsedByView(lastValidVocableSelected);
 
         if (lastValidTranslationSelected != null) {
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastValidVocableSelected, lastValidTranslationSelected));
