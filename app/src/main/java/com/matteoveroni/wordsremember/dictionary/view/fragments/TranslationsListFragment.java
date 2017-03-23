@@ -37,12 +37,7 @@ import org.greenrobot.eventbus.EventBus;
 public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulableView<Word> {
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
-
     private static final EventBus eventBus = EventBus.getDefault();
-
-    private TranslationsListViewAdapter translationsListViewAdapter;
-
-    private final int CURSOR_LOADER_ID = 1;
 
     public enum Type {
         ONLY_TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
@@ -50,6 +45,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     public Type type = Type.ONLY_TRANSLATIONS;
 
+    private TranslationsListViewAdapter translationsListViewAdapter;
     private Word vocableAssociatedToView;
 
     @Override
@@ -74,6 +70,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public void onResume() {
+        int CURSOR_LOADER_ID = 1;
         getLoaderManager().restartLoader(CURSOR_LOADER_ID, getArguments(), this);
         super.onResume();
     }
@@ -160,8 +157,12 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (type != Type.TRANSLATIONS_NOT_FOR_VOCABLE) {
-            getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
+            allowOperationsMenu(menu);
         }
+    }
+
+    private void allowOperationsMenu(ContextMenu menu) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
     }
 
     @Override

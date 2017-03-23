@@ -92,7 +92,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereSelectionArgs, String sortOrder) {
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        final String OPERATION = "QUERY";
+        final SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
@@ -139,7 +141,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 }
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
 
         SQLiteDatabase db = databaseManager.getWritableDatabase();
@@ -161,9 +163,11 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        final String OPERATION = "INSERT";
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
         Uri contractUri;
         long id;
+
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 contractUri = VocablesContract.CONTENT_URI;
@@ -178,7 +182,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return Uri.parse(contractUri + "/" + id);
@@ -187,8 +191,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int updatedRowsCounter;
+        final String OPERATION = "UPDATE";
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
+        int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
@@ -208,7 +213,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return updatedRowsCounter;
@@ -216,30 +221,32 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int deletedRowsCounter;
-
+    public int delete(Uri uri, String whereClause, String[] whereArgs) {
+        final String OPERATION = "DELETE";
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
+        int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
-                deletedRowsCounter = db.delete(VocablesContract.Schema.TABLE_NAME, selection, selectionArgs);
+                deletedRowsCounter = db.delete(VocablesContract.Schema.TABLE_NAME, whereClause, whereArgs);
                 break;
             case VOCABLE_ID:
-                final String id = uri.getLastPathSegment();
-                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
-                        !TextUtils.isEmpty(selection)
-                                ? " AND (" + selection + ")"
-                                : ""
-                );
+                String vocableId = uri.getLastPathSegment();
+                String where = VocablesContract.Schema.COLUMN_ID + "=" + vocableId;
+                if (!TextUtils.isEmpty(whereClause)) {
+                    where += " AND (" + whereClause + ")";
+                }
                 deletedRowsCounter = db.delete(
                         VocablesContract.Schema.TABLE_NAME,
                         where,
-                        selectionArgs
+                        whereArgs
                 );
                 break;
+            case VOCABLE_TRANSLATIONS:
+                deletedRowsCounter = db.delete(VocablesTranslationsContract.Schema.TABLE_NAME, whereClause, whereArgs);
+                break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri);
+                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return deletedRowsCounter;

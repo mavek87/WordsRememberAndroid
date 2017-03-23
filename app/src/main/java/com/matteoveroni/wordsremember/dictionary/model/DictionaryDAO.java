@@ -36,7 +36,7 @@ public class DictionaryDAO {
     }
 
     /***********************************************************************************************
-     * Async methods - Vocables
+     * Async methods - VOCABLES
      **********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
@@ -69,19 +69,16 @@ public class DictionaryDAO {
         ).execute();
     }
 
-    public void asyncDeleteVocable(long id) {
-        if (id < 1) {
-            throw new IllegalArgumentException("asyncDeleteVocable error: impossible to delete a vocable with an id negative or equal to zero.");
+    public void asyncDeleteVocable(long vocableId) {
+        if (vocableId < 1) {
+            throw new IllegalArgumentException("asyncDeleteVocable error: impossible to delete a vocable with a negative or equal to zero id.");
         }
-        final String str_id = String.valueOf(id);
-        final String selection = VocablesContract.Schema.COLUMN_ID + " = ?";
-        final String[] selectionArgs = {str_id};
-
+        asyncDeleteVocableTranslationsByVocableId(vocableId);
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesContract.CONTENT_URI,
-                selection,
-                selectionArgs
+                VocablesContract.Schema.COLUMN_ID + "=?",
+                new String[]{String.valueOf(vocableId)}
         ).execute();
     }
 
@@ -93,9 +90,8 @@ public class DictionaryDAO {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Async methods - Translations
+    // Async methods - TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     public void asyncSaveTranslation(Word translation) {
         if (!Word.isValid(translation)) {
@@ -105,6 +101,38 @@ public class DictionaryDAO {
                 contentResolver,
                 TranslationsContract.CONTENT_URI,
                 translationToContentValues(translation)
+        ).execute();
+    }
+
+    public void asyncDeleteTranslation(long translationId) {
+        asyncDeleteVocableTranslationsByTranslationId(translationId);
+        new AsyncDeleteCommand(
+                contentResolver,
+                TranslationsContract.CONTENT_URI,
+                TranslationsContract.Schema.COLUMN_ID + "=?",
+                new String[]{String.valueOf(translationId)}
+        ).execute();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Async methods - VOCABLES_TRANSLATIONS
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void asyncDeleteVocableTranslationsByTranslationId(long translationId) {
+        new AsyncDeleteCommand(
+                contentResolver,
+                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION_ID + "=?",
+                new String[]{String.valueOf(translationId)}
+        ).execute();
+    }
+
+    public void asyncDeleteVocableTranslationsByVocableId(long vocableId) {
+        new AsyncDeleteCommand(
+                contentResolver,
+                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "=?",
+                new String[]{String.valueOf(vocableId)}
         ).execute();
     }
 
