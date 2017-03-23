@@ -27,7 +27,7 @@
     <include layout="@layout/content_dictionary_add_translation" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/dictionary_translation_selector_add_translation_action_button"
+        android:id="@+id/add_translation_floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

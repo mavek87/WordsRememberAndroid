@@ -10,8 +10,6 @@ import com.matteoveroni.wordsremember.pojos.Word;
 
 public interface AddTranslationView extends PojoManipulableView<VocableTranslation> {
 
-    void selectTranslationAction();
-
     void createTranslationAction();
 
     void goToEditTranslationView(Word vocable);

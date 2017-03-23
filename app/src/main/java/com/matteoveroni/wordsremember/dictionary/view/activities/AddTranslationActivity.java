@@ -7,7 +7,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -24,6 +23,7 @@ import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * @author Matteo Veroni
@@ -62,7 +62,6 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
         fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
@@ -92,12 +91,10 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
         translationsListFragment.setPojoUsedByView(vocableTranslation.getVocable());
     }
 
-    @Override
-    public void selectTranslationAction() {
-    }
-
+    @OnClick(R.id.add_translation_floating_action_button)
     @Override
     public void createTranslationAction() {
+        presenter.onCreateTranslationRequest();
     }
 
     @Override

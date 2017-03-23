@@ -47,7 +47,7 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
         super.onStop();
     }
 
-    @OnClick(R.id.dictionary_management_floating_action_button)
+    @OnClick(R.id.add_vocable_floating_action_button)
     @Override
     public void createVocableAction() {
         presenter.onCreateVocableRequest();
