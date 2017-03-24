@@ -63,15 +63,14 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventVocableSelected event) {
-        final Word selectedVocable = event.getSelectedVocable();
-        eventBus.removeStickyEvent(event);
-        model.setLastValidVocableSelected(selectedVocable);
+        Word vocableSelected = event.getSelectedVocable();
+        model.setLastValidVocableSelected(vocableSelected);
         view.goToEditVocableView();
     }
 
-    @Subscribe(sticky = true)
+    @Subscribe
     public void onEvent(EventVocableManipulationRequest event) {
-        final Word vocableToManipulate = event.getVocableToManipulate();
+        Word vocableToManipulate = event.getVocableToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
                 dao.asyncDeleteVocable(vocableToManipulate.getId());

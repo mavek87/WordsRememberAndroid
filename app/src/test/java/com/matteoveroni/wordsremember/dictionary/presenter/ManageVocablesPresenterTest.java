@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -22,6 +23,7 @@ import static com.matteoveroni.wordsremember.dictionary.events.vocable.EventVoca
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +31,6 @@ import static org.mockito.Mockito.verify;
  * @author Matteo Veroni
  */
 
-// Todo: check each test of this class
 public class ManageVocablesPresenterTest {
 
     private ManageVocablesPresenter presenter;
@@ -45,35 +46,56 @@ public class ManageVocablesPresenterTest {
 
     private final EventBus eventBus = EventBus.getDefault();
 
-    private Word VOCABLE = new Word(1, "VocableTest");
+    private final Word EMPTY_VOCABLE = new Word("");
+    private final Word VOCABLE = new Word(1, "VocableTest");
+    private final ArgumentCaptor<Word> vocablePassedToModelCaptor = ArgumentCaptor.forClass(Word.class);
+
 
     @Before
     public void setUp() {
         presenter = new DictionaryVocablesManagerPresenterFactoryForTests(model, dao).create();
         presenter.attachView(view);
-        assertTrue("Presenter should be registered to eventbus before each test", eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to event bus before each test", eventBus.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
-        assertFalse("Presenter should be unregistered to eventbus after each test", eventBus.isRegistered(presenter));
-
-        model = null;
+        assertFalse("Presenter should be unregistered to event bus after each test", eventBus.isRegistered(presenter));
     }
 
-    // Todo: check why this test fails
+    @Test
+    public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InTheModel() {
+        presenter.onCreateVocableRequest();
+
+        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
+
+        assertTrue(
+                "last valid vocable selected set in the model should be an empty vocable",
+                vocablePassedToModelCaptor.getValue().equals(EMPTY_VOCABLE)
+        );
+    }
+
+    @Test
+    public void onCreateVocableRequest_View_goToEditVocableView() {
+        presenter.onCreateVocableRequest();
+
+        verify(view).goToEditVocableView();
+    }
+
     @Test
     public void onEventVocableSelected_Model_saveVocableSelected() {
-//        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
-//
-//        presenter.onEvent(eventVocableSelected);
-//
-//        assertEquals(eventVocableSelected.getSelectedVocable(), model.getLastValidVocableSelected());
+        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
+
+        presenter.onEvent(eventVocableSelected);
+
+        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
+
+        assertEquals(eventVocableSelected.getSelectedVocable(), vocablePassedToModelCaptor.getValue());
     }
 
     @Test
-    public void onEventVocableSelected_View_goToManipulationView() {
+    public void onEventVocableSelected_View_goToEditVocableView() {
         EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
 
         presenter.onEvent(eventVocableSelected);
@@ -83,19 +105,18 @@ public class ManageVocablesPresenterTest {
 
     @Test
     public void onEventVocableDeleteRequest_DAO_Starts_asyncDeleteVocable() {
-        EventVocableManipulationRequest eventVocableDeleteRequest
-                = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
+        EventVocableManipulationRequest vocableDeleteRequest = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
 
-        presenter.onEvent(eventVocableDeleteRequest);
+        presenter.onEvent(vocableDeleteRequest);
 
         verify(dao).asyncDeleteVocable(VOCABLE.getId());
     }
 
     @Test
-    public void onEventAsyncVocableDeleteComplete_View_showMessageDeleteComplete() {
-        EventAsyncDeleteVocableCompleted eventAsyncVocableDeletionComplete = new EventAsyncDeleteVocableCompleted(1);
+    public void onEventAsyncDeleteVocableComplete_View_showMessageDeleteComplete() {
+        EventAsyncDeleteVocableCompleted vocableDeletionComplete = new EventAsyncDeleteVocableCompleted(1);
 
-        presenter.onEvent(eventAsyncVocableDeletionComplete);
+        presenter.onEvent(vocableDeletionComplete);
 
         verify(view).showMessage(anyString());
     }
