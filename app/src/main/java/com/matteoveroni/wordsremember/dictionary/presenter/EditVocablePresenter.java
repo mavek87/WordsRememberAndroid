@@ -28,7 +28,7 @@ public class EditVocablePresenter implements Presenter {
     public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "Invalid vocable. Cannot save it. Compile all the data and retry";
     public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "Cannot save the vocable using this vocable name. Name already used";
 
-    private Word editedVocableInView = null;
+    protected Word editedVocableInView = null;
 
     public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;

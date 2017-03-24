@@ -79,7 +79,6 @@ public class ManageVocablesPresenter implements Presenter {
                 Log.e(TAG, UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
                 throw new UnsupportedOperationException(UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
         }
-        eventBus.removeStickyEvent(event);
     }
 
     @Subscribe

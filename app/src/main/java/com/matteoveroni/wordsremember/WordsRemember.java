@@ -19,16 +19,17 @@ import com.matteoveroni.wordsremember.pojos.Word;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.75
+ * @version 0.0.76
  **/
 
 public class WordsRemember extends Application {
 
-    public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
-    public static final String NAME = TagGenerator.tag(WordsRemember.class);
-    public static final String LOWERCASE_NAME = NAME.toLowerCase();
+    public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
+    public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.0.75";
+    public static final String VERSION = "0.0.76";
+    public static final String AUTHOR = "Matteo Veroni";
+    public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
     private static final boolean PRODUCTION_MODE = true;
 
@@ -58,10 +59,11 @@ public class WordsRemember extends Application {
     }
 
     private void printAppSpecs() {
-        Log.i(NAME, Str.concat("AUTHORITY = ", AUTHORITY));
-        Log.i(NAME, Str.concat("NAME = ", NAME));
-        Log.i(NAME, Str.concat("LOWERCASE_NAME = ", LOWERCASE_NAME));
-        Log.i(NAME, Str.concat("VERSION = ", VERSION));
+        Log.i(APP_NAME, Str.concat("APP_NAME: ", APP_NAME));
+        Log.i(APP_NAME, Str.concat("LOWERCASE_APP_NAME: ", LOWERCASE_APP_NAME));
+        Log.i(APP_NAME, Str.concat("VERSION: ", VERSION));
+        Log.i(APP_NAME, Str.concat("AUTHOR: ", AUTHOR));
+        Log.i(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
     }
 
     private void buildDAOComponent() {

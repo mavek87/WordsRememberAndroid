@@ -20,7 +20,7 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsCon
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public static final String TAG = TagGenerator.tag(DatabaseManager.class);
-    public static final String DB_NAME = WordsRemember.LOWERCASE_NAME + ".db";
+    public static final String DB_NAME = WordsRemember.LOWERCASE_APP_NAME + ".db";
     public static final int VERSION = 1;
 
     private volatile static DatabaseManager DB_UNIQUE_INSTANCE;

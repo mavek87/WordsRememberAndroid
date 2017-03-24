@@ -44,12 +44,11 @@ public class ManageVocablesPresenterTest {
     @Mock
     private DictionaryModel model;
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private static final EventBus eventBus = EventBus.getDefault();
 
     private final Word EMPTY_VOCABLE = new Word("");
     private final Word VOCABLE = new Word(1, "VocableTest");
     private final ArgumentCaptor<Word> vocablePassedToModelCaptor = ArgumentCaptor.forClass(Word.class);
-
 
     @Before
     public void setUp() {
@@ -65,22 +64,21 @@ public class ManageVocablesPresenterTest {
     }
 
     @Test
-    public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InTheModel() {
-        presenter.onCreateVocableRequest();
-
-        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
-
-        assertTrue(
-                "last valid vocable selected set in the model should be an empty vocable",
-                vocablePassedToModelCaptor.getValue().equals(EMPTY_VOCABLE)
-        );
-    }
-
-    @Test
     public void onCreateVocableRequest_View_goToEditVocableView() {
         presenter.onCreateVocableRequest();
 
         verify(view).goToEditVocableView();
+    }
+
+    @Test
+    public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InTheModel() {
+        presenter.onCreateVocableRequest();
+
+        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
+        assertTrue(
+                "last valid vocable selected set in the model should be an empty vocable",
+                vocablePassedToModelCaptor.getValue().equals(EMPTY_VOCABLE)
+        );
     }
 
     @Test
@@ -90,7 +88,6 @@ public class ManageVocablesPresenterTest {
         presenter.onEvent(eventVocableSelected);
 
         verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
-
         assertEquals(eventVocableSelected.getSelectedVocable(), vocablePassedToModelCaptor.getValue());
     }
 
@@ -104,7 +101,7 @@ public class ManageVocablesPresenterTest {
     }
 
     @Test
-    public void onEventVocableDeleteRequest_DAO_Starts_asyncDeleteVocable() {
+    public void onEventVocableDeleteRequest_DAO_Starts_AsyncDeleteVocable() {
         EventVocableManipulationRequest vocableDeleteRequest = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
 
         presenter.onEvent(vocableDeleteRequest);
