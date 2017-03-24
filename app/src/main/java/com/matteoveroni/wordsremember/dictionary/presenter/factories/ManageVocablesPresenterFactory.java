@@ -15,11 +15,13 @@ import javax.inject.Inject;
 public class ManageVocablesPresenterFactory implements PresenterFactory {
 
     @Inject
-    DictionaryDAO injectedDAO;
+    DictionaryDAO dao;
+
+    private final DictionaryModel model = WordsRemember.getDictionaryModel();
 
     @Override
     public ManageVocablesPresenter create() {
         WordsRemember.getDAOComponent().inject(this);
-        return new ManageVocablesPresenter(injectedDAO);
+        return new ManageVocablesPresenter(model, dao);
     }
 }

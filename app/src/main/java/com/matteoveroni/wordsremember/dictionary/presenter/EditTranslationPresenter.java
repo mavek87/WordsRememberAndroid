@@ -1,8 +1,10 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
@@ -19,16 +21,26 @@ public class EditTranslationPresenter implements Presenter {
 
     private final EventBus eventBus = EventBus.getDefault();
 
-    private final DictionaryDAO model;
+    private final DictionaryModel model;
+    private final DictionaryDAO dao;
     private EditTranslationView view;
 
-    public EditTranslationPresenter(DictionaryDAO model) {
+    private Word editedTranslationInView = null;
+
+    public static final String MSG_TRANSLATION_SAVED = "Translation saved";
+
+    public EditTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
+        this.dao = dao;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (EditTranslationView) view;
+
+        final Word newEmptyTranslation = new Word("");
+        this.view.setPojoUsedByView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
+
         eventBus.register(this);
     }
 
@@ -38,30 +50,26 @@ public class EditTranslationPresenter implements Presenter {
         view = null;
     }
 
-    public void onVocableToTranslateRetrieved(Word vocable) {
-        Word newEmptyTranslation = new Word("");
-        view.setPojoUsedByView(new VocableTranslation(vocable, newEmptyTranslation));
-    }
-
     public void onSaveTranslationRequest() {
-        VocableTranslation vocableTranslation = view.getPojoUsedByView();
-        if (vocableTranslation.getTranslation().getName().trim().isEmpty()) {
-            view.showMessage("Is not possible to save empty translations for vocables.");
+        final VocableTranslation vocableTranslationInView = view.getPojoUsedByView();
+        editedTranslationInView = vocableTranslationInView.getTranslation();
+
+        if (Str.isNullOrEmpty(editedTranslationInView.getName())) {
+            view.showMessage("Is not possible to save empty translations for a vocable.");
             return;
         }
-        model.asyncSaveTranslation(vocableTranslation.getTranslation());
+
+        dao.asyncSaveTranslation(editedTranslationInView);
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
-        VocableTranslation vocableTranslation = view.getPojoUsedByView();
-        vocableTranslation.getTranslation().setId(event.getSavedTranslationId());
-        model.asyncSaveVocableTranslation(vocableTranslation);
-    }
+        view.showMessage(MSG_TRANSLATION_SAVED);
 
-    @Subscribe
-    public void onEvent(EventAsyncSaveVocableTranslationCompleted event) {
-        eventBus.removeStickyEvent(event);
-        view.returnToPreviousView();
+        final Word translationSaved = editedTranslationInView;
+        translationSaved.setId(event.getSavedTranslationId());
+
+        model.setLastValidTranslationSelected(translationSaved);
+        view.returnToEditVocableView();
     }
 }

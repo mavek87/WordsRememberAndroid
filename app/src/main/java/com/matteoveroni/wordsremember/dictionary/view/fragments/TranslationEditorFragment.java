@@ -27,7 +27,7 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
     private Unbinder viewInjector;
-    private VocableTranslation vocableTranslation;
+    private VocableTranslation lastValidVocableTranslationInView;
 
     @BindView(R.id.fragment_translation_editor_title)
     TextView lbl_title;
@@ -50,11 +50,14 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public VocableTranslation getPojoUsedByView() {
-        long translationId = vocableTranslation.getTranslation().getId();
-        String translationName = txt_translationName.getText().toString();
-        Word translation = new Word(translationId, translationName);
-        vocableTranslation.setTranslation(translation);
-        return vocableTranslation;
+        lastValidVocableTranslationInView.setTranslation(getTranslationInView());
+        return lastValidVocableTranslationInView;
+    }
+
+    private Word getTranslationInView(){
+        final long translationId = lastValidVocableTranslationInView.getTranslation().getId();
+        final String translationNameFromView = txt_translationName.getText().toString();
+        return new Word(translationId, translationNameFromView);
     }
 
     @Override
@@ -62,9 +65,9 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
         if (pojo.getTranslation().getName().trim().isEmpty()) {
             lbl_title.setText("Create translation for " + pojo.getVocable().getName());
         } else {
-            lbl_title.setText("Edit translation for " + pojo.getVocable().getName());
+            lbl_title.setText("Edit translation " + pojo.getTranslation().getName());
         }
         txt_translationName.setText(pojo.getTranslation().getName());
-        this.vocableTranslation = pojo;
+        this.lastValidVocableTranslationInView = pojo;
     }
 }

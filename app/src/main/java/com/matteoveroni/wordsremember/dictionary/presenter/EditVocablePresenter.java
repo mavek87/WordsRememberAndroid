@@ -19,35 +19,37 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class EditVocablePresenter implements Presenter {
 
-    private final EventBus eventBus = EventBus.getDefault();
-
-    private final DictionaryModel model;
+    private final EventBus eventBus;
     private final DictionaryDAO dao;
+    private final DictionaryModel model;
     private EditVocableView view;
 
     public static final String MSG_VOCABLE_SAVED = "Vocable saved";
     public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "Invalid vocable. Cannot save it. Compile all the data and retry";
     public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "Cannot save the vocable using this vocable name. Name already used";
 
+    private Word editedVocableInView = null;
+
     public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
         this.dao = dao;
+        this.eventBus = EventBus.getDefault();
     }
 
     @Override
     public void attachView(Object view) {
+        this.view = (EditVocableView) view;
+
         Word lastValidVocableSelected = model.getLastValidVocableSelected();
         Word lastValidTranslationSelected = model.getLastValidTranslationSelected();
 
-        this.view = (EditVocableView) view;
         this.view.setPojoUsedByView(lastValidVocableSelected);
+        eventBus.register(this);
 
         if (lastValidTranslationSelected != null) {
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastValidVocableSelected, lastValidTranslationSelected));
             model.setLastValidTranslationSelected(null);
         }
-
-        eventBus.register(this);
     }
 
     @Override
@@ -61,10 +63,9 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onSaveVocableRequest() {
-        Word vocableInViewToPersist = view.getPojoUsedByView();
-        model.setVocableInView(vocableInViewToPersist);
-        if (isVocableValid(vocableInViewToPersist)) {
-            dao.asyncSearchVocableByName(vocableInViewToPersist.getName());
+        editedVocableInView = view.getPojoUsedByView();
+        if (isVocableValid(editedVocableInView)) {
+            dao.asyncSearchVocableByName(editedVocableInView.getName());
         } else {
             view.showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
         }
@@ -81,7 +82,7 @@ public class EditVocablePresenter implements Presenter {
     }
 
     private boolean storeVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
-        if (model.getEditedVocableInView().getId() <= 0) {
+        if (editedVocableInView.getId() <= 0) {
             return saveVocableInViewIfHasUniqueName(persistentVocableWithSameName);
         } else {
             return updateVocableInViewIfHasUniqueName(persistentVocableWithSameName);
@@ -90,16 +91,15 @@ public class EditVocablePresenter implements Presenter {
 
     private boolean saveVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
         if (persistentVocableWithSameName == null) {
-            dao.asyncSaveVocable(model.getEditedVocableInView());
+            dao.asyncSaveVocable(editedVocableInView);
             return true;
         }
         return false;
     }
 
     private boolean updateVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
-        Word vocableInViewToPersist = model.getEditedVocableInView();
-        if (persistentVocableWithSameName == null || vocableInViewToPersist.getId() == persistentVocableWithSameName.getId()) {
-            dao.asyncUpdateVocable(vocableInViewToPersist.getId(), vocableInViewToPersist);
+        if (persistentVocableWithSameName == null || editedVocableInView.getId() == persistentVocableWithSameName.getId()) {
+            dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
             return true;
         }
         return false;
@@ -116,7 +116,7 @@ public class EditVocablePresenter implements Presenter {
     }
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
-        model.setLastValidVocableSelected(model.getEditedVocableInView());
+        model.setLastValidVocableSelected(editedVocableInView);
         view.returnToPreviousView();
     }
 

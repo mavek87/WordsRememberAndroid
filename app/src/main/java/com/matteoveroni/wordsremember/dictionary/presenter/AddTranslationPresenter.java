@@ -73,6 +73,6 @@ public class AddTranslationPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.goToEditTranslationView(model.getLastValidVocableSelected());
+        view.goToEditTranslationView();
     }
 }

@@ -6,6 +6,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
@@ -28,21 +29,24 @@ public class ManageVocablesPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus eventBus;
     private final DictionaryDAO dao;
+    private final DictionaryModel model;
     private ManageVocablesView view;
 
     private static final String MSG_VOCABLE_REMOVED = "Vocable removed";
     private static final String UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION = "Unsupported vocable manipulation exception";
 
-    public ManageVocablesPresenter(DictionaryDAO dao) {
+    public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
+        this.model = model;
         this.dao = dao;
+        this.eventBus = EventBus.getDefault();
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (ManageVocablesView) view;
-        WordsRemember.getDictionaryModel().reset();
+        model.reset();
         eventBus.register(this);
     }
 
@@ -53,7 +57,7 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        WordsRemember.getDictionaryModel().setLastValidVocableSelected(new Word(""));
+        model.setLastValidVocableSelected(new Word(""));
         view.goToEditVocableView();
     }
 
@@ -61,7 +65,7 @@ public class ManageVocablesPresenter implements Presenter {
     public void onEvent(EventVocableSelected event) {
         final Word selectedVocable = event.getSelectedVocable();
         eventBus.removeStickyEvent(event);
-        WordsRemember.getDictionaryModel().setLastValidVocableSelected(selectedVocable);
+        model.setLastValidVocableSelected(selectedVocable);
         view.goToEditVocableView();
     }
 

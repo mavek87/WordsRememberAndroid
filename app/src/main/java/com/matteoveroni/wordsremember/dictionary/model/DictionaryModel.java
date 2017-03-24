@@ -15,7 +15,6 @@ public class DictionaryModel {
 
     private Word lastValidVocableSelected;
     private Word lastValidTranslationSelected;
-    private Word vocableInView;
 
     public Word getLastValidVocableSelected() {
         return lastValidVocableSelected;
@@ -25,17 +24,9 @@ public class DictionaryModel {
         this.lastValidVocableSelected = lastValidVocableSelected;
     }
 
-    public Word getEditedVocableInView() {
-        return vocableInView;
-    }
-
-    public void setVocableInView(Word vocableInView) {
-        this.vocableInView = vocableInView;
-    }
-
     public void reset() {
         lastValidVocableSelected = null;
-        vocableInView = null;
+        lastValidTranslationSelected = null;
         Log.i(TAG, "Model resetted");
     }
 

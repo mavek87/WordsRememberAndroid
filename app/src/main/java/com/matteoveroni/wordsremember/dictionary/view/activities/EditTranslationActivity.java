@@ -36,9 +36,7 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 
     private TranslationEditorFragment translationEditorFragment;
-
     private EditTranslationPresenter presenter;
-    private final int PRESENTER_LOADER_ID = 1;
 
     @Override
     public void saveTranslationAction() {
@@ -46,8 +44,9 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     }
 
     @Override
-    public void returnToPreviousView() {
-        onBackPressed();
+    public void returnToEditVocableView() {
+        Intent intent_goToEditVocableActivity = new Intent(getApplicationContext(), EditVocableActivity.class);
+        startActivity(intent_goToEditVocableActivity);
     }
 
     @Override
@@ -69,19 +68,6 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     protected void onStart() {
         super.onStart();
         presenter.attachView(this);
-        presenter.onVocableToTranslateRetrieved(findVocableToTranslate());
-    }
-
-    private Word findVocableToTranslate() {
-        Intent starterIntent = getIntent();
-        if (starterIntent.hasExtra(Extras.VOCABLE)) {
-            String json_vocableToTranslate = starterIntent.getStringExtra(Extras.VOCABLE);
-            return Word.fromJson(json_vocableToTranslate);
-        } else {
-            final String errorMessage = "Unexpected Error: No vocable to translate retrieved.";
-            Log.e(TAG, errorMessage);
-            throw new RuntimeException(errorMessage);
-        }
     }
 
     @Override
@@ -93,7 +79,6 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_dictionary_edit_translation);
         ButterKnife.bind(this);
         setupAndShowToolbar();
@@ -101,6 +86,8 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
         translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        final int PRESENTER_LOADER_ID = 1;
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 

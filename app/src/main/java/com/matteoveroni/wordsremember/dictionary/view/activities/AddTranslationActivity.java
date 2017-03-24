@@ -98,9 +98,8 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     }
 
     @Override
-    public void goToEditTranslationView(Word vocable) {
+    public void goToEditTranslationView() {
         Intent intent_goToEditTranslationView = new Intent(getApplicationContext(), EditTranslationActivity.class);
-        intent_goToEditTranslationView.putExtra(Extras.VOCABLE, vocable.toJson());
         startActivity(intent_goToEditTranslationView);
     }
 
