@@ -23,9 +23,6 @@ public final class TranslationsContract {
     public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
-    private TranslationsContract() {
-    }
-
     public static final class Schema implements BaseColumns {
         public static final String TABLE_NAME = "translations";
 

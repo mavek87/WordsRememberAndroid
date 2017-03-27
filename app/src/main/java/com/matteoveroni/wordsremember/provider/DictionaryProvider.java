@@ -8,15 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Content Provider for the dictionary.
@@ -53,6 +49,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
     private static final int VOCABLE_TRANSLATIONS = 5;
+    private static final int NOT_TRANSLATIONS_FOR_VOCABLE_ID = 6;
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
@@ -60,6 +57,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NAME, VOCABLE_TRANSLATIONS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME + "/#", NOT_TRANSLATIONS_FOR_VOCABLE_ID);
     }
 
     private static final class Errors {
@@ -79,6 +77,8 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 return TranslationsContract.CONTENT_ITEM_TYPE;
             case VOCABLE_TRANSLATIONS:
                 return VocablesTranslationsContract.CONTENT_DIR_TYPE;
+            case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+                return VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE;
             default:
                 return null;
         }
@@ -91,26 +91,25 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereSelectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         final String OPERATION = "QUERY";
         final SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
                 break;
             case VOCABLE_ID:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
-                whereSelection = VocablesContract.Schema.COLUMN_ID + " = ? ";
-                whereSelectionArgs = new String[]{uri.getLastPathSegment()};
+                whereSelection = VocablesContract.Schema.COLUMN_ID + "=?";
+                whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case TRANSLATIONS:
                 queryBuilder.setTables(TranslationsContract.Schema.TABLE_NAME);
                 break;
             case TRANSLATION_ID:
                 queryBuilder.setTables(TranslationsContract.Schema.TABLE_NAME);
-                whereSelection = TranslationsContract.Schema.COLUMN_ID + " = ? ";
-                whereSelectionArgs = new String[]{uri.getLastPathSegment()};
+                whereSelection = TranslationsContract.Schema.COLUMN_ID + "=?";
+                whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLE_TRANSLATIONS:
                 // SELECT translations._id, translations.translation
@@ -128,18 +127,42 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                                 + " ON ("
                                 + TranslationsContract.Schema.TABLE_DOT_COLUMN_ID
                                 + "="
-                                + VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION_ID
+                                + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID
                                 + ")"
                 );
 
                 if (whereSelection == null || whereSelection.trim().isEmpty()) {
                     // WHERE vocables_translations.vocable_id=?
-                    whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "=?";
+                    whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
                 }
-                if (whereSelectionArgs == null || whereSelectionArgs.length == 0) {
-                    whereSelectionArgs = new String[]{uri.getLastPathSegment()};
+                if (whereArgs == null || whereArgs.length == 0) {
+                    whereArgs = new String[]{uri.getLastPathSegment()};
                 }
                 break;
+            case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+
+                // 	SELECT * FROM
+                // (SELECT * FROM vocables_translations WHERE translation_id NOT IN (SELECT translation_id FROM vocables_translations WHERE vocable_id=2))
+                // GROUP BY translation_id;
+
+                final String V_T = VocablesTranslationsContract.Schema.TABLE_NAME;
+
+                final String SQL_QUERY_ALL_MY_TRANSLATIONS = "SELECT " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + " "
+                        + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.COL_VOCABLE_ID + "=?";
+
+                final String SQL_QUERY_NOT_MINE_TRANSLATIONS = "SELECT * FROM " + V_T + " "
+                        + "WHERE " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
+
+                final String SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS = "SELECT * FROM (" + SQL_QUERY_NOT_MINE_TRANSLATIONS + ") "
+                        + "GROUP BY " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ";";
+
+                whereArgs = new String[]{uri.getLastPathSegment()};
+
+                Cursor cursor = databaseManager.getReadableDatabase().rawQuery(SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS, whereArgs);
+                if (isContentResolverNotNull())
+                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
+
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
@@ -149,7 +172,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 db,
                 projection,
                 whereSelection,
-                whereSelectionArgs,
+                whereArgs,
                 null,
                 null,
                 sortOrder,

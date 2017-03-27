@@ -204,8 +204,8 @@ public class DatabaseManagerTest {
                 values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
                 break;
             case VocablesTranslationsContract.Schema.TABLE_NAME:
-                values.put(VocablesTranslationsContract.Schema.COLUMN_VOCABLE_ID, 1);
-                values.put(VocablesTranslationsContract.Schema.COLUMN_TRANSLATION_ID, 1);
+                values.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, 1);
+                values.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, 1);
                 break;
             default:
                 throw new RuntimeException("Error trying to insert new record in table. Table " + table.getName() + " unknown");

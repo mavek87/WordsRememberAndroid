@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.view.fragments;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -29,6 +30,8 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsCon
 import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.net.URI;
 
 /**
  * @author Matteo Veroni
@@ -144,13 +147,16 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     }
 
     private Loader<Cursor> getCursorForAllTheTranslationsExceptThoseForVocable() {
+        final String vocableId = String.valueOf(vocableAssociatedToView.getId());
+        final Uri uri = Uri.withAppendedPath(VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI, vocableId);
         return new CursorLoader(
                 getContext(),
-                VocablesTranslationsContract.CONTENT_URI,
+                uri,
                 null,
-                VocablesTranslationsContract.Schema.TABLE_DOT_COLUMN_VOCABLE_ID + "!=?",
-                new String[]{String.valueOf(vocableAssociatedToView.getId())},
-                TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
+                null,
+                null,
+                null
+        );
     }
 
     @Override
