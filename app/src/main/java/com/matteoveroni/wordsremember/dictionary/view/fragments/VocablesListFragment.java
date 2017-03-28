@@ -108,14 +108,14 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        final String[] columns = new String[]{VocablesContract.Schema.COLUMN_ID, VocablesContract.Schema.COLUMN_VOCABLE};
+        final String[] columns = new String[]{VocablesContract.Schema.COL_ID, VocablesContract.Schema.COL_VOCABLE};
         return new CursorLoader(
                 getActivity(),
                 VocablesContract.CONTENT_URI,
                 columns,
                 null,
                 null,
-                VocablesContract.Schema.COLUMN_VOCABLE + " ASC"
+                VocablesContract.Schema.COL_VOCABLE + " ASC"
         );
     }
 

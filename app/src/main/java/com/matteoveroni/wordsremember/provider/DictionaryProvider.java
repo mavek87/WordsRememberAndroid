@@ -100,7 +100,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
-                whereSelection = VocablesContract.Schema.COLUMN_ID + "=?";
+                whereSelection = VocablesContract.Schema.COL_ID + "=?";
                 whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case TRANSLATIONS:
@@ -108,7 +108,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case TRANSLATION_ID:
                 queryBuilder.setTables(TranslationsContract.Schema.TABLE_NAME);
-                whereSelection = TranslationsContract.Schema.COLUMN_ID + "=?";
+                whereSelection = TranslationsContract.Schema.COL_ID + "=?";
                 whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLE_TRANSLATIONS:
@@ -117,22 +117,18 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 // ON (translations._id=vocables_translations.translation_id)
                 // WHERE vocables_translations.vocable_id=?;
 
-                projection = new String[]{
-                        TranslationsContract.Schema.TABLE_DOT_COLUMN_ID,
-                        TranslationsContract.Schema.TABLE_DOT_COLUMN_TRANSLATION
-                };
+                projection = TranslationsContract.Schema.ALL_COLUMNS;
 
                 queryBuilder.setTables(
                         TranslationsContract.Schema.TABLE_NAME + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
                                 + " ON ("
-                                + TranslationsContract.Schema.TABLE_DOT_COLUMN_ID
+                                + TranslationsContract.Schema.TABLE_DOT_COL_ID
                                 + "="
                                 + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID
                                 + ")"
                 );
 
                 if (whereSelection == null || whereSelection.trim().isEmpty()) {
-                    // WHERE vocables_translations.vocable_id=?
                     whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
                 }
                 if (whereArgs == null || whereArgs.length == 0) {
@@ -140,21 +136,33 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 }
                 break;
             case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+//                SELECT translations._id,translations.translation FROM translations
+//                INNER JOIN
+//                (SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
+//                    NOT IN
+//                    (
+//                        SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=?
+//	                )
+//                ) not_mine_translations
+//                ON (translations._id=not_mine_translations.translation_id)
+//                GROUP BY translations.translation;
 
-                // 	SELECT * FROM
-                // (SELECT * FROM vocables_translations WHERE translation_id NOT IN (SELECT translation_id FROM vocables_translations WHERE vocable_id=2))
-                // GROUP BY translation_id;
+                String V_T = VocablesTranslationsContract.Schema.TABLE_NAME;
 
-                final String V_T = VocablesTranslationsContract.Schema.TABLE_NAME;
+                String SQL_QUERY_ALL_MY_TRANSLATIONS =
+                        "SELECT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
+                                + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
 
-                final String SQL_QUERY_ALL_MY_TRANSLATIONS = "SELECT " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + " "
-                        + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.COL_VOCABLE_ID + "=?";
+                String SQL_QUERY_NOT_MINE_TRANSLATIONS =
+                        "SELECT * FROM " + V_T + " "
+                                + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
 
-                final String SQL_QUERY_NOT_MINE_TRANSLATIONS = "SELECT * FROM " + V_T + " "
-                        + "WHERE " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
-
-                final String SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS = "SELECT * FROM (" + SQL_QUERY_NOT_MINE_TRANSLATIONS + ") "
-                        + "GROUP BY " + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ";";
+                String SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS = "SELECT "
+                        + TranslationsContract.Schema.TABLE_DOT_COL_ID + " as _id," + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + " as translation "
+                        + "FROM " + TranslationsContract.Schema.TABLE_NAME + " "
+                        + "INNER JOIN (" + SQL_QUERY_NOT_MINE_TRANSLATIONS + ") not_mine_translations "
+                        + "ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=not_mine_translations." + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ") "
+                        + "GROUP BY " + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + "";
 
                 whereArgs = new String[]{uri.getLastPathSegment()};
 
@@ -224,7 +232,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = VocablesContract.Schema.COLUMN_ID + " = " + id + (
+                final String where = VocablesContract.Schema.COL_ID + " = " + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""
@@ -255,7 +263,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 String vocableId = uri.getLastPathSegment();
-                String where = VocablesContract.Schema.COLUMN_ID + "=" + vocableId;
+                String where = VocablesContract.Schema.COL_ID + "=" + vocableId;
                 if (!TextUtils.isEmpty(whereClause)) {
                     where += " AND (" + whereClause + ")";
                 }

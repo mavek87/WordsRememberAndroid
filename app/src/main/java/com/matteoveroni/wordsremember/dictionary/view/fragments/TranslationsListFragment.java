@@ -31,8 +31,6 @@ import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.net.URI;
-
 /**
  * @author Matteo Veroni
  */
@@ -132,7 +130,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 null,
                 null,
                 null,
-                TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
+                TranslationsContract.Schema.COL_TRANSLATION + " ASC");
     }
 
     private Loader<Cursor> getCursorForAllTheTranslationsForVocable() {
@@ -142,13 +140,13 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 null,
                 null,
                 new String[]{String.valueOf(vocableAssociatedToView.getId())},
-                TranslationsContract.Schema.COLUMN_TRANSLATION + " ASC");
+                TranslationsContract.Schema.COL_TRANSLATION + " ASC");
 
     }
 
     private Loader<Cursor> getCursorForAllTheTranslationsExceptThoseForVocable() {
-        final String vocableId = String.valueOf(vocableAssociatedToView.getId());
-        final Uri uri = Uri.withAppendedPath(VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI, vocableId);
+        String vocableId = String.valueOf(vocableAssociatedToView.getId());
+        Uri uri = Uri.withAppendedPath(VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI, vocableId);
         return new CursorLoader(
                 getContext(),
                 uri,

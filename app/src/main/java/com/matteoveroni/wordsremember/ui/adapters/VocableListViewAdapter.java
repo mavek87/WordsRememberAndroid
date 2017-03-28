@@ -52,6 +52,6 @@ public class VocableListViewAdapter extends CursorAdapter {
 //        }
 
         // Draw the cursor into the item view
-        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COLUMN_VOCABLE)));
+        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COL_VOCABLE)));
     }
 }

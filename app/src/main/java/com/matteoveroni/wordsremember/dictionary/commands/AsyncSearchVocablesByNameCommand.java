@@ -26,7 +26,7 @@ public class AsyncSearchVocablesByNameCommand extends AsyncQueryCommand {
                 contentResolver,
                 VocablesContract.CONTENT_URI,
                 VocablesContract.Schema.ALL_COLUMNS,
-                VocablesContract.Schema.COLUMN_VOCABLE + "=?",
+                VocablesContract.Schema.COL_VOCABLE + "=?",
                 new String[]{vocableName},
                 orderBy,
                 nextCommand

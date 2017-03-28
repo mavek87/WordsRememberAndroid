@@ -133,11 +133,11 @@ public class DatabaseManagerTest {
         assertTrue("Should move to the first retrieved vocable position", queryResults.moveToFirst());
         assertEquals("The id of the only record existing should be equal to the id of data inserted",
                 idOfDataInserted,
-                queryResults.getLong(queryResults.getColumnIndex(VocablesContract.Schema.COLUMN_ID))
+                queryResults.getLong(queryResults.getColumnIndex(VocablesContract.Schema.COL_ID))
         );
         assertEquals("The inserted vocable name should match with the expected value",
                 VALID_VOCABLE_NAME,
-                queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
+                queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COL_VOCABLE))
         );
     }
 
@@ -147,7 +147,7 @@ public class DatabaseManagerTest {
 
         final int rowDeleted = dbManager.getWritableDatabase().delete(
                 VocablesContract.Schema.TABLE_NAME,
-                VocablesContract.Schema.COLUMN_ID + "=" + idOfDataInserted,
+                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted,
                 null
         );
         assertEquals("Should delete only one row", 1, rowDeleted);
@@ -160,12 +160,12 @@ public class DatabaseManagerTest {
         final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
 
         final String UPDATED_VOCABLE_NAME = "UpdatedVocableName";
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, UPDATED_VOCABLE_NAME);
+        values.put(VocablesContract.Schema.COL_VOCABLE, UPDATED_VOCABLE_NAME);
 
         final int rowsUpdated = dbManager.getWritableDatabase().update(
                 VocablesContract.Schema.TABLE_NAME,
                 values,
-                VocablesContract.Schema.COLUMN_ID + "=" + idOfDataInserted, null);
+                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted, null);
         assertEquals("Rows updated should be only one", 1, rowsUpdated);
 
         queryResults = getQueryResultsFromTable(TABLE_VOCABLES);
@@ -174,7 +174,7 @@ public class DatabaseManagerTest {
         queryResults.moveToFirst();
         assertEquals("The only existing vocable should be updated like expected",
                 UPDATED_VOCABLE_NAME,
-                queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE))
+                queryResults.getString(queryResults.getColumnIndex(VocablesContract.Schema.COL_VOCABLE))
         );
     }
 
@@ -198,10 +198,10 @@ public class DatabaseManagerTest {
     private long insertValidRecordInTable(Table table) {
         switch (table.getName()) {
             case VocablesContract.Schema.TABLE_NAME:
-                values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+                values.put(VocablesContract.Schema.COL_VOCABLE, VALID_VOCABLE_NAME);
                 break;
             case TranslationsContract.Schema.TABLE_NAME:
-                values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
+                values.put(TranslationsContract.Schema.COL_TRANSLATION, VALID_TRANSLATION_NAME);
                 break;
             case VocablesTranslationsContract.Schema.TABLE_NAME:
                 values.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, 1);

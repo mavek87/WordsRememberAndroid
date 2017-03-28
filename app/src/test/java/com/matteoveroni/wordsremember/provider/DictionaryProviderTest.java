@@ -64,21 +64,21 @@ public class DictionaryProviderTest {
 
     @Test
     public void insert_vocable_in_vocables_table_returns_expected_uri() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+        values.put(VocablesContract.Schema.COL_VOCABLE, VALID_VOCABLE_NAME);
         Uri generatedUri = provider.insert(VocablesContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + 1), generatedUri);
     }
 
     @Test
     public void insert_translation_in_translations_table_returns_expected_uri() {
-        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
+        values.put(TranslationsContract.Schema.COL_TRANSLATION, VALID_TRANSLATION_NAME);
         Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
 
     @Test
     public void insert_record_in_vocablestranslations_table_returns_expected_uri() {
-        values.put(TranslationsContract.Schema.COLUMN_TRANSLATION, VALID_TRANSLATION_NAME);
+        values.put(TranslationsContract.Schema.COL_TRANSLATION, VALID_TRANSLATION_NAME);
         Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
         assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
     }
@@ -103,7 +103,7 @@ public class DictionaryProviderTest {
 
     @Test
     public void select_vocable_by_id_on_db_containing_element_with_this_id_retrieve_the_right_vocable() {
-        values.put(VocablesContract.Schema.COLUMN_VOCABLE, VALID_VOCABLE_NAME);
+        values.put(VocablesContract.Schema.COL_VOCABLE, VALID_VOCABLE_NAME);
         Uri uri = provider.insert(VocablesContract.CONTENT_URI, values);
         assertEquals(
                 "uri of inserted vocable is like expected",
@@ -119,7 +119,7 @@ public class DictionaryProviderTest {
         );
         cursor.moveToFirst();
         assertEquals("query should return one result", 1, cursor.getCount());
-        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_ID)), 1);
-        assertEquals("query should return the right vocable", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COLUMN_VOCABLE)), VALID_VOCABLE_NAME);
+        assertEquals("query should return the right id", cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COL_ID)), 1);
+        assertEquals("query should return the right vocable", cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COL_VOCABLE)), VALID_VOCABLE_NAME);
     }
 }

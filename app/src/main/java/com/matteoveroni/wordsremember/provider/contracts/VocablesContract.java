@@ -23,22 +23,19 @@ public final class VocablesContract {
     public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
-    private VocablesContract() {
-    }
-
     public static final class Schema implements BaseColumns {
         public static final String TABLE_NAME = "vocables";
 
-        public static final String COLUMN_ID = _ID;
-        public static final String COLUMN_VOCABLE = "vocable";
+        public static final String COL_ID = _ID;
+        public static final String COL_VOCABLE = "vocable";
 
-        public static final String TABLE_DOT_COLUMN_ID = TABLE_NAME + "." + COLUMN_ID;
-        public static final String TABLE_DOT_COLUMN_VOCABLE = TABLE_NAME + "." + COLUMN_VOCABLE;
+        public static final String TABLE_DOT_COL_ID = TABLE_NAME + "." + COL_ID;
+        public static final String TABLE_DOT_COL_VOCABLE = TABLE_NAME + "." + COL_VOCABLE;
 
         public static final String[] ALL_COLUMNS =
                 {
-                        TABLE_DOT_COLUMN_ID,
-                        TABLE_DOT_COLUMN_VOCABLE
+                        TABLE_DOT_COL_ID,
+                        TABLE_DOT_COL_VOCABLE
                 };
     }
 
@@ -46,9 +43,9 @@ public final class VocablesContract {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
                 + Schema.TABLE_NAME
                 + "("
-                + Schema.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COLUMN_VOCABLE + " TEXT NOT NULL, "
-                + "CONSTRAINT UQ_Vocable UNIQUE (" + Schema.COLUMN_VOCABLE + ")"
+                + Schema.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + Schema.COL_VOCABLE + " TEXT NOT NULL, "
+                + "CONSTRAINT UQ_Vocable UNIQUE (" + Schema.COL_VOCABLE + ")"
                 + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }
