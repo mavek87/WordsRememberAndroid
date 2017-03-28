@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
@@ -31,6 +32,10 @@ import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @author Matteo Veroni
  */
@@ -46,14 +51,21 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     public Type type = Type.ONLY_TRANSLATIONS;
 
+    private Unbinder viewInjector;
     private TranslationsListViewAdapter translationsListViewAdapter;
     private Word vocableAssociatedToView;
+
+    @BindView(R.id.fragment_translations_list_title)
+    TextView lbl_title;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_translations_list, container, false);
+        viewInjector = ButterKnife.bind(this, view);
+
         translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(translationsListViewAdapter);
+
         return view;
     }
 
@@ -101,10 +113,13 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (type) {
             case ONLY_TRANSLATIONS:
+                lbl_title.setText("Translations");
                 return getCursorForAllTheTranslations();
             case TRANSLATIONS_FOR_VOCABLE:
+                lbl_title.setText("Translations for vocable");
                 return getCursorForAllTheTranslationsForVocable();
             case TRANSLATIONS_NOT_FOR_VOCABLE:
+                lbl_title.setText("Other translations available");
                 return getCursorForAllTheTranslationsExceptThoseForVocable();
             default:
                 final String error = "Error during onCreateLoader. Unknown type of fragment set.";
