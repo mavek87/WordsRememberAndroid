@@ -86,22 +86,22 @@ public class EditVocablePresenter implements Presenter {
     @Subscribe
     public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
         final Word persistentVocableWithSameName = event.getVocableWithSearchedName();
-        if (storeVocableInViewIfHasUniqueName(persistentVocableWithSameName)) {
+        if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
             view.showMessage(MSG_VOCABLE_SAVED);
         } else {
             view.showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
     }
 
-    private boolean storeVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
+    private boolean storeViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
         if (editedVocableInView.getId() <= 0) {
-            return saveVocableInViewIfHasUniqueName(persistentVocableWithSameName);
+            return saveViewVocableIfHasUniqueName(persistentVocableWithSameName);
         } else {
-            return updateVocableInViewIfHasUniqueName(persistentVocableWithSameName);
+            return updateViewVocableIfHasUniqueName(persistentVocableWithSameName);
         }
     }
 
-    private boolean saveVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
+    private boolean saveViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
         if (persistentVocableWithSameName == null) {
             dao.asyncSaveVocable(editedVocableInView);
             return true;
@@ -109,7 +109,7 @@ public class EditVocablePresenter implements Presenter {
         return false;
     }
 
-    private boolean updateVocableInViewIfHasUniqueName(Word persistentVocableWithSameName) {
+    private boolean updateViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
         if (persistentVocableWithSameName == null || editedVocableInView.getId() == persistentVocableWithSameName.getId()) {
             dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
             return true;

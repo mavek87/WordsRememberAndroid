@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
@@ -54,7 +55,7 @@ public class DictionaryDAO {
 
     public void asyncUpdateVocable(long id, Word updatedVocable) {
         if (id < 1) {
-            throw new IllegalArgumentException("asyncUpdateVocable error: impossible to update a vocable with an id negative or equal to zero.");
+            throw new IllegalArgumentException("AsyncUpdateVocable error: impossible to update a vocable with an id negative or equal to zero.");
         }
         final String str_id = String.valueOf(id);
         final String selection = VocablesContract.Schema.COL_ID + " = ?";
@@ -69,16 +70,16 @@ public class DictionaryDAO {
         ).execute();
     }
 
-    public void asyncDeleteVocable(long vocableId) {
-        if (vocableId < 1) {
-            throw new IllegalArgumentException("asyncDeleteVocable error: impossible to delete a vocable with a negative or equal to zero id.");
+    public void asyncDeleteVocable(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("AsyncDeleteVocable error: impossible to delete a vocable with a negative or equal to zero id.");
         }
-        asyncDeleteVocableTranslationsByVocableId(vocableId);
+        asyncDeleteVocableTranslationsByVocableId(id);
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesContract.CONTENT_URI,
                 VocablesContract.Schema.COL_ID + "=?",
-                new String[]{String.valueOf(vocableId)}
+                new String[]{String.valueOf(id)}
         ).execute();
     }
 
@@ -95,7 +96,7 @@ public class DictionaryDAO {
 
     public void asyncSaveTranslation(Word translation) {
         if (!Word.isValid(translation)) {
-            throw new RuntimeException("");
+            throw new RuntimeException("AsyncFindTranslationWithName error: null or empty translation.");
         }
         new AsyncInsertCommand(
                 contentResolver,
@@ -112,6 +113,13 @@ public class DictionaryDAO {
                 TranslationsContract.Schema.COL_ID + "=?",
                 new String[]{String.valueOf(translationId)}
         ).execute();
+    }
+
+    public void asyncSearchTranslationByName(String translationName) throws IllegalArgumentException {
+        if (Str.isNullOrEmpty(translationName)) {
+            throw new IllegalArgumentException("AsyncFindTranslationWithName error: null or empty translation name.");
+        }
+        new AsyncSearchTranslationsByNameCommand(contentResolver, translationName, "").execute();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,6 +274,20 @@ public class DictionaryDAO {
         final Word translation = new Word(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COL_TRANSLATION)));
         translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COL_ID)));
         return translation;
+    }
+
+    public static List<Word> cursorToListOfTranslations(Cursor cursor) {
+        List<Word> translationsWithSameName = new ArrayList<>();
+        if (cursor == null) {
+            return translationsWithSameName;
+        }
+        while (cursor.moveToNext()) {
+            Word translation = new Word("");
+            translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COL_ID)));
+            translation.setName(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COL_TRANSLATION)));
+            translationsWithSameName.add(translation);
+        }
+        return translationsWithSameName;
     }
 
     ContentValues vocableToContentValues(Word vocable) {
