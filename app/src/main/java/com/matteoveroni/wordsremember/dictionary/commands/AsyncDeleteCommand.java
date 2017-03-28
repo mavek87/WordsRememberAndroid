@@ -44,6 +44,7 @@ public class AsyncDeleteCommand extends AsyncCommand {
         executeCommand((AsyncCommand) nextCommand);
     }
 
+    // Todo: generalize this dispatchCompletionEvent (not only for vocables requests)
     @Override
     public void dispatchCompletionEvent() {
         EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));

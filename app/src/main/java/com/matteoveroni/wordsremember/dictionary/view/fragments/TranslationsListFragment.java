@@ -46,10 +46,10 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     private static final EventBus eventBus = EventBus.getDefault();
 
     public enum Type {
-        ONLY_TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
+        TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
     }
 
-    public Type type = Type.ONLY_TRANSLATIONS;
+    public Type type = Type.TRANSLATIONS;
 
     private Unbinder viewInjector;
     private TranslationsListViewAdapter translationsListViewAdapter;
@@ -112,7 +112,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (type) {
-            case ONLY_TRANSLATIONS:
+            case TRANSLATIONS:
                 lbl_title.setText("Translations");
                 return getCursorForAllTheTranslations();
             case TRANSLATIONS_FOR_VOCABLE:
@@ -192,7 +192,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_remove:
                 Word selectedTranslation = getSelectedTranslation(cursor, position);
-                removeTranslationAction(selectedTranslation);
+                removeTranslationRequest(selectedTranslation);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -203,9 +203,9 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         return DictionaryDAO.cursorToTranslation(cursor);
     }
 
-    private void removeTranslationAction(Word translation) {
+    private void removeTranslationRequest(Word translation) {
         switch (type) {
-            case ONLY_TRANSLATIONS:
+            case TRANSLATIONS:
                 eventBus.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
                 eventBus.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
                 break;
