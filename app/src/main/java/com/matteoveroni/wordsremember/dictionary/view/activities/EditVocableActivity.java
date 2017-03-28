@@ -127,7 +127,7 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     @Override
     public void goToAddTranslationView() {
         Intent intent_goToAddTranslationActivity = new Intent(getApplicationContext(), AddTranslationActivity.class);
-        startActivity(intent_goToAddTranslationActivity);
+        startActivityForResult(intent_goToAddTranslationActivity, 0);
     }
 
     @Override

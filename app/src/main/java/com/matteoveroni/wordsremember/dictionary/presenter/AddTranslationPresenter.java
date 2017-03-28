@@ -40,8 +40,7 @@ public class AddTranslationPresenter implements Presenter {
     @Override
     public void attachView(Object view) {
         this.view = (AddTranslationView) view;
-        Word newEmptyTranslation = new Word("");
-        this.view.setPojoUsedByView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
+        this.view.setPojoUsedByView(model.getLastValidVocableSelected());
         eventBus.register(this);
     }
 

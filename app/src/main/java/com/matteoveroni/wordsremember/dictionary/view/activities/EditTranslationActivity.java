@@ -45,8 +45,14 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
 
     @Override
     public void returnToEditVocableView() {
-        Intent intent_goToEditVocableActivity = new Intent(getApplicationContext(), EditVocableActivity.class);
-        startActivity(intent_goToEditVocableActivity);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     @Override

@@ -112,6 +112,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
             case VOCABLE_TRANSLATIONS:
+
                 // SELECT translations._id, translations.translation
                 // FROM translations LEFT JOIN vocables_translations
                 // ON (translations._id=vocables_translations.translation_id)
@@ -136,29 +137,29 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 }
                 break;
             case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
-//                SELECT translations._id,translations.translation FROM translations
-//                INNER JOIN
-//                (SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
-//                    NOT IN
-//                    (
-//                        SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=?
-//	                )
-//                ) not_mine_translations
-//                ON (translations._id=not_mine_translations.translation_id)
-//                GROUP BY translations.translation;
+
+                //   SELECT translations._id AS _id,translations.translation AS translation, FROM translations
+                //   INNER JOIN
+                //      (SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
+                //      NOT IN (
+                //          SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=?
+                //	    )
+                //   ) not_mine_translations
+                //   ON (translations._id=not_mine_translations.translation_id)
+                //   GROUP BY translations.translation;
 
                 String V_T = VocablesTranslationsContract.Schema.TABLE_NAME;
 
-                String SQL_QUERY_ALL_MY_TRANSLATIONS =
-                        "SELECT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
-                                + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
+                String SQL_QUERY_ALL_MY_TRANSLATIONS = "SELECT "
+                        + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
+                        + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
 
-                String SQL_QUERY_NOT_MINE_TRANSLATIONS =
-                        "SELECT * FROM " + V_T + " "
-                                + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
+                String SQL_QUERY_NOT_MINE_TRANSLATIONS = "SELECT * FROM " + V_T + " "
+                        + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
 
                 String SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS = "SELECT "
-                        + TranslationsContract.Schema.TABLE_DOT_COL_ID + " as _id," + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + " as translation "
+                        + TranslationsContract.Schema.TABLE_DOT_COL_ID + " AS " + TranslationsContract.Schema.COL_ID + ","
+                        + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + " AS " + TranslationsContract.Schema.COL_TRANSLATION + " "
                         + "FROM " + TranslationsContract.Schema.TABLE_NAME + " "
                         + "INNER JOIN (" + SQL_QUERY_NOT_MINE_TRANSLATIONS + ") not_mine_translations "
                         + "ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=not_mine_translations." + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ") "
@@ -282,18 +283,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         notifyChangeToObservers(uri);
         return deletedRowsCounter;
     }
-
-//    private void checkColumnsExistence(String[] projection) {
-//        if (projection != null) {
-//            HashSet<String> requestedColumns = new HashSet<>(Arrays.asList(projection));
-//            HashSet<String> availableColumns = new HashSet<>(Arrays.asList(VocablesContract.Schema.ALL_COLUMNS));
-//
-//            // check if all columns which are requested are available
-//            if (!availableColumns.containsAll(requestedColumns)) {
-//                throw new IllegalArgumentException("Unknown columns in projection");
-//            }
-//        }
-//    }
 
     private void notifyChangeToObservers(Uri uri) {
         if (isContentResolverNotNull())

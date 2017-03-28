@@ -13,13 +13,11 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
@@ -37,6 +35,8 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
 
     private AddTranslationPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
+
+    private static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
 
     @Override
     protected void onStart() {
@@ -81,14 +81,13 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     }
 
     @Override
-    public VocableTranslation getPojoUsedByView() {
-//        return translationsListFragment.getPojoUsedByView();
-        return null;
+    public Word getPojoUsedByView() {
+        throw new UnsupportedOperationException(AddTranslationActivity.class.getSimpleName() + " doesn't store any pojo");
     }
 
     @Override
-    public void setPojoUsedByView(VocableTranslation vocableTranslation) {
-        translationsListFragment.setPojoUsedByView(vocableTranslation.getVocable());
+    public void setPojoUsedByView(Word vocable) {
+        translationsListFragment.setPojoUsedByView(vocable);
     }
 
     @OnClick(R.id.add_translation_floating_action_button)
@@ -100,12 +99,18 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     @Override
     public void goToEditTranslationView() {
         Intent intent_goToEditTranslationView = new Intent(getApplicationContext(), EditTranslationActivity.class);
-        startActivity(intent_goToEditTranslationView);
+        startActivityForResult(intent_goToEditTranslationView, EDIT_TRANSLATION_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        returnToPreviousView();
     }
 
     @Override
     public void returnToPreviousView() {
-        onBackPressed();
+        finish();
     }
 
     @Override
