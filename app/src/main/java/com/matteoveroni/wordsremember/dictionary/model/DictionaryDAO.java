@@ -136,6 +136,15 @@ public class DictionaryDAO {
         ).execute();
     }
 
+    public void asyncDeleteVocableTranslationsByVocableAndTranslationIds(long vocableId, long translationId) {
+        new AsyncDeleteCommand(
+                contentResolver,
+                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=? AND " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
+                new String[]{String.valueOf(vocableId), String.valueOf(translationId)}
+        ).execute();
+    }
+
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
         final Word translation = vocableTranslation.getTranslation();
         final Word vocable = vocableTranslation.getVocable();

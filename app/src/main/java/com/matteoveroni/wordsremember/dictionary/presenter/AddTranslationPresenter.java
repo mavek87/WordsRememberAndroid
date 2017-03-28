@@ -3,14 +3,12 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class AddTranslationPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(AddTranslationPresenter.class);
+
     private final EventBus eventBus = EventBus.getDefault();
 
     private final DictionaryDAO dao;

@@ -207,7 +207,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         switch (type) {
             case TRANSLATIONS:
                 eventBus.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
-                eventBus.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
+//                eventBus.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
                 break;
             case TRANSLATIONS_FOR_VOCABLE:
                 eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView, translation, TypeOfManipulationRequest.REMOVE));

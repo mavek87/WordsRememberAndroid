@@ -61,10 +61,11 @@ public class EditVocablePresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventVocableTranslationManipulationRequest event) {
+        Word vocable = event.getVocableToManipulate();
         Word translation = event.getTranslationToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
-                dao.asyncDeleteVocableTranslationsByTranslationId(translation.getId());
+                dao.asyncDeleteVocableTranslationsByVocableAndTranslationIds(vocable.getId(), translation.getId());
                 break;
         }
     }
