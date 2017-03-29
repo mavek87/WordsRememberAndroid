@@ -11,7 +11,7 @@ public interface EditTranslationView extends PojoManipulableView<VocableTranslat
 
     void saveTranslationAction();
 
-    void returnToEditVocableView();
+    void returnToPreviousView();
 
     void showMessage(String s);
 }

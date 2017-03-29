@@ -28,7 +28,7 @@ public class EditTranslationPresenter implements Presenter {
     public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "Invalid translation. Cannot save it. Compile all the data and retry";
     public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "Cannot save the translation using this translation name. Name already used";
 
-    private Word editedTranslationInView = null;
+    protected Word editedTranslationInView = null;
 
     public EditTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -80,7 +80,7 @@ public class EditTranslationPresenter implements Presenter {
         translationSaved.setId(event.getSavedTranslationId());
         model.setLastValidTranslationSelected(translationSaved);
 
-        view.returnToEditVocableView();
+        view.returnToPreviousView();
     }
 
     private boolean isTranslationValid(Word translation) {

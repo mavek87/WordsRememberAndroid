@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
@@ -17,6 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
+import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME;
+import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -29,7 +32,6 @@ import static org.mockito.Mockito.when;
  * @author Matteo Veroni
  */
 
-// Todo: check each test of this class
 public class EditTranslationPresenterTest {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
@@ -41,19 +43,20 @@ public class EditTranslationPresenterTest {
     @Mock
     private EditTranslationView view;
     @Mock
-    private DictionaryDAO dictionaryDAO;
+    private DictionaryDAO dao;
     @Mock
-    private DictionaryModel ditionaryModel;
+    private DictionaryModel model;
 
     private final Word VOCABLE = new Word(1, "vocable");
     private final Word TRANSLATION = new Word("translation");
     private final Word TRANSLATION_WITH_EMPTY_NAME = new Word(" ");
     private final VocableTranslation TRANSLATION_FOR_VOCABLE = new VocableTranslation(VOCABLE, TRANSLATION);
-    private final VocableTranslation EMPTY_TRANSLATION_NAME_FOR_VOCABLE = new VocableTranslation(null, TRANSLATION_WITH_EMPTY_NAME);
+    private final VocableTranslation TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME = new VocableTranslation(null, TRANSLATION_WITH_EMPTY_NAME);
+    private final long fakeNewSavedTranslationID = 1;
 
     @Before
     public void setUp() {
-        presenter = new PresenterFactoryForTests(ditionaryModel, dictionaryDAO).create();
+        presenter = new PresenterFactoryForTests(model, dao).create();
         presenter.attachView(view);
         assertTrue("Presenter should be registered to eventbus before each test", EVENT_BUS.isRegistered(presenter));
     }
@@ -65,42 +68,58 @@ public class EditTranslationPresenterTest {
     }
 
     @Test
-    public void onSaveTranslationValidRequest_Call_asyncSaveTranslation() {
+    public void onSaveTranslationRequest_WithEmptyTranslationName_View_showsError() {
+        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME);
+
+        presenter.onSaveTranslationRequest();
+
+        verify(view).showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+        verify(dao, never()).asyncSearchTranslationByName(anyString());
+    }
+
+    @Test
+    public void onSaveTranslationValidRequest_Dao_asyncSearchTranslationByName() {
         when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         presenter.onSaveTranslationRequest();
 
-        verify(dictionaryDAO).asyncSaveTranslation(TRANSLATION_FOR_VOCABLE.getTranslation());
+        verify(dao).asyncSearchTranslationByName(TRANSLATION_FOR_VOCABLE.getTranslation().getName());
     }
 
     @Test
-    public void onSaveTranslationRequest_WithEmptyTranslationName_ViewShowsErrorMessage() {
-        when(view.getPojoUsedByView()).thenReturn(EMPTY_TRANSLATION_NAME_FOR_VOCABLE);
+    public void onEventAsyncSearchTranslationByNameCompleted_IfADuplicateExists_View_showsError() {
+        presenter.editedTranslationInView = TRANSLATION;
 
-        presenter.onSaveTranslationRequest();
+        presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(TRANSLATION));
 
-        verify(view).showMessage(anyString());
-        verify(dictionaryDAO, never()).asyncSaveTranslation(any(Word.class));
-        verify(dictionaryDAO, never()).asyncSaveVocableTranslation(any(VocableTranslation.class));
-    }
-
-    // Todo: check why this test fails
-    @Test
-    public void onEventAsyncSaveTranslationCompleted_Call_asyncSaveVocableTranslation() {
-//        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
-//
-//        long fakeTranslationID = 1;
-//        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeTranslationID));
-//        TRANSLATION_FOR_VOCABLE.getTranslation().setId(fakeTranslationID);
-//
-//        verify(dictionaryDAO).asyncSaveVocableTranslation(TRANSLATION_FOR_VOCABLE);
+        verify(view).showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
     }
 
     @Test
-    public void onEventAsyncSaveVocableTranslationCompletedSuccessfully_returnToPreviousView() {
-//        presenter.onEvent(new EventAsyncSaveVocableTranslationCompleted(1, 1));
-//
-//        verify(view).returnToPreviousView();
+    public void onEventAsyncSearchTranslationByNameCompleted_IfAnyDuplicateExists_Dao_asyncSaveTranslation() {
+        presenter.editedTranslationInView = TRANSLATION;
+
+        presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(null));
+
+        verify(dao).asyncSaveTranslation(presenter.editedTranslationInView);
+    }
+
+    @Test
+    public void onEventAsyncSaveTranslationCompleted_Model_setLastValidTranslationSelected() {
+        presenter.editedTranslationInView = TRANSLATION;
+
+        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeNewSavedTranslationID));
+
+        verify(model).setLastValidTranslationSelected(TRANSLATION);
+    }
+
+    @Test
+    public void onEventAsyncSaveTranslationCompleted_View_returnToPreviousView() {
+        presenter.editedTranslationInView = TRANSLATION;
+
+        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeNewSavedTranslationID));
+
+        verify(view).returnToPreviousView();
     }
 
     private class PresenterFactoryForTests implements PresenterFactory {

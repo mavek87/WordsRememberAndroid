@@ -44,7 +44,7 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     }
 
     @Override
-    public void returnToEditVocableView() {
+    public void returnToPreviousView() {
         setResult(RESULT_OK);
         finish();
     }
