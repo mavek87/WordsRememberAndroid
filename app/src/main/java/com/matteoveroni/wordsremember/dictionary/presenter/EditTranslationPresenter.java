@@ -76,9 +76,8 @@ public class EditTranslationPresenter implements Presenter {
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
         view.showMessage(MSG_TRANSLATION_SAVED);
 
-        final Word translationSaved = editedTranslationInView;
-        translationSaved.setId(event.getSavedTranslationId());
-        model.setLastValidTranslationSelected(translationSaved);
+        editedTranslationInView.setId(event.getSavedTranslationId());
+        model.setLastValidTranslationSelected(editedTranslationInView);
 
         view.returnToPreviousView();
     }

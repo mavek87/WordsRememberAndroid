@@ -35,7 +35,6 @@ public class ManageVocablesPresenter implements Presenter {
     private ManageVocablesView view;
 
     private static final String MSG_VOCABLE_REMOVED = "Vocable removed";
-    private static final String UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION = "Unsupported vocable manipulation exception";
 
     public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -75,9 +74,6 @@ public class ManageVocablesPresenter implements Presenter {
             case REMOVE:
                 dao.asyncDeleteVocable(vocableToManipulate.getId());
                 break;
-            default:
-                Log.e(TAG, UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
-                throw new UnsupportedOperationException(UNSUPPORTED_VOCABLE_MANIPULATION_EXCEPTION);
         }
     }
 

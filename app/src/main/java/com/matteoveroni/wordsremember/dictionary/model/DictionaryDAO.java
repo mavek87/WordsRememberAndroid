@@ -41,24 +41,25 @@ public class DictionaryDAO {
      **********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
-        if (Word.isValid(vocable) && vocable.getId() < 0) {
-            final ContentValues values = new ContentValues();
-            values.put(VocablesContract.Schema.COL_VOCABLE, vocable.getName());
-
-            new AsyncInsertCommand(
-                    contentResolver,
-                    VocablesContract.CONTENT_URI,
-                    values
-            ).execute();
+        if (!Word.isValid(vocable) || vocable.getId() > 0) {
+            throw new IllegalArgumentException("AsyncSaveVocable invalid argument");
         }
+        final ContentValues values = new ContentValues();
+        values.put(VocablesContract.Schema.COL_VOCABLE, vocable.getName());
+
+        new AsyncInsertCommand(
+                contentResolver,
+                VocablesContract.CONTENT_URI,
+                values
+        ).execute();
     }
 
     public void asyncUpdateVocable(long id, Word updatedVocable) {
-        if (id < 1) {
-            throw new IllegalArgumentException("AsyncUpdateVocable error: impossible to update a vocable with an id negative or equal to zero.");
+        if (!Word.isValid(updatedVocable) || id < 1) {
+            throw new IllegalArgumentException("AsyncUpdateVocable invalid argument");
         }
         final String str_id = String.valueOf(id);
-        final String selection = VocablesContract.Schema.COL_ID + " = ?";
+        final String selection = VocablesContract.Schema.COL_ID + "=?";
         final String[] selectionArgs = {str_id};
 
         new AsyncUpdateCommand(
@@ -72,7 +73,7 @@ public class DictionaryDAO {
 
     public void asyncDeleteVocable(long id) {
         if (id < 1) {
-            throw new IllegalArgumentException("AsyncDeleteVocable error: impossible to delete a vocable with a negative or equal to zero id.");
+            throw new IllegalArgumentException("AsyncDeleteVocable invalid argument");
         }
         asyncDeleteVocableTranslationsByVocableId(id);
         new AsyncDeleteCommand(
@@ -85,7 +86,7 @@ public class DictionaryDAO {
 
     public void asyncSearchVocableByName(String vocableName) throws IllegalArgumentException {
         if (Str.isNullOrEmpty(vocableName)) {
-            throw new IllegalArgumentException("AsyncFindVocablesWithName error: null or empty vocable name.");
+            throw new IllegalArgumentException("AsyncSearchVocableByName invalid argument");
         }
         new AsyncSearchVocablesByNameCommand(contentResolver, vocableName, "").execute();
     }
@@ -95,8 +96,8 @@ public class DictionaryDAO {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void asyncSaveTranslation(Word translation) {
-        if (!Word.isValid(translation)) {
-            throw new RuntimeException("AsyncFindTranslationWithName error: null or empty translation.");
+        if (!Word.isValid(translation) || translation.getId() > 0) {
+            throw new RuntimeException("AsyncSaveTranslation invalid argument");
         }
         new AsyncInsertCommand(
                 contentResolver,
@@ -105,19 +106,22 @@ public class DictionaryDAO {
         ).execute();
     }
 
-    public void asyncDeleteTranslation(long translationId) {
-        asyncDeleteVocableTranslationsByTranslationId(translationId);
+    public void asyncDeleteTranslation(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("AsyncDeleteTranslation invalid argument");
+        }
+        asyncDeleteVocableTranslationsByTranslationId(id);
         new AsyncDeleteCommand(
                 contentResolver,
                 TranslationsContract.CONTENT_URI,
                 TranslationsContract.Schema.COL_ID + "=?",
-                new String[]{String.valueOf(translationId)}
+                new String[]{String.valueOf(id)}
         ).execute();
     }
 
     public void asyncSearchTranslationByName(String translationName) throws IllegalArgumentException {
         if (Str.isNullOrEmpty(translationName)) {
-            throw new IllegalArgumentException("AsyncFindTranslationWithName error: null or empty translation name.");
+            throw new IllegalArgumentException("AsyncSearchTranslationByName invalid argument");
         }
         new AsyncSearchTranslationsByNameCommand(contentResolver, translationName, "").execute();
     }
@@ -126,16 +130,10 @@ public class DictionaryDAO {
     // Async methods - VOCABLES_TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void asyncDeleteVocableTranslationsByTranslationId(long translationId) {
-        new AsyncDeleteCommand(
-                contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
-                VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
-                new String[]{String.valueOf(translationId)}
-        ).execute();
-    }
-
     public void asyncDeleteVocableTranslationsByVocableId(long vocableId) {
+        if (vocableId < 1) {
+            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByTranslationId invalid argument");
+        }
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesTranslationsContract.CONTENT_URI,
@@ -144,7 +142,22 @@ public class DictionaryDAO {
         ).execute();
     }
 
+    public void asyncDeleteVocableTranslationsByTranslationId(long translationId) {
+        if (translationId < 1) {
+            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByTranslationId invalid argument");
+        }
+        new AsyncDeleteCommand(
+                contentResolver,
+                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
+                new String[]{String.valueOf(translationId)}
+        ).execute();
+    }
+
     public void asyncDeleteVocableTranslationsByVocableAndTranslationIds(long vocableId, long translationId) {
+        if (vocableId < 1 || translationId < 1) {
+            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByVocableAndTranslationIds invalid argument");
+        }
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesTranslationsContract.CONTENT_URI,
@@ -156,14 +169,15 @@ public class DictionaryDAO {
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
         final Word translation = vocableTranslation.getTranslation();
         final Word vocable = vocableTranslation.getVocable();
-        if (Word.isValid(translation) && translation.getId() > 0 && Word.isValid(vocable) && vocable.getId() > 0) {
-
-            final ContentValues vocablesTranslationValue = new ContentValues();
-            vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, vocable.getId());
-            vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, translation.getId());
-
-            new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue).execute();
+        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable) && vocable.getId() < 1) {
+            throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
         }
+        final ContentValues vocablesTranslationValue = new ContentValues();
+        vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, vocable.getId());
+        vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, translation.getId());
+
+        new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue).execute();
+
     }
 
     /***********************************************************************************************
