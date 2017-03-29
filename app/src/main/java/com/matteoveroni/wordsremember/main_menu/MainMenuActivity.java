@@ -73,20 +73,6 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
         setSupportActionBar(toolbar);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-
-        // Todo: remove this lines in production code
-        // This create a bug, if a vocable is inserted here EventAsyncSaveVocable is erroneously propagated
-        // to VocableEditorFragment and causes "goBackActivity for the firstTime bug"
-
-        // Use this line to reset the database if changes in some contract class schema has occurred
-//        DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
-//
-//        Word vocable = new Word("vocable1");
-//        Word translation = new Word("translation1");
-//
-//        DictionaryDAO dao = new DictionaryDAO(getApplicationContext());
-//        dao.asyncSaveVocable(vocable);
-//        dao.asyncSaveVocableTranslation(translation, vocable);
     }
 
     @Override

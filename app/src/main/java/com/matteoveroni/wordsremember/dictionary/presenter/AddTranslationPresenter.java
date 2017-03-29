@@ -29,7 +29,6 @@ public class AddTranslationPresenter implements Presenter {
     private AddTranslationView view;
 
     private static final String MSG_TRANSLATION_ADDED = "Translation added";
-    private static final String UNSUPPORTED_TRANSLATION_MANIPULATION_EXCEPTION = "Unsupported vocable manipulation exception";
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -64,9 +63,6 @@ public class AddTranslationPresenter implements Presenter {
             case REMOVE:
                 dao.asyncDeleteVocableTranslationsByTranslationId(translationId);
                 break;
-            default:
-                Log.e(TAG, UNSUPPORTED_TRANSLATION_MANIPULATION_EXCEPTION);
-                throw new UnsupportedOperationException(UNSUPPORTED_TRANSLATION_MANIPULATION_EXCEPTION);
         }
     }
 
