@@ -34,10 +34,6 @@ import static org.mockito.Mockito.when;
 
 public class EditTranslationPresenterTest {
 
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
-
-    private EditTranslationPresenter presenter;
-
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -47,12 +43,14 @@ public class EditTranslationPresenterTest {
     @Mock
     private DictionaryModel model;
 
-    private final Word VOCABLE = new Word(1, "vocable");
-    private final Word TRANSLATION = new Word("translation");
-    private final Word TRANSLATION_WITH_EMPTY_NAME = new Word(" ");
-    private final VocableTranslation TRANSLATION_FOR_VOCABLE = new VocableTranslation(VOCABLE, TRANSLATION);
-    private final VocableTranslation TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME = new VocableTranslation(null, TRANSLATION_WITH_EMPTY_NAME);
+    private EditTranslationPresenter presenter;
 
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final Word VOCABLE = new Word(1, "vocable");
+    private static final Word TRANSLATION = new Word("translation");
+    private static final Word TRANSLATION_WITH_EMPTY_NAME = new Word(" ");
+    private static final VocableTranslation TRANSLATION_FOR_VOCABLE = new VocableTranslation(VOCABLE, TRANSLATION);
+    private static final VocableTranslation TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME = new VocableTranslation(null, TRANSLATION_WITH_EMPTY_NAME);
     private static final long FAKE_NEW_SAVED_TRANSLATION_ID = 1;
 
     @Before

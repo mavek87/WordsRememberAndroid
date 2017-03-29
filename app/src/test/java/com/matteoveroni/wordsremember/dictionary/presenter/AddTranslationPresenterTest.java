@@ -41,7 +41,7 @@ public class AddTranslationPresenterTest {
 
     private AddTranslationPresenter presenter;
 
-    private static final EventBus eventBus = EventBus.getDefault();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final Word TRANSLATION = new Word(1, "translation");
     private static final Word FAKE_TRANSLATION_SELECTED = new Word(1, "fake_selected_translation");
 
@@ -52,14 +52,14 @@ public class AddTranslationPresenterTest {
         when(model.getLastValidTranslationSelected()).thenReturn(TRANSLATION);
         presenter.attachView(view);
 
-        assertTrue("Presenter should be registered to eventbus before each test", eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to eventbus before each test", EVENT_BUS.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
 
-        assertFalse("Presenter should be unregistered to eventbus after each test", eventBus.isRegistered(presenter));
+        assertFalse("Presenter should be unregistered to eventbus after each test", EVENT_BUS.isRegistered(presenter));
     }
 
     @Test

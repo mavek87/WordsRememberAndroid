@@ -32,8 +32,6 @@ import static org.mockito.Mockito.verify;
 
 public class ManageVocablesPresenterTest {
 
-    private ManageVocablesPresenter presenter;
-
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
@@ -43,23 +41,24 @@ public class ManageVocablesPresenterTest {
     @Mock
     private DictionaryModel model;
 
-    private static final EventBus eventBus = EventBus.getDefault();
+    private ManageVocablesPresenter presenter;
 
-    private final Word EMPTY_VOCABLE = new Word("");
-    private final Word VOCABLE = new Word(1, "VocableTest");
-    private final ArgumentCaptor<Word> vocablePassedToModelCaptor = ArgumentCaptor.forClass(Word.class);
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final Word EMPTY_VOCABLE = new Word("");
+    private static final Word VOCABLE = new Word(1, "VocableTest");
+    private static final ArgumentCaptor<Word> vocablePassedToModelCaptor = ArgumentCaptor.forClass(Word.class);
 
     @Before
     public void setUp() {
         presenter = new DictionaryVocablesManagerPresenterFactoryForTests(model, dao).create();
         presenter.attachView(view);
-        assertTrue("Presenter should be registered to event bus before each test", eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to event bus before each test", EVENT_BUS.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
-        assertFalse("Presenter should be unregistered to event bus after each test", eventBus.isRegistered(presenter));
+        assertFalse("Presenter should be unregistered to event bus after each test", EVENT_BUS.isRegistered(presenter));
     }
 
     @Test

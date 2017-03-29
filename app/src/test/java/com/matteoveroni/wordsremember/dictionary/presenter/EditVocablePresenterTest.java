@@ -4,7 +4,6 @@ import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationReques
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
@@ -52,20 +51,17 @@ public class EditVocablePresenterTest {
 
     private EditVocablePresenter presenter;
 
-    private static final EventBus eventBus = EventBus.getDefault();
-
-    private final Word VOCABLE = new Word(1, "Vocable");
-    private final Word TRANSLATION = new Word(1, "Translation");
-    private final Word VOCABLE_WITH_UPDATED_NAME = new Word(1, "VocableNameUpdated");
-    private final Word VOCABLE_WITH_EMPTY_NAME = new Word(1, " ");
-    private final Word NOT_PERSISTENT_VOCABLE_IN_VIEW = new Word(-1, "name");
-    private final Word PERSISTENT_VOCABLE_IN_VIEW = new Word(1, "name");
-    private final Word ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME = new Word(2, "name");
-    private final Word PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID = new Word(1, "name");
-
-    private final ArgumentCaptor<VocableTranslation> vocableTranslationCaptor = ArgumentCaptor.forClass(VocableTranslation.class);
-
-    private final List<Word> PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME = new ArrayList<>();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final Word VOCABLE = new Word(1, "Vocable");
+    private static final Word TRANSLATION = new Word(1, "Translation");
+    private static final Word VOCABLE_WITH_UPDATED_NAME = new Word(1, "VocableNameUpdated");
+    private static final Word VOCABLE_WITH_EMPTY_NAME = new Word(1, " ");
+    private static final Word NOT_PERSISTENT_VOCABLE_IN_VIEW = new Word(-1, "name");
+    private static final Word PERSISTENT_VOCABLE_IN_VIEW = new Word(1, "name");
+    private static final Word ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME = new Word(2, "name");
+    private static final Word PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID = new Word(1, "name");
+    private static final ArgumentCaptor<VocableTranslation> VOCABLE_TRANSLATION_ARG_CAPTOR = ArgumentCaptor.forClass(VocableTranslation.class);
+    private static final List<Word> PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -73,14 +69,14 @@ public class EditVocablePresenterTest {
 
         presenter.attachView(view);
 
-        assertTrue("Presenter should be registered to eventbus before each test", eventBus.isRegistered(presenter));
+        assertTrue("Presenter should be registered to eventbus before each test", EVENT_BUS.isRegistered(presenter));
     }
 
     @After
     public void tearDown() {
         presenter.destroy();
 
-        assertFalse("Presenter should be unregistered to eventbus after each test", eventBus.isRegistered(presenter));
+        assertFalse("Presenter should be unregistered to eventbus after each test", EVENT_BUS.isRegistered(presenter));
 
         PERSISTENT_LIST_OF_VOCABLES_WITH_SAME_NAME.clear();
     }
@@ -103,10 +99,10 @@ public class EditVocablePresenterTest {
 
         attachViewToPresenter(view);
 
-        verify(dao).asyncSaveVocableTranslation(vocableTranslationCaptor.capture());
+        verify(dao).asyncSaveVocableTranslation(VOCABLE_TRANSLATION_ARG_CAPTOR.capture());
         assertTrue(
                 "DAO save expected translation for vocable",
-                vocableTranslationCaptor.getValue().equals(EXPECTED_VOCABLE_TRANSLATION)
+                VOCABLE_TRANSLATION_ARG_CAPTOR.getValue().equals(EXPECTED_VOCABLE_TRANSLATION)
         );
         verify(model).setLastValidTranslationSelected(null);
     }
