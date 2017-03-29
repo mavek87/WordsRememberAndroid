@@ -1,8 +1,11 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
@@ -162,13 +165,12 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasUniqueName_SaveIt() {
-//        when(model.getEditedVocableInView()).thenReturn(NOT_PERSISTENT_VOCABLE_IN_VIEW);
-//
-//        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(null);
-//        presenter.onEvent(searchVocableByNameCompleted);
-//
-//        verify(dao).asyncSaveVocable(NOT_PERSISTENT_VOCABLE_IN_VIEW);
-//        verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
+        presenter.editedVocableInView = NOT_PERSISTENT_VOCABLE_IN_VIEW;
+
+        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(null));
+
+        verify(dao).asyncSaveVocable(NOT_PERSISTENT_VOCABLE_IN_VIEW);
+        verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
 
     @Test
@@ -195,12 +197,22 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewStillPersistent_AndHasUniqueName_UpdateIt() {
-//        when(model.getEditedVocableInView()).thenReturn(VOCABLE_WITH_UPDATED_NAME);
-//
-//        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(VOCABLE_WITH_UPDATED_NAME);
-//        presenter.onEvent(searchVocableByNameCompleted);
-//
-//        verify(dao).asyncUpdateVocable(VOCABLE_WITH_UPDATED_NAME.getId(), VOCABLE_WITH_UPDATED_NAME);
+        presenter.editedVocableInView = VOCABLE_WITH_UPDATED_NAME;
+
+        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(VOCABLE_WITH_UPDATED_NAME));
+
+        verify(dao).asyncUpdateVocable(VOCABLE_WITH_UPDATED_NAME.getId(), VOCABLE_WITH_UPDATED_NAME);
+    }
+
+    @Test
+    public void onEventVocableTranslationDeleteRequest_Dao_asyncDeleteVocableTranslationsByVocableAndTranslationIds() {
+        EventVocableTranslationManipulationRequest vocabl_transl_deleteRequest = new EventVocableTranslationManipulationRequest(
+                VOCABLE.getId(),
+                TRANSLATION.getId(),
+                TypeOfManipulationRequest.REMOVE
+        );
+
+        presenter.onEvent(vocabl_transl_deleteRequest);
     }
 
     @Test

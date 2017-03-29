@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -93,7 +94,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
             case R.id.menu_dictionary_list_long_press_remove:
                 Word selectedVocable = getSelectedVocable(cursor, position);
                 eventBus.post(
-                        new EventVocableManipulationRequest(selectedVocable, EventVocableManipulationRequest.TypeOfManipulation.REMOVE)
+                        new EventVocableManipulationRequest(selectedVocable, TypeOfManipulationRequest.REMOVE)
                 );
                 return true;
 

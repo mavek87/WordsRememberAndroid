@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.events.vocable;
 
+import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 /**
@@ -8,18 +9,14 @@ import com.matteoveroni.wordsremember.pojos.Word;
 public class EventVocableManipulationRequest {
 
     private final Word vocableToManipulate;
-    private final TypeOfManipulation typeOfManipulation;
+    private final TypeOfManipulationRequest typeOfManipulation;
 
-    public enum TypeOfManipulation {
-        REMOVE;
-    }
-
-    public EventVocableManipulationRequest(Word vocableToManipulate, TypeOfManipulation typeOfManipulation) {
+    public EventVocableManipulationRequest(Word vocableToManipulate, TypeOfManipulationRequest typeOfManipulation) {
         this.vocableToManipulate = vocableToManipulate;
         this.typeOfManipulation = typeOfManipulation;
     }
 
-    public TypeOfManipulation getTypeOfManipulation() {
+    public TypeOfManipulationRequest getTypeOfManipulation() {
         return typeOfManipulation;
     }
 

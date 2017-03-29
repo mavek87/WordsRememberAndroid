@@ -59,10 +59,10 @@ public class AddTranslationPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventVocableTranslationManipulationRequest event) {
-        final Word translation = event.getTranslationToManipulate();
+        final long translationId = event.getTranslationIdToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
-                dao.asyncDeleteVocableTranslationsByTranslationId(translation.getId());
+                dao.asyncDeleteVocableTranslationsByTranslationId(translationId);
                 break;
             default:
                 Log.e(TAG, UNSUPPORTED_TRANSLATION_MANIPULATION_EXCEPTION);

@@ -210,7 +210,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 //                eventBus.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
                 break;
             case TRANSLATIONS_FOR_VOCABLE:
-                eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView, translation, TypeOfManipulationRequest.REMOVE));
+                eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView.getId(), translation.getId(), TypeOfManipulationRequest.REMOVE));
                 break;
             default:
                 throw new RuntimeException("Unexpected type");

@@ -8,13 +8,13 @@ import com.matteoveroni.wordsremember.pojos.Word;
  */
 public class EventVocableTranslationManipulationRequest {
 
-    private final Word vocableToManipulate;
-    private final Word translationToManipulate;
+    private final long vocableIdToManipulate;
+    private final long translationIdToManipulate;
     private final TypeOfManipulationRequest typeOfManipulation;
 
-    public EventVocableTranslationManipulationRequest(Word vocableToManipulate, Word translationToManipulate, TypeOfManipulationRequest typeOfManipulation) {
-        this.vocableToManipulate = vocableToManipulate;
-        this.translationToManipulate = translationToManipulate;
+    public EventVocableTranslationManipulationRequest(long vocableIdToManipulate, long translationIdToManipulate, TypeOfManipulationRequest typeOfManipulation) {
+        this.vocableIdToManipulate = vocableIdToManipulate;
+        this.translationIdToManipulate = translationIdToManipulate;
         this.typeOfManipulation = typeOfManipulation;
     }
 
@@ -22,12 +22,12 @@ public class EventVocableTranslationManipulationRequest {
         return typeOfManipulation;
     }
 
-    public Word getVocableToManipulate() {
-        return vocableToManipulate;
+    public long getVocableIdToManipulate() {
+        return vocableIdToManipulate;
     }
 
-    public Word getTranslationToManipulate() {
-        return translationToManipulate;
+    public long getTranslationIdToManipulate() {
+        return translationIdToManipulate;
     }
 
 

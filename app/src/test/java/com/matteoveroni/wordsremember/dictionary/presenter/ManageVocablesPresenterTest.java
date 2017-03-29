@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
@@ -19,11 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest.TypeOfManipulation;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
@@ -100,7 +99,7 @@ public class ManageVocablesPresenterTest {
 
     @Test
     public void onEventVocableDeleteRequest_DAO_Starts_AsyncDeleteVocable() {
-        presenter.onEvent(new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE));
+        presenter.onEvent(new EventVocableManipulationRequest(VOCABLE, TypeOfManipulationRequest.REMOVE));
 
         verify(dao).asyncDeleteVocable(VOCABLE.getId());
     }
