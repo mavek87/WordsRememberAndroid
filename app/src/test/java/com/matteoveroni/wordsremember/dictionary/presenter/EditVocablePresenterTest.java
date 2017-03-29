@@ -147,9 +147,7 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onEventAsyncSaveVocableCompleted_returnToPreviousView() {
-        EventAsyncSaveVocableCompleted saveVocableCompleted = new EventAsyncSaveVocableCompleted(VOCABLE.getId());
-
-        presenter.onEvent(saveVocableCompleted);
+        presenter.onEvent(new EventAsyncSaveVocableCompleted(VOCABLE.getId()));
 
         verify(view).returnToPreviousView();
     }
@@ -157,8 +155,7 @@ public class EditVocablePresenterTest {
     @Test
     public void onEventAsyncUpdateVocableCompleted_returnToPreviousView() {
         int FAKE_NUMBER_OF_VOCABLES_UPDATED = 1;
-        EventAsyncUpdateVocableCompleted updateVocableCompleted = new EventAsyncUpdateVocableCompleted(FAKE_NUMBER_OF_VOCABLES_UPDATED);
-        presenter.onEvent(updateVocableCompleted);
+        presenter.onEvent(new EventAsyncUpdateVocableCompleted(FAKE_NUMBER_OF_VOCABLES_UPDATED));
 
         verify(view).returnToPreviousView();
     }
@@ -178,8 +175,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasDuplicateName_DontSaveItAndShowError() {
         presenter.editedVocableInView = NOT_PERSISTENT_VOCABLE_IN_VIEW;
 
-        EventAsyncSearchVocableByNameCompleted searchVocableByNameComplete = new EventAsyncSearchVocableByNameCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID);
-        presenter.onEvent(searchVocableByNameComplete);
+        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
 
         verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncSaveVocable(any(Word.class));
@@ -190,8 +186,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted__IfVocableInViewAlreadyPersistent_AndNewNameDuplicated_DontUpdateItAndShowError() {
         presenter.editedVocableInView = PERSISTENT_VOCABLE_IN_VIEW;
 
-        EventAsyncSearchVocableByNameCompleted searchVocableByNameCompleted = new EventAsyncSearchVocableByNameCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME);
-        presenter.onEvent(searchVocableByNameCompleted);
+        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
 
         verify(view).showMessage(EditVocablePresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));

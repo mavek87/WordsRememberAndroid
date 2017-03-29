@@ -52,7 +52,8 @@ public class EditTranslationPresenterTest {
     private final Word TRANSLATION_WITH_EMPTY_NAME = new Word(" ");
     private final VocableTranslation TRANSLATION_FOR_VOCABLE = new VocableTranslation(VOCABLE, TRANSLATION);
     private final VocableTranslation TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME = new VocableTranslation(null, TRANSLATION_WITH_EMPTY_NAME);
-    private final long fakeNewSavedTranslationID = 1;
+
+    private static final long FAKE_NEW_SAVED_TRANSLATION_ID = 1;
 
     @Before
     public void setUp() {
@@ -108,7 +109,7 @@ public class EditTranslationPresenterTest {
     public void onEventAsyncSaveTranslationCompleted_Model_setLastValidTranslationSelected() {
         presenter.editedTranslationInView = TRANSLATION;
 
-        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeNewSavedTranslationID));
+        presenter.onEvent(new EventAsyncSaveTranslationCompleted(FAKE_NEW_SAVED_TRANSLATION_ID));
 
         verify(model).setLastValidTranslationSelected(TRANSLATION);
     }
@@ -117,7 +118,7 @@ public class EditTranslationPresenterTest {
     public void onEventAsyncSaveTranslationCompleted_View_returnToPreviousView() {
         presenter.editedTranslationInView = TRANSLATION;
 
-        presenter.onEvent(new EventAsyncSaveTranslationCompleted(fakeNewSavedTranslationID));
+        presenter.onEvent(new EventAsyncSaveTranslationCompleted(FAKE_NEW_SAVED_TRANSLATION_ID));
 
         verify(view).returnToPreviousView();
     }

@@ -83,7 +83,7 @@ public class ManageVocablesPresenterTest {
 
     @Test
     public void onEventVocableSelected_Model_saveVocableSelected() {
-        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
+        final EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
 
         presenter.onEvent(eventVocableSelected);
 
@@ -93,27 +93,23 @@ public class ManageVocablesPresenterTest {
 
     @Test
     public void onEventVocableSelected_View_goToEditVocableView() {
-        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
-
-        presenter.onEvent(eventVocableSelected);
+        presenter.onEvent(new EventVocableSelected(VOCABLE));
 
         verify(view).goToEditVocableView();
     }
 
     @Test
     public void onEventVocableDeleteRequest_DAO_Starts_AsyncDeleteVocable() {
-        EventVocableManipulationRequest vocableDeleteRequest = new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE);
-
-        presenter.onEvent(vocableDeleteRequest);
+        presenter.onEvent(new EventVocableManipulationRequest(VOCABLE, TypeOfManipulation.REMOVE));
 
         verify(dao).asyncDeleteVocable(VOCABLE.getId());
     }
 
     @Test
     public void onEventAsyncDeleteVocableComplete_View_showMessageDeleteComplete() {
-        EventAsyncDeleteVocableCompleted vocableDeletionComplete = new EventAsyncDeleteVocableCompleted(1);
+        final int FAKE_NUMBER_OF_ROWS_DELETED = 1;
 
-        presenter.onEvent(vocableDeletionComplete);
+        presenter.onEvent(new EventAsyncDeleteVocableCompleted(FAKE_NUMBER_OF_ROWS_DELETED));
 
         verify(view).showMessage(anyString());
     }
