@@ -1,10 +1,12 @@
 package com.matteoveroni.wordsremember.dictionary.view.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -41,6 +43,8 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
 
     private EditVocablePresenter presenter;
     private final int ID_PRESENTER_LOADER = 1;
+
+    private AlertDialog dialogCannotAddTranslation;
 
     @Override
     protected void onStart() {
@@ -122,6 +126,32 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     @Override
     public void addTranslationAction() {
         presenter.onAddTranslationRequest();
+    }
+
+    @Override
+    public void showDialogCannotAddTranslationIfVocableNotSaved() {
+        if (dialogCannotAddTranslation == null) {
+            buildDialogCannotAddTranslationIfVocableNotSaved();
+        }
+        dialogCannotAddTranslation.show();
+    }
+
+    private void buildDialogCannotAddTranslationIfVocableNotSaved() {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle("Vocable not saved")
+                .setMessage("Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.onSaveVocableRequest();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        dialogCannotAddTranslation = alertDialogBuilder.create();
     }
 
     @Override

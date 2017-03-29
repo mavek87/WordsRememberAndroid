@@ -2,8 +2,11 @@ package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,10 +47,11 @@ public class AsyncDeleteCommand extends AsyncCommand {
         executeCommand((AsyncCommand) nextCommand);
     }
 
-    // Todo: generalize this dispatchCompletionEvent (not only for vocables requests)
     @Override
     public void dispatchCompletionEvent() {
-        EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));
+        if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
+            EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));
+        }
     }
 
     private void executeCommand(AsyncCommand command) {

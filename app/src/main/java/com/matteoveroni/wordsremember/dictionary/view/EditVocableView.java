@@ -17,6 +17,8 @@ public interface EditVocableView extends PojoManipulableView<Word> {
 
     void returnToPreviousView();
 
+    void showDialogCannotAddTranslationIfVocableNotSaved();
+
     void showMessage(String message);
 }
 

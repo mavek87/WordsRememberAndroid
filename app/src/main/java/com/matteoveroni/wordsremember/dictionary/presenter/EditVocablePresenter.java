@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
@@ -71,7 +72,12 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onAddTranslationRequest() {
-        view.goToAddTranslationView();
+        final Word lastVocableSelected = model.getLastValidVocableSelected();
+        if (lastVocableSelected == null || Str.isNullOrEmpty(lastVocableSelected.getName())) {
+            view.showDialogCannotAddTranslationIfVocableNotSaved();
+        } else {
+            view.goToAddTranslationView();
+        }
     }
 
     public void onSaveVocableRequest() {
