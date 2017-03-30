@@ -59,6 +59,7 @@ public class AddTranslationPresenter implements Presenter {
         final long translationId = event.getTranslationIdToManipulate();
         switch (event.getTypeOfManipulation()) {
             case REMOVE:
+                // ToDo: probably here there is a bug. Controllare
                 dao.asyncDeleteVocableTranslationsByTranslationId(translationId);
                 break;
         }

@@ -33,7 +33,7 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsCon
  * </p>
  */
 
-public class DictionaryProvider extends ExtendedQueriesContentProvider {
+public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
 
     public static final String TAG = TagGenerator.tag(DictionaryProvider.class);
 
