@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WordsRemember</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="done">Done</string>
 
     <string name="add_word">Add Word</string>
@@ -26,13 +29,16 @@
     <string name="title_dictionary_add_translation_activity">Add translation</string>
     <string name="title_dictionary_edit_translation_activity">Edit translation</string>
 
-    <string name="msg_vocable_saved">Translation saved</string>
+    <string name="vocable_saved">Vocable saved</string>
+    <string name="vocable_not_saved">Vocable not saved</string>
+    <string name="vocable_removed">Vocable removed</string>
+    <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Invalid vocable, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_vocable_name">Cannot save the vocable using this name. Name already used.</string>
-    <string name="msg_vocable_removed">Vocable removed</string>
-    <string name="msg_translation_saved">Translation saved</string>
+
+    <string name="translation_saved">Translation saved</string>
+    <string name="translation_added">Translation added</string>
     <string name="msg_error_trying_to_store_invalid_translation">Invalid translation, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_translation_name">Cannot save the translation using this name. Name already used.</string>
-    <string name="msg_translation_added">Translation added</string>
 
 </resources>

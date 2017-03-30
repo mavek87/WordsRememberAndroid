@@ -139,14 +139,14 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
     private void buildDialogCannotAddTranslationIfVocableNotSaved() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setTitle("Vocable not saved")
-                .setMessage("Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.vocable_not_saved)
+                .setMessage(R.string.msg_vocable_not_saved)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.onSaveVocableRequest();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }

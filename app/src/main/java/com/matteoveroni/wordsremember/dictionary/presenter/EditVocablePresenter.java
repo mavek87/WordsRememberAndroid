@@ -26,7 +26,7 @@ public class EditVocablePresenter implements Presenter {
     private final DictionaryModel model;
     private EditVocable view;
 
-    public static final String MSG_KEY_VOCABLE_SAVED = "msg_vocable_saved";
+    public static final String MSG_KEY_VOCABLE_SAVED = "vocable_saved";
     public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "msg_error_trying_to_store_invalid_vocable";
     public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "msg_error_trying_to_store_duplicate_vocable_name";
 

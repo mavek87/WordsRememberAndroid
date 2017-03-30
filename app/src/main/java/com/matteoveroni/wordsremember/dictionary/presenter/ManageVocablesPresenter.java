@@ -29,7 +29,7 @@ public class ManageVocablesPresenter implements Presenter {
     private final DictionaryModel model;
     private ManageVocablesView view;
 
-    private static final String MSG_KEY_VOCABLE_REMOVED = "msg_vocable_removed";
+    private static final String MSG_KEY_VOCABLE_REMOVED = "vocable_removed";
 
     public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;

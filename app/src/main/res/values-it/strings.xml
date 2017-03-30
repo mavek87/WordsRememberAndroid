@@ -14,4 +14,22 @@
     <string name="create_vocable">Crea vocabolo</string>
     <string name="done">Fatto</string>
     <string name="fragment_translations_manager_title">Traduzioni</string>
+    <string name="cancel">Annulla</string>
+    <string name="fragment_translation_editor_title">Editor traduzione</string>
+    <string name="fragment_vocable_editor_title">Editor vocaboli</string>
+    <string name="title_activity_dictionary_vocables_manager">Dizionario</string>
+    <string name="title_dictionary_add_translation_activity">Aggiungi traduzione</string>
+    <string name="title_dictionary_edit_translation_activity">Modifica traduzione</string>
+    <string name="translation_added">Traduzione aggiunta</string>
+    <string name="translation_saved">Traduzione salvata</string>
+    <string name="vocable_not_saved">Vocabolo non salvato</string>
+    <string name="vocable_removed">Vocabolo eliminato</string>
+    <string name="vocable_saved">Vocabolo salvato</string>
+    <string name="ok">Ok</string>
+    <string name="title_activity_dictionary_vocable_editor">Editor vocaboli</string>
+    <string name="msg_error_trying_to_store_duplicate_translation_name">Non posso salvare la traduzione usando questo nome. Nome già in uso</string>
+    <string name="msg_error_trying_to_store_duplicate_vocable_name">Non posso salvare il vocabolo usando questo nome. Nome già in uso</string>
+    <string name="msg_error_trying_to_store_invalid_translation">Traduzione non valida, impossibile salvarla! Compila tutti i dati e riprova.</string>
+    <string name="msg_error_trying_to_store_invalid_vocable">Vocabolo non valido, impossibile salvarlo! Compila tutti i dati e riprova.</string>
+    <string name="msg_vocable_not_saved">Impossibile aggiungere traduzioni se il vocabolo non è ancora salvato. Vuoi salvare il vocabolo e procedere?</string>
 </resources>

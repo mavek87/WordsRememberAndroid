@@ -26,7 +26,7 @@ public class AddTranslationPresenter implements Presenter {
     private final DictionaryModel model;
     private AddTranslation view;
 
-    private static final String MSG_KEY_TRANSLATION_ADDED = "msg_translation_added";
+    private static final String MSG_KEY_TRANSLATION_ADDED = "translation_added";
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;

@@ -24,7 +24,7 @@ public class EditTranslationPresenter implements Presenter {
     private final DictionaryDAO dao;
     private EditTranslation view;
 
-    public static final String MSG_KEY_TRANSLATION_SAVED = "msg_translation_saved";
+    public static final String MSG_KEY_TRANSLATION_SAVED = "translation_saved";
     public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "msg_error_trying_to_store_invalid_translation";
     public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "msg_error_trying_to_store_duplicate_translation_name";
 
