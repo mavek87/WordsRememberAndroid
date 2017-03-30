@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
+import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
 
@@ -22,7 +22,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class TranslationEditorFragment extends Fragment implements PojoManipulableView<VocableTranslation> {
+public class TranslationEditorFragment extends Fragment implements PojoManipulable<VocableTranslation> {
 
     public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
@@ -49,7 +49,7 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     }
 
     @Override
-    public VocableTranslation getPojoUsedByView() {
+    public VocableTranslation getPojoUsed() {
         lastValidVocableTranslationInView.setTranslation(getTranslationInView());
         return lastValidVocableTranslationInView;
     }
@@ -61,7 +61,7 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     }
 
     @Override
-    public void setPojoUsedByView(VocableTranslation pojo) {
+    public void setPojoUsed(VocableTranslation pojo) {
         if (pojo.getTranslation().getName().trim().isEmpty()) {
             lbl_title.setText("Create translation for " + pojo.getVocable().getName());
         } else {

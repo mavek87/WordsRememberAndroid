@@ -5,7 +5,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventTransla
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.pojos.Word;
 
@@ -35,7 +35,7 @@ public class AddTranslationPresenterTest {
     @Mock
     private DictionaryDAO dao;
     @Mock
-    private AddTranslationView view;
+    private AddTranslation view;
     @Mock
     private DictionaryModel model;
 

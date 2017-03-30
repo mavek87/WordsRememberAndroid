@@ -1,11 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import android.util.Log;
-
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
@@ -34,7 +29,7 @@ public class ManageVocablesPresenter implements Presenter {
     private final DictionaryModel model;
     private ManageVocablesView view;
 
-    private static final String MSG_VOCABLE_REMOVED = "Vocable removed";
+    private static final String MSG_KEY_VOCABLE_REMOVED = "msg_vocable_removed";
 
     public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -79,6 +74,6 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        view.showMessage(MSG_VOCABLE_REMOVED);
+        view.showMessage(MSG_KEY_VOCABLE_REMOVED);
     }
 }

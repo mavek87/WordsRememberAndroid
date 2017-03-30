@@ -4,7 +4,7 @@ import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -24,11 +24,11 @@ public class EditVocablePresenter implements Presenter {
     private final EventBus eventBus;
     private final DictionaryDAO dao;
     private final DictionaryModel model;
-    private EditVocableView view;
+    private EditVocable view;
 
-    public static final String MSG_VOCABLE_SAVED = "Vocable saved";
-    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "Invalid vocable. Cannot save it. Compile all the data and retry";
-    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "Cannot save the vocable using this vocable name. Name already used";
+    public static final String MSG_KEY_VOCABLE_SAVED = "msg_vocable_saved";
+    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "msg_error_trying_to_store_invalid_vocable";
+    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "msg_error_trying_to_store_duplicate_vocable_name";
 
     protected Word editedVocableInView = null;
 
@@ -40,12 +40,12 @@ public class EditVocablePresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (EditVocableView) view;
+        this.view = (EditVocable) view;
 
         Word lastValidVocableSelected = model.getLastValidVocableSelected();
         Word lastValidTranslationSelected = model.getLastValidTranslationSelected();
 
-        this.view.setPojoUsedByView(lastValidVocableSelected);
+        this.view.setPojoUsed(lastValidVocableSelected);
         eventBus.register(this);
 
         if (lastValidTranslationSelected != null) {
@@ -81,11 +81,11 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onSaveVocableRequest() {
-        editedVocableInView = view.getPojoUsedByView();
+        editedVocableInView = view.getPojoUsed();
         if (isVocableValid(editedVocableInView)) {
             dao.asyncSearchVocableByName(editedVocableInView.getName());
         } else {
-            view.showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
         }
     }
 
@@ -93,9 +93,9 @@ public class EditVocablePresenter implements Presenter {
     public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
         final Word persistentVocableWithSameName = event.getVocableWithSearchedName();
         if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
-            view.showMessage(MSG_VOCABLE_SAVED);
+            view.showMessage(MSG_KEY_VOCABLE_SAVED);
         } else {
-            view.showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
     }
 

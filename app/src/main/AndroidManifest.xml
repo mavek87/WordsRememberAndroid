@@ -18,6 +18,10 @@
             android:authorities="com.matteoveroni.wordsremember.provider"
             android:exported="false" />
 
+        <service
+            android:name=".TranslationAndroidService"
+            android:exported="false" />
+
         <activity
             android:name=".main_menu.MainMenuActivity"
             android:label="@string/title_activity_main_menu"

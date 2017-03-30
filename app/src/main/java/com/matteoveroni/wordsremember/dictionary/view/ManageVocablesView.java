@@ -1,17 +1,14 @@
 package com.matteoveroni.wordsremember.dictionary.view;
 
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 
 /**
  * @author Matteo Veroni
  */
 
-public interface ManageVocablesView {
+public interface ManageVocablesView extends View {
 
     void createVocableAction();
 
     void goToEditVocableView();
-
-    void showMessage(String message);
-
 }

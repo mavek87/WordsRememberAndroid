@@ -4,7 +4,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSa
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -22,11 +22,11 @@ public class EditTranslationPresenter implements Presenter {
 
     private final DictionaryModel model;
     private final DictionaryDAO dao;
-    private EditTranslationView view;
+    private EditTranslation view;
 
-    public static final String MSG_TRANSLATION_SAVED = "Translation saved";
-    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "Invalid translation. Cannot save it. Compile all the data and retry";
-    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "Cannot save the translation using this translation name. Name already used";
+    public static final String MSG_KEY_TRANSLATION_SAVED = "msg_translation_saved";
+    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "msg_error_trying_to_store_invalid_translation";
+    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "msg_error_trying_to_store_duplicate_translation_name";
 
     protected Word editedTranslationInView = null;
 
@@ -37,10 +37,10 @@ public class EditTranslationPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (EditTranslationView) view;
+        this.view = (EditTranslation) view;
 
         final Word newEmptyTranslation = new Word("");
-        this.view.setPojoUsedByView(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
+        this.view.setPojoUsed(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
 
         eventBus.register(this);
     }
@@ -52,13 +52,13 @@ public class EditTranslationPresenter implements Presenter {
     }
 
     public void onSaveTranslationRequest() {
-        final VocableTranslation vocableTranslationInView = view.getPojoUsedByView();
+        final VocableTranslation vocableTranslationInView = view.getPojoUsed();
         editedTranslationInView = vocableTranslationInView.getTranslation();
 
         if (isTranslationValid(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
-            view.showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         }
     }
 
@@ -68,13 +68,13 @@ public class EditTranslationPresenter implements Presenter {
         if (persistentTranslationWithSameName == null) {
             dao.asyncSaveTranslation(editedTranslationInView);
         } else {
-            view.showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
         }
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
-        view.showMessage(MSG_TRANSLATION_SAVED);
+        view.showMessage(MSG_KEY_TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
         model.setLastValidTranslationSelected(editedTranslationInView);

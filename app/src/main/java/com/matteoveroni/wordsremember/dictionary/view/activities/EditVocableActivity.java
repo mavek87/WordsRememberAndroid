@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +15,10 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
@@ -33,7 +33,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivity extends AppCompatActivity implements EditVocableView, LoaderManager.LoaderCallbacks<EditVocablePresenter> {
+public class EditVocableActivity extends ActivityView implements EditVocable, LoaderManager.LoaderCallbacks<EditVocablePresenter> {
 
     public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
@@ -107,14 +107,14 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     }
 
     @Override
-    public Word getPojoUsedByView() {
-        return vocableEditorFragment.getPojoUsedByView();
+    public Word getPojoUsed() {
+        return vocableEditorFragment.getPojoUsed();
     }
 
     @Override
-    public void setPojoUsedByView(Word vocable) {
-        vocableEditorFragment.setPojoUsedByView(vocable);
-        translationsListFragment.setPojoUsedByView(vocable);
+    public void setPojoUsed(Word vocable) {
+        vocableEditorFragment.setPojoUsed(vocable);
+        translationsListFragment.setPojoUsed(vocable);
     }
 
     @Override
@@ -163,11 +163,6 @@ public class EditVocableActivity extends AppCompatActivity implements EditVocabl
     @Override
     public void returnToPreviousView() {
         onBackPressed();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

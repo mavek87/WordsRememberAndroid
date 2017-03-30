@@ -5,17 +5,16 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -27,7 +26,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class AddTranslationActivity extends AppCompatActivity implements AddTranslationView, LoaderManager.LoaderCallbacks<AddTranslationPresenter> {
+public class AddTranslationActivity extends ActivityView implements AddTranslation, LoaderManager.LoaderCallbacks<AddTranslationPresenter> {
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
@@ -81,13 +80,13 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     }
 
     @Override
-    public Word getPojoUsedByView() {
+    public Word getPojoUsed() {
         throw new UnsupportedOperationException(AddTranslationActivity.class.getSimpleName() + " doesn't store any pojo");
     }
 
     @Override
-    public void setPojoUsedByView(Word vocable) {
-        translationsListFragment.setPojoUsedByView(vocable);
+    public void setPojoUsed(Word vocable) {
+        translationsListFragment.setPojoUsed(vocable);
     }
 
     @OnClick(R.id.add_translation_floating_action_button)
@@ -111,11 +110,6 @@ public class AddTranslationActivity extends AppCompatActivity implements AddTran
     @Override
     public void returnToPreviousView() {
         finish();
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

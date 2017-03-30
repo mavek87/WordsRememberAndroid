@@ -1,12 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.view.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -14,16 +11,15 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.Extras;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.ButterKnife;
 
@@ -31,7 +27,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends AppCompatActivity implements EditTranslationView, LoaderManager.LoaderCallbacks<EditTranslationPresenter> {
+public class EditTranslationActivity extends ActivityView implements EditTranslation, LoaderManager.LoaderCallbacks<EditTranslationPresenter> {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 
@@ -56,18 +52,13 @@ public class EditTranslationActivity extends AppCompatActivity implements EditTr
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public VocableTranslation getPojoUsed() {
+        return translationEditorFragment.getPojoUsed();
     }
 
     @Override
-    public VocableTranslation getPojoUsedByView() {
-        return translationEditorFragment.getPojoUsedByView();
-    }
-
-    @Override
-    public void setPojoUsedByView(VocableTranslation vocableTranslation) {
-        this.translationEditorFragment.setPojoUsedByView(vocableTranslation);
+    public void setPojoUsed(VocableTranslation vocableTranslation) {
+        this.translationEditorFragment.setPojoUsed(vocableTranslation);
     }
 
     @Override

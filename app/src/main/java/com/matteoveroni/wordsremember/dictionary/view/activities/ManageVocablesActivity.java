@@ -3,10 +3,10 @@ package com.matteoveroni.wordsremember.dictionary.view.activities;
 import android.content.Intent;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
@@ -16,13 +16,15 @@ import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresent
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.matteoveroni.wordsremember.WordsRemember.LOCALE_TRANSLATOR;
+
 /**
  * Dictionary Management Activity
  *
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivity extends AppCompatActivity implements ManageVocablesView, LoaderManager.LoaderCallbacks<ManageVocablesPresenter> {
+public class ManageVocablesActivity extends ActivityView implements ManageVocablesView, LoaderManager.LoaderCallbacks<ManageVocablesPresenter> {
 
     private ManageVocablesPresenter presenter;
     private final int PRESENTER_LOADER_ID = 1;
@@ -57,11 +59,6 @@ public class ManageVocablesActivity extends AppCompatActivity implements ManageV
     public void goToEditVocableView() {
         final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
         startActivity(intent_goToEditVocableView);
-    }
-
-    @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

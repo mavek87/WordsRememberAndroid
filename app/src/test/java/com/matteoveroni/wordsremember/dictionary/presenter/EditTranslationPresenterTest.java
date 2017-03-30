@@ -4,7 +4,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSa
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
@@ -18,8 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME;
-import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION;
+import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME;
+import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -37,7 +37,7 @@ public class EditTranslationPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private EditTranslationView view;
+    private EditTranslation view;
     @Mock
     private DictionaryDAO dao;
     @Mock
@@ -68,17 +68,17 @@ public class EditTranslationPresenterTest {
 
     @Test
     public void onSaveTranslationRequest_WithEmptyTranslationName_View_showsError() {
-        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME);
+        when(view.getPojoUsed()).thenReturn(TRANSLATION_FOR_VOCABLE_WITH_EMPTY_NAME);
 
         presenter.onSaveTranslationRequest();
 
-        verify(view).showMessage(MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+        verify(view).showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         verify(dao, never()).asyncSearchTranslationByName(anyString());
     }
 
     @Test
     public void onSaveTranslationValidRequest_Dao_asyncSearchTranslationByName() {
-        when(view.getPojoUsedByView()).thenReturn(TRANSLATION_FOR_VOCABLE);
+        when(view.getPojoUsed()).thenReturn(TRANSLATION_FOR_VOCABLE);
 
         presenter.onSaveTranslationRequest();
 
@@ -91,7 +91,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(TRANSLATION));
 
-        verify(view).showMessage(MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+        verify(view).showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
     }
 
     @Test

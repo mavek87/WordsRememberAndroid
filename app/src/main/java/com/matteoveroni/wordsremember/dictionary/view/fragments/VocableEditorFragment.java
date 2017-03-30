@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
+import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 
 import butterknife.BindView;
@@ -23,7 +23,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class VocableEditorFragment extends Fragment implements PojoManipulableView<Word> {
+public class VocableEditorFragment extends Fragment implements PojoManipulable<Word> {
 
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
@@ -54,12 +54,12 @@ public class VocableEditorFragment extends Fragment implements PojoManipulableVi
     }
 
     @Override
-    public Word getPojoUsedByView() {
+    public Word getPojoUsed() {
         return new Word(vocableInView.getId(), txt_vocableName.getText().toString());
     }
 
     @Override
-    public void setPojoUsedByView(Word vocableToShow) {
+    public void setPojoUsed(Word vocableToShow) {
         if (vocableToShow.getId() <= 0) {
             lbl_title.setText("Create vocable");
         } else {

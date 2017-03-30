@@ -24,7 +24,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventTransla
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.interfaces.view.PojoManipulableView;
+import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -40,7 +40,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulableView<Word> {
+public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulable<Word> {
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
     private static final EventBus eventBus = EventBus.getDefault();
@@ -89,12 +89,12 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     }
 
     @Override
-    public Word getPojoUsedByView() {
+    public Word getPojoUsed() {
         return vocableAssociatedToView;
     }
 
     @Override
-    public void setPojoUsedByView(Word vocable) {
+    public void setPojoUsed(Word vocable) {
         this.vocableAssociatedToView = vocable;
     }
 
