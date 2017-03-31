@@ -169,7 +169,7 @@ public class DictionaryDAO {
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
         final Word translation = vocableTranslation.getTranslation();
         final Word vocable = vocableTranslation.getVocable();
-        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable) && vocable.getId() < 1) {
+        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable)) {
             throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
         }
         final ContentValues vocablesTranslationValue = new ContentValues();

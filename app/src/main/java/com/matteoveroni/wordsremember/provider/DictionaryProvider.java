@@ -14,6 +14,8 @@ import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
+import rx.internal.schedulers.TrampolineScheduler;
+
 /**
  * Content Provider for the dictionary.
  *
@@ -137,37 +139,59 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 }
                 break;
             case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
-
-                //   SELECT translations._id AS _id,translations.translation AS translation, FROM translations
+                //   SELECT translations._id AS _id, translations.translation AS translation FROM translations
+                //   WHERE NOT EXISTS (
+                //      SELECT vocables_translations.translation_id FROM vocables_translations
+                //      WHERE translations._id=vocables_translations.translation_id
+                //   )
+                //   UNION
+                //   SELECT translations._id AS _id,translations.translation AS translation FROM translations
                 //   INNER JOIN
-                //      (SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
+                //   (
+                //      SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
                 //      NOT IN (
-                //          SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=?
+                //          SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=3
                 //	    )
                 //   ) not_mine_translations
                 //   ON (translations._id=not_mine_translations.translation_id)
-                //   GROUP BY translations.translation;
 
-                String V_T = VocablesTranslationsContract.Schema.TABLE_NAME;
+                String Voc_Tra = VocablesTranslationsContract.Schema.TABLE_NAME;
 
-                String SQL_QUERY_ALL_MY_TRANSLATIONS = "SELECT "
-                        + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
-                        + "FROM " + V_T + " WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
-
-                String SQL_QUERY_NOT_MINE_TRANSLATIONS = "SELECT * FROM " + V_T + " "
-                        + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " NOT IN (" + SQL_QUERY_ALL_MY_TRANSLATIONS + ")";
-
-                String SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS = "SELECT "
-                        + TranslationsContract.Schema.TABLE_DOT_COL_ID + " AS " + TranslationsContract.Schema.COL_ID + ","
+                String SELECT_ALL_TRANSLATIONS = "SELECT "
+                        + TranslationsContract.Schema.TABLE_DOT_COL_ID + " AS " + TranslationsContract.Schema.COL_ID + ", "
                         + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + " AS " + TranslationsContract.Schema.COL_TRANSLATION + " "
-                        + "FROM " + TranslationsContract.Schema.TABLE_NAME + " "
-                        + "INNER JOIN (" + SQL_QUERY_NOT_MINE_TRANSLATIONS + ") not_mine_translations "
-                        + "ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=not_mine_translations." + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ") "
-                        + "GROUP BY " + TranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION + "";
+                        + "FROM " + TranslationsContract.Schema.TABLE_NAME;
+
+                String SELECT_VOCABLES_TRANSLATIONS_TRANSLATION_ID = "SELECT "
+                        + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
+                        + "FROM " + Voc_Tra;
+
+                String SQL_QUERY_SELECT_ALL_THE_TRANSLATIONS_NOT_ASSOCIATED_TO_ANY_VOCABLE = SELECT_ALL_TRANSLATIONS + " "
+                        + "WHERE NOT EXISTS ("
+                        + SELECT_VOCABLES_TRANSLATIONS_TRANSLATION_ID + " "
+                        + "WHERE " + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID
+                        + ")";
+
+                String SELECT_ALL_MY_TRANSLATIONS = SELECT_VOCABLES_TRANSLATIONS_TRANSLATION_ID + " "
+                        + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
+
+                String SELECT_NOT_MINE_TRANSLATIONS = SELECT_VOCABLES_TRANSLATIONS_TRANSLATION_ID + " "
+                        + "WHERE " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + " "
+                        + "NOT IN (" + SELECT_ALL_MY_TRANSLATIONS + ")";
+
+                String SQL_QUERY_ASSOCIATED_TRANSLATIONS_NOT_MINE = SELECT_ALL_TRANSLATIONS + " "
+                        + "INNER JOIN (" + SELECT_NOT_MINE_TRANSLATIONS + ") not_mine_translations "
+                        + "ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=not_mine_translations." + VocablesTranslationsContract.Schema.COL_TRANSLATION_ID + ") ";
+
+                ///////////////////////////////////////////////////////////////////////////////////////
+
+                String SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID = SQL_QUERY_SELECT_ALL_THE_TRANSLATIONS_NOT_ASSOCIATED_TO_ANY_VOCABLE
+                                + " UNION "
+                                + SQL_QUERY_ASSOCIATED_TRANSLATIONS_NOT_MINE;
 
                 whereArgs = new String[]{uri.getLastPathSegment()};
 
-                Cursor cursor = databaseManager.getReadableDatabase().rawQuery(SQL_QUERY_UNIQUE_NOT_MINE_TRANSLATIONS, whereArgs);
+                Cursor cursor = databaseManager.getReadableDatabase().rawQuery(SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID, whereArgs);
                 if (isContentResolverNotNull())
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
