@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame;
 
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuestionsException;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesToDoException;
 
 import org.junit.Test;
 
@@ -15,61 +14,46 @@ public class QuizGameModelTest {
 
     private QuizGameModel model;
 
-    private static final int NEGATIVE_NUMBER_OF_QUESTIONS = -1;
-    private static final int NUMBER_OF_QUESTIONS_IS_ZERO = 0;
-    private static final int POSITIVE_NUMBER_OF_QUESTIONS = 10;
+    private static final int NEGATIVE_NUMBER_OF_QUIZZES = -1;
+    private static final int NUMBER_OF_QUIZZES_IS_ZERO = 0;
+    private static final int POSITIVE_NUMBER_OF_QUIZZES = 10;
 
     @Test(expected = IllegalArgumentException.class)
     public void test_AtTheBeginning_ifNumberOfQuestions_IsNegative_ThrowIllegalArgumentException() {
-        model = new QuizGameModel(NEGATIVE_NUMBER_OF_QUESTIONS);
+        model = new QuizGameModel(NEGATIVE_NUMBER_OF_QUIZZES);
     }
 
     @Test
     public void test_AtTheBeginning_getRemainingNumberOfQuestions_IsEqualTo_numberOfQuestions() {
-        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUESTIONS);
+        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUIZZES);
         assertEquals(
                 "remainingNumberOfQuestions should be equal to numberOfQuestions",
-                POSITIVE_NUMBER_OF_QUESTIONS, model.getRemainingNumberOfQuestions()
+                POSITIVE_NUMBER_OF_QUIZZES, model.getRemainingNumberOfQuizzes()
         );
     }
 
-    @Test(expected = NoMoreQuestionsException.class)
-    public void test_IfNoMoreQuestiongRemaining_getNextQuestionThrow_NoMoreQuestionsException() throws NoMoreQuestionsException {
-        model = new QuizGameModel(NUMBER_OF_QUESTIONS_IS_ZERO);
+    @Test(expected = NoMoreQuizzesToDoException.class)
+    public void test_IfNoMoreQuestiongRemaining_getNextQuestionThrow_NoMoreQuestionsException() throws NoMoreQuizzesToDoException {
+        model = new QuizGameModel(NUMBER_OF_QUIZZES_IS_ZERO);
 
-        model.getNextQuestion();
+        model.getNextQuiz();
     }
 
     @Test
-    public void test_IfOtherQuestionsRemains_getNextQuestionReturnsVocableTranslation() throws NoMoreQuestionsException {
-        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUESTIONS);
+    public void test_IfOtherQuestionsRemains_getNextQuestionReturnsVocableTranslation() throws NoMoreQuizzesToDoException {
+        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUIZZES);
 
-        assertNotNull(model.getNextQuestion());
+        assertNotNull(model.getNextQuiz());
     }
 
     @Test
-    public void test_If_getNextQuestion_Called_getRemainingNumberOfQuestions_DecreaseByOne() throws NoMoreQuestionsException {
-        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUESTIONS);
+    public void test_If_getNextQuestion_Called_getRemainingNumberOfQuestions_DecreaseByOne() throws NoMoreQuizzesToDoException {
+        model = new QuizGameModel(POSITIVE_NUMBER_OF_QUIZZES);
 
-        int initialRemainingNumberOfQuestions = model.getRemainingNumberOfQuestions();
-        model.getNextQuestion();
+        int initialRemainingNumberOfQuestions = model.getRemainingNumberOfQuizzes();
+        model.getNextQuiz();
         assertEquals("after getting the next question, the number of remaining questions should decrease by one",
-                (initialRemainingNumberOfQuestions - 1), model.getRemainingNumberOfQuestions()
+                (initialRemainingNumberOfQuestions - 1), model.getRemainingNumberOfQuizzes()
         );
     }
-
-
-//
-//
-//
-//
-//    @Test
-//    public void test_getNextQuestionReturnsNoTranslationsIfTheyAreFinished() {
-//        final int numberOfQuestions = 10;
-//        final int numberOfTranslationsForVocables = 1;
-//        model = new QuizGameModel(numberOfQuestions, numberOfTranslationsForVocables);
-//        VocableTranslation returnedVocableTranslation = model.getNextQuestion();
-//        assertNotNull(returnedVocableTranslation);
-//    }
-
 }

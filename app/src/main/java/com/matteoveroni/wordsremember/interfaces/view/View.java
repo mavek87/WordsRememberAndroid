@@ -6,7 +6,9 @@ package com.matteoveroni.wordsremember.interfaces.view;
 
 public interface View {
 
-    void showMessage(String localizableMessage);
+    void showMessage(String message);
 
-    void showMessage(String messageFormattedToLocalize, Object... args);
+    void showLocalizedMessage(String localizableMessage);
+
+    void showLocalizedMessage(String messageFormattedToLocalize, Object... args);
 }

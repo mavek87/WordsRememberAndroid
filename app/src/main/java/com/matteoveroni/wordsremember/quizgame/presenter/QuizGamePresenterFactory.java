@@ -1,10 +1,11 @@
-package com.matteoveroni.wordsremember.dictionary.presenter.factories;
+package com.matteoveroni.wordsremember.quizgame.presenter;
 
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.quizgame.QuizGameModel;
 
 import javax.inject.Inject;
 
@@ -12,16 +13,16 @@ import javax.inject.Inject;
  * @author Matteo Veroni
  */
 
-public class AddTranslationPresenterFactory implements PresenterFactory {
+public class QuizGamePresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO dao;
 
-    private DictionaryModel model = WordsRemember.DICTIONARY_MODEL;
+    private QuizGameModel model = WordsRemember.QUIZ_GAME_MODEL;
 
     @Override
-    public AddTranslationPresenter create() {
+    public QuizGamePresenter create() {
         WordsRemember.getDAOComponent().inject(this);
-        return new AddTranslationPresenter(model, dao);
+        return new QuizGamePresenter(model, dao);
     }
 }

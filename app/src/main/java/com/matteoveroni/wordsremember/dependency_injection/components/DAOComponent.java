@@ -6,6 +6,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTransla
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
+import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -26,5 +27,7 @@ public interface DAOComponent {
     void inject(EditTranslationPresenterFactory translationEditorPresenterFactory);
 
     void inject(AddTranslationPresenterFactory addTranslationPresenterFactory);
+
+    void inject(QuizGamePresenterFactory quizGamePresenterFactory);
 
 }

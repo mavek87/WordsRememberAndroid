@@ -14,7 +14,12 @@ import static com.matteoveroni.wordsremember.WordsRemember.LOCALE_TRANSLATOR;
 public abstract class ActivityView extends AppCompatActivity implements View {
 
     @Override
-    public void showMessage(String localizableMessage) {
+    public void showMessage(String message) {
+        showToastWithMessage(message);
+    }
+
+    @Override
+    public void showLocalizedMessage(String localizableMessage) {
         showToastWithMessage(localizeMessage(localizableMessage));
     }
 
@@ -27,7 +32,7 @@ public abstract class ActivityView extends AppCompatActivity implements View {
     }
 
     @Override
-    public void showMessage(String messageFormattedToLocalize, Object... args) {
+    public void showLocalizedMessage(String messageFormattedToLocalize, Object... args) {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof String) {
                 args[i] = localizeMessage((String) args[i]);

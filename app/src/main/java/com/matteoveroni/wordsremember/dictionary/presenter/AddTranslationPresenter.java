@@ -50,7 +50,7 @@ public class AddTranslationPresenter implements Presenter {
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
         model.setLastValidTranslationSelected(translation);
-        view.showMessage("%s (" + translation.getName() + ")", MSG_KEY_TRANSLATION_ADDED);
+        view.showLocalizedMessage("%s (" + translation.getName() + ")", MSG_KEY_TRANSLATION_ADDED);
         view.returnToPreviousView();
     }
 

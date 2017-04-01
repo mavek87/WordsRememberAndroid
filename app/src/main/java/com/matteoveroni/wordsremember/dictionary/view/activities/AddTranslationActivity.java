@@ -33,7 +33,7 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
     private TranslationsListFragment translationsListFragment;
 
     private AddTranslationPresenter presenter;
-    private final int PRESENTER_LOADER_ID = 1;
+    private static final int PRESENTER_LOADER_ID = 1;
 
     private static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
 

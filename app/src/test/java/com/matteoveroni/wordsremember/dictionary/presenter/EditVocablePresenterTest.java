@@ -123,7 +123,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -175,7 +175,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
 
-        verify(view).showMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncSaveVocable(any(Word.class));
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
@@ -186,7 +186,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
 
-        verify(view).showMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
         verify(dao, never()).asyncSaveVocable(any(Word.class));
     }

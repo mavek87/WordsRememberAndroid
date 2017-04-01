@@ -27,7 +27,7 @@ import static com.matteoveroni.wordsremember.WordsRemember.LOCALE_TRANSLATOR;
 public class ManageVocablesActivity extends ActivityView implements ManageVocablesView, LoaderManager.LoaderCallbacks<ManageVocablesPresenter> {
 
     private ManageVocablesPresenter presenter;
-    private final int PRESENTER_LOADER_ID = 1;
+    private static final int PRESENTER_LOADER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

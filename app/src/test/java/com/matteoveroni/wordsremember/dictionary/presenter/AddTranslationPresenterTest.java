@@ -73,7 +73,7 @@ public class AddTranslationPresenterTest {
     public void onEventTranslationSelected_View_showMessage_And_returnToPreviousView() {
         presenter.onEvent(new EventTranslationSelected(FAKE_TRANSLATION_SELECTED));
 
-        verify(view).showMessage(anyString());
+        verify(view).showLocalizedMessage(anyString());
         verify(view).returnToPreviousView();
     }
 

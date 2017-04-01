@@ -74,6 +74,6 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        view.showMessage(MSG_KEY_VOCABLE_REMOVED);
+        view.showLocalizedMessage(MSG_KEY_VOCABLE_REMOVED);
     }
 }

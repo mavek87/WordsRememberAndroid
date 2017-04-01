@@ -42,7 +42,7 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
     private TranslationsListFragment translationsListFragment;
 
     private EditVocablePresenter presenter;
-    private final int ID_PRESENTER_LOADER = 1;
+    private static final int PRESENTER_LOADER_ID = 1;
 
     private AlertDialog dialogCannotAddTranslation;
 
@@ -72,7 +72,7 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
 
         setupAndShowToolbar();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        getSupportLoaderManager().initLoader(ID_PRESENTER_LOADER, null, this);
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     private TranslationsListFragment createTranslationListFragmentForVocable() {

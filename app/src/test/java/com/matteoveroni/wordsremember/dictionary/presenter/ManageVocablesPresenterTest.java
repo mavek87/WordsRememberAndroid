@@ -109,7 +109,7 @@ public class ManageVocablesPresenterTest {
 
         presenter.onEvent(new EventAsyncDeleteVocableCompleted(FAKE_NUMBER_OF_ROWS_DELETED));
 
-        verify(view).showMessage(anyString());
+        verify(view).showLocalizedMessage(anyString());
     }
 
     private class DictionaryVocablesManagerPresenterFactoryForTests implements PresenterFactory {

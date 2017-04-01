@@ -1,9 +1,9 @@
 package com.matteoveroni.wordsremember.quizgame;
 
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.pojos.Word;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuestionsException;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesToDoException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Matteo Veroni
@@ -11,28 +11,29 @@ import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuestionsExcepti
 
 public class QuizGameModel {
 
-    private int remainingNumberOfQuestions;
-    private DictionaryDAO dao;
+    private int remainingNumberOfQuizzes;
 
-    public QuizGameModel(int numberOfQuestions, DictionaryDAO dao) {
-        if (numberOfQuestions < 0)
+    public QuizGameModel(int numberOfQuizzes) {
+        if (numberOfQuizzes < 0)
             throw new IllegalArgumentException("Illegal argument passed");
 
-        this.dao = dao;
-
-        
-        this.remainingNumberOfQuestions = numberOfQuestions;
+        this.remainingNumberOfQuizzes = numberOfQuizzes;
     }
 
-    public int getRemainingNumberOfQuestions() {
-        return remainingNumberOfQuestions;
+    public int getRemainingNumberOfQuizzes() {
+        return remainingNumberOfQuizzes;
     }
 
-    public VocableTranslation getNextQuestion() throws NoMoreQuestionsException {
-        if (getRemainingNumberOfQuestions() < 1) {
-            throw new NoMoreQuestionsException();
+    public Quiz getNextQuiz() throws NoMoreQuizzesToDoException {
+        if (getRemainingNumberOfQuizzes() < 1) {
+            throw new NoMoreQuizzesToDoException();
         }
-        remainingNumberOfQuestions--;
-        return new VocableTranslation(new Word(), new Word());
+        remainingNumberOfQuizzes--;
+
+        List<String> rightAnswers = new ArrayList<>();
+        rightAnswers.add("Good morning");
+        rightAnswers.add("Good night");
+
+        return new Quiz("What are the most commons english greetings?", rightAnswers);
     }
 }

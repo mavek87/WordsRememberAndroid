@@ -72,7 +72,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onSaveTranslationRequest();
 
-        verify(view).showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+        verify(view).showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         verify(dao, never()).asyncSearchTranslationByName(anyString());
     }
 
@@ -91,7 +91,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(TRANSLATION));
 
-        verify(view).showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+        verify(view).showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
     }
 
     @Test

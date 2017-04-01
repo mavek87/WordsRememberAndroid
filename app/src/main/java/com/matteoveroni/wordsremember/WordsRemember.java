@@ -16,12 +16,13 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
+import com.matteoveroni.wordsremember.quizgame.QuizGameModel;
 
 /**
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.91
+ * @version 0.0.92
  **/
 
 public class WordsRemember extends Application {
@@ -29,14 +30,15 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.0.91";
+    public static final String VERSION = "0.0.92";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
     private static final boolean START_WITH_EMPTY_DB = false;
     private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
 
-    private static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
+    public static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
+    public static final QuizGameModel QUIZ_GAME_MODEL = new QuizGameModel(10);
     public static LocaleTranslator LOCALE_TRANSLATOR;
     private static DAOComponent DAO_COMPONENT;
 
@@ -54,10 +56,6 @@ public class WordsRemember extends Application {
         if (POPULATE_DB_USING_FAKE_DATA) {
             populateDatabaseForTestPurposes(getApplicationContext());
         }
-    }
-
-    public static DictionaryModel getDictionaryModel() {
-        return DICTIONARY_MODEL;
     }
 
     public static DAOComponent getDAOComponent() {

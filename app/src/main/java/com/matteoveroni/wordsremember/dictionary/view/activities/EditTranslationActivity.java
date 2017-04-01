@@ -34,6 +34,8 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
     private TranslationEditorFragment translationEditorFragment;
     private EditTranslationPresenter presenter;
 
+    private static final int PRESENTER_LOADER_ID = 1;
+
     @Override
     public void saveTranslationAction() {
         presenter.onSaveTranslationRequest();
@@ -84,7 +86,6 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        final int PRESENTER_LOADER_ID = 1;
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 

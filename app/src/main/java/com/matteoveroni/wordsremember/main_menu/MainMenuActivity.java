@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,34 +34,6 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
 
-    @OnClick(R.id.main_menu_btn_start)
-    @SuppressWarnings("unused")
-    public void onButtonStartClicked() {
-    }
-
-    @OnClick(R.id.main_menu_btn_manage_dictionary)
-    @SuppressWarnings("unused")
-    public void onButtonManageDictionaryClicked() {
-        presenter.onButtonManageDictionaryClicked();
-    }
-
-    @OnClick(R.id.main_menu_btn_settings)
-    @SuppressWarnings("unused")
-    public void onButtonSettingsClicked() {
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +49,42 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.destroy();
+        super.onStop();
+    }
+
+    @OnClick(R.id.main_menu_btn_start)
+    public void onButtonStartClicked() {
+        presenter.onButtonStartClicked();
+    }
+
+    @Override
+    public void startNewQuizGame() {
+        startActivity(new Intent(getApplicationContext(), QuizGameActivity.class));
+    }
+
+    @OnClick(R.id.main_menu_btn_manage_dictionary)
+    public void onButtonManageDictionaryClicked() {
+        presenter.onButtonManageDictionaryClicked();
+    }
+
+    @Override
+    public void startDictionaryManagement() {
+        startActivity(new Intent(getApplicationContext(), ManageVocablesActivity.class));
+    }
+
+    @OnClick(R.id.main_menu_btn_settings)
+    public void onButtonSettingsClicked() {
+    }
+
+    @Override
     public Loader<MainMenuPresenter> onCreateLoader(int id, Bundle arg) {
         return new PresenterLoader<>(this, new MainMenuPresenterFactory());
     }
@@ -88,12 +97,6 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
     @Override
     public void onLoaderReset(Loader<MainMenuPresenter> loader) {
         presenter = null;
-    }
-
-    @Override
-    public void startDictionaryManagement() {
-        Intent intentStartDictionary = new Intent(getBaseContext(), ManageVocablesActivity.class);
-        startActivity(intentStartDictionary);
     }
 }
 

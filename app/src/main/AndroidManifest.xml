@@ -18,10 +18,6 @@
             android:authorities="com.matteoveroni.wordsremember.provider"
             android:exported="false" />
 
-        <service
-            android:name=".TranslationAndroidService"
-            android:exported="false" />
-
         <activity
             android:name=".main_menu.MainMenuActivity"
             android:label="@string/title_activity_main_menu"
@@ -31,6 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".quizgame.view.QuizGameActivity"
+            android:label="@string/title_activity_quiz_game" />
 
         <activity
             android:name=".dictionary.view.activities.ManageVocablesActivity"

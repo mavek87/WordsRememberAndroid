@@ -17,7 +17,7 @@ public class EditTranslationPresenterFactory implements PresenterFactory {
     @Inject
     DictionaryDAO dao;
 
-    private DictionaryModel model = WordsRemember.getDictionaryModel();
+    private DictionaryModel model = WordsRemember.DICTIONARY_MODEL;
 
     @Override
     public EditTranslationPresenter create() {

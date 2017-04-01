@@ -25,4 +25,8 @@ public class MainMenuPresenter implements Presenter {
     void onButtonManageDictionaryClicked() {
         view.startDictionaryManagement();
     }
+
+    public void onButtonStartClicked() {
+        view.startNewQuizGame();
+    }
 }

@@ -85,7 +85,7 @@ public class EditVocablePresenter implements Presenter {
         if (isVocableValid(editedVocableInView)) {
             dao.asyncSearchVocableByName(editedVocableInView.getName());
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+            view.showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
         }
     }
 
@@ -93,9 +93,9 @@ public class EditVocablePresenter implements Presenter {
     public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
         final Word persistentVocableWithSameName = event.getVocableWithSearchedName();
         if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
-            view.showMessage(MSG_KEY_VOCABLE_SAVED);
+            view.showLocalizedMessage(MSG_KEY_VOCABLE_SAVED);
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+            view.showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
     }
 
