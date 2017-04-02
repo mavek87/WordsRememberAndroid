@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame;
 
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesToDoException;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,29 +11,25 @@ import java.util.List;
 
 public class QuizGameModel {
 
-    private int remainingNumberOfQuizzes;
+    private int numberOfQuizzes;
+    private final QuizGenerator quizGenerator;
 
-    public QuizGameModel(int numberOfQuizzes) {
-        if (numberOfQuizzes < 0)
-            throw new IllegalArgumentException("Illegal argument passed");
-
-        this.remainingNumberOfQuizzes = numberOfQuizzes;
-    }
-
-    public int getRemainingNumberOfQuizzes() {
-        return remainingNumberOfQuizzes;
-    }
-
-    public Quiz getNextQuiz() throws NoMoreQuizzesToDoException {
-        if (getRemainingNumberOfQuizzes() < 1) {
-            throw new NoMoreQuizzesToDoException();
+    public QuizGameModel(GameDifficulty difficulty, QuizGenerator quizGenerator) {
+        this.quizGenerator = quizGenerator;
+        switch (difficulty) {
+            case EASY:
+                numberOfQuizzes = 10;
+                break;
+            case MEDIUM:
+                numberOfQuizzes = 20;
+                break;
+            case HARD:
+                numberOfQuizzes = 30;
+                break;
         }
-        remainingNumberOfQuizzes--;
+    }
 
-        List<String> rightAnswers = new ArrayList<>();
-        rightAnswers.add("Good morning");
-        rightAnswers.add("Good night");
-
-        return new Quiz("What are the most commons english greetings?", rightAnswers);
+    public Quiz getNextQuiz() throws NoMoreQuizzesException {
+        return quizGenerator.generateQuiz();
     }
 }

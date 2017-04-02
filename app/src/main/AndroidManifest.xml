@@ -30,7 +30,8 @@
 
         <activity
             android:name=".quizgame.view.QuizGameActivity"
-            android:label="@string/title_activity_quiz_game" />
+            android:label="@string/title_activity_quiz_game"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".dictionary.view.activities.ManageVocablesActivity"

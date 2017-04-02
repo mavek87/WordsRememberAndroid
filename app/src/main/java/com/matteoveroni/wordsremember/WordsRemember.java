@@ -22,7 +22,7 @@ import com.matteoveroni.wordsremember.quizgame.QuizGameModel;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.0.92
+ * @version 0.0.93
  **/
 
 public class WordsRemember extends Application {
@@ -30,7 +30,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.0.92";
+    public static final String VERSION = "0.0.93";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
@@ -48,12 +48,11 @@ public class WordsRemember extends Application {
         printAppSpecs();
         buildDAOComponent();
         initLocaleTranslator();
-        // TODO: remove this in production code
         if (START_WITH_EMPTY_DB) {
             DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
         }
-        // (mode "true" broke some test)
         if (POPULATE_DB_USING_FAKE_DATA) {
+            // (mode "true" broke some test)
             populateDatabaseForTestPurposes(getApplicationContext());
         }
     }

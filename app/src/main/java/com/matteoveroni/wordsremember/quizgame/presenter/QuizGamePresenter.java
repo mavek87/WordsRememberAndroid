@@ -4,7 +4,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.Quiz;
 import com.matteoveroni.wordsremember.quizgame.QuizGameModel;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesToDoException;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
 /**
@@ -39,7 +39,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             currentQuizInView = model.getNextQuiz();
             view.setPojoUsed(currentQuizInView);
-        } catch (NoMoreQuizzesToDoException ex) {
+        } catch (NoMoreQuizzesException ex) {
             destroy();
         }
     }
