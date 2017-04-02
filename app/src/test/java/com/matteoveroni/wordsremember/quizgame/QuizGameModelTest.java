@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame;
 
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 
 import org.junit.Test;
 

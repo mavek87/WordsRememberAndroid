@@ -2,8 +2,10 @@ package com.matteoveroni.wordsremember.quizgame.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.quizgame.Quiz;
-import com.matteoveroni.wordsremember.quizgame.QuizGameModel;
+import com.matteoveroni.wordsremember.quizgame.model.GameDifficulty;
+import com.matteoveroni.wordsremember.quizgame.model.GameType;
+import com.matteoveroni.wordsremember.quizgame.model.Quiz;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
@@ -17,30 +19,33 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private final QuizGameModel model;
     private final DictionaryDAO dao;
 
-    private Quiz currentQuizInView;
+    private Quiz currentQuiz;
 
-    public QuizGamePresenter(QuizGameModel model, DictionaryDAO dao) {
-        this.model = model;
+    public QuizGamePresenter(DictionaryDAO dao) {
         this.dao = dao;
+        this.model = new QuizGameModel(GameType.FIND_RIGHT_TRANSLATION_FOR_VOCABLES, GameDifficulty.EASY, dao);
     }
 
     @Override
     public void attachView(QuizGameView view) {
+        this.model.registerToEventBus();
         this.view = view;
         startNewQuizOrStopGameIfTheyAreFinished();
     }
 
     @Override
     public void destroy() {
-        view = null;
+        this.model.unregisterToEventBus();
+        this.view = null;
     }
 
     private void startNewQuizOrStopGameIfTheyAreFinished() {
         try {
-            currentQuizInView = model.getNextQuiz();
-            view.setPojoUsed(currentQuizInView);
+            currentQuiz = model.generateQuiz();
+            view.setPojoUsed(currentQuiz);
         } catch (NoMoreQuizzesException ex) {
-            destroy();
+            view.showMessage("Game ended");
+            view.returnToPreviousView();
         }
     }
 
@@ -55,7 +60,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private boolean isAnswerCorrect(String answer) {
-        for (String rightAnswer : currentQuizInView.getRightAnswers()) {
+        for (String rightAnswer : currentQuiz.getRightAnswers()) {
             if (answer.equalsIgnoreCase(rightAnswer)) {
                 return true;
             }

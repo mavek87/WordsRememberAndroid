@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame;
+package com.matteoveroni.wordsremember.quizgame.model;
 
 import java.util.ArrayList;
 import java.util.List;

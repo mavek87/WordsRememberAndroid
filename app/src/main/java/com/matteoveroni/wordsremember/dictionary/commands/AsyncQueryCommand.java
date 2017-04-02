@@ -10,7 +10,7 @@ import android.net.Uri;
 
 public abstract class AsyncQueryCommand extends AsyncCommand {
 
-    private final Uri commandTargetUri;
+    protected final Uri commandTargetUri;
     private final String[] projection;
     private final String selection;
     private final String[] selectionArgs;

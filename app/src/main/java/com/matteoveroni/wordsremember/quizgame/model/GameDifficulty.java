@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame;
+package com.matteoveroni.wordsremember.quizgame.model;
 
 /**
  * Created by Matteo Veroni

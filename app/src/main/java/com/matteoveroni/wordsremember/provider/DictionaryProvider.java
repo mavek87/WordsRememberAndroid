@@ -139,6 +139,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 }
                 break;
             case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+
                 //   SELECT translations._id AS _id, translations.translation AS translation FROM translations
                 //   WHERE NOT EXISTS (
                 //      SELECT vocables_translations.translation_id FROM vocables_translations

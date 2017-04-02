@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountUniqueVocablesWithTranslationCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
@@ -131,16 +131,8 @@ public class DictionaryDAO {
     // Async methods - VOCABLES_TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void asyncGetNumberOfTranslationsForVocables() {
-        new AsyncCountCommand(
-                contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
-                VocablesTranslationsContract.Schema.TABLE_DOT_COL_ID,
-                null,
-                null,
-                null,
-                null
-        ).execute();
+    public void asyncCountUniqueVocablesWithTranslation() {
+        new AsyncCountUniqueVocablesWithTranslationCommand(contentResolver).execute();
     }
 
     public void asyncDeleteVocableTranslationsByVocableId(long vocableId) {

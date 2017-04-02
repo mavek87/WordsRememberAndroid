@@ -4,7 +4,10 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.util.Log;
 
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
+import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author Matteo Veroni
@@ -31,8 +34,11 @@ public class AsyncCountCommand extends AsyncQueryCommand {
     @Override
     public void dispatchCompletionEvent() {
         queryCompleteCursor.moveToFirst();
-        int count = queryCompleteCursor.getInt(0);
-        Log.i("AAAAAAA", count + "");
-//        EventBus.getDefault().postSticky(event);
+        int numberOfCountResults = queryCompleteCursor.getInt(0);
+        Log.i("AAAAAAA", numberOfCountResults + "");
+
+        if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
+//            EventBus.getDefault().postSticky(new EventCountUniqueVocablesWithTranslationsCompleted(numberOfCountResults));
+        }
     }
 }
