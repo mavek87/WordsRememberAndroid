@@ -52,7 +52,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public Type type = Type.TRANSLATIONS;
 
     private Unbinder viewInjector;
-    private TranslationsListViewAdapter translationsListViewAdapter;
+    private TranslationsListViewAdapter adapter_translationsList;
     private Word vocableAssociatedToView;
 
     @BindView(R.id.fragment_translations_list_title)
@@ -60,13 +60,17 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_translations_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_translations_list, container, false);
         viewInjector = ButterKnife.bind(this, view);
-
-        translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
-        setListAdapter(translationsListViewAdapter);
-
+        adapter_translationsList = new TranslationsListViewAdapter(getContext(), null);
+        setListAdapter(adapter_translationsList);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        viewInjector.unbind();
+        super.onDestroyView();
     }
 
     @Override
@@ -102,7 +106,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = translationsListViewAdapter.getCursor();
+        Cursor cursor = adapter_translationsList.getCursor();
         cursor.moveToPosition(position);
 
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
@@ -130,12 +134,12 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        translationsListViewAdapter.swapCursor(cursor);
+        adapter_translationsList.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        translationsListViewAdapter.swapCursor(null);
+        adapter_translationsList.swapCursor(null);
     }
 
     private Loader<Cursor> getCursorForAllTheTranslations() {
@@ -151,7 +155,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     private Loader<Cursor> getCursorForAllTheTranslationsForVocable() {
         return new CursorLoader(
                 getContext(),
-                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_URI,
                 null,
                 null,
                 new String[]{String.valueOf(vocableAssociatedToView.getId())},
@@ -188,7 +192,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final int position = contextMenuInfo.position;
-        final Cursor cursor = translationsListViewAdapter.getCursor();
+        final Cursor cursor = adapter_translationsList.getCursor();
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_remove:
                 Word selectedTranslation = getSelectedTranslation(cursor, position);
@@ -207,7 +211,6 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         switch (type) {
             case TRANSLATIONS:
                 eventBus.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
-//                EVENT_BUS.post(new EventVocableTranslationManipulationRequest(null, translation, TypeOfManipulationRequest.REMOVE));
                 break;
             case TRANSLATIONS_FOR_VOCABLE:
                 eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView.getId(), translation.getId(), TypeOfManipulationRequest.REMOVE));

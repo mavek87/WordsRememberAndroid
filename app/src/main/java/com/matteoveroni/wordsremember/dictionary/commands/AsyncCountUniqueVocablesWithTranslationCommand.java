@@ -1,9 +1,10 @@
 package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
-import android.net.Uri;
+import android.database.DatabaseUtils;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
@@ -21,8 +22,8 @@ public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQueryCo
     public AsyncCountUniqueVocablesWithTranslationCommand(ContentResolver contentResolver, String selection, String[] selectionArgs, String orderBy, Object nextCommand) {
         super(
                 contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
-                new String[]{"COUNT (*) FROM (SELECT DISTINCT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + " FROM " + VocablesTranslationsContract.Schema.TABLE_NAME + ")"},
+                VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
+                new String[]{"DISTINCT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID},
                 selection,
                 selectionArgs,
                 orderBy,
@@ -33,7 +34,8 @@ public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQueryCo
     @Override
     public void dispatchCompletionEvent() {
         queryCompleteCursor.moveToFirst();
-        int numberOfCountResults = queryCompleteCursor.getInt(0);
+        int numberOfCountResults = queryCompleteCursor.getCount();
         EventBus.getDefault().postSticky(new EventCountUniqueVocablesWithTranslationsCompleted(numberOfCountResults));
+        queryCompleteCursor.close();
     }
 }

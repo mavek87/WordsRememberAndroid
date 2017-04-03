@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
@@ -15,6 +16,7 @@ import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -32,9 +34,11 @@ import java.util.List;
 public class DictionaryDAO {
 
     private final ContentResolver contentResolver;
+    private final Context context;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
+        this.context = context;
     }
 
     /***********************************************************************************************
@@ -131,7 +135,7 @@ public class DictionaryDAO {
     // Async methods - VOCABLES_TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void asyncCountUniqueVocablesWithTranslation() {
+    public void countUniqueVocablesWithTranslation() {
         new AsyncCountUniqueVocablesWithTranslationCommand(contentResolver).execute();
     }
 
@@ -141,7 +145,7 @@ public class DictionaryDAO {
         }
         new AsyncDeleteCommand(
                 contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?",
                 new String[]{String.valueOf(vocableId)}
         ).execute();
@@ -153,7 +157,7 @@ public class DictionaryDAO {
         }
         new AsyncDeleteCommand(
                 contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
                 new String[]{String.valueOf(translationId)}
         ).execute();
@@ -165,7 +169,7 @@ public class DictionaryDAO {
         }
         new AsyncDeleteCommand(
                 contentResolver,
-                VocablesTranslationsContract.CONTENT_URI,
+                VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=? AND " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
                 new String[]{String.valueOf(vocableId), String.valueOf(translationId)}
         ).execute();
@@ -181,7 +185,7 @@ public class DictionaryDAO {
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, vocable.getId());
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, translation.getId());
 
-        new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.CONTENT_URI, vocablesTranslationValue).execute();
+        new AsyncInsertCommand(contentResolver, VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI, vocablesTranslationValue).execute();
 
     }
 

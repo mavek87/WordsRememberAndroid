@@ -50,7 +50,6 @@ public abstract class AsyncQueryCommand extends AsyncCommand {
         queryCompleteCursor = cursor;
         dispatchCompletionEvent();
         executeCommand((AsyncCommand) nextCommand);
-        queryCompleteCursor.close();
     }
 
     abstract void dispatchCompletionEvent();

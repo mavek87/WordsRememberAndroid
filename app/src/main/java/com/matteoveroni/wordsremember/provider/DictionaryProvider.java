@@ -14,25 +14,8 @@ import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
-import rx.internal.schedulers.TrampolineScheduler;
-
 /**
- * Content Provider for the dictionary.
- *
  * @author Matteo Veroni
- */
-
-/**
- * Useful resources on Content Providers:
- * <p>
- * https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
- * http://www.grokkingandroid.com/android-tutorial-writing-your-own-content-provider/
- * https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
- * http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
- * http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
- * http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
- * sql inject => https://github.com/yahoo/squidb/wiki/Protecting-against-SQL-Injection
- * </p>
  */
 
 public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
@@ -50,15 +33,17 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
     private static final int VOCABLE_ID = 2;
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
-    private static final int VOCABLE_TRANSLATIONS = 5;
-    private static final int NOT_TRANSLATIONS_FOR_VOCABLE_ID = 6;
+    private static final int VOCABLES_TRANSLATIONS = 5;
+    private static final int TRANSLATIONS_FOR_VOCABLES = 6;
+    private static final int NOT_TRANSLATIONS_FOR_VOCABLE_ID = 7;
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME + "/#", VOCABLE_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NAME, VOCABLE_TRANSLATIONS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.VOCABLES_TRANSLATIONS, VOCABLES_TRANSLATIONS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_FOR_VOCABLES);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME + "/#", NOT_TRANSLATIONS_FOR_VOCABLE_ID);
     }
 
@@ -77,8 +62,10 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 return TranslationsContract.CONTENT_DIR_TYPE;
             case TRANSLATION_ID:
                 return TranslationsContract.CONTENT_ITEM_TYPE;
-            case VOCABLE_TRANSLATIONS:
-                return VocablesTranslationsContract.CONTENT_DIR_TYPE;
+            case VOCABLES_TRANSLATIONS:
+                return VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_DIR_TYPE;
+            case TRANSLATIONS_FOR_VOCABLES:
+                return VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_DIR_TYPE;
             case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
                 return VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE;
             default:
@@ -96,6 +83,9 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
     public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         final String OPERATION = "QUERY";
         final SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+//        final String[] projectionWithCount = new String[100];
+//        System.arraycopy(projection, 0, projectionWithCount, 0, projection.length);
+//        projectionWithCount[projectionWithCount.length] = ""
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
@@ -113,7 +103,10 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 whereSelection = TranslationsContract.Schema.COL_ID + "=?";
                 whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
-            case VOCABLE_TRANSLATIONS:
+            case VOCABLES_TRANSLATIONS:
+                queryBuilder.setTables(VocablesTranslationsContract.Schema.TABLE_NAME);
+                break;
+            case TRANSLATIONS_FOR_VOCABLES:
 
                 // SELECT translations._id, translations.translation
                 // FROM translations LEFT JOIN vocables_translations
@@ -187,8 +180,8 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 ///////////////////////////////////////////////////////////////////////////////////////
 
                 String SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID = SQL_QUERY_SELECT_ALL_THE_TRANSLATIONS_NOT_ASSOCIATED_TO_ANY_VOCABLE
-                                + " UNION "
-                                + SQL_QUERY_ASSOCIATED_TRANSLATIONS_NOT_MINE;
+                        + " UNION "
+                        + SQL_QUERY_ASSOCIATED_TRANSLATIONS_NOT_MINE;
 
                 whereArgs = new String[]{uri.getLastPathSegment()};
 
@@ -196,11 +189,9 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 if (isContentResolverNotNull())
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
-
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
-
         SQLiteDatabase db = databaseManager.getWritableDatabase();
         Cursor cursor = queryBuilder.query(
                 db,
@@ -212,7 +203,6 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParameterLimitValue(uri)
         );
-
         if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -234,8 +224,8 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 contractUri = TranslationsContract.CONTENT_URI;
                 id = db.insertOrThrow(TranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
-            case VOCABLE_TRANSLATIONS:
-                contractUri = VocablesTranslationsContract.CONTENT_URI;
+            case VOCABLES_TRANSLATIONS:
+                contractUri = VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI;
                 id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
@@ -299,7 +289,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                         whereArgs
                 );
                 break;
-            case VOCABLE_TRANSLATIONS:
+            case VOCABLES_TRANSLATIONS:
                 deletedRowsCounter = db.delete(VocablesTranslationsContract.Schema.TABLE_NAME, whereClause, whereArgs);
                 break;
             default:
@@ -315,7 +305,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
     }
 
     private boolean isContentResolverNotNull() {
-        final Context ctx = getContext();
+        Context ctx = getContext();
         return (ctx != null && ctx.getContentResolver() != null);
     }
 }

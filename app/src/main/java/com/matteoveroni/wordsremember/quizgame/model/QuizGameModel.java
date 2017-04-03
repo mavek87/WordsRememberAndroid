@@ -36,8 +36,6 @@ public class QuizGameModel {
 
         setNumberOfQuizzesAccordingToGameDifficulty();
         adjustNumberOfQuizzesAccordingToGameType();
-
-        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
     }
 
     private void setNumberOfQuizzesAccordingToGameDifficulty() {
@@ -57,9 +55,10 @@ public class QuizGameModel {
     private void adjustNumberOfQuizzesAccordingToGameType() {
         switch (gameType) {
             case FIND_RIGHT_TRANSLATION_FOR_VOCABLES:
-                dao.asyncCountUniqueVocablesWithTranslation();
+                dao.countUniqueVocablesWithTranslation();
                 break;
             case FIND_RIGHT_VOCABLE_FOR_TRANSLATIONS:
+                dao.countUniqueVocablesWithTranslation();
                 // calculate if max number of quizzes is ok or change it
                 break;
         }
@@ -71,6 +70,7 @@ public class QuizGameModel {
         if (numberOfQuizzes > numberOfQuizzesCreatable) {
             numberOfQuizzes = numberOfQuizzesCreatable;
         }
+        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
     }
 
     public void registerToEventBus() {

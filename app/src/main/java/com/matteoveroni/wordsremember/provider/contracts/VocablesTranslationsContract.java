@@ -14,25 +14,29 @@ import com.matteoveroni.wordsremember.provider.DictionaryProvider;
 
 public class VocablesTranslationsContract {
 
-    public static final String NAME = "vocables_translations";
+    public static final String VOCABLES_TRANSLATIONS = "vocables_translations";
+    public static final String TRANSLATIONS_FOR_VOCABLE = "translations_for_vocable";
     public static final String NOT_TRANSLATION_FOR_VOCABLE_NAME = "not_translations_for_vocable";
 
-    public static final Uri CONTENT_URI =
-            Uri.parse(
-                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
-            );
+    public static final Uri VOCABLES_TRANSLATIONS_CONTENT_URI = Uri.parse(
+            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + VOCABLES_TRANSLATIONS
+    );
 
-    public static final Uri NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI =
-            Uri.parse(
-                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NOT_TRANSLATION_FOR_VOCABLE_NAME
-            );
+    public static final Uri TRANSLATIONS_FOR_VOCABLE_CONTENT_URI = Uri.parse(
+            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + TRANSLATIONS_FOR_VOCABLE
+    );
+
+    public static final Uri NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI = Uri.parse(
+            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NOT_TRANSLATION_FOR_VOCABLE_NAME
+    );
 
     // Mime type
-    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
-    public static final String NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
+    public static final String VOCABLES_TRANSLATIONS_CONTENT_DIR_TYPE = VOCABLES_TRANSLATIONS_CONTENT_URI + ".dir";
+    public static final String TRANSLATIONS_FOR_VOCABLE_CONTENT_DIR_TYPE = TRANSLATIONS_FOR_VOCABLE_CONTENT_URI + ".dir";
+    public static final String NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE = NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI + ".item";
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = NAME;
+        public static final String TABLE_NAME = VOCABLES_TRANSLATIONS;
 
         public static final String COL_ID = _ID;
         public static final String COL_VOCABLE_ID = "vocable_id";

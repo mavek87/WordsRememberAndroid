@@ -58,7 +58,7 @@ public class AsyncInsertCommand extends AsyncCommand {
         } else if (commandTargetUri.equals(TranslationsContract.CONTENT_URI)) {
             EventBus.getDefault().postSticky(new EventAsyncSaveTranslationCompleted(id));
 
-        } else if (commandTargetUri.equals(VocablesTranslationsContract.CONTENT_URI)) {
+        } else if (commandTargetUri.equals(VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI)) {
             EventBus.getDefault().postSticky(new EventAsyncSaveVocableTranslationCompleted(1,1));
         }
     }

@@ -3,6 +3,17 @@ REMEMBERING WORDS:
 http://www.thepolyglotdream.com/forget-it-the-secret-of-remembering-words/
 
 
+ *         Useful resources on CONTENT PROVIDERS:
+ *         https://youtu.be/IWP2-qkhtiM?list=PLZ9NgFYEMxp50tvT8806xllaCbd31DpDy
+ *         http://www.grokkingandroid.com/android-tutorial-writing-your-own-content-provider/
+ *         https://github.com/margaretmz/andevcon/tree/master/SampleContentProvider/
+ *         http://www.vogella.com/tutorials/AndroidSQLite/article.html#tutorial-sqlite-custom-contentprovider-and-loader
+ *         http://stackoverflow.com/questions/11131058/how-to-properly-insert-values-into-the-sqlite-database-using-contentproviders-i
+ *         http://www.androiddesignpatterns.com/2012/06/content-resolvers-and-content-providers.html
+ *         sql inject => https://github.com/yahoo/squidb/wiki/Protecting-against-SQL-Injection
+ *         https://newcircle.com/s/post/1375/android_content_provider_tutorial
+
+
 
 VIEW CONTENTS OF DATABASE FROM ANDROID STUDIO:
 
