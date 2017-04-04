@@ -44,7 +44,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.VOCABLES_TRANSLATIONS, VOCABLES_TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_FOR_VOCABLES);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME + "/#", NOT_TRANSLATIONS_FOR_VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE + "/#", NOT_TRANSLATIONS_FOR_VOCABLE_ID);
     }
 
     private static final class Errors {
@@ -115,13 +115,9 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
 
                 projection = TranslationsContract.Schema.ALL_COLUMNS;
 
-                queryBuilder.setTables(
-                        TranslationsContract.Schema.TABLE_NAME + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
-                                + " ON ("
-                                + TranslationsContract.Schema.TABLE_DOT_COL_ID
-                                + "="
-                                + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID
-                                + ")"
+                queryBuilder.setTables(TranslationsContract.Schema.TABLE_NAME
+                        + " LEFT JOIN " + VocablesTranslationsContract.Schema.TABLE_NAME
+                        + " ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + ")"
                 );
 
                 if (whereSelection == null || whereSelection.trim().isEmpty()) {

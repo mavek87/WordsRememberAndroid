@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -10,8 +11,12 @@ import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * @author Matteo Veroni
@@ -26,6 +31,9 @@ public class QuizGameModel {
     private final GameDifficulty difficulty;
     private final DictionaryDAO dao;
     private int numberOfQuizzes;
+
+    private final Random randomGenerator = new SecureRandom();
+    private final Set<Integer> randomlyExtractedIdsForQuizzes = new HashSet<>();
 
     public QuizGameModel(GameType gameType, GameDifficulty gameDifficulty, DictionaryDAO dao) {
         this.gameType = gameType;
@@ -97,6 +105,8 @@ public class QuizGameModel {
     }
 
     private Quiz generateQuizForFindingTranslations() throws NoMoreQuizzesException {
+//        int extractedUniqueRandomNumber = extractUniqueRandomNumber();
+//        dao.getVocableById((long)extractedUniqueRandomNumber);
         List<String> rightAnswers = new ArrayList<>();
         rightAnswers.add("Good morning");
         rightAnswers.add("Good night");
@@ -112,6 +122,17 @@ public class QuizGameModel {
         return new Quiz("What are the most commons english greetings?", rightAnswers);
     }
 
-    public void destroy() {
+    private int extractUniqueRandomNumber() {
+        int randomIntExtracted;
+        int initialSetSize = randomlyExtractedIdsForQuizzes.size();
+        do {
+            randomIntExtracted = randomInt(1, numberOfQuizzes);
+            randomlyExtractedIdsForQuizzes.add(randomIntExtracted);
+        } while (randomlyExtractedIdsForQuizzes.size() == initialSetSize);
+        return randomIntExtracted;
+    }
+
+    public int randomInt(int min, int max) {
+        return randomGenerator.nextInt((max - min) + 1) + min;
     }
 }

@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
@@ -34,11 +33,9 @@ import java.util.List;
 public class DictionaryDAO {
 
     private final ContentResolver contentResolver;
-    private final Context context;
 
     public DictionaryDAO(Context context) {
         this.contentResolver = context.getContentResolver();
-        this.context = context;
     }
 
     /***********************************************************************************************
@@ -195,21 +192,13 @@ public class DictionaryDAO {
 
     public Word getVocableById(long id) {
         final String str_id = String.valueOf(id);
-
-        final String[] projection = {VocablesContract.Schema.COL_VOCABLE};
-        final String selection = VocablesContract.Schema.COL_ID + " = ?";
-        final String[] selectionArgs = {str_id};
-
-        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-
         Cursor cursor = contentResolver.query(
-                uri,
-                projection,
-                selection,
-                selectionArgs,
+                Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build(),
+                new String[]{VocablesContract.Schema.COL_VOCABLE},
+                VocablesContract.Schema.COL_ID + " = ?",
+                new String[]{str_id},
                 null
         );
-
         if (cursor != null) {
             cursor.moveToFirst();
             return cursorToVocable(cursor);
@@ -239,14 +228,10 @@ public class DictionaryDAO {
 
     public boolean updateVocable(long vocableID, Word newVocable) {
         final String str_id = String.valueOf(vocableID);
-
         final String selection = VocablesContract.Schema.COL_ID + " = ?";
         final String[] selectionArgs = {str_id};
-
         final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-
         int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
-
         return updatedRecords > 0;
     }
 
@@ -254,12 +239,9 @@ public class DictionaryDAO {
         int recordDeleted = 0;
         if (vocableID > 0) {
             final String str_id = String.valueOf(vocableID);
-
             final String selection = VocablesContract.Schema.COL_ID + " = ?";
             final String[] selectionArgs = {str_id};
-
             final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-
             recordDeleted = contentResolver.delete(
                     vocableUri,
                     selection,

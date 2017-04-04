@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
+import android.widget.Toast;
+
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.model.GameDifficulty;
@@ -30,6 +32,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public void attachView(QuizGameView view) {
         this.model.registerToEventBus();
         this.view = view;
+        //ToDo: new quiz should not start everytime the view is attached (eg after device rotation)
         startNewQuizOrStopGameIfTheyAreFinished();
     }
 
@@ -40,6 +43,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void startNewQuizOrStopGameIfTheyAreFinished() {
+        view.showMessage("New Quiz");
         try {
             currentQuiz = model.generateQuiz();
             view.setPojoUsed(currentQuiz);

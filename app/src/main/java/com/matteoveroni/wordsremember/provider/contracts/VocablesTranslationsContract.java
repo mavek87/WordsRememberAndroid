@@ -16,7 +16,7 @@ public class VocablesTranslationsContract {
 
     public static final String VOCABLES_TRANSLATIONS = "vocables_translations";
     public static final String TRANSLATIONS_FOR_VOCABLE = "translations_for_vocable";
-    public static final String NOT_TRANSLATION_FOR_VOCABLE_NAME = "not_translations_for_vocable";
+    public static final String NOT_TRANSLATION_FOR_VOCABLE = "not_translations_for_vocable";
 
     public static final Uri VOCABLES_TRANSLATIONS_CONTENT_URI = Uri.parse(
             DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + VOCABLES_TRANSLATIONS
@@ -27,7 +27,7 @@ public class VocablesTranslationsContract {
     );
 
     public static final Uri NOT_TRANSLATION_FOR_VOCABLE_CONTENT_URI = Uri.parse(
-            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NOT_TRANSLATION_FOR_VOCABLE_NAME
+            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NOT_TRANSLATION_FOR_VOCABLE
     );
 
     // Mime type
