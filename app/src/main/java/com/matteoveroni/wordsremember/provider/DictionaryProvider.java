@@ -83,9 +83,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
     public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         final String OPERATION = "QUERY";
         final SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-//        final String[] projectionWithCount = new String[100];
-//        System.arraycopy(projection, 0, projectionWithCount, 0, projection.length);
-//        projectionWithCount[projectionWithCount.length] = ""
+
         switch (URI_MATCHER.match(uri)) {
             case VOCABLES:
                 queryBuilder.setTables(VocablesContract.Schema.TABLE_NAME);
@@ -188,8 +186,10 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
             default:
                 throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(
+
+        final SQLiteDatabase db = databaseManager.getWritableDatabase();
+
+        final Cursor cursor = queryBuilder.query(
                 db,
                 projection,
                 whereSelection,
@@ -197,7 +197,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 null,
                 null,
                 sortOrder,
-                getQueryParameterLimitValue(uri)
+                getQueryParametersValuesForLimitAndOffset(uri)
         );
         if (isContentResolverNotNull())
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -244,7 +244,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 break;
             case VOCABLE_ID:
                 final String id = uri.getLastPathSegment();
-                final String where = VocablesContract.Schema.COL_ID + " = " + id + (
+                final String where = VocablesContract.Schema.COL_ID + "=" + id + (
                         !TextUtils.isEmpty(selection)
                                 ? " AND (" + selection + ")"
                                 : ""

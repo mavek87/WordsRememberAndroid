@@ -2,12 +2,15 @@ package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 import android.database.DatabaseUtils;
+import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
+
+import javax.xml.transform.URIResolver;
 
 /**
  * @author Matteo Veroni
