@@ -1,11 +1,13 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
-import android.database.Cursor;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 
 import org.greenrobot.eventbus.EventBus;
@@ -105,13 +107,26 @@ public class QuizGameModel {
     }
 
     private Quiz generateQuizForFindingTranslations() throws NoMoreQuizzesException {
-//        int extractedUniqueRandomNumber = extractUniqueRandomNumber();
-//        dao.getVocableById((long)extractedUniqueRandomNumber);
+        int extractedUniqueRandomNumber = extractUniqueRandomNumber();
+        dao.asyncSearchVocableWithTranslationByOffsetCommand(extractedUniqueRandomNumber);
+
+
         List<String> rightAnswers = new ArrayList<>();
         rightAnswers.add("Good morning");
         rightAnswers.add("Good night");
 
         return new Quiz("What are the most commons english greetings?", rightAnswers);
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSearchVocableWithTranslationByOffsetCompleted event) {
+        Word vocable = event.getVocableWithTranslationFound();
+        dao.asyncSearchVocableTranslationsByVocableId(vocable.getId());
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSearchVocableTranslationsCompleted event) {
+        List<Word> translations = event.getTranslations();
     }
 
     private Quiz generateQuizForFindingVocables() throws NoMoreQuizzesException {

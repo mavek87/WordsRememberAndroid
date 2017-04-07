@@ -9,13 +9,14 @@ import android.net.Uri;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountUniqueVocablesWithTranslationCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableTranslationsCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableWithTranslationByOffsetCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.pojos.Word;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -126,6 +127,20 @@ public class DictionaryDAO {
             throw new IllegalArgumentException("AsyncSearchTranslationByName invalid argument");
         }
         new AsyncSearchTranslationsByNameCommand(contentResolver, translationName, "").execute();
+    }
+
+    public void asyncSearchVocableTranslationsByVocableId(long id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("Id minor than one");
+        }
+        new AsyncSearchVocableTranslationsCommand(contentResolver, "" + id, null).execute();
+    }
+
+    public void asyncSearchVocableWithTranslationByOffsetCommand(int offset) throws IllegalArgumentException {
+        if (offset < 0) {
+            throw new IllegalArgumentException("Offset can\'t be minor than zero");
+        }
+        new AsyncSearchVocableWithTranslationByOffsetCommand(contentResolver, String.valueOf(offset)).execute();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,17 +277,17 @@ public class DictionaryDAO {
     }
 
     public static List<Word> cursorToListOfVocables(Cursor cursor) {
-        List<Word> vocablesWithSameName = new ArrayList<>();
+        List<Word> vocables = new ArrayList<>();
         if (cursor == null) {
-            return vocablesWithSameName;
+            return vocables;
         }
         while (cursor.moveToNext()) {
             Word vocable = new Word("");
             vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COL_ID)));
             vocable.setName(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COL_VOCABLE)));
-            vocablesWithSameName.add(vocable);
+            vocables.add(vocable);
         }
-        return vocablesWithSameName;
+        return vocables;
     }
 
     public static Word cursorToTranslation(Cursor cursor) {
@@ -282,17 +297,17 @@ public class DictionaryDAO {
     }
 
     public static List<Word> cursorToListOfTranslations(Cursor cursor) {
-        List<Word> translationsWithSameName = new ArrayList<>();
+        List<Word> translations = new ArrayList<>();
         if (cursor == null) {
-            return translationsWithSameName;
+            return translations;
         }
         while (cursor.moveToNext()) {
             Word translation = new Word("");
             translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COL_ID)));
             translation.setName(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COL_TRANSLATION)));
-            translationsWithSameName.add(translation);
+            translations.add(translation);
         }
-        return translationsWithSameName;
+        return translations;
     }
 
     ContentValues vocableToContentValues(Word vocable) {
