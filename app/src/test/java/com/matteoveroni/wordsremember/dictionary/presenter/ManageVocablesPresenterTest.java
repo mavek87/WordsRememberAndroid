@@ -8,7 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;

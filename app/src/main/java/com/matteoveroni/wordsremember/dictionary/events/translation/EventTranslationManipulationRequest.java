@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.events.translation;
 
 import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 /**
  * @author Matteo Veroni

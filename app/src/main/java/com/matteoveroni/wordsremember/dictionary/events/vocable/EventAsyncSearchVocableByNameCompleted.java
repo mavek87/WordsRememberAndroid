@@ -1,9 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.events.vocable;
 
-import com.matteoveroni.wordsremember.pojos.Word;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 /**
  * @author Matteo Veroni

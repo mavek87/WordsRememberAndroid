@@ -17,7 +17,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslat
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

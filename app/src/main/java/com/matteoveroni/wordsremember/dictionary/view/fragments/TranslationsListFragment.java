@@ -25,7 +25,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventTransla
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;

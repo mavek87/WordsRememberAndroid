@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.events.vocable;
 
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 /**
  * Event used when a dictionary item is selected in a fragment, to inform the main activity

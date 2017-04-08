@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

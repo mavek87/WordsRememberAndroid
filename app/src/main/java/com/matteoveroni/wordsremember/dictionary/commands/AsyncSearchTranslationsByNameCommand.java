@@ -3,9 +3,8 @@ package com.matteoveroni.wordsremember.dictionary.commands;
 import android.content.ContentResolver;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;

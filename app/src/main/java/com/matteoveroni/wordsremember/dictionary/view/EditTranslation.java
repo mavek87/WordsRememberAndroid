@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.view;
 
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 
 /**
  * Created by Matteo Veroni

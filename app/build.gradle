@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
     dexOptions {
         maxProcessCount 2
         javaMaxHeapSize "2048m"
@@ -69,6 +69,6 @@ dependencies {
     })
 
     // Dependencies taken from git by jitpack.io
-    compile 'com.github.mavek87:MyUtils:425afc06604f1c2f1fcaed3cc6a374abad97fb6'
+    compile 'com.github.mavek87:MyUtils:b0d93217fb6ed1bf08d86c3adfb4c5d83d27a813'
     compile 'com.github.mavek87:AndroidTagGenerator:fdb57035f780e1381da84793124c3fa95afa6bd2'
 }

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
@@ -19,7 +18,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTransla
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 
 import butterknife.ButterKnife;
 

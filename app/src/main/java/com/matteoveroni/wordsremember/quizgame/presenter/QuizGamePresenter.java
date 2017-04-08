@@ -1,15 +1,16 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
-import android.widget.Toast;
-
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.model.GameDifficulty;
 import com.matteoveroni.wordsremember.quizgame.model.GameType;
-import com.matteoveroni.wordsremember.quizgame.model.Quiz;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
+import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
+
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Matteo Veroni
@@ -18,14 +19,12 @@ import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private QuizGameView view;
-    private final QuizGameModel model;
-    private final DictionaryDAO dao;
+    private final QuizGameFindTranslationForVocableModel model;
 
     private Quiz currentQuiz;
 
     public QuizGamePresenter(DictionaryDAO dao) {
-        this.dao = dao;
-        this.model = new QuizGameModel(GameType.FIND_RIGHT_TRANSLATION_FOR_VOCABLES, GameDifficulty.EASY, dao);
+        this.model = new QuizGameFindTranslationForVocableModel(GameDifficulty.EASY, dao);
     }
 
     @Override
@@ -45,12 +44,17 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private void startNewQuizOrStopGameIfTheyAreFinished() {
         view.showMessage("New Quiz");
         try {
-            currentQuiz = model.generateQuiz();
-            view.setPojoUsed(currentQuiz);
+            model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
             view.showMessage("Game ended");
             view.returnToPreviousView();
         }
+    }
+
+    @Subscribe
+    public void onEvent(EventQuizGenerated event){
+        currentQuiz = event.getQuiz();
+        view.setPojoUsed(currentQuiz);
     }
 
     public void onQuizResponseFromView(String givenAnswer) {

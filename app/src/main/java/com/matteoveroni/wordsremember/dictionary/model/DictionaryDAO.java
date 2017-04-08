@@ -15,8 +15,8 @@ import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByN
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
-import com.matteoveroni.wordsremember.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.pojos.Word;
+import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
@@ -129,11 +129,11 @@ public class DictionaryDAO {
         new AsyncSearchTranslationsByNameCommand(contentResolver, translationName, "").execute();
     }
 
-    public void asyncSearchVocableTranslationsByVocableId(long id) {
-        if (id < 1) {
-            throw new IllegalArgumentException("Id minor than one");
+    public void asyncSearchVocableTranslations(Word vocable) {
+        if (vocable== null | vocable.getId() < 1) {
+            throw new IllegalArgumentException("vocable null or vocable id minor than one");
         }
-        new AsyncSearchVocableTranslationsCommand(contentResolver, "" + id, null).execute();
+        new AsyncSearchVocableTranslationsCommand(contentResolver, vocable, null).execute();
     }
 
     public void asyncSearchVocableWithTranslationByOffsetCommand(int offset) throws IllegalArgumentException {
