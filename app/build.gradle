@@ -69,6 +69,6 @@ dependencies {
     })
 
     // Dependencies taken from git by jitpack.io
-    compile 'com.github.mavek87:MyUtils:b0d93217fb6ed1bf08d86c3adfb4c5d83d27a813'
+    compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
     compile 'com.github.mavek87:AndroidTagGenerator:fdb57035f780e1381da84793124c3fa95afa6bd2'
 }
