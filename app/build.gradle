@@ -38,6 +38,20 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'junit:junit:4.12'
 
+    /*************** Dependencies taken from git by jitpack.io ******************/
+
+    // Important:
+    // If jitpack libraries are not being updated comment them and comment jitpack in the other
+    // gradle file, and build and then remove comment
+
+    // Example using tag:
+    // compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
+
+    compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'
+    compile 'com.github.mavek87:AndroidTagGenerator:master-SNAPSHOT'
+
+    /***************************************************************************/
+
     // RxJava & RxAndroid
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
@@ -67,8 +81,4 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    // Dependencies taken from git by jitpack.io
-    compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
-    compile 'com.github.mavek87:AndroidTagGenerator:fdb57035f780e1381da84793124c3fa95afa6bd2'
 }
