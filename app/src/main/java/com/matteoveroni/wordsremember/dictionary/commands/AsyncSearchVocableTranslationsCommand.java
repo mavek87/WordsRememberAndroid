@@ -44,6 +44,7 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQueryCommand {
                 vocable,
                 foundTranslations
         );
+        queryCompleteCursor.close();
         EventBus.getDefault().postSticky(event);
     }
 }

@@ -1,7 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
+import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
@@ -35,11 +37,13 @@ public class AsyncSearchVocableWithTranslationByOffsetCommand extends AsyncQuery
     public void dispatchCompletionEvent() {
         queryCompleteCursor.moveToFirst();
 
-        Word vocableWithTranslationByOffset = (queryCompleteCursor.isBeforeFirst())
-                ? null
-                : DictionaryDAO.cursorToVocable(queryCompleteCursor);
+        String str_id = queryCompleteCursor.getString(queryCompleteCursor.getColumnIndex(VocablesTranslationsContract.Schema.COL_VOCABLE_ID));
+        Log.i(TagGenerator.tag(AsyncSearchVocableWithTranslationByOffsetCommand.class), str_id);
+        long idOfVocableWithTranslationByOffset = Long.valueOf(str_id);
 
-        EventAsyncSearchVocableWithTranslationByOffsetCompleted event = new EventAsyncSearchVocableWithTranslationByOffsetCompleted(vocableWithTranslationByOffset);
+        queryCompleteCursor.close();
+
+        EventAsyncSearchVocableWithTranslationByOffsetCompleted event = new EventAsyncSearchVocableWithTranslationByOffsetCompleted(idOfVocableWithTranslationByOffset);
         EventBus.getDefault().postSticky(event);
     }
 }

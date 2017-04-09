@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
@@ -90,8 +90,8 @@ public class EditVocablePresenter implements Presenter {
     }
 
     @Subscribe
-    public void onEvent(EventAsyncSearchVocableByNameCompleted event) {
-        final Word persistentVocableWithSameName = event.getVocableWithSearchedName();
+    public void onEvent(EventAsyncSearchVocableCompleted event) {
+        final Word persistentVocableWithSameName = event.getVocable();
         if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
             view.showLocalizedMessage(MSG_KEY_VOCABLE_SAVED);
         } else {

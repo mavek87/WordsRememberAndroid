@@ -8,13 +8,13 @@ import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 public class EventAsyncSearchVocableWithTranslationByOffsetCompleted {
 
-    private final Word vocable;
+    private final long vocableId;
 
-    public EventAsyncSearchVocableWithTranslationByOffsetCompleted(Word vocable) {
-        this.vocable = vocable;
+    public EventAsyncSearchVocableWithTranslationByOffsetCompleted(long vocableId) {
+        this.vocableId = vocableId;
     }
 
-    public Word getVocableWithTranslationFound() {
-        return vocable;
+    public long getVocableWithTranslationFound() {
+        return vocableId;
     }
 }

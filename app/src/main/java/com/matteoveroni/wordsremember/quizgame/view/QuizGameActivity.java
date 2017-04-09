@@ -1,10 +1,12 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
 
@@ -72,6 +75,34 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         presenter.destroy();
         super.onStop();
     }
+
+    @Override
+    public void showQuizResult(QuizResult result) {
+        String resultMessage;
+        switch (result) {
+            case RIGHT:
+                resultMessage = "Correct answer press ok to go to the next question";
+                break;
+            case WRONG:
+                resultMessage = "Wrong answer press ok to go to the next question";
+                break;
+            default:
+                throw new RuntimeException("Unknown quiz result");
+        }
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle("Quiz Result")
+                .setMessage(resultMessage)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.onQuizContinueGameFromView();
+                    }
+                });
+        AlertDialog resultDialog = alertDialogBuilder.create();
+        resultDialog.show();
+    }
+
 
     @OnClick(R.id.quiz_game_accept_answer_button)
     public void onButtonAcceptAnswerAction() {

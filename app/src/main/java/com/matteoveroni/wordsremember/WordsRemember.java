@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Range;
+import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dependency_injection.components.DAOComponent;
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerDAOComponent;
@@ -21,7 +21,7 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.1.0
+ * @version 0.1.1
  **/
 
 public class WordsRemember extends Application {
@@ -29,7 +29,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.1.1";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
@@ -88,7 +88,7 @@ public class WordsRemember extends Application {
     private void populateDatabaseForTestPurposes(Context context) {
         final int NUMBER_OF_VOCABLES_TO_CREATE = 1;
         for (int i = 0; i < NUMBER_OF_VOCABLES_TO_CREATE; i++) {
-            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new Range(3, 20)));
+            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new IntRange(3, 20)));
             DictionaryDAO dao = new DictionaryDAO(context);
             dao.saveVocable(vocableToSave);
         }

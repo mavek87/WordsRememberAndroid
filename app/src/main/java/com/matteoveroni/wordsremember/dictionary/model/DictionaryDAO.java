@@ -11,6 +11,7 @@ import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountUniqueVocabl
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableTranslationsCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableWithTranslationByOffsetCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByIdCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
@@ -44,10 +45,10 @@ public class DictionaryDAO {
      **********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
-        if (!Word.isValid(vocable) || vocable.getId() > 0) {
-            throw new IllegalArgumentException("AsyncSaveVocable invalid argument");
-        }
-        final ContentValues values = new ContentValues();
+        if (!Word.isValid(vocable) || vocable.getId() > 0)
+            throw new IllegalArgumentException("Invalid vocable");
+
+        ContentValues values = new ContentValues();
         values.put(VocablesContract.Schema.COL_VOCABLE, vocable.getName());
 
         new AsyncInsertCommand(
@@ -57,10 +58,22 @@ public class DictionaryDAO {
         ).execute();
     }
 
+    public void asyncSearchVocableById(long id) {
+        if (id < 1) throw new IllegalArgumentException("Negative id");
+
+        new AsyncSearchVocablesByIdCommand(contentResolver, id, "").execute();
+    }
+
+    public void asyncSearchVocableByName(String vocableName) throws IllegalArgumentException {
+        if (Str.isNullOrEmpty(vocableName)) throw new IllegalArgumentException("Invalid name");
+
+        new AsyncSearchVocablesByNameCommand(contentResolver, vocableName, "").execute();
+    }
+
     public void asyncUpdateVocable(long id, Word updatedVocable) {
-        if (!Word.isValid(updatedVocable) || id < 1) {
-            throw new IllegalArgumentException("AsyncUpdateVocable invalid argument");
-        }
+        if (!Word.isValid(updatedVocable) || id < 1)
+            throw new IllegalArgumentException("Invalid vocable or id");
+
         final String str_id = String.valueOf(id);
         final String selection = VocablesContract.Schema.COL_ID + "=?";
         final String[] selectionArgs = {str_id};
@@ -75,10 +88,10 @@ public class DictionaryDAO {
     }
 
     public void asyncDeleteVocable(long id) {
-        if (id < 1) {
-            throw new IllegalArgumentException("AsyncDeleteVocable invalid argument");
-        }
+        if (id < 1) throw new IllegalArgumentException("Negative id");
+
         asyncDeleteVocableTranslationsByVocableId(id);
+
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesContract.CONTENT_URI,
@@ -87,21 +100,14 @@ public class DictionaryDAO {
         ).execute();
     }
 
-    public void asyncSearchVocableByName(String vocableName) throws IllegalArgumentException {
-        if (Str.isNullOrEmpty(vocableName)) {
-            throw new IllegalArgumentException("AsyncSearchVocableByName invalid argument");
-        }
-        new AsyncSearchVocablesByNameCommand(contentResolver, vocableName, "").execute();
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Async methods - TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void asyncSaveTranslation(Word translation) {
-        if (!Word.isValid(translation) || translation.getId() > 0) {
-            throw new RuntimeException("AsyncSaveTranslation invalid argument");
-        }
+        if (!Word.isValid(translation) || translation.getId() > 0)
+            throw new IllegalArgumentException("Invalid translation");
+
         new AsyncInsertCommand(
                 contentResolver,
                 TranslationsContract.CONTENT_URI,
@@ -110,10 +116,10 @@ public class DictionaryDAO {
     }
 
     public void asyncDeleteTranslation(long id) {
-        if (id < 1) {
-            throw new IllegalArgumentException("AsyncDeleteTranslation invalid argument");
-        }
+        if (id < 1) throw new IllegalArgumentException("Negative id");
+
         asyncDeleteVocableTranslationsByTranslationId(id);
+
         new AsyncDeleteCommand(
                 contentResolver,
                 TranslationsContract.CONTENT_URI,
@@ -123,23 +129,21 @@ public class DictionaryDAO {
     }
 
     public void asyncSearchTranslationByName(String translationName) throws IllegalArgumentException {
-        if (Str.isNullOrEmpty(translationName)) {
-            throw new IllegalArgumentException("AsyncSearchTranslationByName invalid argument");
-        }
+        if (Str.isNullOrEmpty(translationName)) throw new IllegalArgumentException("Invalid name");
+
         new AsyncSearchTranslationsByNameCommand(contentResolver, translationName, "").execute();
     }
 
     public void asyncSearchVocableTranslations(Word vocable) {
-        if (vocable== null | vocable.getId() < 1) {
-            throw new IllegalArgumentException("vocable null or vocable id minor than one");
-        }
+        if (vocable == null || vocable.getId() < 1)
+            throw new IllegalArgumentException("Invalid vocable or vocable id minor than one");
+
         new AsyncSearchVocableTranslationsCommand(contentResolver, vocable, null).execute();
     }
 
     public void asyncSearchVocableWithTranslationByOffsetCommand(int offset) throws IllegalArgumentException {
-        if (offset < 0) {
-            throw new IllegalArgumentException("Offset can\'t be minor than zero");
-        }
+        if (offset < 0) throw new IllegalArgumentException("Negative offset");
+
         new AsyncSearchVocableWithTranslationByOffsetCommand(contentResolver, String.valueOf(offset)).execute();
     }
 
@@ -151,34 +155,31 @@ public class DictionaryDAO {
         new AsyncCountUniqueVocablesWithTranslationCommand(contentResolver).execute();
     }
 
-    public void asyncDeleteVocableTranslationsByVocableId(long vocableId) {
-        if (vocableId < 1) {
-            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByTranslationId invalid argument");
-        }
+    public void asyncDeleteVocableTranslationsByVocableId(long id) {
+        if (id < 1) throw new IllegalArgumentException("Negative id");
+
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?",
-                new String[]{String.valueOf(vocableId)}
+                new String[]{String.valueOf(id)}
         ).execute();
     }
 
-    public void asyncDeleteVocableTranslationsByTranslationId(long translationId) {
-        if (translationId < 1) {
-            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByTranslationId invalid argument");
-        }
+    public void asyncDeleteVocableTranslationsByTranslationId(long id) {
+        if (id < 1) throw new IllegalArgumentException("Negative id");
+
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=?",
-                new String[]{String.valueOf(translationId)}
+                new String[]{String.valueOf(id)}
         ).execute();
     }
 
     public void asyncDeleteVocableTranslationsByVocableAndTranslationIds(long vocableId, long translationId) {
-        if (vocableId < 1 || translationId < 1) {
-            throw new IllegalArgumentException("AsyncDeleteVocableTranslationsByVocableAndTranslationIds invalid argument");
-        }
+        if (vocableId < 1 || translationId < 1) throw new IllegalArgumentException("Negative id");
+
         new AsyncDeleteCommand(
                 contentResolver,
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
@@ -188,11 +189,12 @@ public class DictionaryDAO {
     }
 
     public void asyncSaveVocableTranslation(VocableTranslation vocableTranslation) {
-        final Word translation = vocableTranslation.getTranslation();
-        final Word vocable = vocableTranslation.getVocable();
-        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable)) {
+        Word translation = vocableTranslation.getTranslation();
+        Word vocable = vocableTranslation.getVocable();
+
+        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable))
             throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
-        }
+
         final ContentValues vocablesTranslationValue = new ContentValues();
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, vocable.getId());
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, translation.getId());
@@ -204,23 +206,6 @@ public class DictionaryDAO {
     /***********************************************************************************************
      * Sync methods - Vocables
      **********************************************************************************************/
-
-    public Word getVocableById(long id) {
-        final String str_id = String.valueOf(id);
-        Cursor cursor = contentResolver.query(
-                Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build(),
-                new String[]{VocablesContract.Schema.COL_VOCABLE},
-                VocablesContract.Schema.COL_ID + " = ?",
-                new String[]{str_id},
-                null
-        );
-        if (cursor != null) {
-            cursor.moveToFirst();
-            return cursorToVocable(cursor);
-        } else {
-            throw new RuntimeException("duplicated ids for different vocables");
-        }
-    }
 
     public long saveVocable(Word vocable) {
         long id = -1;
@@ -239,31 +224,6 @@ public class DictionaryDAO {
             }
         }
         return id;
-    }
-
-    public boolean updateVocable(long vocableID, Word newVocable) {
-        final String str_id = String.valueOf(vocableID);
-        final String selection = VocablesContract.Schema.COL_ID + " = ?";
-        final String[] selectionArgs = {str_id};
-        final Uri uri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-        int updatedRecords = contentResolver.update(uri, vocableToContentValues(newVocable), selection, selectionArgs);
-        return updatedRecords > 0;
-    }
-
-    public boolean removeVocable(long vocableID) {
-        int recordDeleted = 0;
-        if (vocableID > 0) {
-            final String str_id = String.valueOf(vocableID);
-            final String selection = VocablesContract.Schema.COL_ID + " = ?";
-            final String[] selectionArgs = {str_id};
-            final Uri vocableUri = Uri.withAppendedPath(VocablesContract.CONTENT_URI, str_id).buildUpon().build();
-            recordDeleted = contentResolver.delete(
-                    vocableUri,
-                    selection,
-                    selectionArgs
-            );
-        }
-        return recordDeleted > 0;
     }
 
     /***********************************************************************************************

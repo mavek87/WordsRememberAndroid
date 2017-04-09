@@ -3,25 +3,26 @@ package com.matteoveroni.wordsremember.quizgame.model;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Range;
+import com.matteoveroni.myutils.Int;
+import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
+import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreUniqueRandomIntegerGenerable;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.util.ExceptionToResourceMapping;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -37,10 +38,9 @@ public class QuizGameFindTranslationForVocableModel {
     private final DictionaryDAO dao;
     private int numberOfQuizzes;
 
-    private final Random randomGenerator = new SecureRandom();
-    private final Set<Integer> randomlyExtractedIdsForQuizzes = new HashSet<>();
+    private final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
 
-    private int numberOfIdsExtrated = 0;
+    private int numberOfPositionsExtrated = 0;
 
     public QuizGameFindTranslationForVocableModel(GameDifficulty gameDifficulty, DictionaryDAO dao) {
         this.difficulty = gameDifficulty;
@@ -48,15 +48,6 @@ public class QuizGameFindTranslationForVocableModel {
 
         registerToEventBus();
 
-        setNumberOfQuizzes();
-    }
-
-    private void setNumberOfQuizzes() {
-        dao.countUniqueVocablesWithTranslation();
-    }
-
-    @Subscribe
-    public void onEvent(EventCountUniqueVocablesWithTranslationsCompleted event) {
         switch (difficulty) {
             case EASY:
                 numberOfQuizzes = 10;
@@ -69,11 +60,7 @@ public class QuizGameFindTranslationForVocableModel {
                 break;
         }
 
-        int maxNumberOfQuizzesCreatable = event.getNumberOfUniqueVocablesWithTranslation();
-        if (numberOfQuizzes > maxNumberOfQuizzesCreatable) {
-            numberOfQuizzes = maxNumberOfQuizzesCreatable;
-        }
-        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
+        adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
     }
 
     public void registerToEventBus() {
@@ -88,42 +75,60 @@ public class QuizGameFindTranslationForVocableModel {
         }
     }
 
+    private void adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable() {
+        dao.countUniqueVocablesWithTranslation();
+    }
+
+    @Subscribe
+    public void onEvent(EventCountUniqueVocablesWithTranslationsCompleted event) {
+        int maxNumberOfQuizzesCreatable = event.getNumberOfUniqueVocablesWithTranslation();
+        if (numberOfQuizzes > maxNumberOfQuizzesCreatable) {
+            numberOfQuizzes = maxNumberOfQuizzesCreatable;
+        }
+        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
+
+        EVENT_BUS.post(new EventQuizModelInitialized());
+    }
+
     public void startQuizGeneration() throws NoMoreQuizzesException {
         try {
-            int extractedUniqueRandomNumber = generateUniqueRandomInteger();
-            dao.asyncSearchVocableWithTranslationByOffsetCommand(extractedUniqueRandomNumber);
-        } catch (NoMoreUniqueRandomNumbersGenerable ex) {
+            int uniqueRandomVocablePosition = generateUniqueRandomVocablePosition();
+            dao.asyncSearchVocableWithTranslationByOffsetCommand(uniqueRandomVocablePosition);
+        } catch (NoMoreUniqueRandomIntegerGenerable ex) {
             throw new NoMoreQuizzesException();
         }
     }
 
-    private int generateUniqueRandomInteger() throws NoMoreUniqueRandomNumbersGenerable {
-        int randomIntExtracted;
-        int initialSetSize = randomlyExtractedIdsForQuizzes.size();
+    private int generateUniqueRandomVocablePosition() throws NoMoreUniqueRandomIntegerGenerable {
+        IntRange positionsRange = new IntRange(0, numberOfQuizzes - 1);
 
-        Range range = new Range(1, numberOfQuizzes);
+        if ((positionsRange.getDimension() - numberOfPositionsExtrated) <= 0) {
+            throw new NoMoreUniqueRandomIntegerGenerable();
+        }
 
-        numberOfIdsExtrated++;
+        int randomPosition;
+        int initialSetSize = randomlyExtractedPositionsForQuiz.size();
 
         do {
-            randomIntExtracted = randomInt(range);
-            randomlyExtractedIdsForQuizzes.add(randomIntExtracted);
-        } while (randomlyExtractedIdsForQuizzes.size() == initialSetSize);
-        return randomIntExtracted;
+            randomPosition = Int.getRandomInteger(positionsRange);
+            randomlyExtractedPositionsForQuiz.add(randomPosition);
+        } while (randomlyExtractedPositionsForQuiz.size() == initialSetSize);
+
+        numberOfPositionsExtrated++;
+
+        return randomPosition;
     }
 
-    private class NoMoreUniqueRandomNumbersGenerable extends Exception {
-    }
-
-    public int randomInt(Range range) {
-        int min = range.getLowBorder();
-        int max = range.getHighBorder();
-        return randomGenerator.nextInt((max - min) + 1) + min;
-    }
 
     @Subscribe
     public void onEvent(EventAsyncSearchVocableWithTranslationByOffsetCompleted event) {
-        Word vocable = event.getVocableWithTranslationFound();
+        long vocableId = event.getVocableWithTranslationFound();
+        dao.asyncSearchVocableById(vocableId);
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSearchVocableCompleted event) {
+        Word vocable = event.getVocable();
         dao.asyncSearchVocableTranslations(vocable);
     }
 

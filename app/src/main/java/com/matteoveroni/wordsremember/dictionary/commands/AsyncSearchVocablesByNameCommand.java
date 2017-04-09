@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
@@ -35,13 +35,14 @@ public class AsyncSearchVocablesByNameCommand extends AsyncQueryCommand {
 
     @Override
     public void dispatchCompletionEvent() {
+        // Todo: remove list
         List<Word> maxOneVocableWithSameNameList = DictionaryDAO.cursorToListOfVocables(queryCompleteCursor);
-        EventAsyncSearchVocableByNameCompleted event
-                = new EventAsyncSearchVocableByNameCompleted(
+        EventAsyncSearchVocableCompleted event = new EventAsyncSearchVocableCompleted
+                (
                         maxOneVocableWithSameNameList.size() == 1
                                 ? maxOneVocableWithSameNameList.get(0)
                                 : null
-        );
+                );
         EventBus.getDefault().postSticky(event);
     }
 }

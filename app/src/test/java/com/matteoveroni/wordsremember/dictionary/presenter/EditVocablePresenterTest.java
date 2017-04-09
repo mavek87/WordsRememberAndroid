@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableByNameCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -163,7 +163,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasUniqueName_SaveIt() {
         presenter.editedVocableInView = NOT_PERSISTENT_VOCABLE_IN_VIEW;
 
-        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(null));
+        presenter.onEvent(new EventAsyncSearchVocableCompleted(null));
 
         verify(dao).asyncSaveVocable(NOT_PERSISTENT_VOCABLE_IN_VIEW);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
@@ -173,7 +173,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewNotPersisted_AndHasDuplicateName_DontSaveItAndShowError() {
         presenter.editedVocableInView = NOT_PERSISTENT_VOCABLE_IN_VIEW;
 
-        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
+        presenter.onEvent(new EventAsyncSearchVocableCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
 
         verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncSaveVocable(any(Word.class));
@@ -184,7 +184,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted__IfVocableInViewAlreadyPersistent_AndNewNameDuplicated_DontUpdateItAndShowError() {
         presenter.editedVocableInView = PERSISTENT_VOCABLE_IN_VIEW;
 
-        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
+        presenter.onEvent(new EventAsyncSearchVocableCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
 
         verify(view).showLocalizedMessage(EditVocablePresenter.MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
@@ -195,7 +195,7 @@ public class EditVocablePresenterTest {
     public void onEventAsyncSearchVocablesByNameCompleted_IfVocableInViewStillPersistent_AndHasUniqueName_UpdateIt() {
         presenter.editedVocableInView = VOCABLE_WITH_UPDATED_NAME;
 
-        presenter.onEvent(new EventAsyncSearchVocableByNameCompleted(VOCABLE_WITH_UPDATED_NAME));
+        presenter.onEvent(new EventAsyncSearchVocableCompleted(VOCABLE_WITH_UPDATED_NAME));
 
         verify(dao).asyncUpdateVocable(VOCABLE_WITH_UPDATED_NAME.getId(), VOCABLE_WITH_UPDATED_NAME);
     }
