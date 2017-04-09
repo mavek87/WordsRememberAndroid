@@ -17,4 +17,5 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void returnToPreviousView();
 
+    void reset();
 }

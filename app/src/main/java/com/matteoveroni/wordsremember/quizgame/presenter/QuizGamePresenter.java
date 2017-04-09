@@ -34,6 +34,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     @Override
     public void attachView(QuizGameView view) {
         EVENT_BUS.register(this);
+        this.model.reset();
         this.model.registerToEventBus();
         this.view = view;
     }
@@ -51,7 +52,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void startNewQuizOrStopGameIfTheyAreFinished() {
-        view.showMessage("New Quiz");
+        view.reset();
         try {
             model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
@@ -64,7 +65,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void endGame() {
-        view.showMessage("Game ended");
         view.returnToPreviousView();
     }
 

@@ -133,6 +133,12 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
+    public void reset() {
+        lbl_question.setText("");
+        txt_answer.setText("");
+    }
+
+    @Override
     public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {
         return new PresenterLoader<>(this, new QuizGamePresenterFactory());
     }

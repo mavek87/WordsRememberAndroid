@@ -38,7 +38,7 @@ public class QuizGameFindTranslationForVocableModel {
     private final DictionaryDAO dao;
     private int numberOfQuizzes;
 
-    private final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
+    private Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
 
     private int numberOfPositionsExtrated = 0;
 
@@ -61,6 +61,11 @@ public class QuizGameFindTranslationForVocableModel {
         }
 
         adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
+    }
+
+    public void reset() {
+        randomlyExtractedPositionsForQuiz.clear();
+        numberOfPositionsExtrated = 0;
     }
 
     public void registerToEventBus() {
@@ -146,6 +151,4 @@ public class QuizGameFindTranslationForVocableModel {
 
         EVENT_BUS.post(new EventQuizGenerated(new Quiz(question, answers)));
     }
-
-
 }
