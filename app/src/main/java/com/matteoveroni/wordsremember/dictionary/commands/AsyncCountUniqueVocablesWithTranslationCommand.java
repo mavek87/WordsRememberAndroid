@@ -26,7 +26,7 @@ public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQueryCo
         super(
                 contentResolver,
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
-                new String[]{"DISTINCT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID},
+                new String[]{"DISTINCT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID},
                 selection,
                 selectionArgs,
                 orderBy,
