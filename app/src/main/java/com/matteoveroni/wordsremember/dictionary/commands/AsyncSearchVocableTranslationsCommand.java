@@ -40,11 +40,12 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQueryCommand {
     @Override
     public void dispatchCompletionEvent() {
         List<Word> foundTranslations = DictionaryDAO.cursorToListOfTranslations(queryCompleteCursor);
+        queryCompleteCursor.close();
+
         EventAsyncSearchVocableTranslationsCompleted event = new EventAsyncSearchVocableTranslationsCompleted(
                 vocable,
                 foundTranslations
         );
-        queryCompleteCursor.close();
         EventBus.getDefault().postSticky(event);
     }
 }

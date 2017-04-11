@@ -25,7 +25,7 @@ public class AsyncSearchVocableWithTranslationByOffsetCommand extends AsyncQuery
         super(
                 contentResolver,
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
-                VocablesTranslationsContract.Schema.ALL_COLUMNS,
+                new String[]{"DISTINCT " + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID},
                 null,
                 null,
                 VocablesTranslationsContract.Schema.TABLE_DOT_COL_ID + " LIMIT 1 OFFSET " + offsetValue,
