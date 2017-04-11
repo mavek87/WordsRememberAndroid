@@ -15,6 +15,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreUniqueRandomIntegerGenerable;
+import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 import org.greenrobot.eventbus.EventBus;
@@ -95,7 +96,8 @@ public class QuizGameFindTranslationForVocableModel {
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
-    public void startQuizGeneration() throws NoMoreQuizzesException {
+    public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
+        if (numberOfQuizzes <= 0) throw new ZeroQuizzesException();
         try {
             int uniqueRandomVocablePosition = generateUniqueRandomVocablePosition();
             dao.asyncSearchVocableWithTranslationByOffsetCommand(uniqueRandomVocablePosition);
@@ -107,21 +109,21 @@ public class QuizGameFindTranslationForVocableModel {
     private int generateUniqueRandomVocablePosition() throws NoMoreUniqueRandomIntegerGenerable {
         IntRange positionsRange = new IntRange(0, numberOfQuizzes - 1);
 
-        if ((positionsRange.getDimension() - numberOfPositionsExtrated) <= 0) {
+        if ((positionsRange.getDimension() - numberOfPositionsExtrated) < 0) {
             throw new NoMoreUniqueRandomIntegerGenerable();
         }
 
-        int randomPosition;
+        int randPosition;
         int initialSetSize = randomlyExtractedPositionsForQuiz.size();
 
         do {
-            randomPosition = Int.getRandomInteger(positionsRange);
-            randomlyExtractedPositionsForQuiz.add(randomPosition);
+            randPosition = Int.getRandomInteger(positionsRange);
+            randomlyExtractedPositionsForQuiz.add(randPosition);
         } while (randomlyExtractedPositionsForQuiz.size() == initialSetSize);
 
         numberOfPositionsExtrated++;
 
-        return randomPosition;
+        return randPosition;
     }
 
 

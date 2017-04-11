@@ -4,6 +4,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
+import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.GameDifficulty;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
@@ -57,7 +58,15 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
             model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
             endGame();
+        } catch (ZeroQuizzesException ex) {
+            view.showMessage("Insert some vocable with translations to play a new game");
         }
+    }
+
+    @Subscribe
+    public void onEvent(EventQuizGenerated event) {
+        currentQuiz = event.getQuiz();
+        view.setPojoUsed(currentQuiz);
     }
 
     public void onQuizEndGame() {
@@ -66,12 +75,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private void endGame() {
         view.returnToPreviousView();
-    }
-
-    @Subscribe
-    public void onEvent(EventQuizGenerated event) {
-        currentQuiz = event.getQuiz();
-        view.setPojoUsed(currentQuiz);
     }
 
     public void onQuizResponseFromView(String givenAnswer) {
