@@ -17,7 +17,10 @@ allprojects {
     repositories {
         jcenter()
         // Jitpack.io - get libraries from github repositories
-        maven { url 'https://jitpack.io' }
+        maven {
+            name "jitpack"
+            url "https://jitpack.io"
+        }
     }
 }
 
