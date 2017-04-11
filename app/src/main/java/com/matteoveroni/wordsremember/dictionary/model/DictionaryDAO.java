@@ -10,7 +10,7 @@ import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountUniqueVocablesWithTranslationCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableTranslationsCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableWithTranslationByOffsetCommand;
+import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchDistinctVocableWithTranslationByOffsetCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByIdCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
@@ -144,7 +144,7 @@ public class DictionaryDAO {
     public void asyncSearchVocableWithTranslationByOffsetCommand(int offset) throws IllegalArgumentException {
         if (offset < 0) throw new IllegalArgumentException("Negative offset");
 
-        new AsyncSearchVocableWithTranslationByOffsetCommand(contentResolver, String.valueOf(offset)).execute();
+        new AsyncSearchDistinctVocableWithTranslationByOffsetCommand(contentResolver, String.valueOf(offset)).execute();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

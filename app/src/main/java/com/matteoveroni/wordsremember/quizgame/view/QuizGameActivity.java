@@ -108,7 +108,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         resultDialog.show();
     }
 
-
     @OnClick(R.id.quiz_game_accept_answer_button)
     public void onButtonAcceptAnswerAction() {
         final String givenAnswer = txt_answer.getText().toString();
@@ -128,9 +127,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     public void setPojoUsed(Quiz pojo) {
         final String question = pojo.getQuestion();
         final List<String> rightAnswers = pojo.getRightAnswers();
+        Toast.makeText(this, question, Toast.LENGTH_SHORT).show();
         lbl_question.setText(question);
         currentQuiz = new Quiz(question, rightAnswers);
-        showViewFields(true);
+//        showViewFields(true);
     }
 
     @Override
@@ -140,22 +140,22 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void reset() {
-        lbl_question.setText("");
+//        lbl_question.setText("");
         txt_answer.setText("");
-        showViewFields(false);
+//        showViewFields(false);
     }
 
-    private void showViewFields(boolean areViewFieldsVisible) {
-        int visibility;
-        if (areViewFieldsVisible) {
-            visibility = View.VISIBLE;
-        } else {
-            visibility = View.INVISIBLE;
-        }
-        lbl_question.setVisibility(visibility);
-        txt_answer.setVisibility(visibility);
-        btn_acceptAnswer.setVisibility(visibility);
-    }
+//    private void showViewFields(boolean areViewFieldsVisible) {
+//        int visibility;
+//        if (areViewFieldsVisible) {
+//            visibility = View.VISIBLE;
+//        } else {
+//            visibility = View.INVISIBLE;
+//        }
+//        lbl_question.setVisibility(visibility);
+//        txt_answer.setVisibility(visibility);
+//        btn_acceptAnswer.setVisibility(visibility);
+//    }
 
     @Override
     public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {

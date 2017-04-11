@@ -6,11 +6,11 @@ import com.matteoveroni.wordsremember.dictionary.pojos.Word;
  * @author Matteo Veroni
  */
 
-public class EventAsyncSearchVocableWithTranslationByOffsetCompleted {
+public class EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted {
 
     private final long vocableId;
 
-    public EventAsyncSearchVocableWithTranslationByOffsetCompleted(long vocableId) {
+    public EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted(long vocableId) {
         this.vocableId = vocableId;
     }
 

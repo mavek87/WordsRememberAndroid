@@ -8,7 +8,7 @@ import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchVocableWithTranslationByOffsetCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
@@ -92,7 +92,6 @@ public class QuizGameFindTranslationForVocableModel {
             numberOfQuizzes = maxNumberOfQuizzesCreatable;
         }
         Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
-
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
@@ -128,7 +127,7 @@ public class QuizGameFindTranslationForVocableModel {
 
 
     @Subscribe
-    public void onEvent(EventAsyncSearchVocableWithTranslationByOffsetCompleted event) {
+    public void onEvent(EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event) {
         long vocableId = event.getVocableWithTranslationFound();
         dao.asyncSearchVocableById(vocableId);
     }
@@ -145,12 +144,16 @@ public class QuizGameFindTranslationForVocableModel {
         String question = "What is the translation for the word: " + vocable.getName();
 
         List<Word> translations = event.getTranslations();
-        List<String> answers = new ArrayList<>();
+        List<String> answers = populateRightAnswers(translations);
 
+        EVENT_BUS.post(new EventQuizGenerated(new Quiz(question, answers)));
+    }
+
+    private List<String> populateRightAnswers(List<Word> translations) {
+        List<String> answers = new ArrayList<>();
         for (Word translation : translations) {
             answers.add(translation.getName());
         }
-
-        EVENT_BUS.post(new EventQuizGenerated(new Quiz(question, answers)));
+        return answers;
     }
 }
