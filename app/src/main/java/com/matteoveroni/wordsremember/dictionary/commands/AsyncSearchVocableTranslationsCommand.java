@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
-import android.util.Log;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
@@ -17,7 +16,7 @@ import java.util.List;
  * Created by Matteo Veroni
  */
 
-public class AsyncSearchVocableTranslationsCommand extends AsyncQueryCommand {
+public class AsyncSearchVocableTranslationsCommand extends AsyncQuerySearchCommand {
 
     private final Word vocable;
 
@@ -49,7 +48,7 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQueryCommand {
                 VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
                 TranslationsContract.Schema.ALL_COLUMNS,
                 null,
-                new String[]{},
+                null,
                 orderBy + " LEFT JOIN " + TranslationsContract.Schema.TABLE_NAME +
                         " ON (" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=" + TranslationsContract.Schema.TABLE_DOT_COL_ID + ")" +
                         "WHERE (" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "= "+ "" + vocable.getId() +")",
@@ -66,7 +65,6 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQueryCommand {
     @Override
     public void dispatchCompletionEvent() {
         List<Word> foundTranslations = DictionaryDAO.cursorToListOfTranslations(queryCompleteCursor);
-        queryCompleteCursor.close();
 
         EventAsyncSearchVocableTranslationsCompleted event = new EventAsyncSearchVocableTranslationsCompleted(
                 vocable,

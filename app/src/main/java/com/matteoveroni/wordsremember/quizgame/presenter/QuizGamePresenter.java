@@ -5,8 +5,9 @@ import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.model.GameDifficulty;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
@@ -23,13 +24,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
+    private QuizGameSessionSettings settings = new QuizGameSessionSettings();
+
+    private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
 
-    private Quiz currentQuiz;
-
     public QuizGamePresenter(DictionaryDAO dao) {
-        this.model = new QuizGameFindTranslationForVocableModel(GameDifficulty.EASY, dao);
+        this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
     }
 
     @Override
@@ -65,8 +67,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     @Subscribe
     public void onEvent(EventQuizGenerated event) {
-        currentQuiz = event.getQuiz();
-        view.setPojoUsed(currentQuiz);
+        quiz = event.getQuiz();
+        view.setPojoUsed(quiz);
     }
 
     public void onQuizEndGame() {
@@ -91,7 +93,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private boolean isAnswerCorrect(String answer) {
-        for (String rightAnswer : currentQuiz.getRightAnswers()) {
+        for (String rightAnswer : quiz.getRightAnswers()) {
             if (answer.equalsIgnoreCase(rightAnswer)) {
                 return true;
             }

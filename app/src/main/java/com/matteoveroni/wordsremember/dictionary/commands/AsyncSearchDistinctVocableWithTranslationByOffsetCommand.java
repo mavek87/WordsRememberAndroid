@@ -13,7 +13,7 @@ import org.greenrobot.eventbus.EventBus;
  * Created by Matteo Veroni
  */
 
-public class AsyncSearchDistinctVocableWithTranslationByOffsetCommand extends AsyncQueryCommand {
+public class AsyncSearchDistinctVocableWithTranslationByOffsetCommand extends AsyncQuerySearchCommand {
 
     public AsyncSearchDistinctVocableWithTranslationByOffsetCommand(ContentResolver contentResolver, String offsetValue) {
         this(contentResolver, offsetValue, new AsyncNoOperationCommand(contentResolver));

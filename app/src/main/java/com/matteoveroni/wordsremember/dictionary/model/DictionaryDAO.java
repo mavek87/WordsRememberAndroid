@@ -151,7 +151,7 @@ public class DictionaryDAO {
     // Async methods - VOCABLES_TRANSLATIONS
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void countUniqueVocablesWithTranslation() {
+    public void countDistinctVocablesWithTranslations() {
         new AsyncCountUniqueVocablesWithTranslationCommand(contentResolver).execute();
     }
 

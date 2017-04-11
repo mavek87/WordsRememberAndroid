@@ -7,14 +7,14 @@ import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreUniqueRandomIntegerGenerable;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreUniqueRandomVocableGenerable;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
@@ -35,7 +35,7 @@ public class QuizGameFindTranslationForVocableModel {
     public static final String TAG = TagGenerator.tag(QuizGameFindTranslationForVocableModel.class);
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private final GameDifficulty difficulty;
+    private final QuizGameSessionSettings settings;
     private final DictionaryDAO dao;
     private int numberOfQuizzes;
 
@@ -43,23 +43,11 @@ public class QuizGameFindTranslationForVocableModel {
 
     private int numberOfPositionsExtrated = 0;
 
-    public QuizGameFindTranslationForVocableModel(GameDifficulty gameDifficulty, DictionaryDAO dao) {
-        this.difficulty = gameDifficulty;
+    public QuizGameFindTranslationForVocableModel(QuizGameSessionSettings settings, DictionaryDAO dao) {
+        this.settings = settings;
         this.dao = dao;
 
         registerToEventBus();
-
-        switch (difficulty) {
-            case EASY:
-                numberOfQuizzes = 10;
-                break;
-            case MEDIUM:
-                numberOfQuizzes = 20;
-                break;
-            case HARD:
-                numberOfQuizzes = 30;
-                break;
-        }
 
         adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
     }
@@ -82,34 +70,34 @@ public class QuizGameFindTranslationForVocableModel {
     }
 
     private void adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable() {
-        dao.countUniqueVocablesWithTranslation();
+        dao.countDistinctVocablesWithTranslations();
     }
 
     @Subscribe
-    public void onEvent(EventCountUniqueVocablesWithTranslationsCompleted event) {
+    public void onEvent(EventCountDistinctVocablesWithTranslationsCompleted event) {
         int maxNumberOfQuizzesCreatable = event.getNumberOfUniqueVocablesWithTranslation();
-        if (numberOfQuizzes > maxNumberOfQuizzesCreatable) {
-            numberOfQuizzes = maxNumberOfQuizzesCreatable;
+        if (settings.getNumberOfQuestions() > maxNumberOfQuizzesCreatable) {
+            settings.setNumberOfQuestions(maxNumberOfQuizzesCreatable);
         }
-        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuizzes);
+        Log.d(TAG, "Max number of quizzes creatable are: " + settings.getNumberOfQuestions() );
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
     public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
         if (numberOfQuizzes <= 0) throw new ZeroQuizzesException();
         try {
-            int uniqueRandomVocablePosition = generateUniqueRandomVocablePosition();
-            dao.asyncSearchVocableWithTranslationByOffsetCommand(uniqueRandomVocablePosition);
-        } catch (NoMoreUniqueRandomIntegerGenerable ex) {
+            int position = generateUniqueRandomVocablePosition();
+            dao.asyncSearchVocableWithTranslationByOffsetCommand(position);
+        } catch (NoMoreUniqueRandomVocableGenerable ex) {
             throw new NoMoreQuizzesException();
         }
     }
 
-    private int generateUniqueRandomVocablePosition() throws NoMoreUniqueRandomIntegerGenerable {
-        IntRange positionsRange = new IntRange(0, numberOfQuizzes - 1);
+    private int generateUniqueRandomVocablePosition() throws NoMoreUniqueRandomVocableGenerable {
+        IntRange positionsRange = new IntRange(0, settings.getNumberOfQuestions() - 1);
 
         if ((positionsRange.getDimension() - numberOfPositionsExtrated) < 0) {
-            throw new NoMoreUniqueRandomIntegerGenerable();
+            throw new NoMoreUniqueRandomVocableGenerable();
         }
 
         int randPosition;

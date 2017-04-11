@@ -4,11 +4,11 @@ package com.matteoveroni.wordsremember.dictionary.events.vocable;
  * Created by Matteo Veroni
  */
 
-public class EventCountUniqueVocablesWithTranslationsCompleted {
+public class EventCountDistinctVocablesWithTranslationsCompleted {
 
     private final int numberOfCountResults;
 
-    public EventCountUniqueVocablesWithTranslationsCompleted(int numberOfCountResults) {
+    public EventCountDistinctVocablesWithTranslationsCompleted(int numberOfCountResults) {
         this.numberOfCountResults = numberOfCountResults;
     }
 

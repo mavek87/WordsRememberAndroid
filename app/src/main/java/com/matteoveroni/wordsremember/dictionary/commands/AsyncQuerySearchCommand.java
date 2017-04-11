@@ -8,7 +8,7 @@ import android.net.Uri;
  * @author Matteo Veroni
  */
 
-public abstract class AsyncQueryCommand extends AsyncCommand {
+public abstract class AsyncQuerySearchCommand extends AsyncCommand {
 
     protected final Uri commandTargetUri;
     private final String[] projection;
@@ -19,11 +19,11 @@ public abstract class AsyncQueryCommand extends AsyncCommand {
 
     protected Cursor queryCompleteCursor;
 
-    public AsyncQueryCommand(ContentResolver contentResolver, Uri commandTargetUri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
+    public AsyncQuerySearchCommand(ContentResolver contentResolver, Uri commandTargetUri, String[] projection, String selection, String[] selectionArgs, String orderBy) {
         this(contentResolver, commandTargetUri, projection, selection, selectionArgs, orderBy, new AsyncNoOperationCommand(contentResolver));
     }
 
-    public AsyncQueryCommand(
+    public AsyncQuerySearchCommand(
             ContentResolver contentResolver,
             Uri commandTargetUri,
             String projection[],

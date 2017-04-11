@@ -9,13 +9,11 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.List;
-
 /**
  * Created by Matteo Veroni
  */
 
-public class AsyncSearchVocablesByIdCommand extends AsyncQueryCommand {
+public class AsyncSearchVocablesByIdCommand extends AsyncQuerySearchCommand {
 
     public AsyncSearchVocablesByIdCommand(ContentResolver contentResolver, long vocableId, String orderBy) {
         this(contentResolver, vocableId, orderBy, new AsyncNoOperationCommand(contentResolver));

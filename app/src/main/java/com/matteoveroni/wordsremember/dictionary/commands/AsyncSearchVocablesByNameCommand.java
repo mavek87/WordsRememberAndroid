@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Matteo Veroni
  */
 
-public class AsyncSearchVocablesByNameCommand extends AsyncQueryCommand {
+public class AsyncSearchVocablesByNameCommand extends AsyncQuerySearchCommand {
 
     public AsyncSearchVocablesByNameCommand(ContentResolver contentResolver, String vocableName, String orderBy) {
         this(contentResolver, vocableName, orderBy, new AsyncNoOperationCommand(contentResolver));

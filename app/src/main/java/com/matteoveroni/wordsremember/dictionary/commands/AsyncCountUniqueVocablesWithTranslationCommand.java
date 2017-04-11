@@ -1,22 +1,17 @@
 package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
-import android.database.DatabaseUtils;
-import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountUniqueVocablesWithTranslationsCompleted;
-import com.matteoveroni.wordsremember.provider.DatabaseManager;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
-
-import javax.xml.transform.URIResolver;
 
 /**
  * @author Matteo Veroni
  */
 
-public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQueryCommand {
+public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQuerySearchCommand {
 
     public AsyncCountUniqueVocablesWithTranslationCommand(ContentResolver contentResolver) {
         this(contentResolver, null, null, null, new AsyncNoOperationCommand(contentResolver));
@@ -38,7 +33,7 @@ public class AsyncCountUniqueVocablesWithTranslationCommand extends AsyncQueryCo
     public void dispatchCompletionEvent() {
         queryCompleteCursor.moveToFirst();
         int numberOfCountResults = queryCompleteCursor.getCount();
-        EventBus.getDefault().postSticky(new EventCountUniqueVocablesWithTranslationsCompleted(numberOfCountResults));
+        EventBus.getDefault().postSticky(new EventCountDistinctVocablesWithTranslationsCompleted(numberOfCountResults));
         queryCompleteCursor.close();
     }
 }
