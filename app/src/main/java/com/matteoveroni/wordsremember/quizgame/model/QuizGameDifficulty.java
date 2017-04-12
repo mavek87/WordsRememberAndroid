@@ -18,5 +18,5 @@ public enum QuizGameDifficulty {
         return id;
     }
 
-    public final static int COMPLEXITY_MULTIPLIER = 1;
+    public final static int COMPLEXITY_MULTIPLIER = 10;
 }
