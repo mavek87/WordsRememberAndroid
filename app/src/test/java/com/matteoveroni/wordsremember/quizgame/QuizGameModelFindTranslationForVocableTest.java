@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame;
 
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
 
 import org.junit.Test;
 
@@ -9,9 +9,9 @@ import org.junit.Test;
  * @author Matteo Veroni
  */
 
-public class QuizGameFindTranslationForVocableModelTest {
+public class QuizGameModelFindTranslationForVocableTest {
 
-    private QuizGameFindTranslationForVocableModel model;
+    private QuizGameModelFindTranslationForVocable model;
 
     private static final int NEGATIVE_NUMBER_OF_QUIZZES = -1;
     private static final int NUMBER_OF_QUIZZES_IS_ZERO = 0;

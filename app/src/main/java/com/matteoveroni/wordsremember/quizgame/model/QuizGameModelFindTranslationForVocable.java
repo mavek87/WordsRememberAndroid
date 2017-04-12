@@ -30,19 +30,20 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGameFindTranslationForVocableModel {
+public class QuizGameModelFindTranslationForVocable {
 
-    public static final String TAG = TagGenerator.tag(QuizGameFindTranslationForVocableModel.class);
+    public static final String TAG = TagGenerator.tag(QuizGameModelFindTranslationForVocable.class);
+
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private final QuizGameSessionSettings settings;
     private final DictionaryDAO dao;
+    private final QuizGameSessionSettings settings;
+    private final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
 
-    private Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
+    private int numberOfVocablesWithTranslations = 0;
+    private int numberOfPositionsExtractedForQuiz = 0;
 
-    private int numberOfPositionsExtrated = 0;
-
-    public QuizGameFindTranslationForVocableModel(QuizGameSessionSettings settings, DictionaryDAO dao) {
+    public QuizGameModelFindTranslationForVocable(QuizGameSessionSettings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
 
@@ -53,7 +54,8 @@ public class QuizGameFindTranslationForVocableModel {
 
     public void reset() {
         randomlyExtractedPositionsForQuiz.clear();
-        numberOfPositionsExtrated = 0;
+        numberOfPositionsExtractedForQuiz = 0;
+        numberOfVocablesWithTranslations = 0;
     }
 
     public void registerToEventBus() {
@@ -74,29 +76,32 @@ public class QuizGameFindTranslationForVocableModel {
 
     @Subscribe
     public void onEvent(EventCountDistinctVocablesWithTranslationsCompleted event) {
-        int maxNumberOfQuizzesCreatable = event.getNumberOfUniqueVocablesWithTranslation();
-        if (settings.getNumberOfQuestions() > maxNumberOfQuizzesCreatable) {
-            settings.setNumberOfQuestions(maxNumberOfQuizzesCreatable);
+        numberOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
+
+        if (settings.getNumberOfQuestions() > numberOfVocablesWithTranslations) {
+            settings.setNumberOfQuestions(numberOfVocablesWithTranslations);
         }
-        Log.d(TAG, "Max number of quizzes creatable are: " + settings.getNumberOfQuestions() );
+
+        Log.d(TAG, "Max number of quizzes creatable are: " + settings.getNumberOfQuestions());
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
     public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
         if (settings.getNumberOfQuestions() <= 0) throw new ZeroQuizzesException();
         try {
-            int position = generateUniqueRandomVocablePosition();
-            dao.asyncSearchVocableWithTranslationByOffsetCommand(position);
-        } catch (NoMoreUniqueRandomVocableGenerable ex) {
+            int vocablePosition = extractUniqueRandomVocablePosition();
+            dao.asyncSearchVocableWithTranslationByOffsetCommand(vocablePosition);
+        } catch (NoMoreQuizzesException | NoMoreUniqueRandomVocableGenerable ex) {
             throw new NoMoreQuizzesException();
         }
     }
 
-    private int generateUniqueRandomVocablePosition() throws NoMoreUniqueRandomVocableGenerable {
-        IntRange positionsRange = new IntRange(0, settings.getNumberOfQuestions() - 1);
-
-        if ((positionsRange.getDimension() - numberOfPositionsExtrated) < 0) {
+    private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException, NoMoreUniqueRandomVocableGenerable {
+        IntRange positionsRange = new IntRange(0, numberOfVocablesWithTranslations - 1);
+        if ((positionsRange.getDimension() - numberOfPositionsExtractedForQuiz) < 0) {
             throw new NoMoreUniqueRandomVocableGenerable();
+        } else if (numberOfPositionsExtractedForQuiz >= settings.getNumberOfQuestions()) {
+            throw new NoMoreQuizzesException();
         }
 
         int randPosition;
@@ -107,8 +112,7 @@ public class QuizGameFindTranslationForVocableModel {
             randomlyExtractedPositionsForQuiz.add(randPosition);
         } while (randomlyExtractedPositionsForQuiz.size() == initialSetSize);
 
-        numberOfPositionsExtrated++;
-
+        numberOfPositionsExtractedForQuiz++;
         return randPosition;
     }
 

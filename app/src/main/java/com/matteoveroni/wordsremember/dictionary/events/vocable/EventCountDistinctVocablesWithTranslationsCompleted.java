@@ -12,7 +12,7 @@ public class EventCountDistinctVocablesWithTranslationsCompleted {
         this.numberOfCountResults = numberOfCountResults;
     }
 
-    public int getNumberOfUniqueVocablesWithTranslation() {
+    public int getNumberOfVocablesWithTranslation() {
         return numberOfCountResults;
     }
 }

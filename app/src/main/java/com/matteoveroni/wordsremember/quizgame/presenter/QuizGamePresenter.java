@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
@@ -26,12 +26,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private Quiz quiz;
     private QuizGameView view;
-    private final QuizGameFindTranslationForVocableModel model;
+    private final QuizGameModelFindTranslationForVocable model;
     private final QuizGameSessionSettings settings = new QuizGameSessionSettings();
 
     public QuizGamePresenter(DictionaryDAO dao) {
         this.settings.setDifficulty(QuizGameDifficulty.EASY);
-        this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
+        this.model = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
     @Override
