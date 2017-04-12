@@ -37,7 +37,6 @@ public class AsyncSearchVocablesByNameCommand extends AsyncQuerySearchCommand {
     public void dispatchCompletionEvent() {
         // Todo: remove list
         List<Word> maxOneVocableWithSameNameList = DictionaryDAO.cursorToListOfVocables(queryCompleteCursor);
-        queryCompleteCursor.close();
 
         EventAsyncSearchVocableCompleted event = new EventAsyncSearchVocableCompleted
                 (
@@ -46,5 +45,7 @@ public class AsyncSearchVocablesByNameCommand extends AsyncQuerySearchCommand {
                                 : null
                 );
         EventBus.getDefault().postSticky(event);
+
+        queryCompleteCursor.close();
     }
 }

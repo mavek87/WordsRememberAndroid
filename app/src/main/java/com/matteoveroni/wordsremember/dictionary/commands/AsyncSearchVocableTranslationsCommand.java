@@ -25,40 +25,15 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQuerySearchComma
     }
 
     public AsyncSearchVocableTranslationsCommand(ContentResolver contentResolver, Word vocable, String orderBy, Object nextCommand) {
-//        super(
-//                contentResolver,
-//                VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_URI,
-//                TranslationsContract.Schema.ALL_COLUMNS,
-//                TranslationsContract.Schema.TABLE_DOT_COL_ID + "=?",
-//                new String[]{"" + vocable.getId()},
-//                orderBy,
-//                nextCommand
-//        );
-        // CURRENT WRONG QUERY
-
-        //SELECT translations._id, translations.translation
-        // FROM translations LEFT JOIN vocables_translations
-        // ON (translations._id=vocables_translations.translation_id)
-        // WHERE (translations._id=?)
-
-        // CORRECT QUERY SHOULD BE
-
         super(
                 contentResolver,
-                VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI,
-                TranslationsContract.Schema.ALL_COLUMNS,
+                VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_URI,
                 null,
                 null,
-                orderBy + " LEFT JOIN " + TranslationsContract.Schema.TABLE_NAME +
-                        " ON (" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + "=" + TranslationsContract.Schema.TABLE_DOT_COL_ID + ")" +
-                        "WHERE (" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "= "+ "" + vocable.getId() +")",
+                new String[]{String.valueOf(vocable.getId())},
+                orderBy,
                 nextCommand
         );
-
-        // SELECT translations._id, translations.translation
-        // FROM vocables_translations LEFT JOIN translations
-        // ON (translations._id=vocables_translations.translation_id)
-        // WHERE (vocables_translations.vocable_id=13)
         this.vocable = vocable;
     }
 
@@ -71,5 +46,7 @@ public class AsyncSearchVocableTranslationsCommand extends AsyncQuerySearchComma
                 foundTranslations
         );
         EventBus.getDefault().postSticky(event);
+
+        queryCompleteCursor.close();
     }
 }

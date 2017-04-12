@@ -24,13 +24,13 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private QuizGameSessionSettings settings = new QuizGameSessionSettings();
-
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
+    private final QuizGameSessionSettings settings = new QuizGameSessionSettings();
 
     public QuizGamePresenter(DictionaryDAO dao) {
+        this.settings.setDifficulty(QuizGameDifficulty.EASY);
         this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
     }
 

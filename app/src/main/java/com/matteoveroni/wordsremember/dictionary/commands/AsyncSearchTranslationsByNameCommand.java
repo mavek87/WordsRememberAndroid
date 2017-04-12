@@ -36,7 +36,6 @@ public class AsyncSearchTranslationsByNameCommand extends AsyncQuerySearchComman
     @Override
     public void dispatchCompletionEvent() {
         List<Word> maxOneTranslationWithSameNameList = DictionaryDAO.cursorToListOfTranslations(queryCompleteCursor);
-        queryCompleteCursor.close();
 
         EventAsyncSearchTranslationByNameCompleted event = new EventAsyncSearchTranslationByNameCompleted(
                 maxOneTranslationWithSameNameList.size() == 1
@@ -44,5 +43,7 @@ public class AsyncSearchTranslationsByNameCommand extends AsyncQuerySearchComman
                         : null
         );
         EventBus.getDefault().postSticky(event);
+
+        queryCompleteCursor.close();
     }
 }

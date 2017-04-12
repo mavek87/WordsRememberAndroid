@@ -39,9 +39,9 @@ public class AsyncSearchDistinctVocableWithTranslationByOffsetCommand extends As
         Log.i(TagGenerator.tag(AsyncSearchDistinctVocableWithTranslationByOffsetCommand.class), str_id);
         long idOfVocableWithTranslationByOffset = Long.valueOf(str_id);
 
-        queryCompleteCursor.close();
-
         EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event = new EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted(idOfVocableWithTranslationByOffset);
         EventBus.getDefault().post(event);
+
+        queryCompleteCursor.close();
     }
 }

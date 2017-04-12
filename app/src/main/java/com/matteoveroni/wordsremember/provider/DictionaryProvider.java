@@ -34,8 +34,8 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
     private static final int TRANSLATIONS = 3;
     private static final int TRANSLATION_ID = 4;
     private static final int VOCABLES_TRANSLATIONS = 5;
-    private static final int TRANSLATIONS_FOR_VOCABLES = 6;
-    private static final int NOT_TRANSLATIONS_FOR_VOCABLE_ID = 7;
+    private static final int TRANSLATIONS_FOR_VOCABLE = 6;
+    private static final int NOT_TRANSLATIONS_FOR_VOCABLE = 7;
 
     static {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesContract.NAME, VOCABLES);
@@ -43,8 +43,8 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME, TRANSLATIONS);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, TranslationsContract.NAME + "/#", TRANSLATION_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.VOCABLES_TRANSLATIONS, VOCABLES_TRANSLATIONS);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_FOR_VOCABLES);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE + "/#", NOT_TRANSLATIONS_FOR_VOCABLE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_FOR_VOCABLE);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE + "/#", NOT_TRANSLATIONS_FOR_VOCABLE);
     }
 
     private static final class Errors {
@@ -64,9 +64,9 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 return TranslationsContract.CONTENT_ITEM_TYPE;
             case VOCABLES_TRANSLATIONS:
                 return VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_DIR_TYPE;
-            case TRANSLATIONS_FOR_VOCABLES:
+            case TRANSLATIONS_FOR_VOCABLE:
                 return VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_DIR_TYPE;
-            case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+            case NOT_TRANSLATIONS_FOR_VOCABLE:
                 return VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE;
             default:
                 return null;
@@ -104,8 +104,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
             case VOCABLES_TRANSLATIONS:
                 queryBuilder.setTables(VocablesTranslationsContract.Schema.TABLE_NAME);
                 break;
-            case TRANSLATIONS_FOR_VOCABLES:
-
+            case TRANSLATIONS_FOR_VOCABLE:
                 // SELECT translations._id, translations.translation
                 // FROM translations LEFT JOIN vocables_translations
                 // ON (translations._id=vocables_translations.translation_id)
@@ -118,14 +117,14 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                         + " ON (" + TranslationsContract.Schema.TABLE_DOT_COL_ID + "=" + VocablesTranslationsContract.Schema.TABLE_DOT_COL_TRANSLATION_ID + ")"
                 );
 
-                if (whereSelection == null || whereSelection.trim().isEmpty()) {
+                if (whereSelection == null || whereSelection.trim().isEmpty())
                     whereSelection = VocablesTranslationsContract.Schema.TABLE_DOT_COL_VOCABLE_ID + "=?";
-                }
-                if (whereArgs == null || whereArgs.length == 0) {
+
+                if (whereArgs == null || whereArgs.length == 0)
                     whereArgs = new String[]{uri.getLastPathSegment()};
-                }
+
                 break;
-            case NOT_TRANSLATIONS_FOR_VOCABLE_ID:
+            case NOT_TRANSLATIONS_FOR_VOCABLE:
 
                 //   SELECT translations._id AS _id, translations.translation AS translation FROM translations
                 //   WHERE NOT EXISTS (

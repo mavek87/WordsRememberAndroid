@@ -37,7 +37,6 @@ public class QuizGameFindTranslationForVocableModel {
 
     private final QuizGameSessionSettings settings;
     private final DictionaryDAO dao;
-    private int numberOfQuizzes;
 
     private Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
 
@@ -84,7 +83,7 @@ public class QuizGameFindTranslationForVocableModel {
     }
 
     public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
-        if (numberOfQuizzes <= 0) throw new ZeroQuizzesException();
+        if (settings.getNumberOfQuestions() <= 0) throw new ZeroQuizzesException();
         try {
             int position = generateUniqueRandomVocablePosition();
             dao.asyncSearchVocableWithTranslationByOffsetCommand(position);

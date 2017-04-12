@@ -39,8 +39,8 @@ public class AsyncSearchVocablesByIdCommand extends AsyncQuerySearchCommand {
                 ? null
                 : DictionaryDAO.cursorToVocable(queryCompleteCursor);
 
-        queryCompleteCursor.close();
-
         EventBus.getDefault().postSticky(new EventAsyncSearchVocableCompleted(vocable));
+
+        queryCompleteCursor.close();
     }
 }

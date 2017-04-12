@@ -10,12 +10,10 @@ public class QuizGameSessionSettings {
     private int numberOfQuestions;
 
     public QuizGameSessionSettings() {
-        this(QuizGameDifficulty.EASY);
     }
 
     public QuizGameSessionSettings(QuizGameDifficulty difficulty) {
-        this.difficulty = difficulty;
-        this.numberOfQuestions = this.difficulty.getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
+        setDifficulty(difficulty);
     }
 
     public QuizGameDifficulty getDifficulty() {
@@ -24,6 +22,7 @@ public class QuizGameSessionSettings {
 
     public void setDifficulty(QuizGameDifficulty difficulty) {
         this.difficulty = difficulty;
+        this.numberOfQuestions = this.difficulty.getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
     }
 
     public int getNumberOfQuestions() {
