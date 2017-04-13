@@ -5,9 +5,9 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventTransla
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
@@ -20,6 +20,7 @@ import org.mockito.junit.MockitoRule;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,7 +74,7 @@ public class AddTranslationPresenterTest {
     public void onEventTranslationSelected_View_showMessage_And_returnToPreviousView() {
         presenter.onEvent(new EventTranslationSelected(FAKE_TRANSLATION_SELECTED));
 
-        verify(view).showLocalizedMessage(anyString());
+        verify(view).showLocalizedMessage(anyString(), anyObject());
         verify(view).returnToPreviousView();
     }
 
