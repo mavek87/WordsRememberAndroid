@@ -14,7 +14,6 @@ import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreUniqueRandomVocableGenerable;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
@@ -89,18 +88,16 @@ public class QuizGameModelFindTranslationForVocable {
         try {
             int vocablePosition = extractUniqueRandomVocablePosition();
             dao.asyncSearchVocableWithTranslationByOffsetCommand(vocablePosition);
-        } catch (NoMoreQuizzesException | NoMoreUniqueRandomVocableGenerable ex) {
+        } catch (NoMoreQuizzesException ex) {
             throw new NoMoreQuizzesException();
         }
     }
 
-    private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException, NoMoreUniqueRandomVocableGenerable {
+    private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
         int initialNumberOfPositionsExtractedForQuiz = randomlyExtractedPositionsForQuiz.size();
 
         IntRange positionsRange = new IntRange(0, numberOfVocablesWithTranslations - 1);
-        if ((positionsRange.getDimension() - initialNumberOfPositionsExtractedForQuiz) < 0) {
-            throw new NoMoreUniqueRandomVocableGenerable();
-        } else if (initialNumberOfPositionsExtractedForQuiz >= settings.getNumberOfQuestions()) {
+        if (initialNumberOfPositionsExtractedForQuiz >= settings.getNumberOfQuestions()) {
             throw new NoMoreQuizzesException();
         }
 
@@ -109,7 +106,8 @@ public class QuizGameModelFindTranslationForVocable {
         do {
             randPosition = Int.getRandomInteger(positionsRange);
             randomlyExtractedPositionsForQuiz.add(randPosition);
-        } while (randomlyExtractedPositionsForQuiz.size() == initialNumberOfPositionsExtractedForQuiz);
+        }
+        while (randomlyExtractedPositionsForQuiz.size() == initialNumberOfPositionsExtractedForQuiz);
 
         return randPosition;
     }
