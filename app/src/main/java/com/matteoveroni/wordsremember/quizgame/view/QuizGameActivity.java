@@ -52,7 +52,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     private Quiz currentQuiz;
     private AlertDialog resultDialog;
     private AlertDialog.Builder alertDialogBuilder;
-    ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

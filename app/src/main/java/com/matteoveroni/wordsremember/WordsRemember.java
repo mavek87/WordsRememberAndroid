@@ -39,7 +39,6 @@ public class WordsRemember extends Application {
 
     public static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
 
-    public static LocaleTranslator LOCALE_TRANSLATOR;
     private static DAOComponent DAO_COMPONENT;
 
     @Override
@@ -47,7 +46,6 @@ public class WordsRemember extends Application {
         super.onCreate();
         printAppSpecs();
         buildDAOComponent();
-        initLocaleTranslator();
         if (START_WITH_EMPTY_DB) {
             DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
         }
@@ -57,8 +55,21 @@ public class WordsRemember extends Application {
         }
     }
 
+    private void buildDAOComponent() {
+        // build DAOcomponent using Dagger 2
+        DAO_COMPONENT = DaggerDAOComponent
+                .builder()
+                .appModule(new AppModule(this))
+                .daoModule(new DaoModule())
+                .build();
+    }
+
     public static DAOComponent getDAOComponent() {
         return DAO_COMPONENT;
+    }
+
+    public static LocaleTranslator getLocaleTranslator(Context context) {
+        return new LocaleTranslator(context);
     }
 
     public static WordsRemember getInjectorsForApp(Context context) {
@@ -74,18 +85,6 @@ public class WordsRemember extends Application {
         Log.i(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
     }
 
-    private void buildDAOComponent() {
-        // build Dagger2 DAOcomponent
-        DAO_COMPONENT = DaggerDAOComponent
-                .builder()
-                .appModule(new AppModule(this))
-                .daoModule(new DaoModule())
-                .build();
-    }
-
-    private void initLocaleTranslator() {
-        LOCALE_TRANSLATOR = new LocaleTranslator(getApplicationContext());
-    }
 
     private void populateDatabaseForTestPurposes(Context context) {
         final int NUMBER_OF_VOCABLES_TO_CREATE = 1;

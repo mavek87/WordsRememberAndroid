@@ -3,15 +3,16 @@ package com.matteoveroni.wordsremember.interfaces.view;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.interfaces.view.View;
-
-import static com.matteoveroni.wordsremember.WordsRemember.LOCALE_TRANSLATOR;
+import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 /**
  * @author Matteo Veroni
  */
 
 public abstract class ActivityView extends AppCompatActivity implements View {
+
+    protected LocaleTranslator translator;
 
     @Override
     public void showMessage(String message) {
@@ -28,7 +29,10 @@ public abstract class ActivityView extends AppCompatActivity implements View {
     }
 
     private String localizeMessage(String localizableMessage) {
-        return LOCALE_TRANSLATOR.localize(localizableMessage);
+        if (translator == null)
+            translator = WordsRemember.getLocaleTranslator(getApplicationContext());
+
+        return translator.localize(localizableMessage);
     }
 
     @Override
