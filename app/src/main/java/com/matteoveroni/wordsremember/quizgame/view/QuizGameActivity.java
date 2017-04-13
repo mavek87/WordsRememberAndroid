@@ -50,6 +50,9 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     Button btn_acceptAnswer;
 
     private Quiz currentQuiz;
+    private AlertDialog resultDialog;
+    private AlertDialog.Builder alertDialogBuilder;
+    ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,8 +84,30 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         super.onStop();
     }
 
+    @OnClick(R.id.quiz_game_accept_answer_button)
+    public void onButtonAcceptAnswerAction() {
+        final String givenAnswer = txt_answer.getText().toString();
+        if (givenAnswer.trim().isEmpty()) {
+            Toast.makeText(this, "No answer given! Insert an answer to continue", Toast.LENGTH_SHORT).show();
+        } else {
+            presenter.onQuizResponseFromView(givenAnswer);
+        }
+    }
+
     @Override
-    public void showQuizResult(QuizResult result) {
+    public Quiz getPojoUsed() {
+        return currentQuiz;
+    }
+
+    @Override
+    public void setPojoUsed(Quiz quiz) {
+        currentQuiz = quiz;
+        lbl_question.setText(currentQuiz.getQuestion());
+        showAllViewFields(true);
+    }
+
+    @Override
+    public void showQuizResultDialog(QuizResult result) {
         String resultMessage;
         switch (result) {
             case RIGHT:
@@ -95,7 +120,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 throw new RuntimeException("Unknown quiz result");
         }
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle("Quiz Result")
                 .setMessage(resultMessage)
@@ -104,33 +129,23 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                         presenter.onQuizContinueGameFromView();
                     }
                 });
-        AlertDialog resultDialog = alertDialogBuilder.create();
+        resultDialog = alertDialogBuilder.create();
         resultDialog.show();
     }
 
-    @OnClick(R.id.quiz_game_accept_answer_button)
-    public void onButtonAcceptAnswerAction() {
-        final String givenAnswer = txt_answer.getText().toString();
-        if (givenAnswer.trim().isEmpty()) {
-            Toast.makeText(this, "Empty answer. Insert an answer and continue.", Toast.LENGTH_SHORT).show();
-        } else {
-            presenter.onQuizResponseFromView(givenAnswer);
-        }
-    }
-
     @Override
-    public Quiz getPojoUsed() {
-        return currentQuiz;
-    }
-
-    @Override
-    public void setPojoUsed(Quiz pojo) {
-        final String question = pojo.getQuestion();
-        final List<String> rightAnswers = pojo.getRightAnswers();
-        Toast.makeText(this, question, Toast.LENGTH_SHORT).show();
-        lbl_question.setText(question);
-        currentQuiz = new Quiz(question, rightAnswers);
-//        showViewFields(true);
+    public void showErrorDialog(String msgErrorTitle, String msgErrorText) {
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle(msgErrorTitle)
+                .setMessage(msgErrorText)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.onQuizEndGame();
+                    }
+                });
+        resultDialog = alertDialogBuilder.create();
+        resultDialog.show();
     }
 
     @Override
@@ -140,22 +155,22 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void reset() {
-//        lbl_question.setText("");
+        lbl_question.setText("");
         txt_answer.setText("");
-//        showViewFields(false);
+        showAllViewFields(false);
     }
 
-//    private void showViewFields(boolean areViewFieldsVisible) {
-//        int visibility;
-//        if (areViewFieldsVisible) {
-//            visibility = View.VISIBLE;
-//        } else {
-//            visibility = View.INVISIBLE;
-//        }
-//        lbl_question.setVisibility(visibility);
-//        txt_answer.setVisibility(visibility);
-//        btn_acceptAnswer.setVisibility(visibility);
-//    }
+    private void showAllViewFields(boolean areViewFieldsVisible) {
+        int visibility;
+        if (areViewFieldsVisible) {
+            visibility = View.VISIBLE;
+        } else {
+            visibility = View.INVISIBLE;
+        }
+        lbl_question.setVisibility(visibility);
+        txt_answer.setVisibility(visibility);
+        btn_acceptAnswer.setVisibility(visibility);
+    }
 
     @Override
     public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {

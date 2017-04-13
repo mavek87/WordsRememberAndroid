@@ -116,7 +116,6 @@ public class QuizGameModelFindTranslationForVocable {
         return randPosition;
     }
 
-
     @Subscribe
     public void onEvent(EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event) {
         long vocableId = event.getVocableWithTranslationFound();

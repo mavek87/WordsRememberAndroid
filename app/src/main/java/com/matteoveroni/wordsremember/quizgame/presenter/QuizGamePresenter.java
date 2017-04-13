@@ -61,7 +61,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         } catch (NoMoreQuizzesException ex) {
             endGame();
         } catch (ZeroQuizzesException ex) {
-            view.showMessage("Insert some vocable with translations to play a new game");
+            view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
         }
     }
 
@@ -82,9 +82,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public void onQuizResponseFromView(String givenAnswer) {
         if (isAnswerCorrect(givenAnswer)) {
             // increment points
-            view.showQuizResult(QuizResult.RIGHT);
+            view.showQuizResultDialog(QuizResult.RIGHT);
         } else {
-            view.showQuizResult(QuizResult.WRONG);
+            view.showQuizResultDialog(QuizResult.WRONG);
         }
     }
 

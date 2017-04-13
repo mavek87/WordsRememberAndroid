@@ -11,7 +11,9 @@ import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 
 public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
-    void showQuizResult(QuizResult result);
+    void showErrorDialog(String msgErrorTitle, String msgErrorText);
+
+    void showQuizResultDialog(QuizResult result);
 
     void onButtonAcceptAnswerAction();
 
