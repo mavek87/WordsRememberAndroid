@@ -1,14 +1,17 @@
 package com.matteoveroni.wordsremember.quizgame;
 
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenterTest;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
 
+import org.greenrobot.eventbus.EventBus;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +21,10 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.Dictionary;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -34,58 +40,51 @@ public class QuizGameModelFindTranslationForVocableTest {
     @Mock
     private DictionaryDAO dao;
 
-//    private QuizGamePresenter presenter;
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
+    private QuizGameModelFindTranslationForVocable model;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void test_AtTheBeginning_ifNumberOfQuestions_IsNegative_ThrowIllegalArgumentException() {
-//        model = new QuizGameFindTranslationForVocableModel(NEGATIVE_NUMBER_OF_QUIZZES);
+    @Before
+    public void setUp() {
+        model = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
     @Test
-    public void test_AtTheBeginning_getRemainingNumberOfQuestions_IsEqualTo_numberOfQuestions() {
-//        model = new QuizGameFindTranslationForVocableModel(POSITIVE_NUMBER_OF_QUIZZES);
-//        assertEquals(
-//                "remainingNumberOfQuestions should be equal to numberOfQuestions",
-//                POSITIVE_NUMBER_OF_QUIZZES, model.getRemainingNumberOfQuizzes()
-//        );
-    }
+    public void test_After_onEventCalculateNumberOfQuizzes_EventQuizModelInitialized() {
+        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
 
-    @Test(expected = NoMoreQuizzesException.class)
-    public void test_IfNoMoreQuestiongRemaining_getNextQuestionThrow_NoMoreQuestionsException() throws NoMoreQuizzesException {
-//        model = new QuizGameFindTranslationForVocableModel(NUMBER_OF_QUIZZES_IS_ZERO);
-//
-//        model.getNextQuiz();
+        model.onEventCalculateNumberOfQuizzes(
+                new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
+        );
+
+        EVENT_BUS.hasSubscriberForEvent(EventQuizModelInitialized.class);
     }
 
     @Test
-    public void test_IfOtherQuestionsRemains_getNextQuestionReturnsVocableTranslation() throws NoMoreQuizzesException {
-//        model = new QuizGameFindTranslationForVocableModel(POSITIVE_NUMBER_OF_QUIZZES);
-//
-//        assertNotNull(model.getNextQuiz());
+    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreMoreThanPossibleQuestions_ReduceThem() {
+        int NUMBER_OF_QUESTIONS_FROM_SETTINGS = 2;
+        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
+
+        when(settings.getNumberOfQuestions()).thenReturn(NUMBER_OF_QUESTIONS_FROM_SETTINGS);
+
+        model.onEventCalculateNumberOfQuizzes(
+                new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
+        );
+
+        verify(settings).setNumberOfQuestions(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
     }
 
     @Test
-    public void test_If_getNextQuestion_Called_getRemainingNumberOfQuestions_DecreaseByOne() throws NoMoreQuizzesException {
-//        model = new QuizGameFindTranslationForVocableModel(POSITIVE_NUMBER_OF_QUIZZES);
-//
-//        int initialRemainingNumberOfQuestions = model.getRemainingNumberOfQuizzes();
-//        model.getNextQuiz();
-//        assertEquals("after getting the next question, the number of remaining questions should decrease by one",
-//                (initialRemainingNumberOfQuestions - 1), model.getRemainingNumberOfQuizzes()
-//        );
-    }
+    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreLessThanPossibleQuestions_DontReduceThem() {
+        int NUMBER_OF_QUESTIONS_FROM_SETTINGS = 1;
+        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 2;
 
-//    private class DictionaryAddTranslationPresenterFactoryForTests implements PresenterFactory {
-//        private DictionaryDAO dao;
-//
-//        DictionaryAddTranslationPresenterFactoryForTests(DictionaryDAO dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        public QuizGamePresenter create() {
-//            return new QuizGamePresenter(dao);
-//        }
-//    }
+        when(settings.getNumberOfQuestions()).thenReturn(NUMBER_OF_QUESTIONS_FROM_SETTINGS);
+
+        model.onEventCalculateNumberOfQuizzes(
+                new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
+        );
+
+        verify(settings, never()).setNumberOfQuestions(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
+    }
 }
