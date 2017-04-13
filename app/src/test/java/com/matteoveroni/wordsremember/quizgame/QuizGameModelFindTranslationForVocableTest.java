@@ -1,9 +1,25 @@
 package com.matteoveroni.wordsremember.quizgame;
 
+import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenterTest;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
+import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
+import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import java.util.Dictionary;
+
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Matteo Veroni
@@ -11,11 +27,15 @@ import org.junit.Test;
 
 public class QuizGameModelFindTranslationForVocableTest {
 
-    private QuizGameModelFindTranslationForVocable model;
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock
+    private QuizGameSessionSettings settings;
+    @Mock
+    private DictionaryDAO dao;
 
-    private static final int NEGATIVE_NUMBER_OF_QUIZZES = -1;
-    private static final int NUMBER_OF_QUIZZES_IS_ZERO = 0;
-    private static final int POSITIVE_NUMBER_OF_QUIZZES = 10;
+//    private QuizGamePresenter presenter;
+
 
     @Test(expected = IllegalArgumentException.class)
     public void test_AtTheBeginning_ifNumberOfQuestions_IsNegative_ThrowIllegalArgumentException() {
@@ -55,4 +75,17 @@ public class QuizGameModelFindTranslationForVocableTest {
 //                (initialRemainingNumberOfQuestions - 1), model.getRemainingNumberOfQuizzes()
 //        );
     }
+
+//    private class DictionaryAddTranslationPresenterFactoryForTests implements PresenterFactory {
+//        private DictionaryDAO dao;
+//
+//        DictionaryAddTranslationPresenterFactoryForTests(DictionaryDAO dao) {
+//            this.dao = dao;
+//        }
+//
+//        @Override
+//        public QuizGamePresenter create() {
+//            return new QuizGamePresenter(dao);
+//        }
+//    }
 }

@@ -30,6 +30,9 @@ public class QuizGameSessionSettings {
     }
 
     public void setNumberOfQuestions(int number) {
+        if (number < 0)
+            throw new IllegalArgumentException("Number of questions cannot be negative");
+
         numberOfQuestions = number;
     }
 }
