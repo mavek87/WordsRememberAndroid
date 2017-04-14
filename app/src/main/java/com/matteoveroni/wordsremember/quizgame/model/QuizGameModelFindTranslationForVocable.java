@@ -38,8 +38,8 @@ public class QuizGameModelFindTranslationForVocable {
     private final DictionaryDAO dao;
     private final QuizGameSessionSettings settings;
 
-    private final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
-    private int numberOfVocablesWithTranslations = 0;
+    final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
+    int numberOfVocablesWithTranslations = 0;
 
     public QuizGameModelFindTranslationForVocable(QuizGameSessionSettings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -113,19 +113,19 @@ public class QuizGameModelFindTranslationForVocable {
     }
 
     @Subscribe
-    public void onEvent(EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event) {
+    public void onEventGetExtractedVocableId(EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event) {
         long vocableId = event.getVocableWithTranslationFound();
         dao.asyncSearchVocableById(vocableId);
     }
 
     @Subscribe
-    public void onEvent(EventAsyncSearchVocableCompleted event) {
+    public void onEventGetExtractedVocable(EventAsyncSearchVocableCompleted event) {
         Word vocable = event.getVocable();
         dao.asyncSearchVocableTranslations(vocable);
     }
 
     @Subscribe
-    public void onEvent(EventAsyncSearchVocableTranslationsCompleted event) {
+    public void onEventGetTranslationsForVocable(EventAsyncSearchVocableTranslationsCompleted event) {
         Word vocable = event.getVocable();
         String question = "What is the translation for the word: " + vocable.getName();
 
