@@ -1,18 +1,17 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember;
+
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 /**
  * Created by Matteo Veroni
  */
 
-public class QuizGameSessionSettings {
+public class Settings {
 
     private QuizGameDifficulty difficulty;
     private int numberOfQuestions;
 
-    public QuizGameSessionSettings() {
-    }
-
-    public QuizGameSessionSettings(QuizGameDifficulty difficulty) {
+    public Settings(QuizGameDifficulty difficulty) {
         setDifficulty(difficulty);
     }
 

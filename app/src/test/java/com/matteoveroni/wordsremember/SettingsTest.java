@@ -1,6 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame;
-
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
+package com.matteoveroni.wordsremember;
 
 import org.junit.Test;
 
@@ -10,9 +8,9 @@ import static org.junit.Assert.assertEquals;
  * @author Matteo Veroni
  */
 
-public class QuizGameSessionSettingsTest {
+public class SettingsTest {
 
-    private final QuizGameSessionSettings settings = new QuizGameSessionSettings();
+    private final Settings settings = new Settings();
 
     @Test
     public void test_setPositiveNumberOfQuestionShouldWorks() {

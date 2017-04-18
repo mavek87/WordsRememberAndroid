@@ -5,6 +5,7 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
+import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
@@ -36,12 +37,12 @@ public class QuizGameModelFindTranslationForVocable {
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
-    private final QuizGameSessionSettings settings;
+    private final Settings settings;
 
     final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
     int numberOfVocablesWithTranslations = 0;
 
-    public QuizGameModelFindTranslationForVocable(QuizGameSessionSettings settings, DictionaryDAO dao) {
+    public QuizGameModelFindTranslationForVocable(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
 

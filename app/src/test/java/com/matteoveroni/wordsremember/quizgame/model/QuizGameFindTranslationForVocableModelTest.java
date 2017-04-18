@@ -1,12 +1,11 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
-import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
+import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
@@ -15,13 +14,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
@@ -34,20 +29,18 @@ import static org.mockito.Mockito.when;
  * @author Matteo Veroni
  */
 
-public class QuizGameModelFindTranslationForVocableTest {
+public class QuizGameFindTranslationForVocableModelTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private QuizGameSessionSettings settings;
+    private Settings settings;
     @Mock
     private DictionaryDAO dao;
 
-    ArgumentCaptor<EventBus> ArgCaptorForEventBus = ArgumentCaptor.forClass(EventBus.class);
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private static final Word FAKE_VOCABLE_EXTRACTED = new Word(1, "FakeVocable");
-    private static final List<Word> FAKE_TRANSLATIONS_FOR_VOCABLE_EXTRACTED = new ArrayList<>();
 
     private QuizGameModelFindTranslationForVocable model;
 
@@ -114,13 +107,11 @@ public class QuizGameModelFindTranslationForVocableTest {
 
     @Test
     public void test_onEventGetExtractedVocableId_DAO_searchVocableById() {
-        long fakeVocableIdExtracted = 1;
-
         model.onEventGetExtractedVocableId(
-                new EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted(fakeVocableIdExtracted)
+                new EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted(FAKE_VOCABLE_EXTRACTED.getId())
         );
 
-        verify(dao).asyncSearchVocableById(fakeVocableIdExtracted);
+        verify(dao).asyncSearchVocableById(FAKE_VOCABLE_EXTRACTED.getId());
     }
 
     @Test

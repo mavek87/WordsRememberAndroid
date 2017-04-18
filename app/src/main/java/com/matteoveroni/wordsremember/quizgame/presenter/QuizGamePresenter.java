@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameSessionSettings;
+import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
@@ -27,7 +27,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameModelFindTranslationForVocable model;
-    private final QuizGameSessionSettings settings = new QuizGameSessionSettings();
+    private final Settings settings = new Settings();
 
     public QuizGamePresenter(DictionaryDAO dao) {
         this.settings.setDifficulty(QuizGameDifficulty.EASY);
