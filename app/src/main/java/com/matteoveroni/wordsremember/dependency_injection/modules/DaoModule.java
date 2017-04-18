@@ -19,7 +19,7 @@ public class DaoModule {
     }
 
     @Provides
-    public DictionaryDAO provideDictionaryDAO(Context context) {
+    public DictionaryDAO providesDictionaryDAO(Context context) {
         return new DictionaryDAO(context);
     }
 }

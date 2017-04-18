@@ -8,9 +8,10 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.myutils.MyUtilsVersion;
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dependency_injection.components.DAOComponent;
-import com.matteoveroni.wordsremember.dependency_injection.components.DaggerDAOComponent;
+import com.matteoveroni.wordsremember.dependency_injection.components.AppComponent;
+import com.matteoveroni.wordsremember.dependency_injection.components.DaggerAppComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
@@ -22,7 +23,7 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.1.16
+ * @version 0.1.17
  **/
 
 public class WordsRemember extends Application {
@@ -30,7 +31,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.1.16";
+    public static final String VERSION = "0.1.17";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
@@ -39,13 +40,13 @@ public class WordsRemember extends Application {
 
     public static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
 
-    private static DAOComponent DAO_COMPONENT;
+    private static AppComponent APP_COMPONENT;
 
     @Override
     public void onCreate() {
         super.onCreate();
         printAppSpecs();
-        buildDAOComponent();
+        buildAppComponent();
         if (START_WITH_EMPTY_DB) {
             DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
         }
@@ -55,17 +56,18 @@ public class WordsRemember extends Application {
         }
     }
 
-    private void buildDAOComponent() {
+    private void buildAppComponent() {
         // build DAOcomponent using Dagger 2
-        DAO_COMPONENT = DaggerDAOComponent
+        APP_COMPONENT = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))
                 .daoModule(new DaoModule())
+                .settingsModule(new SettingsModule())
                 .build();
     }
 
-    public static DAOComponent getDAOComponent() {
-        return DAO_COMPONENT;
+    public static AppComponent getAppComponent() {
+        return APP_COMPONENT;
     }
 
     public static LocaleTranslator getLocaleTranslator(Context context) {

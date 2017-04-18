@@ -21,7 +21,7 @@ public class EditVocablePresenterFactory implements PresenterFactory {
 
     @Override
     public EditVocablePresenter create() {
-        WordsRemember.getDAOComponent().inject(this);
+        WordsRemember.getAppComponent().inject(this);
         return new EditVocablePresenter(model, dao);
     }
 }

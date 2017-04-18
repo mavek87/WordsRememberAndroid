@@ -27,10 +27,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
-    private final Settings settings = new Settings();
+    private final Settings settings;
 
-    public QuizGamePresenter(DictionaryDAO dao) {
-        this.settings.setDifficulty(QuizGameDifficulty.EASY);
+    public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
+        this.settings = settings;
         this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
     }
 

@@ -21,7 +21,7 @@ public class ManageVocablesPresenterFactory implements PresenterFactory {
 
     @Override
     public ManageVocablesPresenter create() {
-        WordsRemember.getDAOComponent().inject(this);
+        WordsRemember.getAppComponent().inject(this);
         return new ManageVocablesPresenter(model, dao);
     }
 }
