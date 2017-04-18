@@ -61,7 +61,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         ButterKnife.bind(this);
         setupAndShowToolbar();
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -73,6 +72,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 }
             }
         });
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
