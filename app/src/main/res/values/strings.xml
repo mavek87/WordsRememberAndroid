@@ -42,4 +42,7 @@
     <string name="msg_error_trying_to_store_invalid_translation">Invalid translation, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_translation_name">Cannot save the translation using this name. Name already used.</string>
 
+    <string name="translate_vocable_in_quiz_question">Translate vocable</string>
+    <string name="msg_error_no_translation_given_for_vocable_during_quiz_question">No answer given! Insert an answer to continue</string>
+
 </resources>

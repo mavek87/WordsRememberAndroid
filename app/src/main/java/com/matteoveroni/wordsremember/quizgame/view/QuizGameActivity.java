@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +9,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,6 @@ import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactor
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Matteo Veroni
@@ -43,11 +44,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @BindView(R.id.quiz_game_question_text)
     TextView lbl_question;
 
+    @BindView(R.id.quiz_game_vocable_text)
+    TextView lbl_vocable_question;
+
     @BindView(R.id.quiz_game_answer_edit_text)
     EditText txt_answer;
-
-    @BindView(R.id.quiz_game_accept_answer_button)
-    Button btn_acceptAnswer;
 
     private Quiz currentQuiz;
     private AlertDialog resultDialog;
@@ -59,8 +60,21 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
         setupAndShowToolbar();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    onButtonAcceptAnswerAction();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-        makeButtonToAcceptAnswerVisibleOnlyWhenAnswerIsInserted();
     }
 
     private void setupAndShowToolbar() {
@@ -84,16 +98,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         super.onStop();
     }
 
-    @OnClick(R.id.quiz_game_accept_answer_button)
-    public void onButtonAcceptAnswerAction() {
-        final String givenAnswer = txt_answer.getText().toString();
-        if (givenAnswer.trim().isEmpty()) {
-            Toast.makeText(this, "No answer given! Insert an answer to continue", Toast.LENGTH_SHORT).show();
-        } else {
-            presenter.onQuizResponseFromView(givenAnswer);
-        }
-    }
-
     @Override
     public Quiz getPojoUsed() {
         return currentQuiz;
@@ -102,7 +106,8 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @Override
     public void setPojoUsed(Quiz quiz) {
         currentQuiz = quiz;
-        lbl_question.setText(currentQuiz.getQuestion());
+        lbl_question.setText(getString(R.string.translate_vocable_in_quiz_question));
+        lbl_vocable_question.setText(currentQuiz.getQuestion());
         showAllViewFields(true);
     }
 
@@ -168,6 +173,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
             visibility = View.INVISIBLE;
         }
         lbl_question.setVisibility(visibility);
+        lbl_vocable_question.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
     }
 
@@ -186,25 +192,13 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         presenter = null;
     }
 
-    private void makeButtonToAcceptAnswerVisibleOnlyWhenAnswerIsInserted() {
-        btn_acceptAnswer.setVisibility(View.INVISIBLE);
-        txt_answer.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0)
-                    btn_acceptAnswer.setVisibility(View.INVISIBLE);
-                else
-                    btn_acceptAnswer.setVisibility(View.VISIBLE);
-            }
-        });
+    public void onButtonAcceptAnswerAction() {
+        final String givenAnswer = txt_answer.getText().toString();
+        if (givenAnswer.trim().isEmpty()) {
+            String msg_error = getString(R.string.msg_error_no_translation_given_for_vocable_during_quiz_question);
+            Toast.makeText(this, msg_error, Toast.LENGTH_SHORT).show();
+        } else {
+            presenter.onQuizResponseFromView(givenAnswer);
+        }
     }
 }

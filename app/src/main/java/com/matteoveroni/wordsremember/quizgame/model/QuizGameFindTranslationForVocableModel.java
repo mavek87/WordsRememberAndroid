@@ -128,12 +128,12 @@ public class QuizGameFindTranslationForVocableModel {
     @Subscribe
     public void onEventGetTranslationsForVocable(EventAsyncSearchVocableTranslationsCompleted event) {
         Word vocable = event.getVocable();
-        String question = "What is the translation for the word: " + vocable.getName();
+        String vocableQuestion = vocable.getName();
 
         List<Word> translations = event.getTranslations();
         List<String> answers = populateRightAnswers(translations);
 
-        EVENT_BUS.post(new EventQuizGenerated(new Quiz(question, answers)));
+        EVENT_BUS.post(new EventQuizGenerated(new Quiz(vocableQuestion, answers)));
     }
 
     private List<String> populateRightAnswers(List<Word> translations) {

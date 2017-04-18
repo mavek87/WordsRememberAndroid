@@ -32,4 +32,7 @@
     <string name="msg_error_trying_to_store_invalid_translation">Traduzione non valida, impossibile salvarla! Compila tutti i dati e riprova.</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Vocabolo non valido, impossibile salvarlo! Compila tutti i dati e riprova.</string>
     <string name="msg_vocable_not_saved">Impossibile aggiungere traduzioni se il vocabolo non è ancora salvato. Vuoi salvare il vocabolo e procedere?</string>
+    <string name="translate_vocable_in_quiz_question">Traduci vocabolo</string>
+    <string name="title_activity_quiz_game">Gioco Quiz</string>
+    <string name="msg_error_no_translation_given_for_vocable_during_quiz_question">Nessuna risposta fornita! Inserisci una risposta per continuare</string>
 </resources>
