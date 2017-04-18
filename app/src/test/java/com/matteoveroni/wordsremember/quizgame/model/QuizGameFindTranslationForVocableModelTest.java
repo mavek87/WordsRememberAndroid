@@ -42,11 +42,11 @@ public class QuizGameFindTranslationForVocableModelTest {
 
     private static final Word FAKE_VOCABLE_EXTRACTED = new Word(1, "FakeVocable");
 
-    private QuizGameModelFindTranslationForVocable model;
+    private QuizGameFindTranslationForVocableModel model;
 
     @Before
     public void setUp() {
-        model = new QuizGameModelFindTranslationForVocable(settings, dao);
+        model = new QuizGameFindTranslationForVocableModel(settings, dao);
     }
 
     @Test

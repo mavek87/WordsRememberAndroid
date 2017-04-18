@@ -30,9 +30,9 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGameModelFindTranslationForVocable {
+public class QuizGameFindTranslationForVocableModel {
 
-    public static final String TAG = TagGenerator.tag(QuizGameModelFindTranslationForVocable.class);
+    public static final String TAG = TagGenerator.tag(QuizGameFindTranslationForVocableModel.class);
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
@@ -42,7 +42,7 @@ public class QuizGameModelFindTranslationForVocable {
     final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
     int numberOfVocablesWithTranslations = 0;
 
-    public QuizGameModelFindTranslationForVocable(Settings settings, DictionaryDAO dao) {
+    public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
 

@@ -11,6 +11,9 @@ public class Settings {
     private QuizGameDifficulty difficulty;
     private int numberOfQuestions;
 
+    public Settings() {
+    }
+
     public Settings(QuizGameDifficulty difficulty) {
         setDifficulty(difficulty);
     }
