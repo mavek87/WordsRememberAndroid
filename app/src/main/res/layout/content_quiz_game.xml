@@ -27,7 +27,8 @@
         <TextView
             android:id="@+id/quiz_game_question_text"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:textSize="@dimen/activity_horizontal_margin" />
 
         <Space
             android:layout_width="match_parent"

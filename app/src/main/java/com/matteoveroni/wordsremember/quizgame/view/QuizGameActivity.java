@@ -8,6 +8,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,8 +26,6 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +60,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         ButterKnife.bind(this);
         setupAndShowToolbar();
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        makeButtonToAcceptAnswerVisibleOnlyWhenAnswerIsInserted();
     }
 
     private void setupAndShowToolbar() {
@@ -168,7 +169,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         }
         lbl_question.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
-        btn_acceptAnswer.setVisibility(visibility);
     }
 
     @Override
@@ -184,5 +184,27 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @Override
     public void onLoaderReset(Loader<QuizGamePresenter> loader) {
         presenter = null;
+    }
+
+    private void makeButtonToAcceptAnswerVisibleOnlyWhenAnswerIsInserted() {
+        btn_acceptAnswer.setVisibility(View.INVISIBLE);
+        txt_answer.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 0)
+                    btn_acceptAnswer.setVisibility(View.INVISIBLE);
+                else
+                    btn_acceptAnswer.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }
