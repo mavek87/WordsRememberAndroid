@@ -5,7 +5,6 @@ import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
 import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
@@ -27,6 +26,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
+    private int score = 0;
     private final Settings settings;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
@@ -40,6 +40,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         this.model.reset();
         this.model.registerToEventBus();
         this.view = view;
+        score = 0;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
-            endGame();
+            onQuizGameEnd();
         } catch (ZeroQuizzesException ex) {
             view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
         }
@@ -71,17 +72,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(quiz);
     }
 
-    public void onQuizEndGame() {
-        endGame();
-    }
-
-    private void endGame() {
-        view.returnToPreviousView();
-    }
-
     public void onQuizResponseFromView(String givenAnswer) {
         if (isAnswerCorrect(givenAnswer)) {
-            // increment points
+            score++;
             view.showQuizResultDialog(QuizResult.RIGHT);
         } else {
             view.showQuizResultDialog(QuizResult.WRONG);
@@ -90,6 +83,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public void onQuizContinueGameFromView() {
         startNewQuizOrStopGameIfTheyAreFinished();
+    }
+
+    public void onQuizGameEnd() {
+        view.showGameResultDialog(score);
+    }
+
+    public void onAbortGame() {
+        view.returnToPreviousView();
     }
 
     private boolean isAnswerCorrect(String answer) {

@@ -103,13 +103,11 @@ public class QuizGameFindTranslationForVocableModel {
         }
 
         int randPosition;
-
         do {
             randPosition = Int.getRandomInteger(positionsRange);
             randomlyExtractedPositionsForQuiz.add(randPosition);
         }
         while (randomlyExtractedPositionsForQuiz.size() == initialNumberOfPositionsExtractedForQuiz);
-
         return randPosition;
     }
 

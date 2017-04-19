@@ -1,10 +1,8 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
@@ -13,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,11 +48,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     EditText txt_answer;
 
     private Quiz currentQuiz;
-    private AlertDialog resultDialog;
+    private AlertDialog quizAlert;
     private AlertDialog.Builder alertDialogBuilder;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
@@ -116,14 +113,15 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         String resultMessage;
         switch (result) {
             case RIGHT:
-                resultMessage = "Correct answer press ok to go to the next question";
+                resultMessage = "Correct answer. ";
                 break;
             case WRONG:
-                resultMessage = "Wrong answer press ok to go to the next question";
+                resultMessage = "Wrong answer. ";
                 break;
             default:
                 throw new RuntimeException("Unknown quiz result");
         }
+        resultMessage += "Press ok to go to the next question";
 
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
@@ -134,8 +132,23 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                         presenter.onQuizContinueGameFromView();
                     }
                 });
-        resultDialog = alertDialogBuilder.create();
-        resultDialog.show();
+        quizAlert = alertDialogBuilder.create();
+        quizAlert.show();
+    }
+
+    @Override
+    public void showGameResultDialog(int score) {
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle("Game Result")
+                .setMessage("You\'ve just completed the quiz! You made " + score + " points.")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        presenter.onAbortGame();
+                    }
+                });
+        quizAlert = alertDialogBuilder.create();
+        quizAlert.show();
     }
 
     @Override
@@ -146,11 +159,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onQuizEndGame();
+                        presenter.onQuizGameEnd();
                     }
                 });
-        resultDialog = alertDialogBuilder.create();
-        resultDialog.show();
+        quizAlert = alertDialogBuilder.create();
+        quizAlert.show();
     }
 
     @Override

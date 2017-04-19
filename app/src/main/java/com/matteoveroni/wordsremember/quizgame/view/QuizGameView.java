@@ -15,6 +15,8 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void showQuizResultDialog(QuizResult result);
 
+    void showGameResultDialog(int points);
+
     void onButtonAcceptAnswerAction();
 
     void returnToPreviousView();
