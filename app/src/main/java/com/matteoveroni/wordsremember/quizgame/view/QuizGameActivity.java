@@ -2,9 +2,12 @@ package com.matteoveroni.wordsremember.quizgame.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,28 +114,31 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void showQuizResultDialog(QuizResult result) {
-        String resultMessage;
+        Drawable img_alertDialog;
+        String resultTitle;
         switch (result) {
             case RIGHT:
-                resultMessage = "Correct answer. ";
+                resultTitle = "Correct answer";
+                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
                 break;
             case WRONG:
-                resultMessage = "Wrong answer. ";
+                resultTitle = "Wrong answer";
+                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
                 break;
             default:
                 throw new RuntimeException("Unknown quiz result");
         }
-        resultMessage += "Press ok to go to the next question";
 
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setTitle("Quiz Result")
-                .setMessage(resultMessage)
+                .setTitle(resultTitle)
+                .setMessage("Press ok to continue.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.onQuizContinueGameFromView();
                     }
-                });
+                })
+                .setIcon(img_alertDialog);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
     }
