@@ -40,7 +40,7 @@ public class QuizGameFindTranslationForVocableModel {
     private final Settings settings;
 
     final Set<Integer> randomlyExtractedPositionsForQuiz = new HashSet<>();
-    int numberOfVocablesWithTranslations = 0;
+    int numberOfQuestions = 0;
 
     public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -53,7 +53,7 @@ public class QuizGameFindTranslationForVocableModel {
 
     public void reset() {
         randomlyExtractedPositionsForQuiz.clear();
-        numberOfVocablesWithTranslations = 0;
+        numberOfQuestions = 0;
     }
 
     public void registerToEventBus() {
@@ -74,10 +74,10 @@ public class QuizGameFindTranslationForVocableModel {
 
     @Subscribe
     public void onEventCalculateNumberOfQuizzes(EventCountDistinctVocablesWithTranslationsCompleted event) {
-        numberOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
+        numberOfQuestions = event.getNumberOfVocablesWithTranslation();
 
-        if (settings.getNumberOfQuestions() > numberOfVocablesWithTranslations) {
-            settings.setNumberOfQuestions(numberOfVocablesWithTranslations);
+        if (settings.getNumberOfQuestions() > numberOfQuestions) {
+            settings.setNumberOfQuestions(numberOfQuestions);
         }
 
         Log.d(TAG, "Max number of quizzes creatable are: " + settings.getNumberOfQuestions());
@@ -97,7 +97,7 @@ public class QuizGameFindTranslationForVocableModel {
     private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
         int initialNumberOfPositionsExtractedForQuiz = randomlyExtractedPositionsForQuiz.size();
 
-        IntRange positionsRange = new IntRange(0, numberOfVocablesWithTranslations - 1);
+        IntRange positionsRange = new IntRange(0, numberOfQuestions - 1);
         if (initialNumberOfPositionsExtractedForQuiz >= settings.getNumberOfQuestions()) {
             throw new NoMoreQuizzesException();
         }

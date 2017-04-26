@@ -97,7 +97,7 @@ public class QuizGameFindTranslationForVocableModelTest {
 
     @Test
     public void test_onStartQuizGeneration_If_getNumberOfQuizzesGreaterThanZero_extractRandomQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
-        model.numberOfVocablesWithTranslations = 1;
+        model.numberOfQuestions = 1;
         when(settings.getNumberOfQuestions()).thenReturn(1);
 
         model.startQuizGeneration();

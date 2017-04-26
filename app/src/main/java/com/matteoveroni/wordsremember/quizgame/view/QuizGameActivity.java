@@ -175,7 +175,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void returnToPreviousView() {
-        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+        finish();
     }
 
     @Override
