@@ -61,7 +61,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
-            onQuizGameEnd();
+            view.showGameResultDialog(score, model.getNumberOfQuestions());
         } catch (ZeroQuizzesException ex) {
             view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
         }
@@ -86,11 +86,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         startNewQuizOrStopGameIfTheyAreFinished();
     }
 
-    public void onQuizGameEnd() {
-        view.showGameResultDialog(score, model.getNumberOfQuestions());
-    }
-
-    public void onAbortGame() {
+    public void onCloseGame() {
         view.close();
     }
 

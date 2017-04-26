@@ -1,8 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +21,6 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
-import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
@@ -151,9 +147,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage("You\'ve just completed the quiz! You made " + score + "/" + numberOfQuestions + " points.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onAbortGame();
+                        presenter.onCloseGame();
                     }
-                });
+                })
+                .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
     }
@@ -166,9 +163,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onQuizGameEnd();
+                        presenter.onCloseGame();
                     }
-                });
+                })
+                .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
     }
