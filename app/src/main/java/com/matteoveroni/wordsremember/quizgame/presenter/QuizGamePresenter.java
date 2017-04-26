@@ -37,10 +37,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     @Override
     public void attachView(QuizGameView view) {
-        EVENT_BUS.register(this);
-        this.model.reset();
-        this.model.registerToEventBus();
         this.view = view;
+        EVENT_BUS.register(this);
+        model.registerToEventBus();
+        model.reset();
         score = 0;
     }
 
@@ -91,7 +91,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     public void onAbortGame() {
-        view.returnToPreviousView();
+        view.close();
     }
 
     private boolean isAnswerCorrect(String answer) {

@@ -174,7 +174,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void returnToPreviousView() {
+    public void close() {
         finish();
     }
 

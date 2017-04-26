@@ -19,7 +19,7 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void onButtonAcceptAnswerAction();
 
-    void returnToPreviousView();
+    void close();
 
     void reset();
 }
