@@ -144,11 +144,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void showGameResultDialog(int score) {
+    public void showGameResultDialog(int score, int numberOfQuestions) {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle("Game Result")
-                .setMessage("You\'ve just completed the quiz! You made " + score + " points.")
+                .setMessage("You\'ve just completed the quiz! You made " + score + "/" + numberOfQuestions + " points.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.onAbortGame();

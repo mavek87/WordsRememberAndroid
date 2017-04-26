@@ -26,8 +26,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
-    private int score = 0;
     private final Settings settings;
+
+    private int score = 0;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -86,7 +87,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     public void onQuizGameEnd() {
-        view.showGameResultDialog(score);
+        view.showGameResultDialog(score, model.getNumberOfQuestions());
     }
 
     public void onAbortGame() {

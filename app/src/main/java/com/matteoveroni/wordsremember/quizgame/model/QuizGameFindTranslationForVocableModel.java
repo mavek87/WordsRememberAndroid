@@ -141,4 +141,8 @@ public class QuizGameFindTranslationForVocableModel {
         }
         return answers;
     }
+
+    public int getNumberOfQuestions(){
+        return numberOfQuestions;
+    }
 }
