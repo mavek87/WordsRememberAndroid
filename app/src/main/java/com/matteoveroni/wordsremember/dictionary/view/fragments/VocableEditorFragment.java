@@ -27,19 +27,19 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
 
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
-    private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
+    private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
     private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
 
     private Unbinder viewInjector;
-    private Word vocableInView;
+    private Word vocableUsedByView;
 
     @BindView(R.id.fragment_vocable_editor_title)
     TextView lbl_title;
 
     @BindView(R.id.fragment_vocable_editor_txt_vocable_name)
     EditText txt_vocableName;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocable_editor, container, false);
@@ -55,18 +55,20 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
 
     @Override
     public Word getPojoUsed() {
-        return new Word(vocableInView.getId(), txt_vocableName.getText().toString());
+        return new Word(vocableUsedByView.getId(), txt_vocableName.getText().toString());
     }
 
     @Override
-    public void setPojoUsed(Word vocableToShow) {
-        if (vocableToShow.getId() <= 0) {
+    public void setPojoUsed(Word vocable) {
+        if (vocable.getId() <= 0) {
             lbl_title.setText("Create vocable");
         } else {
             lbl_title.setText("Edit vocable");
+            if (txt_vocableName.getText().toString().trim().isEmpty()) {
+                txt_vocableName.setText(vocable.getName());
+            }
         }
-        txt_vocableName.setText(vocableToShow.getName());
-        vocableInView = vocableToShow;
+        vocableUsedByView = vocable;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
 
     private void saveViewData(Bundle instanceState) {
         instanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
-        instanceState.putString(VOCABLE_CONTENT_KEY, vocableInView.toJson());
+        instanceState.putString(VOCABLE_CONTENT_KEY, vocableUsedByView.toJson());
         instanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
     }
 
@@ -94,7 +96,7 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
             lbl_title.setText(instanceState.getString(VIEW_TITLE_CONTENT_KEY));
         }
         if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-            vocableInView = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
+            vocableUsedByView = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
         }
         if (instanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
             txt_vocableName.setText(instanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
