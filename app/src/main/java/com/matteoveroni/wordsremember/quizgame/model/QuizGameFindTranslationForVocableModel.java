@@ -70,7 +70,7 @@ public class QuizGameFindTranslationForVocableModel {
     }
 
     @Subscribe
-    public void onEventCalculateNumberOfQuizzes(EventCountDistinctVocablesWithTranslationsCompleted event) {
+    public void onEventCalculateNumberOfQuestions(EventCountDistinctVocablesWithTranslationsCompleted event) {
         numberOfQuestions = event.getNumberOfVocablesWithTranslation();
 
         if (numberOfQuestions > settings.getNumberOfQuestions()) {
@@ -83,12 +83,8 @@ public class QuizGameFindTranslationForVocableModel {
 
     public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
         if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
-        try {
-            int vocablePosition = extractUniqueRandomVocablePosition();
-            dao.asyncSearchVocableWithTranslationByOffsetCommand(vocablePosition);
-        } catch (NoMoreQuizzesException ex) {
-            throw new NoMoreQuizzesException();
-        }
+        int vocablePosition = extractUniqueRandomVocablePosition();
+        dao.asyncSearchVocableWithTranslationByOffsetCommand(vocablePosition);
     }
 
     private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {

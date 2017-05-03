@@ -30,6 +30,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private int score = 0;
 
+    private static boolean isQuizGameEnabled = false;
+
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
@@ -38,10 +40,15 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     @Override
     public void attachView(QuizGameView view) {
         this.view = view;
+
         EVENT_BUS.register(this);
         model.registerToEventBus();
-        model.reset();
-        score = 0;
+
+        if (!isQuizGameEnabled) {
+            model.reset();
+            score = 0;
+            isQuizGameEnabled = true;
+        }
     }
 
     @Override
@@ -88,6 +95,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public void onCloseGame() {
         view.close();
+        isQuizGameEnabled = false;
     }
 
     private boolean isAnswerCorrect(String answer) {

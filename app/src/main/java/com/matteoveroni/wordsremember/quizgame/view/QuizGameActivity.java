@@ -38,18 +38,22 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     private QuizGamePresenter presenter;
     private static final int PRESENTER_LOADER_ID = 1;
 
-    @BindView(R.id.quiz_game_question_text)
+    private Quiz currentQuiz;
+    private AlertDialog quizAlert;
+    private AlertDialog.Builder alertDialogBuilder;
+
+    @BindView(R.id.quiz_game_question)
     TextView lbl_question;
 
-    @BindView(R.id.quiz_game_vocable_text)
-    TextView lbl_vocable_question;
+    @BindView(R.id.quiz_game_question_vocable)
+    TextView lbl_question_vocable;
 
     @BindView(R.id.quiz_game_answer_edit_text)
     EditText txt_answer;
 
-    private Quiz currentQuiz;
-    private AlertDialog quizAlert;
-    private AlertDialog.Builder alertDialogBuilder;
+    private static final String LBL_QUESTION_KEY = "lbl_question_key";
+    private static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
+    private static final String LBL_ANSWER_KEY = "txt_answer_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
         setupAndShowToolbar();
+
+        if (savedInstanceState != null) {
+            restoreViewData(savedInstanceState);
+        }
 
         txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -84,6 +92,30 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+        saveViewData(instanceState);
+    }
+
+    private void saveViewData(Bundle instanceState) {
+        instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
+        instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
+        instanceState.putString(LBL_ANSWER_KEY, txt_answer.getText().toString());
+    }
+
+    private void restoreViewData(Bundle instanceState) {
+        if (instanceState.containsKey(LBL_QUESTION_KEY)) {
+            lbl_question.setText(instanceState.getString(LBL_QUESTION_KEY));
+        }
+        if (instanceState.containsKey(LBL_QUESTION_VOCABLE_KEY)) {
+            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE_KEY));
+        }
+        if (instanceState.containsKey(LBL_ANSWER_KEY)) {
+            txt_answer.setText(instanceState.getString(LBL_ANSWER_KEY));
+        }
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         presenter.attachView(this);
@@ -104,7 +136,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     public void setPojoUsed(Quiz quiz) {
         currentQuiz = quiz;
         lbl_question.setText(getString(R.string.translate_vocable_in_quiz_question));
-        lbl_vocable_question.setText(currentQuiz.getQuestion());
+        lbl_question_vocable.setText(currentQuiz.getQuestion());
         showAllViewFields(true);
     }
 
@@ -191,7 +223,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
             visibility = View.INVISIBLE;
         }
         lbl_question.setVisibility(visibility);
-        lbl_vocable_question.setVisibility(visibility);
+        lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
     }
 

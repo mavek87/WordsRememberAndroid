@@ -25,14 +25,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/quiz_game_question_text"
+            android:id="@+id/quiz_game_question"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:textAlignment="center"
             android:textSize="@dimen/activity_horizontal_margin" />
 
         <TextView
-            android:id="@+id/quiz_game_vocable_text"
+            android:id="@+id/quiz_game_question_vocable"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:textAlignment="center"

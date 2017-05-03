@@ -18,10 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,9 +48,9 @@ public class QuizGameFindTranslationForVocableModelTest {
 
     @Test
     public void test_After_onEventCalculateNumberOfQuizzes_EventQuizModelInitialized() {
-        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
+        final int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
 
-        model.onEventCalculateNumberOfQuizzes(
+        model.onEventCalculateNumberOfQuestions(
                 new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
         );
 
@@ -61,31 +58,31 @@ public class QuizGameFindTranslationForVocableModelTest {
     }
 
     @Test
-    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreMoreThanPossibleQuestions_ReduceThem() {
-        int NUMBER_OF_QUESTIONS_FROM_SETTINGS = 2;
-        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
+    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreMoreThanMaxNumberOfQuestions_ReduceThem() {
+        final int MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS = 2;
+        final int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
 
-        when(settings.getNumberOfQuestions()).thenReturn(NUMBER_OF_QUESTIONS_FROM_SETTINGS);
+        eventCalculateNumberOfQuestions(MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS, NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
 
-        model.onEventCalculateNumberOfQuizzes(
-                new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
-        );
-
-        verify(settings).setNumberOfQuestions(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
+        model.numberOfQuestions = MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS;
     }
 
     @Test
-    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreLessThanPossibleQuestions_DontReduceThem() {
-        int NUMBER_OF_QUESTIONS_FROM_SETTINGS = 1;
-        int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 2;
+    public void test_onEventCalculateNumberOfQuizzes_IfNumberOfQuestionsAreLessThanMaxNumberOfQuestions_DontReduceThem() {
+        final int MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS = 1;
+        final int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 2;
 
-        when(settings.getNumberOfQuestions()).thenReturn(NUMBER_OF_QUESTIONS_FROM_SETTINGS);
+        eventCalculateNumberOfQuestions(MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS, NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
 
-        model.onEventCalculateNumberOfQuizzes(
-                new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
+        model.numberOfQuestions = NUMBER_OF_VOCABLES_WITH_TRANSLATIONS;
+    }
+
+    private void eventCalculateNumberOfQuestions(int numberOfQuestionsFromSettings, int numberOfVocablesWithTranslations) {
+        when(settings.getNumberOfQuestions()).thenReturn(numberOfQuestionsFromSettings);
+
+        model.onEventCalculateNumberOfQuestions(
+                new EventCountDistinctVocablesWithTranslationsCompleted(numberOfVocablesWithTranslations)
         );
-
-        verify(settings, never()).setNumberOfQuestions(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
     }
 
     @Test(expected = ZeroQuizzesException.class)
