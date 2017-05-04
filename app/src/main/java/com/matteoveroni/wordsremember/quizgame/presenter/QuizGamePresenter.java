@@ -53,7 +53,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void initGame() {
-        view.reset();
         model.reset();
         isGameAlreadyStarted = true;
     }
@@ -72,6 +71,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void tryToStartNewQuizOrShowError() {
+        view.reset();
         try {
             model.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
