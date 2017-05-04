@@ -135,7 +135,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @Override
     public void setPojoUsed(Quiz quiz) {
         currentQuiz = quiz;
-        lbl_question.setText(getString(R.string.translate_vocable_in_quiz_question));
+        lbl_question.setText(getString(R.string.translate_vocable_in_quiz_question) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
         lbl_question_vocable.setText(currentQuiz.getQuestion());
         showAllViewFields(true);
     }
@@ -163,7 +163,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage("Press ok to continue.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onQuizContinueGameFromView();
+                        presenter.onContinueQuizGame();
                     }
                 })
                 .setIcon(img_alertDialog);

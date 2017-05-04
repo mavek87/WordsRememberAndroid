@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
-import android.util.Log;
-
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
@@ -30,7 +28,7 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGameFindTranslationForVocableModel {
+public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     public static final String TAG = TagGenerator.tag(QuizGameFindTranslationForVocableModel.class);
 
@@ -39,29 +37,38 @@ public class QuizGameFindTranslationForVocableModel {
     private final DictionaryDAO dao;
     private final Settings settings;
 
+    // TODO: check if is possible to use private <g fields (check tests too)
     final Set<Integer> extractedPositionsForQuiz = new HashSet<>();
     int numberOfQuestions;
+
+    private int questionNumber = 0;
+    private int score = 0;
 
     public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
     }
 
+    @Override
     public void registerToEventBus() {
         if (!EVENT_BUS.isRegistered(this)) {
             EVENT_BUS.register(this);
         }
     }
 
+    @Override
     public void unregisterToEventBus() {
         if (EVENT_BUS.isRegistered(this)) {
             EVENT_BUS.unregister(this);
         }
     }
 
+    @Override
     public void reset() {
         extractedPositionsForQuiz.clear();
         numberOfQuestions = 0;
+        questionNumber = 0;
+        score = 0;
         adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
     }
 
@@ -80,10 +87,15 @@ public class QuizGameFindTranslationForVocableModel {
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
-    public void startQuizGeneration() throws NoMoreQuizzesException, ZeroQuizzesException {
+    @Override
+    public void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
         if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
+
+        questionNumber++;
+
         int vocablePosition = extractUniqueRandomVocablePosition();
-        dao.asyncSearchVocableWithTranslationByOffsetCommand(vocablePosition);
+
+        dao.asyncSearchDistinctVocableWithTranslationByOffsetCommand(vocablePosition);
     }
 
     private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
@@ -121,7 +133,7 @@ public class QuizGameFindTranslationForVocableModel {
         List<Word> translations = event.getTranslations();
         List<String> answers = populateRightAnswers(translations);
 
-        EVENT_BUS.post(new EventQuizGenerated(new Quiz(vocableQuestion, answers)));
+        EVENT_BUS.post(new EventQuizGenerated(new Quiz(questionNumber, numberOfQuestions, vocableQuestion, answers)));
     }
 
     private List<String> populateRightAnswers(List<Word> translations) {
@@ -132,7 +144,22 @@ public class QuizGameFindTranslationForVocableModel {
         return answers;
     }
 
+    @Override
     public int getNumberOfQuestions() {
         return numberOfQuestions;
+    }
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    @Override
+    public void increaseScore() {
+        score++;
+    }
+
+    @Override
+    public int getScore() {
+        return score;
     }
 }

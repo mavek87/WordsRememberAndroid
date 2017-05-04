@@ -89,7 +89,7 @@ public class QuizGameFindTranslationForVocableModelTest {
     public void test_onStartQuizGeneration_If_getNumberOfQuizzesFromSettingsIsZero_throwZeroQuizzesException() throws NoMoreQuizzesException, ZeroQuizzesException {
         when(settings.getNumberOfQuestions()).thenReturn(0);
 
-        model.startQuizGeneration();
+        model.generateQuiz();
     }
 
     @Test
@@ -97,9 +97,9 @@ public class QuizGameFindTranslationForVocableModelTest {
         model.numberOfQuestions = 1;
         when(settings.getNumberOfQuestions()).thenReturn(1);
 
-        model.startQuizGeneration();
+        model.generateQuiz();
 
-        verify(dao).asyncSearchVocableWithTranslationByOffsetCommand(anyInt());
+        verify(dao).asyncSearchDistinctVocableWithTranslationByOffsetCommand(anyInt());
     }
 
     @Test

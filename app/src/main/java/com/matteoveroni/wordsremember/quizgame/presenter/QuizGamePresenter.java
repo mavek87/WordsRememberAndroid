@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
-import android.util.Log;
-
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
@@ -10,6 +8,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
 import com.matteoveroni.wordsremember.Settings;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
@@ -30,11 +29,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private Quiz quiz;
     private QuizGameView view;
-    private final QuizGameFindTranslationForVocableModel model;
+    private final QuizGameModel model;
 
     private final Settings settings;
-    // TODO: refactoring => encapsulate score attribute in model
-    private int score = 0;
 
     private static boolean isGameAlreadyStarted = false;
 
@@ -58,20 +55,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private void initGame() {
         view.reset();
         model.reset();
-        score = 0;
         isGameAlreadyStarted = true;
     }
 
     @Override
     public void destroy() {
         settings.saveLastGameDate();
-        // TODO: remember to remove this "try catch block" in production code
-        try {
-            Log.i(TAG, "" + settings.getLastGameDate());
-            view.showMessage("" + settings.getLastGameDate());
-        } catch (Exception ex) {
-        }
-        //////////////////////////////////////////////////////////////////////////
         EVENT_BUS.unregister(this);
         this.model.unregisterToEventBus();
         this.view = null;
@@ -84,9 +73,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private void tryToStartNewQuizOrShowError() {
         try {
-            model.startQuizGeneration();
+            model.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            view.showGameResultDialog(score, model.getNumberOfQuestions());
+            view.showGameResultDialog(model.getScore(), model.getNumberOfQuestions());
         } catch (ZeroQuizzesException ex) {
             view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
         }
@@ -98,22 +87,22 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(quiz);
     }
 
-    public void onQuizResponseFromView(String givenAnswer) {
-        if (isAnswerCorrect(givenAnswer)) {
-            score++;
-            view.showQuizResultDialog(QuizResult.RIGHT);
-        } else {
-            view.showQuizResultDialog(QuizResult.WRONG);
-        }
-    }
-
-    public void onQuizContinueGameFromView() {
+    public void onContinueQuizGame() {
         tryToStartNewQuizOrShowError();
     }
 
     public void onCloseGame() {
         view.close();
         isGameAlreadyStarted = false;
+    }
+
+    public void onQuizResponseFromView(String givenAnswer) {
+        if (isAnswerCorrect(givenAnswer)) {
+            model.increaseScore();
+            view.showQuizResultDialog(QuizResult.RIGHT);
+        } else {
+            view.showQuizResultDialog(QuizResult.WRONG);
+        }
     }
 
     private boolean isAnswerCorrect(String answer) {
