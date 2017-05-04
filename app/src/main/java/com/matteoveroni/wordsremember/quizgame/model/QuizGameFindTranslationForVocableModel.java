@@ -77,7 +77,6 @@ public class QuizGameFindTranslationForVocableModel {
             numberOfQuestions = settings.getNumberOfQuestions();
         }
 
-        Log.d(TAG, "Max number of quizzes creatable are: " + numberOfQuestions);
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
