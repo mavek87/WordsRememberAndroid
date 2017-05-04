@@ -38,8 +38,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'junit:junit:4.12'
@@ -53,6 +51,15 @@ dependencies {
     compile 'com.github.mavek87:AndroidTagGenerator:master-SNAPSHOT'
 
     /** *************************************************************************/
+
+    // Gson
+    compile 'com.google.code.gson:gson:2.8.0'
+
+    // GreenRobot EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    // Joda-Time
+    compile 'joda-time:joda-time:2.9.9'
 
     // RxJava & RxAndroid
     compile 'io.reactivex:rxandroid:1.2.1'

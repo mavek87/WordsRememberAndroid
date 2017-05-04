@@ -1,5 +1,8 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
+import android.util.Log;
+
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
@@ -21,16 +24,19 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class QuizGamePresenter implements Presenter<QuizGameView> {
 
+    public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
+
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private Quiz quiz;
     private QuizGameView view;
     private final QuizGameFindTranslationForVocableModel model;
-    private final Settings settings;
 
+    private final Settings settings;
+    // TODO: refactoring => encapsulate score attribute in model
     private int score = 0;
 
-    private static boolean isQuizGameEnabled = false;
+    private static boolean isGameAlreadyStarted = false;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -38,21 +44,34 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     @Override
-    public void attachView(QuizGameView view) {
-        this.view = view;
+    public void attachView(QuizGameView quizGameView) {
+        this.view = quizGameView;
 
         EVENT_BUS.register(this);
         model.registerToEventBus();
 
-        if (!isQuizGameEnabled) {
-            model.reset();
-            score = 0;
-            isQuizGameEnabled = true;
+        if (!isGameAlreadyStarted) {
+            initGame();
         }
+    }
+
+    private void initGame() {
+        view.reset();
+        model.reset();
+        score = 0;
+        isGameAlreadyStarted = true;
     }
 
     @Override
     public void destroy() {
+        settings.saveLastGameDate();
+        // TODO: remember to remove this "try catch block" in production code
+        try {
+            Log.i(TAG, "" + settings.getLastGameDate());
+            view.showMessage("" + settings.getLastGameDate());
+        } catch (Exception ex) {
+        }
+        //////////////////////////////////////////////////////////////////////////
         EVENT_BUS.unregister(this);
         this.model.unregisterToEventBus();
         this.view = null;
@@ -60,11 +79,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     @Subscribe
     public void onEvent(EventQuizModelInitialized event) {
-        startNewQuizOrStopGameIfTheyAreFinished();
+        tryToStartNewQuizOrShowError();
     }
 
-    private void startNewQuizOrStopGameIfTheyAreFinished() {
-        view.reset();
+    private void tryToStartNewQuizOrShowError() {
         try {
             model.startQuizGeneration();
         } catch (NoMoreQuizzesException ex) {
@@ -90,12 +108,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     public void onQuizContinueGameFromView() {
-        startNewQuizOrStopGameIfTheyAreFinished();
+        tryToStartNewQuizOrShowError();
     }
 
     public void onCloseGame() {
         view.close();
-        isQuizGameEnabled = false;
+        isGameAlreadyStarted = false;
     }
 
     private boolean isAnswerCorrect(String answer) {

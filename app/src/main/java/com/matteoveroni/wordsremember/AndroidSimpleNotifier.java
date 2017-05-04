@@ -1,12 +1,15 @@
 package com.matteoveroni.wordsremember;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+
+import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 /**
  * @author Matteo Veroni
@@ -20,7 +23,7 @@ import android.support.v4.app.TaskStackBuilder;
 
 public class AndroidSimpleNotifier {
 
-    private final Activity destinationActivity;
+    private final Activity activity;
     private final Context context;
 
     private final String notification_title;
@@ -29,10 +32,12 @@ public class AndroidSimpleNotifier {
 
     private NotificationCompat.Builder notificationBuilder;
     private static final int NOTIFICATION_ID = 1;
+    private Notification notification;
 
-    public AndroidSimpleNotifier(Activity destinationActivity, String notification_title, String notification_text, int notification_icon) {
-        this.destinationActivity = destinationActivity;
-        this.context = destinationActivity.getApplicationContext();
+    public AndroidSimpleNotifier(Activity activity, Context context, String notification_title, String notification_text, int notification_icon) {
+        this.activity = activity;
+        this.context = context;
+
         this.notification_title = notification_title;
         this.notification_text = notification_text;
         this.notification_icon = notification_icon;
@@ -50,10 +55,10 @@ public class AndroidSimpleNotifier {
         // your application to the Home screen.
         final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack(destinationActivity);
+        stackBuilder.addParentStack(activity.getClass());
 
         // Creates an explicit intent for an Activity in your app
-        final Intent resultIntent = new Intent(context, destinationActivity.getClass());
+        final Intent resultIntent = new Intent(context, activity.getClass());
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
 
@@ -64,12 +69,13 @@ public class AndroidSimpleNotifier {
                 );
 
         notificationBuilder.setContentIntent(resultPendingIntent);
+        notification = notificationBuilder.build();
     }
 
     public void showNotification() {
         final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // NOTIFICATION_ID allows you to update the notification later on.
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID, notification);
     }
 }

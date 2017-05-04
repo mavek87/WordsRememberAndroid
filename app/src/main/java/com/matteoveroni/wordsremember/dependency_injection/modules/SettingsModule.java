@@ -1,7 +1,9 @@
 package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
@@ -23,9 +25,11 @@ public class SettingsModule {
 
     @Provides
     @Singleton
-    public Settings providesSettings() {
-        Settings settings = new Settings();
-        settings.setDifficulty(QuizGameDifficulty.EASY);
+    public Settings providesSettings(SharedPreferences preferences) {
+        Settings settings = new Settings(
+                preferences,
+                QuizGameDifficulty.EASY
+        );
         return settings;
     }
 }

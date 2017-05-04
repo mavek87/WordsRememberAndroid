@@ -1,6 +1,12 @@
 package com.matteoveroni.wordsremember;
 
+import android.content.SharedPreferences;
+
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
+
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 /**
  * Created by Matteo Veroni
@@ -8,13 +14,19 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 public class Settings {
 
+    private final SharedPreferences preferences;
+
     private QuizGameDifficulty difficulty;
     private int numberOfQuestions;
 
-    public Settings() {
+    public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
+
+    public Settings(SharedPreferences preferences) {
+        this.preferences = preferences;
     }
 
-    public Settings(QuizGameDifficulty difficulty) {
+    public Settings(SharedPreferences preferences, QuizGameDifficulty difficulty) {
+        this.preferences = preferences;
         setDifficulty(difficulty);
     }
 
@@ -36,5 +48,18 @@ public class Settings {
             throw new IllegalArgumentException("Number of questions cannot be negative");
 
         numberOfQuestions = number;
+    }
+
+    public void saveLastGameDate() {
+        final DateTime lastGameDate = new DateTime(new Date());
+        preferences
+                .edit()
+                .putString(LAST_GAME_DATE_KEY, lastGameDate.toString())
+                .apply();
+    }
+
+    public DateTime getLastGameDate() throws Exception {
+        return DateTime.parse(preferences.getString(LAST_GAME_DATE_KEY, ""));
+//        return DateManager.DATE_FORMATTER.parseDateTime(preferences.getString(LAST_GAME_DATE_KEY, ""));
     }
 }
