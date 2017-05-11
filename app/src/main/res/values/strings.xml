@@ -47,4 +47,9 @@
     <string name="translate_vocable_in_quiz_question">Translate vocable</string>
     <string name="msg_error_no_translation_given_for_vocable_during_quiz_question">No answer given! Insert an answer to continue</string>
 
+    <string name="correct_answer">Correct answer</string>
+    <string name="wrong_answer">Wrong answer</string>
+
+    <string name="press_ok_to_continue">Press OK to continue</string>
+
 </resources>

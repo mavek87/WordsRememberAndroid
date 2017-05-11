@@ -13,6 +13,10 @@ public class Quiz {
     private final String question;
     private final List<String> rightAnswers;
 
+    public enum Result {
+        RIGHT, WRONG;
+    }
+
     public Quiz(int quizNumber, int totalNumberOfQuizzes, String question, List<String> rightAnswers) {
         if (rightAnswers.isEmpty())
             throw new IllegalArgumentException("Trying to create a quiz without setting right answers");

@@ -11,7 +11,6 @@ import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,7 +65,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     @Subscribe
-    public void onEvent(EventQuizModelInitialized event) {
+    public void onEventModelInitialized(EventQuizModelInitialized event) {
         tryToStartNewQuizOrShowError();
     }
 
@@ -82,7 +81,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     @Subscribe
-    public void onEvent(EventQuizGenerated event) {
+    public void onEventQuizGenerated(EventQuizGenerated event) {
         quiz = event.getQuiz();
         view.setPojoUsed(quiz);
     }
@@ -99,9 +98,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public void onQuizResponseFromView(String givenAnswer) {
         if (isAnswerCorrect(givenAnswer)) {
             model.increaseScore();
-            view.showQuizResultDialog(QuizResult.RIGHT);
+            view.showQuizResultDialog(Quiz.Result.RIGHT);
         } else {
-            view.showQuizResultDialog(QuizResult.WRONG);
+            view.showQuizResultDialog(Quiz.Result.WRONG);
         }
     }
 

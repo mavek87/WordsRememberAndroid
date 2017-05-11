@@ -22,7 +22,6 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
-import com.matteoveroni.wordsremember.quizgame.pojos.QuizResult;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
 
@@ -34,13 +33,6 @@ import butterknife.ButterKnife;
  */
 
 public class QuizGameActivity extends ActivityView implements QuizGameView, LoaderManager.LoaderCallbacks<QuizGamePresenter> {
-
-    private QuizGamePresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
-
-    private Quiz currentQuiz;
-    private AlertDialog quizAlert;
-    private AlertDialog.Builder alertDialogBuilder;
 
     @BindView(R.id.quiz_game_question)
     TextView lbl_question;
@@ -55,6 +47,40 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     private static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
     private static final String LBL_ANSWER_KEY = "txt_answer_key";
 
+    private Quiz currentQuiz;
+    private AlertDialog quizAlert;
+    private AlertDialog.Builder alertDialogBuilder;
+
+    private QuizGamePresenter presenter;
+    private static final int PRESENTER_LOADER_ID = 1;
+
+    @Override
+    public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {
+        return new PresenterLoader<>(this, new QuizGamePresenterFactory());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<QuizGamePresenter> loader, QuizGamePresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<QuizGamePresenter> loader) {
+        this.presenter = null;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.destroy();
+        super.onStop();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +92,12 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
             restoreViewData(savedInstanceState);
         }
 
+        // Associate softkey action button to buttonAcceptAnswerAction()
         txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onButtonAcceptAnswerAction();
+                    buttonAcceptAnswerAction();
                     return true;
                 } else {
                     return false;
@@ -80,6 +107,17 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    }
+
+    @Override
+    public void buttonAcceptAnswerAction() {
+        final String givenAnswer = txt_answer.getText().toString();
+        if (givenAnswer.trim().isEmpty()) {
+            String msg_error = getString(R.string.msg_error_no_translation_given_for_vocable_during_quiz_question);
+            Toast.makeText(this, msg_error, Toast.LENGTH_SHORT).show();
+        } else {
+            presenter.onQuizResponseFromView(givenAnswer);
+        }
     }
 
     private void setupAndShowToolbar() {
@@ -116,18 +154,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
-    }
-
-    @Override
     public Quiz getPojoUsed() {
         return currentQuiz;
     }
@@ -141,16 +167,17 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void showQuizResultDialog(QuizResult result) {
+    public void showQuizResultDialog(Quiz.Result quizResult) {
+        // TODO: use string resources not fixed strings
         Drawable img_alertDialog;
-        String resultTitle;
-        switch (result) {
+        String quizResultTitle;
+        switch (quizResult) {
             case RIGHT:
-                resultTitle = "Correct answer";
+                quizResultTitle = getString(R.string.correct_answer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
                 break;
             case WRONG:
-                resultTitle = "Wrong answer";
+                quizResultTitle = getString(R.string.wrong_answer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
                 break;
             default:
@@ -159,8 +186,8 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setTitle(resultTitle)
-                .setMessage("Press ok to continue.")
+                .setTitle(quizResultTitle)
+                .setMessage(getString(R.string.press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.onContinueQuizGame();
@@ -225,30 +252,5 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
-    }
-
-    @Override
-    public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {
-        return new PresenterLoader<>(this, new QuizGamePresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<QuizGamePresenter> loader, QuizGamePresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<QuizGamePresenter> loader) {
-        presenter = null;
-    }
-
-    public void onButtonAcceptAnswerAction() {
-        final String givenAnswer = txt_answer.getText().toString();
-        if (givenAnswer.trim().isEmpty()) {
-            String msg_error = getString(R.string.msg_error_no_translation_given_for_vocable_during_quiz_question);
-            Toast.makeText(this, msg_error, Toast.LENGTH_SHORT).show();
-        } else {
-            presenter.onQuizResponseFromView(givenAnswer);
-        }
     }
 }
