@@ -26,9 +26,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private Quiz quiz;
     private QuizGameView view;
-    private final QuizGameModel model;
+    private final QuizGameModel game;
 
     private final Settings settings;
 
@@ -36,7 +35,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
-        this.model = new QuizGameFindTranslationForVocableModel(settings, dao);
+        this.game = new QuizGameFindTranslationForVocableModel(settings, dao);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         this.view = quizGameView;
 
         EVENT_BUS.register(this);
-        model.registerToEventBus();
+        game.registerToEventBus();
 
         if (!isGameAlreadyStarted) {
             initGame();
@@ -55,12 +54,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public void destroy() {
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
-        this.model.unregisterToEventBus();
+        this.game.unregisterToEventBus();
         this.view = null;
     }
 
     private void initGame() {
-        model.reset();
+        game.init();
         isGameAlreadyStarted = true;
     }
 
@@ -81,9 +80,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     private void startNewQuizOrShowError() {
         view.reset();
         try {
-            model.generateQuiz();
+            game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            view.showGameResultDialog(model.getScore(), model.getNumberOfQuestions());
+            view.showGameResultDialog(game.getScore(), game.getNumberOfQuestions());
         } catch (ZeroQuizzesException ex) {
             view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
         }
@@ -91,25 +90,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     @Subscribe
     public void onEventQuizGenerated(EventQuizGenerated event) {
-        quiz = event.getQuiz();
+        Quiz quiz = event.getQuiz();
         view.setPojoUsed(quiz);
     }
 
     public void onQuizResponseFromView(String givenAnswer) {
-        if (isAnswerCorrect(givenAnswer)) {
-            model.increaseScore();
-            view.showQuizResultDialog(Quiz.Result.RIGHT);
-        } else {
-            view.showQuizResultDialog(Quiz.Result.WRONG);
-        }
-    }
-
-    private boolean isAnswerCorrect(String answer) {
-        for (String rightAnswer : quiz.getRightAnswers()) {
-            if (answer.equalsIgnoreCase(rightAnswer)) {
-                return true;
-            }
-        }
-        return false;
+        Quiz.Result quizResult = game.checkAnswer(givenAnswer);
+        view.showQuizResultDialog(quizResult);
     }
 }

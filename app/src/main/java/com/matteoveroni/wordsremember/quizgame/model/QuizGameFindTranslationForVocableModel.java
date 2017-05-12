@@ -37,16 +37,35 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     private final DictionaryDAO dao;
     private final Settings settings;
 
-    // TODO: check if is possible to use private <g fields (check tests too)
-    final Set<Integer> extractedPositionsForQuiz = new HashSet<>();
-    int numberOfQuestions;
+    private final Set<Integer> extractedPositionsForQuiz = new HashSet<>();
 
-    private int questionNumber = 0;
-    private int score = 0;
+    private Quiz currentQuiz;
+    private int numberOfQuestions;
+    private int questionNumber;
+    private int score;
 
     public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
+    }
+
+    @Override
+    public int getScore() {
+        return score;
+    }
+
+    @Override
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
+    @Override
+    public int getQuestionNumber() {
+        return questionNumber;
     }
 
     @Override
@@ -64,7 +83,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     @Override
-    public void reset() {
+    public void init() {
         extractedPositionsForQuiz.clear();
         numberOfQuestions = 0;
         questionNumber = 0;
@@ -133,7 +152,8 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         List<Word> translations = event.getTranslations();
         List<String> answers = populateRightAnswers(translations);
 
-        EVENT_BUS.post(new EventQuizGenerated(new Quiz(questionNumber, numberOfQuestions, vocableQuestion, answers)));
+        currentQuiz = new Quiz(questionNumber, numberOfQuestions, vocableQuestion, answers);
+        EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
     }
 
     private List<String> populateRightAnswers(List<Word> translations) {
@@ -145,21 +165,24 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     @Override
-    public int getNumberOfQuestions() {
-        return numberOfQuestions;
+    public Quiz.Result checkAnswer(String answer) {
+        if (currentQuiz == null)
+            throw new RuntimeException("Unexpected exception. No current quiz set in QuizGame model");
+
+        if (isAnswerCorrect(answer)) {
+            score++;
+            return Quiz.Result.RIGHT;
+        } else {
+            return Quiz.Result.WRONG;
+        }
     }
 
-    public int getQuestionNumber() {
-        return questionNumber;
-    }
-
-    @Override
-    public void increaseScore() {
-        score++;
-    }
-
-    @Override
-    public int getScore() {
-        return score;
+    private boolean isAnswerCorrect(String answer) {
+        for (String rightAnswer : currentQuiz.getRightAnswers()) {
+            if (answer.equalsIgnoreCase(rightAnswer)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -64,7 +64,7 @@ public class QuizGameFindTranslationForVocableModelTest {
 
         eventCalculateNumberOfQuestions(MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS, NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
 
-        model.numberOfQuestions = MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS;
+        model.setNumberOfQuestions(MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class QuizGameFindTranslationForVocableModelTest {
 
         eventCalculateNumberOfQuestions(MAX_NUMBER_OF_QUESTIONS_FROM_SETTINGS, NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
 
-        model.numberOfQuestions = NUMBER_OF_VOCABLES_WITH_TRANSLATIONS;
+        model.setNumberOfQuestions(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS);
     }
 
     private void eventCalculateNumberOfQuestions(int numberOfQuestionsFromSettings, int numberOfVocablesWithTranslations) {
@@ -94,7 +94,7 @@ public class QuizGameFindTranslationForVocableModelTest {
 
     @Test
     public void test_onStartQuizGeneration_If_getNumberOfQuizzesGreaterThanZero_extractRandomQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
-        model.numberOfQuestions = 1;
+        model.setNumberOfQuestions(1);
         when(settings.getNumberOfQuestions()).thenReturn(1);
 
         model.generateQuiz();

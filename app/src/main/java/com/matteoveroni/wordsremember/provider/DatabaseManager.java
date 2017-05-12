@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
 
 /**
- * Singleton helper class that manages SQLiteDatabase creation, reset, export and upgrade operations
+ * Singleton helper class that manages SQLiteDatabase creation, init, export and upgrade operations
  * and which contains db attributes.
  *
  * @author Matteo Veroni

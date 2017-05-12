@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.quizgame.model;
 
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
+import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 /**
  * Created by Matteo Veroni
@@ -9,19 +10,20 @@ import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 
 public interface QuizGameModel {
 
-    void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException;
-
-    int getNumberOfQuestions();
-
-    int getQuestionNumber();
-
-    void increaseScore();
-
-    int getScore();
+    void init();
 
     void registerToEventBus();
 
     void unregisterToEventBus();
 
-    void reset();
+    int getNumberOfQuestions();
+
+    int getQuestionNumber();
+
+    void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException;
+
+    Quiz.Result checkAnswer(String answer);
+
+    int getScore();
+
 }
