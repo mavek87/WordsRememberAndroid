@@ -1,6 +1,15 @@
 package com.matteoveroni.wordsremember;
 
+import android.content.SharedPreferences;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowApplication;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +19,9 @@ import static org.junit.Assert.assertEquals;
 
 public class SettingsTest {
 
-    private final Settings settings = new Settings();
+    @Mock
+    private SharedPreferences sharedPreferences;
+    private final Settings settings = new Settings(sharedPreferences);
 
     @Test
     public void test_setPositiveNumberOfQuestionShouldWorks() {

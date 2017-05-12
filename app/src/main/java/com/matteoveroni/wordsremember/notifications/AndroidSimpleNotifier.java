@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember;
+package com.matteoveroni.wordsremember.notifications;
 
 import android.app.Activity;
 import android.app.Notification;

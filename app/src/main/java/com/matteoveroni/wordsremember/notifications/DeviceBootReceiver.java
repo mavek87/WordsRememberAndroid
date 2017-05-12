@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember;
+package com.matteoveroni.wordsremember.notifications;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.Settings;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 import org.joda.time.DateTime;
@@ -26,11 +29,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             Log.i(TAG, "DeviceBootReceiver woke up after system boot completed.");
 
-            SharedPreferences preferences = context.getSharedPreferences(
-                    context.getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-            );
-
+            SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             if (preferences.contains(Settings.LAST_GAME_DATE_KEY)) {
 
                 DateTime currentDate = new DateTime();

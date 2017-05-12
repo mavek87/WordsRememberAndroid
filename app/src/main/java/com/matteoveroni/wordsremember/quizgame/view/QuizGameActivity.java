@@ -200,6 +200,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void showGameResultDialog(int score, int numberOfQuestions) {
+        // TODO: use string resources not fixed strings
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle("Game Result")
@@ -242,13 +243,8 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         showAllViewFields(false);
     }
 
-    private void showAllViewFields(boolean areViewFieldsVisible) {
-        int visibility;
-        if (areViewFieldsVisible) {
-            visibility = View.VISIBLE;
-        } else {
-            visibility = View.INVISIBLE;
-        }
+    private void showAllViewFields(boolean isViewVisible) {
+        int visibility = isViewVisible ? View.VISIBLE : View.INVISIBLE;
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
