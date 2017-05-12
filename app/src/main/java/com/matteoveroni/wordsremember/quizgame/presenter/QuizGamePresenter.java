@@ -51,11 +51,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         }
     }
 
-    private void initGame() {
-        model.reset();
-        isGameAlreadyStarted = true;
-    }
-
     @Override
     public void destroy() {
         settings.saveLastGameDate();
@@ -64,12 +59,26 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         this.view = null;
     }
 
-    @Subscribe
-    public void onEventModelInitialized(EventQuizModelInitialized event) {
-        tryToStartNewQuizOrShowError();
+    private void initGame() {
+        model.reset();
+        isGameAlreadyStarted = true;
     }
 
-    private void tryToStartNewQuizOrShowError() {
+    public void abortGame() {
+        isGameAlreadyStarted = false;
+        view.close();
+    }
+
+    public void continueGame() {
+        startNewQuizOrShowError();
+    }
+
+    @Subscribe
+    public void onEventModelInitialized(EventQuizModelInitialized event) {
+        startNewQuizOrShowError();
+    }
+
+    private void startNewQuizOrShowError() {
         view.reset();
         try {
             model.generateQuiz();
@@ -84,15 +93,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public void onEventQuizGenerated(EventQuizGenerated event) {
         quiz = event.getQuiz();
         view.setPojoUsed(quiz);
-    }
-
-    public void onContinueQuizGame() {
-        tryToStartNewQuizOrShowError();
-    }
-
-    public void onCloseGame() {
-        view.close();
-        isGameAlreadyStarted = false;
     }
 
     public void onQuizResponseFromView(String givenAnswer) {

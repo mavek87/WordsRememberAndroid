@@ -190,7 +190,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage(getString(R.string.press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onContinueQuizGame();
+                        presenter.continueGame();
                     }
                 })
                 .setIcon(img_alertDialog);
@@ -207,7 +207,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage("You\'ve just completed the quiz! You made " + score + "/" + numberOfQuestions + " points.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onCloseGame();
+                        presenter.abortGame();
                     }
                 })
                 .setCancelable(false);
@@ -223,12 +223,18 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.onCloseGame();
+                        presenter.abortGame();
                     }
                 })
                 .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.abortGame();
+        presenter.destroy();
     }
 
     @Override
