@@ -34,8 +34,8 @@
     <string name="msg_vocable_not_saved">Impossibile aggiungere traduzioni se il vocabolo non è ancora salvato. Vuoi salvare il vocabolo e procedere?</string>
     <string name="translate_vocable_in_quiz_question">Traduci vocabolo</string>
     <string name="title_activity_quiz_game">Gioco Quiz</string>
-    <string name="msg_error_no_translation_given_for_vocable_during_quiz_question">Nessuna risposta fornita! Inserisci una risposta per continuare</string>
     <string name="wrong_answer">Risposta errata</string>
     <string name="correct_answer">Risposta corretta</string>
     <string name="press_ok_to_continue">Premi OK per continuare</string>
+    <string name="no_answer_given">Nessuna risposta fornita! Inserisci una risposta per continuare</string>
 </resources>

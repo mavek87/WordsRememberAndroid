@@ -39,6 +39,8 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     private final Set<Integer> extractedPositionsForQuiz = new HashSet<>();
 
+    private boolean isGameAlreadyStarted = false;
+
     private Quiz currentQuiz;
     private int numberOfQuestions;
     private int questionNumber;
@@ -69,25 +71,30 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     @Override
-    public void registerToEventBus() {
-        if (!EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.register(this);
+    public void startGame() {
+        if (!isGameAlreadyStarted) {
+            initGame();
+            isGameAlreadyStarted = true;
         }
+        registerToEventBus();
     }
 
     @Override
-    public void unregisterToEventBus() {
-        if (EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.unregister(this);
-        }
+    public void pauseGame() {
+        unregisterToEventBus();
     }
 
     @Override
-    public void init() {
+    public void abortGame() {
+        isGameAlreadyStarted = false;
+        unregisterToEventBus();
+    }
+
+    private void initGame() {
         extractedPositionsForQuiz.clear();
+        score = 0;
         numberOfQuestions = 0;
         questionNumber = 0;
-        score = 0;
         adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
     }
 
@@ -184,5 +191,17 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
             }
         }
         return false;
+    }
+
+    private void registerToEventBus() {
+        if (!EVENT_BUS.isRegistered(this)) {
+            EVENT_BUS.register(this);
+        }
+    }
+
+    private void unregisterToEventBus() {
+        if (EVENT_BUS.isRegistered(this)) {
+            EVENT_BUS.unregister(this);
+        }
     }
 }

@@ -24,7 +24,7 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.1.35
+ * @version 0.1.36
  **/
 
 public class WordsRemember extends Application {
@@ -32,7 +32,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.1.35";
+    public static final String VERSION = "0.1.36";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
 
@@ -86,7 +86,6 @@ public class WordsRemember extends Application {
         Log.i(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
         Log.i(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
     }
-
 
     private void populateDatabaseForTestPurposes(Context context) {
         final int NUMBER_OF_VOCABLES_TO_CREATE = 1;

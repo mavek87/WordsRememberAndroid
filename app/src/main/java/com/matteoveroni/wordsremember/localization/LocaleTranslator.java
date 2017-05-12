@@ -23,12 +23,12 @@ public class LocaleTranslator {
         Log.d(TAG, "LocaleTranslator created");
     }
 
-    public String localize(String word) {
+    public String localize(String locale_keyword) {
         try {
-            int translation_id = androidResources.getIdentifier(word, "string", context.getPackageName());
+            int translation_id = androidResources.getIdentifier(locale_keyword, "string", context.getPackageName());
             return androidResources.getString(translation_id);
-        }catch (Exception ex) {
-            throw new RuntimeException("Translation for " + word + " not found");
+        } catch (Exception ex) {
+            throw new RuntimeException("Translation for " + locale_keyword + " not found");
         }
     }
 }

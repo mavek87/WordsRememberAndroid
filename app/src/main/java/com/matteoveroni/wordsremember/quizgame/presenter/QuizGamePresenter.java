@@ -26,12 +26,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private QuizGameView view;
-    private final QuizGameModel game;
+    public static final String LOCALE_KEY_ERROR_NO_ANSWER_GIVEN = "no_answer_given";
 
     private final Settings settings;
-
-    private static boolean isGameAlreadyStarted = false;
+    private final QuizGameModel game;
+    private QuizGameView view;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -41,34 +40,23 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     @Override
     public void attachView(QuizGameView quizGameView) {
         this.view = quizGameView;
-
         EVENT_BUS.register(this);
-        game.registerToEventBus();
-
-        if (!isGameAlreadyStarted) {
-            initGame();
-        }
+        game.startGame();
     }
 
     @Override
     public void destroy() {
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
-        this.game.unregisterToEventBus();
+        game.pauseGame();
         this.view = null;
     }
 
-    private void initGame() {
-        game.init();
-        isGameAlreadyStarted = true;
-    }
-
     public void abortGame() {
-        isGameAlreadyStarted = false;
-        view.close();
+        game.abortGame();
     }
 
-    public void continueGame() {
+    public void continueToPlay() {
         startNewQuizOrShowError();
     }
 
@@ -78,7 +66,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     private void startNewQuizOrShowError() {
-        view.reset();
+        view.clearAndHideFields();
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
@@ -94,8 +82,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(quiz);
     }
 
-    public void onQuizResponseFromView(String givenAnswer) {
-        Quiz.Result quizResult = game.checkAnswer(givenAnswer);
-        view.showQuizResultDialog(quizResult);
+    public void onQuizAnswerFromView(String givenAnswer) {
+        if (givenAnswer.trim().isEmpty()) {
+            view.showLocalizedMessage(LOCALE_KEY_ERROR_NO_ANSWER_GIVEN);
+        } else {
+            Quiz.Result quizResult = game.checkAnswer(givenAnswer);
+            view.showQuizResultDialog(quizResult);
+        }
     }
 }

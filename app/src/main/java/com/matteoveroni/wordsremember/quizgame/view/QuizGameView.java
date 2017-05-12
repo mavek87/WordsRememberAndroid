@@ -10,15 +10,13 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
+    void confirmQuizAnswerAction();
+
     void showErrorDialog(String msgErrorTitle, String msgErrorText);
 
     void showQuizResultDialog(Quiz.Result quizResult);
 
     void showGameResultDialog(int points, int numberOfQuestions);
 
-    void buttonAcceptAnswerAction();
-
-    void close();
-
-    void reset();
+    void clearAndHideFields();
 }

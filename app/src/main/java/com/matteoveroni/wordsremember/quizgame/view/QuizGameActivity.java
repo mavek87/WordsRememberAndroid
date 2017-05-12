@@ -14,7 +14,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
@@ -88,16 +87,14 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         ButterKnife.bind(this);
         setupAndShowToolbar();
 
-        if (savedInstanceState != null) {
-            restoreViewData(savedInstanceState);
-        }
+        if (savedInstanceState != null) restoreViewData(savedInstanceState);
 
-        // Associate softkey action button to buttonAcceptAnswerAction()
+        // Associate softkey action button to confirmQuizAnswerAction()
         txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    buttonAcceptAnswerAction();
+                    confirmQuizAnswerAction();
                     return true;
                 } else {
                     return false;
@@ -109,21 +106,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
-    @Override
-    public void buttonAcceptAnswerAction() {
-        final String givenAnswer = txt_answer.getText().toString();
-        if (givenAnswer.trim().isEmpty()) {
-            String msg_error = getString(R.string.msg_error_no_translation_given_for_vocable_during_quiz_question);
-            Toast.makeText(this, msg_error, Toast.LENGTH_SHORT).show();
-        } else {
-            presenter.onQuizResponseFromView(givenAnswer);
-        }
-    }
-
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_quiz_game));
+            String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_quiz_game));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
@@ -151,6 +137,12 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         if (instanceState.containsKey(LBL_ANSWER_KEY)) {
             txt_answer.setText(instanceState.getString(LBL_ANSWER_KEY));
         }
+    }
+
+    @Override
+    public void confirmQuizAnswerAction() {
+        String givenAnswer = txt_answer.getText().toString();
+        presenter.onQuizAnswerFromView(givenAnswer);
     }
 
     @Override
@@ -190,7 +182,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage(getString(R.string.press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.continueGame();
+                        presenter.continueToPlay();
                     }
                 })
                 .setIcon(img_alertDialog);
@@ -207,7 +199,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 .setMessage("You\'ve just completed the quiz! You made " + score + "/" + numberOfQuestions + " points.")
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.abortGame();
+                        quitGame();
                     }
                 })
                 .setCancelable(false);
@@ -233,17 +225,17 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void onBackPressed() {
-        presenter.abortGame();
-        presenter.destroy();
+        quitGame();
     }
 
-    @Override
-    public void close() {
+    private void quitGame() {
+        presenter.abortGame();
+        presenter.destroy();
         finish();
     }
 
     @Override
-    public void reset() {
+    public void clearAndHideFields() {
         lbl_question.setText("");
         txt_answer.setText("");
         showAllViewFields(false);

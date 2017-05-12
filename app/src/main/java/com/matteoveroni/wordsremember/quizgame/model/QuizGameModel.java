@@ -10,11 +10,11 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 public interface QuizGameModel {
 
-    void init();
+    void startGame();
 
-    void registerToEventBus();
+    void pauseGame();
 
-    void unregisterToEventBus();
+    void abortGame();
 
     int getNumberOfQuestions();
 
