@@ -28,7 +28,21 @@ public class LocaleTranslator {
             int translation_id = androidResources.getIdentifier(locale_keyword, "string", context.getPackageName());
             return androidResources.getString(translation_id);
         } catch (Exception ex) {
-            throw new RuntimeException("Translation for " + locale_keyword + " not found");
+            Log.e(TAG, "Translation for " + locale_keyword + " locale keyword not found");
+            return locale_keyword;
         }
+    }
+
+    public String localize(FormattedLocaleString formattedLocaleString) {
+        Object[] placeholders = formattedLocaleString.getArgs();
+        int numberOfPlaceholders = (placeholders == null) ? 0 : placeholders.length;
+
+        for (int i = 0; i < numberOfPlaceholders; i++) {
+            if (placeholders[i] instanceof String) {
+                placeholders[i] = localize((String) placeholders[i]);
+            }
+        }
+
+        return String.format(formattedLocaleString.getString(), placeholders);
     }
 }

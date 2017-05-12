@@ -49,7 +49,11 @@
     <string name="correct_answer">Correct answer</string>
     <string name="wrong_answer">Wrong answer</string>
 
-    <string name="no_answer_given">No answer given! Insert an answer to continue</string>
+    <string name="game_result">Game Results</string>
+    <string name="no_answer_given_msg">No answer given! Insert an answer to continue</string>
+    <string name="game_completed_msg">You\'ve just completed a game session!</string>
+    <string name="score">score</string>
+    <string name="points">points</string>
 
     <string name="press_ok_to_continue">Press OK to continue</string>
 

@@ -37,5 +37,9 @@
     <string name="wrong_answer">Risposta errata</string>
     <string name="correct_answer">Risposta corretta</string>
     <string name="press_ok_to_continue">Premi OK per continuare</string>
-    <string name="no_answer_given">Nessuna risposta fornita! Inserisci una risposta per continuare</string>
+    <string name="no_answer_given_msg">Nessuna risposta fornita! Inserisci una risposta per continuare</string>
+    <string name="points">punti</string>
+    <string name="score">punteggio</string>
+    <string name="game_result">Risultati del gioco</string>
+    <string name="quiz_completed_msg">Hai appena completato una sessione di gioco!</string>
 </resources>

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
+import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
 
 /**
  * @author Matteo Veroni
@@ -21,29 +22,26 @@ public abstract class ActivityView extends AppCompatActivity implements View {
 
     @Override
     public void showLocalizedMessage(String localizableMessage) {
-        showToastWithMessage(localizeMessage(localizableMessage));
+        showToastWithMessage(localize(localizableMessage));
     }
 
     private void showToastWithMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private String localizeMessage(String localizableMessage) {
+    public String localize(String string) {
         if (translator == null)
             translator = WordsRemember.getLocaleTranslator(getApplicationContext());
 
-        return translator.localize(localizableMessage);
+        return translator.localize(string);
     }
 
-    @Override
-    public void showLocalizedMessage(String messageFormattedToLocalize, Object... args) {
-        for (int i = 0; i < args.length; i++) {
-            if (args[i] instanceof String) {
-                args[i] = localizeMessage((String) args[i]);
-            }
-        }
+    public String localize(FormattedLocaleString formattedLocaleString) {
+        if (translator == null)
+            translator = WordsRemember.getLocaleTranslator(getApplicationContext());
 
-        final String formattedLocalizedMessage = String.format(messageFormattedToLocalize, args);
-        showToastWithMessage(formattedLocalizedMessage);
+        return translator.localize(formattedLocaleString);
     }
+
+
 }

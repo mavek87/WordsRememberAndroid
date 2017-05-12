@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
+import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
+
 /**
  * @author Matteo Veroni
  */
@@ -10,5 +12,5 @@ public interface View {
 
     void showLocalizedMessage(String localizableMessage);
 
-    void showLocalizedMessage(String messageFormattedToLocalize, Object... args);
+    void showLocalizedMessage(FormattedLocaleString formattedLocaleString);
 }
