@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.FormattedString;
 
 /**
  * @author Matteo Veroni
@@ -23,26 +24,29 @@ public class LocaleTranslator {
         Log.d(TAG, "LocaleTranslator created");
     }
 
-    public String localize(String locale_keyword) {
+    public String localize(String localeStringKey) {
         try {
-            int translation_id = androidResources.getIdentifier(locale_keyword, "string", context.getPackageName());
+            int translation_id = androidResources.getIdentifier(localeStringKey, "string", context.getPackageName());
             return androidResources.getString(translation_id);
         } catch (Exception ex) {
-            Log.e(TAG, "Translation for " + locale_keyword + " locale keyword not found");
-            return locale_keyword;
+            Log.w(TAG, "Translation for " + localeStringKey + " locale keyword not found");
+            return localeStringKey;
         }
     }
 
-    public String localize(FormattedLocaleString formattedLocaleString) {
-        Object[] placeholders = formattedLocaleString.getArgs();
-        int numberOfPlaceholders = (placeholders == null) ? 0 : placeholders.length;
+    public String localize(FormattedString formattedString) {
+        Object[] placeholders = formattedString.getArgs();
 
-        for (int i = 0; i < numberOfPlaceholders; i++) {
+        if(placeholders == null || placeholders.length == 0) {
+            return localize(formattedString.getFormattedString());
+        }
+
+        for (int i = 0; i < placeholders.length; i++) {
             if (placeholders[i] instanceof String) {
                 placeholders[i] = localize((String) placeholders[i]);
             }
         }
 
-        return String.format(formattedLocaleString.getString(), placeholders);
+        return String.format(formattedString.getFormattedString(), placeholders);
     }
 }

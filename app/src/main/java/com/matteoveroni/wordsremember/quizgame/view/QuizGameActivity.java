@@ -20,7 +20,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
-import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
+import com.matteoveroni.wordsremember.FormattedString;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
@@ -192,11 +192,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void showGameResultDialog(FormattedLocaleString formattedLocaleString) {
+    public void showGameResultDialog(FormattedString formattedString) {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(getString(R.string.game_result))
-                .setMessage(localize(formattedLocaleString))
+                .setMessage(localize(formattedString))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         quitGame();

@@ -41,5 +41,5 @@
     <string name="points">punti</string>
     <string name="score">punteggio</string>
     <string name="game_result">Risultati del gioco</string>
-    <string name="quiz_completed_msg">Hai appena completato una sessione di gioco!</string>
+    <string name="game_completed_msg">Hai appena completato una sessione di gioco!</string>
 </resources>

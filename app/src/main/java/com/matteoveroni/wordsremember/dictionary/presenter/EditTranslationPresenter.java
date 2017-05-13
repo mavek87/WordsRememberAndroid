@@ -58,7 +58,7 @@ public class EditTranslationPresenter implements Presenter {
         if (isTranslationValid(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
-            view.showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         }
     }
 
@@ -68,13 +68,13 @@ public class EditTranslationPresenter implements Presenter {
         if (persistentTranslationWithSameName == null) {
             dao.asyncSaveTranslation(editedTranslationInView);
         } else {
-            view.showLocalizedMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
         }
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
-        view.showLocalizedMessage(MSG_KEY_TRANSLATION_SAVED);
+        view.showMessage(MSG_KEY_TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
         model.setLastValidTranslationSelected(editedTranslationInView);

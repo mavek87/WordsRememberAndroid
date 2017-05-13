@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.FormattedString;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,7 +51,7 @@ public class AddTranslationPresenter implements Presenter {
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
         model.setLastValidTranslationSelected(translation);
-        view.showLocalizedMessage("%s (" + translation.getName() + ")", MSG_KEY_TRANSLATION_ADDED);
+        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", MSG_KEY_TRANSLATION_ADDED));
         view.returnToPreviousView();
     }
 

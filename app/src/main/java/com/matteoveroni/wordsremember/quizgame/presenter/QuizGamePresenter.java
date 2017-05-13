@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
+import com.matteoveroni.wordsremember.FormattedString;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
@@ -75,7 +75,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            view.showGameResultDialog(new FormattedLocaleString(
+            view.showGameResultDialog(new FormattedString(
                     "%s %s %d/%d %s",
                     LOCALE_KEY_GAME_COMPLETED_MSG,
                     LOCALE_KEY_SCORE,
@@ -96,7 +96,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public void onQuizAnswerFromView(String givenAnswer) {
         if (givenAnswer.trim().isEmpty()) {
-            view.showLocalizedMessage(LOCALE_KEY_NO_ANSWER_GIVEN_MSG);
+            view.showMessage(LOCALE_KEY_NO_ANSWER_GIVEN_MSG);
         } else {
             Quiz.Result quizResult = game.checkAnswer(givenAnswer);
             view.showQuizResultDialog(quizResult);

@@ -3,9 +3,9 @@ package com.matteoveroni.wordsremember.interfaces.view;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.matteoveroni.wordsremember.FormattedString;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
 
 /**
  * @author Matteo Veroni
@@ -13,35 +13,30 @@ import com.matteoveroni.wordsremember.localization.FormattedLocaleString;
 
 public abstract class ActivityView extends AppCompatActivity implements View {
 
-    protected LocaleTranslator translator;
+    private LocaleTranslator translator;
 
     @Override
     public void showMessage(String message) {
-        showToastWithMessage(message);
+        Toast.makeText(getApplicationContext(), localize(message), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showLocalizedMessage(String localizableMessage) {
-        showToastWithMessage(localize(localizableMessage));
+    public void showMessage(FormattedString formattedLocaleMessage) {
+        Toast.makeText(getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
     }
 
-    private void showToastWithMessage(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    public String localize(String localeStringKey) {
+        return getTranslator().localize(localeStringKey);
     }
 
-    public String localize(String string) {
+    public String localize(FormattedString formattedLocaleString) {
+        return getTranslator().localize(formattedLocaleString);
+    }
+
+    protected LocaleTranslator getTranslator() {
         if (translator == null)
             translator = WordsRemember.getLocaleTranslator(getApplicationContext());
-
-        return translator.localize(string);
+        return translator;
     }
-
-    public String localize(FormattedLocaleString formattedLocaleString) {
-        if (translator == null)
-            translator = WordsRemember.getLocaleTranslator(getApplicationContext());
-
-        return translator.localize(formattedLocaleString);
-    }
-
 
 }
