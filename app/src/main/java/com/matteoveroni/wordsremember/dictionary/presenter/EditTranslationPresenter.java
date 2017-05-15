@@ -24,9 +24,9 @@ public class EditTranslationPresenter implements Presenter {
     private final DictionaryDAO dao;
     private EditTranslation view;
 
-    public static final String MSG_KEY_TRANSLATION_SAVED = "translation_saved";
-    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "msg_error_trying_to_store_invalid_translation";
-    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "msg_error_trying_to_store_duplicate_translation_name";
+    public static final String LOCALE_MSG_KEY_TRANSLATION_SAVED = "translation_saved";
+    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "error_trying_to_store_invalid_translation";
+    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "error_trying_to_store_duplicate_translation_name";
 
     protected Word editedTranslationInView = null;
 
@@ -58,7 +58,7 @@ public class EditTranslationPresenter implements Presenter {
         if (isTranslationValid(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         }
     }
 
@@ -68,13 +68,13 @@ public class EditTranslationPresenter implements Presenter {
         if (persistentTranslationWithSameName == null) {
             dao.asyncSaveTranslation(editedTranslationInView);
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
         }
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
-        view.showMessage(MSG_KEY_TRANSLATION_SAVED);
+        view.showMessage(LOCALE_MSG_KEY_TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
         model.setLastValidTranslationSelected(editedTranslationInView);

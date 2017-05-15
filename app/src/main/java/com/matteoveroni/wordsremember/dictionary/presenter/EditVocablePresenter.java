@@ -26,9 +26,9 @@ public class EditVocablePresenter implements Presenter {
     private final DictionaryModel model;
     private EditVocable view;
 
-    public static final String MSG_KEY_VOCABLE_SAVED = "vocable_saved";
-    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "msg_error_trying_to_store_invalid_vocable";
-    public static final String MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "msg_error_trying_to_store_duplicate_vocable_name";
+    public static final String LOCALE_MSG_KEY_VOCABLE_SAVED = "vocable_saved";
+    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "error_trying_to_store_invalid_vocable";
+    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "error_trying_to_store_duplicate_vocable_name";
 
     protected Word editedVocableInView = null;
 
@@ -85,7 +85,7 @@ public class EditVocablePresenter implements Presenter {
         if (isVocableValid(editedVocableInView)) {
             dao.asyncSearchVocableByName(editedVocableInView.getName());
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
         }
     }
 
@@ -93,9 +93,9 @@ public class EditVocablePresenter implements Presenter {
     public void onEvent(EventAsyncSearchVocableCompleted event) {
         final Word persistentVocableWithSameName = event.getVocable();
         if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
-            view.showMessage(MSG_KEY_VOCABLE_SAVED);
+            view.showMessage(LOCALE_MSG_KEY_VOCABLE_SAVED);
         } else {
-            view.showMessage(MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
     }
 

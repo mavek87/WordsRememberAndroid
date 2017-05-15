@@ -27,7 +27,7 @@ public class AddTranslationPresenter implements Presenter {
     private final DictionaryModel model;
     private AddTranslation view;
 
-    protected static final String MSG_KEY_TRANSLATION_ADDED = "translation_added";
+    protected static final String LOCALE_MSG_KEY_TRANSLATION_ADDED = "translation_added";
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -51,7 +51,7 @@ public class AddTranslationPresenter implements Presenter {
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
         model.setLastValidTranslationSelected(translation);
-        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", MSG_KEY_TRANSLATION_ADDED));
+        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", LOCALE_MSG_KEY_TRANSLATION_ADDED));
         view.returnToPreviousView();
     }
 

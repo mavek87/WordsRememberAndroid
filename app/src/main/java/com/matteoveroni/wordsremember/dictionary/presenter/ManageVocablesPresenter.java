@@ -29,7 +29,7 @@ public class ManageVocablesPresenter implements Presenter {
     private final DictionaryModel model;
     private ManageVocablesView view;
 
-    private static final String MSG_KEY_VOCABLE_REMOVED = "vocable_removed";
+    protected static final String LOCALE_MSG_KEY_VOCABLE_REMOVED = "vocable_removed";
 
     public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -74,6 +74,6 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        view.showMessage(MSG_KEY_VOCABLE_REMOVED);
+        view.showMessage(LOCALE_MSG_KEY_VOCABLE_REMOVED);
     }
 }
