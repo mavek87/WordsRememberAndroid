@@ -208,10 +208,10 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void showErrorDialog(String msgErrorTitle, String msgErrorText) {
+    public void showErrorDialog(String msgErrorText) {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
-                .setTitle(msgErrorTitle)
+                .setTitle(getString(R.string.error))
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

@@ -13,7 +13,7 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void confirmQuizAnswerAction();
 
-    void showErrorDialog(String msgErrorTitle, String msgErrorText);
+    void showErrorDialog(String msgErrorText);
 
     void showQuizResultDialog(Quiz.Result quizResult);
 

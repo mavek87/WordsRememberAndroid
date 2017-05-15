@@ -4,6 +4,8 @@
 
     <string name="preference_file_key">Preferences</string>
 
+    <string name="error">Error</string>
+
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>

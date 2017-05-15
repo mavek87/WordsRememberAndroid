@@ -42,4 +42,5 @@
     <string name="score">punteggio</string>
     <string name="game_result">Risultati del gioco</string>
     <string name="game_completed_msg">Hai appena completato una sessione di gioco!</string>
+    <string name="error">Errore</string>
 </resources>

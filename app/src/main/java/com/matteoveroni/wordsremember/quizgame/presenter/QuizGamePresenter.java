@@ -27,11 +27,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    public static final String LOCALE_KEY_NO_ANSWER_GIVEN_MSG = "no_answer_given_msg";
-    public static final String LOCALE_KEY_GAME_COMPLETED_MSG = "game_completed_msg";
-    public static final String LOCALE_KEY_SCORE = "score";
-    public static final String LOCALE_KEY_POINTS = "points";
-
+    protected static final String LOCALE_KEY_ERROR = "error";
+    protected static final String LOCALE_KEY_NO_ANSWER_GIVEN_MSG = "no_answer_given_msg";
+    protected static final String LOCALE_KEY_GAME_COMPLETED_MSG = "game_completed_msg";
+    protected static final String LOCALE_KEY_SCORE = "score";
+    protected static final String LOCALE_KEY_POINTS = "points";
 
     private final Settings settings;
     private final QuizGameModel game;
@@ -54,7 +54,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
         game.pauseGame();
-        this.view = null;
+        view = null;
     }
 
     public void abortGame() {
@@ -75,16 +75,18 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            view.showGameResultDialog(new FormattedString(
-                    "%s %s %d/%d %s",
-                    LOCALE_KEY_GAME_COMPLETED_MSG,
-                    LOCALE_KEY_SCORE,
-                    game.getScore(),
-                    game.getNumberOfQuestions(),
-                    LOCALE_KEY_POINTS
-            ));
+            view.showGameResultDialog(
+                    new FormattedString(
+                            "%s %s %d/%d %s",
+                            LOCALE_KEY_GAME_COMPLETED_MSG,
+                            LOCALE_KEY_SCORE,
+                            game.getScore(),
+                            game.getNumberOfQuestions(),
+                            LOCALE_KEY_POINTS
+                    ));
         } catch (ZeroQuizzesException ex) {
-            view.showErrorDialog("Error", "Insert some vocable with translations to play a new game");
+            // TODO: use a locale key
+            view.showErrorDialog("Insert some vocable with translations to play a new game");
         }
     }
 
