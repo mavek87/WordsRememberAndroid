@@ -1,17 +1,17 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.FormattedString;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
+import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
-import com.matteoveroni.wordsremember.Settings;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
-import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
 import org.greenrobot.eventbus.EventBus;

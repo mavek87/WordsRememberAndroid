@@ -15,12 +15,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
-import com.matteoveroni.wordsremember.FormattedString;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
@@ -192,11 +192,11 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     @Override
-    public void showGameResultDialog(FormattedString formattedString) {
+    public void showGameResultDialog(FormattedString gameResultMessage) {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(getString(R.string.game_result))
-                .setMessage(localize(formattedString))
+                .setMessage(localize(gameResultMessage))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         quitGame();

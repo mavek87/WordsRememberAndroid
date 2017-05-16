@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.interfaces.view;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.matteoveroni.wordsremember.FormattedString;
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 

@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.FormattedString;
+import com.matteoveroni.myutils.FormattedString;
 
 /**
  * @author Matteo Veroni

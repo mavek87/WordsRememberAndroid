@@ -1,14 +1,14 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.FormattedString;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
