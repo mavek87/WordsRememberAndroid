@@ -133,7 +133,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         IntRange positionsRange = new IntRange(0, numberOfQuestions - 1);
         int randPosition;
         do {
-            randPosition = Int.getRandomInteger(positionsRange);
+            randPosition = Int.getRandomInt(positionsRange);
             extractedPositionsForQuiz.add(randPosition);
         } while (extractedPositionsForQuiz.size() == initialNumberOfExtractedPositionsForQuiz);
         return randPosition;

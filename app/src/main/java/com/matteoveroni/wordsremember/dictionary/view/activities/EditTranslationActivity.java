@@ -91,7 +91,7 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_dictionary_add_translation_activity));
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.add_translation));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);

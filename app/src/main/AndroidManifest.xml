@@ -29,7 +29,7 @@
 
         <activity
             android:name=".main_menu.MainMenuActivity"
-            android:label="@string/title_activity_main_menu"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,26 +39,26 @@
 
         <activity
             android:name=".quizgame.view.QuizGameActivity"
-            android:label="@string/title_activity_quiz_game"
+            android:label="@string/quiz_game"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".dictionary.view.activities.ManageVocablesActivity"
-            android:label="@string/title_activity_dictionary_vocables_manager" />
+            android:label="@string/vocables_editor" />
 
         <activity
             android:name=".dictionary.view.activities.EditVocableActivity"
-            android:label="@string/title_activity_dictionary_vocable_editor"
+            android:label="@string/vocable_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".dictionary.view.activities.AddTranslationActivity"
-            android:label="@string/title_dictionary_add_translation_activity"
+            android:label="@string/add_translation"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".dictionary.view.activities.EditTranslationActivity"
-            android:label="@string/title_dictionary_edit_translation_activity"
+            android:label="@string/edit_translation"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

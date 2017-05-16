@@ -83,7 +83,7 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_dictionary_vocable_editor));
+            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.vocable_editor));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);

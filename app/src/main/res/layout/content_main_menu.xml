@@ -35,8 +35,7 @@
             android:layout_height="wrap_content"
             android:minHeight="80dp"
             android:minWidth="200dp"
-            android:text="@string/main_menu_start_training" />
-
+            android:text="@string/start_training" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -48,7 +47,7 @@
             android:layout_height="wrap_content"
             android:minHeight="80dp"
             android:minWidth="200dp"
-            android:text="@string/main_menu_manage_dictionary" />
+            android:text="@string/manage_dictionary" />
 
         <Space
             android:layout_width="match_parent"
@@ -61,7 +60,7 @@
             android:layout_height="wrap_content"
             android:minHeight="80dp"
             android:minWidth="200dp"
-            android:text="@string/main_menu_settings" />
+            android:text="@string/settings" />
 
         <Space
             android:layout_width="match_parent"

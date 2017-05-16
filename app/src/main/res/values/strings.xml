@@ -4,59 +4,45 @@
 
     <string name="preference_file_key">Preferences</string>
 
-    <string name="error">Error</string>
-
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
-
-    <string name="add_word">Add Word</string>
-    <string name="add_translation">Add Translation</string>
-    <string name="title_activity_main_menu">Main Menu</string>
-
-    <string name="main_menu_start_training">Start training</string>
-    <string name="main_menu_manage_dictionary">Manage dictionary</string>
-    <string name="main_menu_settings">Settings</string>
-    <string name="main_menu_help">Help</string>
-
-    <string name="fragment_vocables_manager_title">Dictionary</string>
-    <string name="fragment_vocable_editor_title">Vocable editor</string>
-    <string name="fragment_translations_manager_title">Translations</string>
-    <string name="fragment_translation_editor_title">Translation editor</string>
-
-    <string name="create_vocable">Create vocable</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
-
-    <string name="title_activity_quiz_game">Quiz Game</string>
-    <string name="title_activity_dictionary_vocables_manager">Dictionary</string>
-    <string name="title_activity_dictionary_vocable_editor">Vocables editor</string>
-    <string name="title_dictionary_add_translation_activity">Add translation</string>
-    <string name="title_dictionary_edit_translation_activity">Edit translation</string>
-
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
+    <string name="error">Error</string>
+    <string name="score">score</string>
+    <string name="points">points</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="quiz_game">Quiz Game</string>
+    <string name="game_result">Game Results</string>
+    <string name="start_training">Start training</string>
+    <string name="correct_answer">Correct answer</string>
+    <string name="wrong_answer">Wrong answer</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="manage_dictionary">Manage dictionary</string>
+    <string name="add_word">Add Word</string>
+    <string name="create_vocable">Create vocable</string>
+    <string name="vocable_editor">Vocable editor</string>
+    <string name="vocables_editor">Vocables editor</string>
     <string name="vocable_saved">Vocable saved</string>
     <string name="vocable_not_saved">Vocable not saved</string>
     <string name="vocable_removed">Vocable removed</string>
+    <string name="translations">Translations</string>
+    <string name="translations_editor">Translation editor</string>
+    <string name="add_translation">Add Translation</string>
+    <string name="edit_translation">Edit translation</string>
+    <string name="translate_vocable">Translate vocable</string>
+    <string name="translation_saved">Translation saved</string>
+    <string name="translation_added">Translation added</string>
     <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Invalid vocable, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_vocable_name">Cannot save the vocable using this name. Name already used.</string>
-
-    <string name="translation_saved">Translation saved</string>
-    <string name="translation_added">Translation added</string>
     <string name="msg_error_trying_to_store_invalid_translation">Invalid translation, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_translation_name">Cannot save the translation using this name. Name already used.</string>
-
-    <string name="translate_vocable_in_quiz_question">Translate vocable</string>
-
-    <string name="correct_answer">Correct answer</string>
-    <string name="wrong_answer">Wrong answer</string>
-
-    <string name="game_result">Game Results</string>
-    <string name="no_answer_given_msg">No answer given! Insert an answer to continue</string>
-    <string name="game_completed_msg">You\'ve just completed a game session!</string>
-    <string name="score">score</string>
-    <string name="points">points</string>
-
-    <string name="press_ok_to_continue">Press OK to continue</string>
-
+    <string name="msg_error_insert_some_vocable">Insert some vocable with translations to play a new game</string>
+    <string name="msg_error_no_answer_given">No answer given! Insert an answer to continue</string>
+    <string name="msg_game_completed">You\'ve just completed a game session!</string>
+    <string name="msg_press_ok_to_continue">Press OK to continue</string>
 </resources>

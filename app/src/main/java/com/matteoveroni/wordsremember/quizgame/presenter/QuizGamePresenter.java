@@ -27,9 +27,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    protected static final String LOCALE_KEY_ERROR = "error";
-    protected static final String LOCALE_KEY_NO_ANSWER_GIVEN_MSG = "no_answer_given_msg";
-    protected static final String LOCALE_KEY_GAME_COMPLETED_MSG = "game_completed_msg";
+    protected static final String LOCALE_KEY_MSG_ERROR_NO_ANSWER_GIVEN = "msg_error_no_answer_given";
+    protected static final String LOCALE_KEY_ERROR_INSERT_SOME_VOCABLE = "msg_error_insert_some_vocable";
+    protected static final String LOCALE_KEY_MSG_GAME_COMPLETED = "msg_game_completed";
     protected static final String LOCALE_KEY_SCORE = "score";
     protected static final String LOCALE_KEY_POINTS = "points";
 
@@ -75,18 +75,17 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            view.showGameResultDialog(
-                    new FormattedString(
-                            "%s %s %d/%d %s",
-                            LOCALE_KEY_GAME_COMPLETED_MSG,
-                            LOCALE_KEY_SCORE,
-                            game.getScore(),
-                            game.getNumberOfQuestions(),
-                            LOCALE_KEY_POINTS
-                    ));
+            FormattedString gameResultMessage = new FormattedString(
+                    "%s %s %d/%d %s",
+                    LOCALE_KEY_MSG_GAME_COMPLETED,
+                    LOCALE_KEY_SCORE,
+                    game.getScore(),
+                    game.getNumberOfQuestions(),
+                    LOCALE_KEY_POINTS
+            );
+            view.showGameResultDialog(gameResultMessage);
         } catch (ZeroQuizzesException ex) {
-            // TODO: use a locale key
-            view.showErrorDialog("Insert some vocable with translations to play a new game");
+            view.showErrorDialog(LOCALE_KEY_ERROR_INSERT_SOME_VOCABLE);
         }
     }
 
@@ -98,7 +97,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public void onQuizAnswerFromView(String givenAnswer) {
         if (givenAnswer.trim().isEmpty()) {
-            view.showMessage(LOCALE_KEY_NO_ANSWER_GIVEN_MSG);
+            view.showMessage(LOCALE_KEY_MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
             Quiz.Result quizResult = game.checkAnswer(givenAnswer);
             view.showQuizResultDialog(quizResult);

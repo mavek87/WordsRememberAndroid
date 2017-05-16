@@ -110,7 +110,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     private void setupAndShowToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.title_activity_quiz_game));
+            String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.quiz_game));
             toolbar.setTitle(title);
         }
         setSupportActionBar(toolbar);
@@ -154,7 +154,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @Override
     public void setPojoUsed(Quiz quiz) {
         currentQuiz = quiz;
-        lbl_question.setText(getString(R.string.translate_vocable_in_quiz_question) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
+        lbl_question.setText(getString(R.string.translate_vocable) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
         lbl_question_vocable.setText(currentQuiz.getQuestion());
         showAllViewFields(true);
     }
@@ -180,7 +180,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(quizResultTitle)
-                .setMessage(getString(R.string.press_ok_to_continue))
+                .setMessage(getString(R.string.msg_press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.continueToPlay();
