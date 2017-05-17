@@ -1,3 +1,24 @@
+REST API REQUESTS (RETROFIT):
+
+https://github.com/codepath/android_guides/wiki/Consuming-APIs-with-Retrofit
+https://www.youtube.com/watch?v=3cN6aJmwMAg
+https://www.youtube.com/watch?v=dKyaPxXwKcg#t=407.977407
+https://inthecheesefactory.com/blog/retrofit-2.0/en
+
+http://www.jsonschema2pojo.org/
+https://glosbe.com/a-api
+http://transltr.org/Developers#!/Translate/Translate_Translate_0
+
+https://developer.oxforddictionaries.com/documentation#/
+
+
+
+CONTROLLARE JSON
+
+https://jsonlint.com/
+http://jsonviewer.stack.hu/
+
+
 REMEMBERING WORDS:
 
 http://www.thepolyglotdream.com/forget-it-the-secret-of-remembering-words/
