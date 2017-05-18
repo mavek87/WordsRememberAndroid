@@ -1,18 +1,18 @@
 package com.matteoveroni.wordsremember.web;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.ContentType;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.GlosbePojo;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.Phrase;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.Tuc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,9 +27,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class WebTranslator {
 
     private static final String TAG = TagGenerator.tag(WebTranslator.class);
+
+    private volatile static WebTranslator WEB_TRANSLATOR_UNIQUE_INSTANCE;
+
     private final WebDictionaryReaderService apiService;
 
-    public WebTranslator() {
+    private WebTranslator() {
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(WebDictionaryReaderService.GLOSBE_WEB_DICTIONARY_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -38,13 +41,25 @@ public class WebTranslator {
         apiService = retrofit.create(WebDictionaryReaderService.class);
     }
 
-    public void translate(String locale_from, String locale_dest, final Word vocableToTranslate, final WebTranslatorListener listener) {
+    public static final WebTranslator getInstance() {
+        if (WEB_TRANSLATOR_UNIQUE_INSTANCE == null) {
+            synchronized (WebTranslator.class) {
+                if (WEB_TRANSLATOR_UNIQUE_INSTANCE == null) {
+                    WEB_TRANSLATOR_UNIQUE_INSTANCE = new WebTranslator();
+                }
+            }
+        }
+        return WEB_TRANSLATOR_UNIQUE_INSTANCE;
+    }
+
+    public void translate(Word vocableToTranslate, Locale locale_from, Locale locale_dest, final WebTranslatorListener listener) {
+        Log.i(TAG, "TRANSLATION REQUEST => translate \'" + vocableToTranslate.getName() + "\' from \'" + locale_from + "\' to \'" + locale_dest + "\'");
 
         Call<GlosbePojo> request = apiService.getGlosbeTranslation(
-                locale_from,
-                locale_dest,
-                "json",
-                vocableToTranslate.getName(),
+                locale_from.getLanguage(),
+                locale_dest.getLanguage(),
+                ContentType.JSON.getName(),
+                vocableToTranslate.getName().toLowerCase(),
                 "true"
         );
 
@@ -53,16 +68,13 @@ public class WebTranslator {
             @Override
             public void onResponse(Call<GlosbePojo> request, Response<GlosbePojo> response) {
                 final int statusCode = response.code();
-                Log.i(TAG, "response STATUS_CODE: " + statusCode);
+                Log.i(TAG, "RESPONSE STATUS_CODE: " + statusCode);
 
                 final GlosbePojo glosbePojo = response.body();
-                Log.i(TAG, "GLOSBE POJO IN JSON: " + Json.getInstance().toJson(glosbePojo));
+                Log.i(TAG, "GLOSBE_POJO JSONized: " + Json.getInstance().toJson(glosbePojo));
 
-                final List<VocableTranslation> vocableTranslations = convertGlosbePojoInVocableTranslations(
-                        glosbePojo, vocableToTranslate
-                );
-
-                listener.onTranslationCompletedSuccessfully(vocableTranslations);
+                final List<Word> translations = getTranslations(glosbePojo);
+                listener.onTranslationCompletedSuccessfully(translations);
             }
 
             @Override
@@ -74,15 +86,14 @@ public class WebTranslator {
         });
     }
 
-    @NonNull
-    private List<VocableTranslation> convertGlosbePojoInVocableTranslations(GlosbePojo glosbePojo, Word vocableToTranslate) {
+    private List<Word> getTranslations(GlosbePojo glosbePojo) {
         List<Tuc> tucs = glosbePojo.getTuc();
-        List<VocableTranslation> webTranslations = new ArrayList<>();
+        List<Word> webTranslations = new ArrayList<>();
 
         for (Tuc tuc : tucs) {
             Phrase phrase = tuc.getPhrase();
             if (phrase != null && !phrase.getText().trim().isEmpty()) {
-                webTranslations.add(new VocableTranslation(vocableToTranslate, new Word(phrase.getText())));
+                webTranslations.add(new Word(phrase.getText()));
                 Log.i(TAG, phrase.getText());
             }
         }

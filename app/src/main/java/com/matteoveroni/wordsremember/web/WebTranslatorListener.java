@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.web;
 
-import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface WebTranslatorListener {
 
-    void onTranslationCompletedSuccessfully(List<VocableTranslation> translationsFound);
+    void onTranslationCompletedSuccessfully(List<Word> translationsFound);
 
     void onTranslationCompletedWithError(Throwable t);
 }

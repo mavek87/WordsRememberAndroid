@@ -24,7 +24,7 @@ import com.matteoveroni.wordsremember.provider.DatabaseManager;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.1.42
+ * @version 0.1.43
  **/
 
 public class WordsRemember extends Application {
