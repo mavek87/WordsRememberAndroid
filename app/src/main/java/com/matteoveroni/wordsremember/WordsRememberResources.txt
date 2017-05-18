@@ -5,15 +5,20 @@ https://www.youtube.com/watch?v=3cN6aJmwMAg
 https://www.youtube.com/watch?v=dKyaPxXwKcg#t=407.977407
 https://inthecheesefactory.com/blog/retrofit-2.0/en
 
-http://www.jsonschema2pojo.org/
+REST API MULTILINGUAL DICTIONARY:
+
 https://glosbe.com/a-api
-http://transltr.org/Developers#!/Translate/Translate_Translate_0
+http://transltr.org/
 
 https://developer.oxforddictionaries.com/documentation#/
 
 
+JSON:
 
-CONTROLLARE JSON
+https://jsonformatter.org/
+
+http://www.jsonschema2pojo.org/
+http://pojo.sodhanalibrary.com/
 
 https://jsonlint.com/
 http://jsonviewer.stack.hu/
