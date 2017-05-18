@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -20,11 +21,13 @@ import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.DatabaseManager;
 
+import java.util.Locale;
+
 /**
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.1.43
+ * @version 0.1.44
  **/
 
 public class WordsRemember extends Application {
@@ -32,9 +35,10 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = TagGenerator.tag(WordsRemember.class);
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.1.42";
+    public static final String VERSION = "0.1.44";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
+    public static Locale CURRENT_LOCALE;
 
     private static final boolean START_WITH_EMPTY_DB = false;
     private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
@@ -46,8 +50,13 @@ public class WordsRemember extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        CURRENT_LOCALE = getCurrentLocale();
+
         printAppSpecs();
+
         buildAppComponent();
+
         if (START_WITH_EMPTY_DB) {
             DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
         }
@@ -85,6 +94,15 @@ public class WordsRemember extends Application {
         Log.i(APP_NAME, Str.concat("AUTHOR: ", AUTHOR));
         Log.i(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
         Log.i(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
+        Log.i(APP_NAME, Str.concat("CURRENT LOCALE: ", getCurrentLocale().toString()));
+    }
+
+    private Locale getCurrentLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return getResources().getConfiguration().getLocales().get(0);
+        } else {
+            return getResources().getConfiguration().locale;
+        }
     }
 
     private void populateDatabaseForTestPurposes(Context context) {

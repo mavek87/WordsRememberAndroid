@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.model;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
-import com.matteoveroni.wordsremember.Settings;
+import com.matteoveroni.wordsremember.settings.Settings;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;

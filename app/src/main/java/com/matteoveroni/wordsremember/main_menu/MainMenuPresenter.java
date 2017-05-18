@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.web.WebTranslator;

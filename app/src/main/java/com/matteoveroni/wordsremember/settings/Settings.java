@@ -1,12 +1,15 @@
-package com.matteoveroni.wordsremember;
+package com.matteoveroni.wordsremember.settings;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 import org.joda.time.DateTime;
 
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Matteo Veroni

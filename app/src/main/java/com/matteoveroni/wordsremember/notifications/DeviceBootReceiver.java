@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.Settings;
+import com.matteoveroni.wordsremember.settings.Settings;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
@@ -22,23 +22,24 @@ public class DeviceBootReceiver extends BroadcastReceiver {
 
     public static final String TAG = TagGenerator.tag(DeviceBootReceiver.class);
 
-    private static final int OCCURRED_TIME_FOR_NOTIFICATION_IN_DAYS = 3;
+    private static final int DAYS_TO_PASS_BEFORE_NOTIFICATION = 3;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            Log.i(TAG, "DeviceBootReceiver woke up after system boot completed.");
+            Log.d(TAG, "DeviceBootReceiver woke up after system boot completed.");
 
             SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             if (preferences.contains(Settings.LAST_GAME_DATE_KEY)) {
 
                 DateTime currentDate = new DateTime();
-                Log.i(TAG, "Current date: " + currentDate);
+                Log.d(TAG, "Current date: " + currentDate);
 
                 DateTime lastGameDate = DateTime.parse(preferences.getString(Settings.LAST_GAME_DATE_KEY, ""));
-                Log.i(TAG, "Last played game\'s date: " + lastGameDate);
+                Log.d(TAG, "Last played game\'s date: " + lastGameDate);
 
-                if (currentDate.isAfter(lastGameDate.plusDays(OCCURRED_TIME_FOR_NOTIFICATION_IN_DAYS))) {
+                DateTime dateOfNotification = lastGameDate.plusDays(DAYS_TO_PASS_BEFORE_NOTIFICATION);
+                if (currentDate.isAfter(dateOfNotification)) {
                     new AndroidSimpleNotifier(
                             new MainMenuActivity(),
                             context,

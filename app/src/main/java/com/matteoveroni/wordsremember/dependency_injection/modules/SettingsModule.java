@@ -1,11 +1,8 @@
 package com.matteoveroni.wordsremember.dependency_injection.modules;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.Settings;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.settings.Settings;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 import javax.inject.Singleton;
