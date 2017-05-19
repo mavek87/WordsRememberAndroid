@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,15 +19,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class EditTranslationPresenter implements Presenter {
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryModel model;
     private final DictionaryDAO dao;
     private EditTranslation view;
-
-    public static final String LOCALE_MSG_KEY_TRANSLATION_SAVED = "translation_saved";
-    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "error_trying_to_store_invalid_translation";
-    public static final String LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "error_trying_to_store_duplicate_translation_name";
 
     protected Word editedTranslationInView = null;
 
@@ -42,12 +39,12 @@ public class EditTranslationPresenter implements Presenter {
         final Word newEmptyTranslation = new Word("");
         this.view.setPojoUsed(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
 
-        eventBus.register(this);
+        EVENT_BUS.register(this);
     }
 
     @Override
     public void destroy() {
-        eventBus.unregister(this);
+        EVENT_BUS.unregister(this);
         view = null;
     }
 
@@ -58,7 +55,7 @@ public class EditTranslationPresenter implements Presenter {
         if (isTranslationValid(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
-            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         }
     }
 
@@ -68,13 +65,13 @@ public class EditTranslationPresenter implements Presenter {
         if (persistentTranslationWithSameName == null) {
             dao.asyncSaveTranslation(editedTranslationInView);
         } else {
-            view.showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
         }
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveTranslationCompleted event) {
-        view.showMessage(LOCALE_MSG_KEY_TRANSLATION_SAVED);
+        view.showMessage(LocaleKey.TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
         model.setLastValidTranslationSelected(editedTranslationInView);

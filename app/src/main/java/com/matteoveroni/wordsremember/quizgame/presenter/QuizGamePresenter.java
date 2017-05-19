@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.quizgame.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.settings.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
@@ -26,12 +27,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
-
-    protected static final String LOCALE_KEY_MSG_ERROR_NO_ANSWER_GIVEN = "msg_error_no_answer_given";
-    protected static final String LOCALE_KEY_ERROR_INSERT_SOME_VOCABLE = "msg_error_insert_some_vocable";
-    protected static final String LOCALE_KEY_MSG_GAME_COMPLETED = "msg_game_completed";
-    protected static final String LOCALE_KEY_SCORE = "score";
-    protected static final String LOCALE_KEY_POINTS = "points";
 
     private final Settings settings;
     private final QuizGameModel game;
@@ -77,15 +72,15 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         } catch (NoMoreQuizzesException ex) {
             FormattedString gameResultMessage = new FormattedString(
                     "%s %s %d/%d %s",
-                    LOCALE_KEY_MSG_GAME_COMPLETED,
-                    LOCALE_KEY_SCORE,
+                    LocaleKey.MSG_GAME_COMPLETED,
+                    LocaleKey.SCORE,
                     game.getScore(),
                     game.getNumberOfQuestions(),
-                    LOCALE_KEY_POINTS
+                    LocaleKey.POINTS
             );
             view.showGameResultDialog(gameResultMessage);
         } catch (ZeroQuizzesException ex) {
-            view.showErrorDialog(LOCALE_KEY_ERROR_INSERT_SOME_VOCABLE);
+            view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
         }
     }
 
@@ -97,7 +92,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public void onQuizAnswerFromView(String givenAnswer) {
         if (givenAnswer.trim().isEmpty()) {
-            view.showMessage(LOCALE_KEY_MSG_ERROR_NO_ANSWER_GIVEN);
+            view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
             Quiz.Result quizResult = game.checkAnswer(givenAnswer);
             view.showQuizResultDialog(quizResult);

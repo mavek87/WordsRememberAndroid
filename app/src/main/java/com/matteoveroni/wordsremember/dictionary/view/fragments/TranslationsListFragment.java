@@ -43,7 +43,8 @@ import butterknife.Unbinder;
 public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulable<Word> {
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
-    private static final EventBus eventBus = EventBus.getDefault();
+
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     public enum Type {
         TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
@@ -210,10 +211,10 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     private void removeTranslationRequest(Word translation) {
         switch (type) {
             case TRANSLATIONS:
-                eventBus.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
+                EVENT_BUS.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
                 break;
             case TRANSLATIONS_FOR_VOCABLE:
-                eventBus.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView.getId(), translation.getId(), TypeOfManipulationRequest.REMOVE));
+                EVENT_BUS.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView.getId(), translation.getId(), TypeOfManipulationRequest.REMOVE));
                 break;
             default:
                 throw new RuntimeException("Unexpected type");

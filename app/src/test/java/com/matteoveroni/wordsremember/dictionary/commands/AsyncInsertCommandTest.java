@@ -40,7 +40,7 @@ public class AsyncInsertCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final Uri TRANSLATIONS_URI = TranslationsContract.CONTENT_URI;
@@ -56,16 +56,16 @@ public class AsyncInsertCommandTest {
     @After
     public void tearDown() {
         VALUES.clear();
-        eventBus.removeAllStickyEvents();
+        EVENT_BUS.removeAllStickyEvents();
     }
 
     @Test
     public void test_NoStickyEvent_In_EventuBus_If_AnyOperationIsComplete() {
         assertNull("EventAsyncSaveVocableCompleted should NOT be fired before onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class)
+                EVENT_BUS.getStickyEvent(EventAsyncSaveVocableCompleted.class)
         );
         assertNull("EventAsyncSaveTranslationCompleted should NOT be fired before onInsertComplete",
-                eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class)
+                EVENT_BUS.getStickyEvent(EventAsyncSaveTranslationCompleted.class)
         );
     }
 
@@ -75,7 +75,7 @@ public class AsyncInsertCommandTest {
 
         asyncInsertCommand.onInsertComplete(0, null, Uri.parse(VOCABLES_URI + "/" + FAKE_INSERTED_ID));
 
-        EventAsyncSaveVocableCompleted event = eventBus.getStickyEvent(EventAsyncSaveVocableCompleted.class);
+        EventAsyncSaveVocableCompleted event = EVENT_BUS.getStickyEvent(EventAsyncSaveVocableCompleted.class);
         assertEquals(
                 "EventAsyncSaveVocableCompleted should be fired onInsertComplete with right id",
                 FAKE_INSERTED_ID, event.getSavedVocableId()
@@ -88,7 +88,7 @@ public class AsyncInsertCommandTest {
 
         asyncInsertCommand.onInsertComplete(0, null, Uri.parse(TRANSLATIONS_URI + "/" + FAKE_INSERTED_ID));
 
-        EventAsyncSaveTranslationCompleted event = eventBus.getStickyEvent(EventAsyncSaveTranslationCompleted.class);
+        EventAsyncSaveTranslationCompleted event = EVENT_BUS.getStickyEvent(EventAsyncSaveTranslationCompleted.class);
         assertEquals(
                 "EventAsyncSaveTranslationCompleted should be fired onInsertComplete with right id",
                 FAKE_INSERTED_ID, event.getSavedTranslationId()

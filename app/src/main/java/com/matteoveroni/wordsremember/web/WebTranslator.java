@@ -53,7 +53,7 @@ public class WebTranslator {
     }
 
     public void translate(Word vocableToTranslate, Locale locale_from, Locale locale_dest, final WebTranslatorListener listener) {
-        Log.i(TAG, "TRANSLATION REQUEST => translate \'" + vocableToTranslate.getName() + "\' from \'" + locale_from + "\' to \'" + locale_dest + "\'");
+        Log.d(TAG, "TRANSLATION REQUEST => translate \'" + vocableToTranslate.getName() + "\' from \'" + locale_from + "\' to \'" + locale_dest + "\'");
 
         Call<GlosbePojo> request = apiService.getGlosbeTranslation(
                 locale_from.getLanguage(),
@@ -68,10 +68,10 @@ public class WebTranslator {
             @Override
             public void onResponse(Call<GlosbePojo> request, Response<GlosbePojo> response) {
                 final int statusCode = response.code();
-                Log.i(TAG, "RESPONSE STATUS_CODE: " + statusCode);
+                Log.d(TAG, "RESPONSE STATUS_CODE: " + statusCode);
 
                 final GlosbePojo glosbePojo = response.body();
-                Log.i(TAG, "GLOSBE_POJO JSONized: " + Json.getInstance().toJson(glosbePojo));
+                Log.d(TAG, "GLOSBE_POJO JSONized: " + Json.getInstance().toJson(glosbePojo));
 
                 final List<Word> translations = getTranslations(glosbePojo);
                 listener.onTranslationCompletedSuccessfully(translations);
@@ -94,7 +94,7 @@ public class WebTranslator {
             Phrase phrase = tuc.getPhrase();
             if (phrase != null && !phrase.getText().trim().isEmpty()) {
                 webTranslations.add(new Word(phrase.getText()));
-                Log.i(TAG, phrase.getText());
+                Log.d(TAG, phrase.getText());
             }
         }
         return webTranslations;

@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
@@ -20,11 +21,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter.LOCALE_MSG_KEY_VOCABLE_REMOVED;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -110,7 +109,7 @@ public class ManageVocablesPresenterTest {
 
         presenter.onEvent(new EventAsyncDeleteVocableCompleted(FAKE_NUMBER_OF_ROWS_DELETED));
 
-        verify(view).showMessage(LOCALE_MSG_KEY_VOCABLE_REMOVED);
+        verify(view).showMessage(LocaleKey.VOCABLE_REMOVED);
     }
 
     private class DictionaryVocablesManagerPresenterFactoryForTests implements PresenterFactory {

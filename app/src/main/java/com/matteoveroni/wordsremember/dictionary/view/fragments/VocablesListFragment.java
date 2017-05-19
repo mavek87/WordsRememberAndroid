@@ -34,10 +34,11 @@ import org.greenrobot.eventbus.EventBus;
 
 public class VocablesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private final EventBus eventBus = EventBus.getDefault();
-    private VocableListViewAdapter vocableListAdapter;
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private static final int ID_CURSOR_LOADER = 1;
+
+    private VocableListViewAdapter vocableListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,9 +72,8 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-//        super.onListItemClick(listView, view, position, id);
         Cursor cursor = vocableListAdapter.getCursor();
-        eventBus.post(new EventVocableSelected(getSelectedVocable(cursor, position)));
+        EVENT_BUS.post(new EventVocableSelected(getSelectedVocable(cursor, position)));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
             case R.id.menu_dictionary_list_long_press_remove:
                 Word selectedVocable = getSelectedVocable(cursor, position);
-                eventBus.post(
+                EVENT_BUS.post(
                         new EventVocableManipulationRequest(selectedVocable, TypeOfManipulationRequest.REMOVE)
                 );
                 return true;

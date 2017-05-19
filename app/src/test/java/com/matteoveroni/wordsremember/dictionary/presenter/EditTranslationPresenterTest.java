@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
@@ -18,8 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME;
-import static com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -71,7 +70,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onSaveTranslationRequest();
 
-        verify(view).showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         verify(dao, never()).asyncSearchTranslationByName(anyString());
     }
 
@@ -90,7 +89,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(TRANSLATION));
 
-        verify(view).showMessage(LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
     }
 
     @Test

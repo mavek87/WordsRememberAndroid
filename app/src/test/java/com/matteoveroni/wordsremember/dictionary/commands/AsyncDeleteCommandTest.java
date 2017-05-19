@@ -32,7 +32,7 @@ public class AsyncDeleteCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final int FAKE_NUMBER_OF_ROWS_DELETED = 1;
@@ -45,14 +45,14 @@ public class AsyncDeleteCommandTest {
 
     @After
     public void tearDown() {
-        eventBus.removeAllStickyEvents();
+        EVENT_BUS.removeAllStickyEvents();
     }
 
     @Test
     public void test_NoStickyEvent_In_EventBus_If_AnyOperationIsComplete() {
         assertNull(
                 "EventAsyncDeleteVocableCompleted should NOT be fired before onDeleteComplete",
-                eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class)
+                EVENT_BUS.getStickyEvent(EventAsyncDeleteVocableCompleted.class)
         );
     }
 
@@ -64,7 +64,7 @@ public class AsyncDeleteCommandTest {
 
         asyncDeleteCommand.onDeleteComplete(0, null, FAKE_NUMBER_OF_ROWS_DELETED);
 
-        EventAsyncDeleteVocableCompleted event = eventBus.getStickyEvent(EventAsyncDeleteVocableCompleted.class);
+        EventAsyncDeleteVocableCompleted event = EVENT_BUS.getStickyEvent(EventAsyncDeleteVocableCompleted.class);
         assertEquals(
                 "EventAsyncDeleteVocableCompleted should be fired after onDeleteComplete with right number of rows deleted",
                 FAKE_NUMBER_OF_ROWS_DELETED, event.getNumberOfRowsDeleted()

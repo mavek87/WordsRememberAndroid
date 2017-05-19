@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,13 +22,11 @@ public class AddTranslationPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(AddTranslationPresenter.class);
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final DictionaryModel model;
     private AddTranslation view;
-
-    protected static final String LOCALE_MSG_KEY_TRANSLATION_ADDED = "translation_added";
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -38,12 +37,12 @@ public class AddTranslationPresenter implements Presenter {
     public void attachView(Object view) {
         this.view = (AddTranslation) view;
         this.view.setPojoUsed(model.getLastValidVocableSelected());
-        eventBus.register(this);
+        EVENT_BUS.register(this);
     }
 
     @Override
     public void destroy() {
-        eventBus.unregister(this);
+        EVENT_BUS.unregister(this);
         view = null;
     }
 
@@ -51,7 +50,7 @@ public class AddTranslationPresenter implements Presenter {
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
         model.setLastValidTranslationSelected(translation);
-        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", LOCALE_MSG_KEY_TRANSLATION_ADDED));
+        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", LocaleKey.TRANSLATION_ADDED));
         view.returnToPreviousView();
     }
 

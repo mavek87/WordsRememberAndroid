@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableMani
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,29 +25,27 @@ public class ManageVocablesPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
 
-    private final EventBus eventBus;
+    private final EventBus EVENT_BUS = EventBus.getDefault();
+
     private final DictionaryDAO dao;
     private final DictionaryModel model;
     private ManageVocablesView view;
 
-    protected static final String LOCALE_MSG_KEY_VOCABLE_REMOVED = "vocable_removed";
-
     public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
         this.dao = dao;
-        this.eventBus = EventBus.getDefault();
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (ManageVocablesView) view;
         model.reset();
-        eventBus.register(this);
+        EVENT_BUS.register(this);
     }
 
     @Override
     public void destroy() {
-        eventBus.unregister(this);
+        EVENT_BUS.unregister(this);
         view = null;
     }
 
@@ -74,6 +73,6 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        view.showMessage(LOCALE_MSG_KEY_VOCABLE_REMOVED);
+        view.showMessage(LocaleKey.VOCABLE_REMOVED);
     }
 }

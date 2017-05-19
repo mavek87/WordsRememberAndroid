@@ -11,6 +11,7 @@ import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
@@ -121,7 +122,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(EditVocablePresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -130,7 +131,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(EditVocablePresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -173,7 +174,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
 
-        verify(view).showMessage(EditVocablePresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncSaveVocable(any(Word.class));
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
@@ -184,7 +185,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
 
-        verify(view).showMessage(EditVocablePresenter.LOCALE_MSG_KEY_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
         verify(dao, never()).asyncSaveVocable(any(Word.class));
     }

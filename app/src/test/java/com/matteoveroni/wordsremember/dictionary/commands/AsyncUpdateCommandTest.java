@@ -37,7 +37,7 @@ public class AsyncUpdateCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private final EventBus eventBus = EventBus.getDefault();
+    private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private static final ContentValues VALUES = new ContentValues();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
@@ -51,7 +51,7 @@ public class AsyncUpdateCommandTest {
 
     @After
     public void tearDown() {
-        eventBus.removeAllStickyEvents();
+        EVENT_BUS.removeAllStickyEvents();
         VALUES.clear();
     }
 
@@ -59,7 +59,7 @@ public class AsyncUpdateCommandTest {
     public void test_NoStickyEvent_In_EventuBus_If_AnyOperationIsComplete() {
         assertNull(
                 "EventAsyncUpdateVocableCompleted should NOT be fired before onUpdateComplete",
-                eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
+                EVENT_BUS.getStickyEvent(EventAsyncUpdateVocableCompleted.class)
         );
     }
 
@@ -71,7 +71,7 @@ public class AsyncUpdateCommandTest {
 
         asyncUpdateCommand.onUpdateComplete(0, null, FAKE_NUMBER_OF_ROWS_UPDATED);
 
-        EventAsyncUpdateVocableCompleted event = eventBus.getStickyEvent(EventAsyncUpdateVocableCompleted.class);
+        EventAsyncUpdateVocableCompleted event = EVENT_BUS.getStickyEvent(EventAsyncUpdateVocableCompleted.class);
         assertEquals(
                 "EventAsyncUpdateVocableCompleted should be fired onUpdateComplete with right number of rows updated",
                 FAKE_NUMBER_OF_ROWS_UPDATED, event.getNumberOfVocablesUpdated()
