@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.wordsremember.settings.Settings;
@@ -30,16 +29,14 @@ import java.util.Set;
 
 public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
-    public static final String TAG = TagGenerator.tag(QuizGameFindTranslationForVocableModel.class);
-
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final Settings settings;
 
-    private final Set<Integer> extractedPositionsForQuiz = new HashSet<>();
+    private final Set<Integer> extractedVocablesIndexes = new HashSet<>();
 
-    private boolean isGameAlreadyStarted = false;
+    private boolean isGameStarted = false;
 
     private Quiz currentQuiz;
     private int numberOfQuestions;
@@ -72,9 +69,9 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     @Override
     public void startGame() {
-        if (!isGameAlreadyStarted) {
+        if (!isGameStarted) {
             initGame();
-            isGameAlreadyStarted = true;
+            isGameStarted = true;
         }
         registerToEventBus();
     }
@@ -86,12 +83,12 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     @Override
     public void abortGame() {
-        isGameAlreadyStarted = false;
+        isGameStarted = false;
         unregisterToEventBus();
     }
 
     private void initGame() {
-        extractedPositionsForQuiz.clear();
+        extractedVocablesIndexes.clear();
         score = 0;
         numberOfQuestions = 0;
         questionNumber = 0;
@@ -125,8 +122,8 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
-        int initialNumberOfExtractedPositionsForQuiz = extractedPositionsForQuiz.size();
-        if (initialNumberOfExtractedPositionsForQuiz >= numberOfQuestions) {
+        int initialNumberOfExtractedVocablesIndexes = extractedVocablesIndexes.size();
+        if (initialNumberOfExtractedVocablesIndexes >= numberOfQuestions) {
             throw new NoMoreQuizzesException();
         }
 
@@ -134,8 +131,8 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         int randPosition;
         do {
             randPosition = Int.getRandomInt(positionsRange);
-            extractedPositionsForQuiz.add(randPosition);
-        } while (extractedPositionsForQuiz.size() == initialNumberOfExtractedPositionsForQuiz);
+            extractedVocablesIndexes.add(randPosition);
+        } while (extractedVocablesIndexes.size() == initialNumberOfExtractedVocablesIndexes);
         return randPosition;
     }
 
@@ -176,21 +173,13 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         if (currentQuiz == null)
             throw new RuntimeException("Unexpected exception. No current quiz set in QuizGame model");
 
-        if (isAnswerCorrect(answer)) {
+        QuizAnswerChecker answerChecker = new QuizAnswerChecker(currentQuiz);
+        if (answerChecker.isAnswerCorrect(answer)) {
             score++;
             return Quiz.Result.RIGHT;
         } else {
             return Quiz.Result.WRONG;
         }
-    }
-
-    private boolean isAnswerCorrect(String answer) {
-        for (String rightAnswer : currentQuiz.getRightAnswers()) {
-            if (answer.equalsIgnoreCase(rightAnswer)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void registerToEventBus() {
