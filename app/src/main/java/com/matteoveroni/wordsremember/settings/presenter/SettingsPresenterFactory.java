@@ -1,9 +1,10 @@
-package com.matteoveroni.wordsremember.quizgame.presenter;
+package com.matteoveroni.wordsremember.settings.presenter;
 
-import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 
 import javax.inject.Inject;
 
@@ -11,7 +12,7 @@ import javax.inject.Inject;
  * @author Matteo Veroni
  */
 
-public class QuizGamePresenterFactory implements PresenterFactory {
+public class SettingsPresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO dao;
@@ -19,8 +20,8 @@ public class QuizGamePresenterFactory implements PresenterFactory {
     Settings settings;
 
     @Override
-    public QuizGamePresenter create() {
+    public SettingsPresenter create() {
         WordsRemember.getAppComponent().inject(this);
-        return new QuizGamePresenter(settings, dao);
+        return new SettingsPresenter(settings, dao);
     }
 }

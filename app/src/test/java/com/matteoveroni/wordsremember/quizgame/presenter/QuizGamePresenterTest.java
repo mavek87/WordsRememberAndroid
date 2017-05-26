@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.quizgame.presenter;
 
-import com.matteoveroni.wordsremember.settings.Settings;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;

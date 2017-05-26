@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslat
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
+import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -31,4 +32,5 @@ public interface AppComponent {
 
     void inject(QuizGamePresenterFactory quizGamePresenterFactory);
 
+    void inject(SettingsPresenterFactory settingsPresenterFactory);
 }

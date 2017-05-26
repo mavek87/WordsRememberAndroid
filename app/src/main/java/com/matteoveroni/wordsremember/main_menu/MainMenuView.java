@@ -6,8 +6,10 @@ package com.matteoveroni.wordsremember.main_menu;
 
 public interface MainMenuView {
 
+    void startNewQuizGame();
+
     void startDictionaryManagement();
 
-    void startNewQuizGame();
+    void startSettings();
 
 }

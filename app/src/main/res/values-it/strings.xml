@@ -21,7 +21,7 @@
     <string name="msg_vocable_not_saved">Impossibile aggiungere traduzioni se il vocabolo non è ancora salvato. Vuoi salvare il vocabolo e procedere?</string>
     <string name="wrong_answer">Risposta errata</string>
     <string name="correct_answer">Risposta corretta</string>
-    <string name="points">punti</string>
+    <string name="points">Punti</string>
     <string name="score">Punteggio</string>
     <string name="game_result">Risultati del gioco</string>
     <string name="error">Errore</string>
@@ -42,4 +42,8 @@
     <string name="translations">Traduzioni</string>
     <string name="msg_press_ok_to_continue">Premi OK per continuare</string>
     <string name="translate_vocable">Traduci vocabolo</string>
+    <string name="msg_game_difficulty_changed">Difficoltà del gioco cambiata</string>
+    <string name="easy">Facile</string>
+    <string name="hard">Difficile</string>
+    <string name="medium">Media</string>
 </resources>

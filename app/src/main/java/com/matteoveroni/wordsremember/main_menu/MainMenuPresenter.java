@@ -25,7 +25,7 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
     @Override
     public void attachView(Object view) {
         this.view = (MainMenuView) view;
-
+        // TODO: remove this REST test from production code
         WebTranslator.getInstance().translate(new Word("atto"), new Locale("it"), new Locale("en"), this);
     }
 
@@ -38,8 +38,12 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
         view.startDictionaryManagement();
     }
 
-    public void onButtonStartClicked() {
+    void onButtonStartClicked() {
         view.startNewQuizGame();
+    }
+
+    void onButtonSettingsClicked() {
+        view.startSettings();
     }
 
     @Override

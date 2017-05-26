@@ -12,8 +12,11 @@
     <string name="settings">Settings</string>
     <string name="help">Help</string>
     <string name="error">Error</string>
-    <string name="score">score</string>
-    <string name="points">points</string>
+    <string name="score">Score</string>
+    <string name="points">Points</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
     <string name="main_menu">Main Menu</string>
     <string name="quiz_game">Quiz Game</string>
     <string name="game_result">Game Results</string>
@@ -45,4 +48,5 @@
     <string name="msg_error_no_answer_given">No answer given! Insert an answer to continue</string>
     <string name="msg_game_completed">You\'ve just completed a game session!</string>
     <string name="msg_press_ok_to_continue">Press OK to continue</string>
+    <string name="msg_game_difficulty_changed">Game difficulty changed</string>
 </resources>

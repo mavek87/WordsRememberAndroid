@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
-import com.matteoveroni.wordsremember.settings.Settings;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;

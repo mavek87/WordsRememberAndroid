@@ -20,4 +20,10 @@ public class LocaleKey {
     public static final String MSG_GAME_COMPLETED = "msg_game_completed";
     public static final String MSG_ERROR_NO_ANSWER_GIVEN = "msg_error_no_answer_given";
     public static final String MSG_ERROR_INSERT_SOME_VOCABLE = "msg_error_insert_some_vocable";
+
+    public static final String EASY = "easy";
+    public static final String MEDIUM = "medium";
+    public static final String HARD = "hard";
+    public static final String MSG_GAME_DIFFICULTY_CHANGED = "msg_game_difficulty_changed";
+
 }

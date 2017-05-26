@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember;
 
 import android.content.SharedPreferences;
 
-import com.matteoveroni.wordsremember.settings.Settings;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 
 import org.junit.Test;
 import org.mockito.Mock;

@@ -12,6 +12,8 @@ import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesA
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
+import com.matteoveroni.wordsremember.settings.model.Settings;
+import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,8 +82,15 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
         startActivity(new Intent(getApplicationContext(), ManageVocablesActivity.class));
     }
 
+
     @OnClick(R.id.main_menu_btn_settings)
     public void onButtonSettingsClicked() {
+        presenter.onButtonSettingsClicked();
+    }
+
+    @Override
+    public void startSettings() {
+        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.settings;
+package com.matteoveroni.wordsremember.settings.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
