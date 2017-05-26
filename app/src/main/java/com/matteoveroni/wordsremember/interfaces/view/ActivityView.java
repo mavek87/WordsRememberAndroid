@@ -45,7 +45,7 @@ public abstract class ActivityView extends AppCompatActivity implements View {
     protected void setupAndShowToolbar(String title) {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
-            toolbar.setTitle(Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", title));
+            toolbar.setTitle(Str.concat(WordsRemember.ABBREVIATED_NAME, " ", WordsRemember.VERSION, " - ", title));
         }
         setSupportActionBar(toolbar);
     }

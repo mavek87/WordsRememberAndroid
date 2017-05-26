@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
@@ -22,7 +23,7 @@ import butterknife.OnClick;
 /**
  * Main Menu Activity
  */
-public class MainMenuActivity extends AppCompatActivity implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
+public class MainMenuActivity extends ActivityView implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
 
     private MainMenuPresenter presenter;
     private static final int PRESENTER_LOADER_ID = 1;
@@ -39,14 +40,9 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuView,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main_menu);
-
         ButterKnife.bind(this);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        setupAndShowToolbar("Main menu");
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
