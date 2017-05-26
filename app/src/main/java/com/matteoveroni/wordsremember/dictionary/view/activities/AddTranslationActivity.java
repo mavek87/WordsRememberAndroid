@@ -60,7 +60,7 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
         fragmentManager.executePendingTransactions();
 
-        setupAndShowToolbar();
+        setupAndShowToolbar(getString(R.string.add_translation));
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
@@ -68,15 +68,6 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
         final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
         fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_NOT_FOR_VOCABLE;
         return fragmentToBuild;
-    }
-
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.add_translation));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
         fragmentManager.executePendingTransactions();
 
-        setupAndShowToolbar();
+        setupAndShowToolbar(getString(R.string.vocable_editor));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
@@ -78,15 +78,6 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
         final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
         fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_FOR_VOCABLE;
         return fragmentToBuild;
-    }
-
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.vocable_editor));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

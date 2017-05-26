@@ -79,22 +79,13 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_edit_translation);
         ButterKnife.bind(this);
-        setupAndShowToolbar();
+        setupAndShowToolbar(getString(R.string.edit_translation));
 
         translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            final String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.add_translation));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

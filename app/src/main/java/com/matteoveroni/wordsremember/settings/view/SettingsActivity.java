@@ -74,18 +74,8 @@ public class SettingsActivity extends ActivityView implements SettingsView, Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
-        setupAndShowToolbar();
+        setupAndShowToolbar(getString(R.string.settings));
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    // TODO: check if its possible to put this method into abstract superclass Activity View
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.settings));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

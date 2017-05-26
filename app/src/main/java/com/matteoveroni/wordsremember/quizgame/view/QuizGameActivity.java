@@ -86,7 +86,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
-        setupAndShowToolbar();
+        setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState != null) restoreViewData(savedInstanceState);
 
@@ -105,15 +105,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    private void setupAndShowToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            String title = Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", getString(R.string.quiz_game));
-            toolbar.setTitle(title);
-        }
-        setSupportActionBar(toolbar);
     }
 
     @Override

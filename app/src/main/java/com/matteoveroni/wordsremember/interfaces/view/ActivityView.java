@@ -1,9 +1,12 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
@@ -37,6 +40,14 @@ public abstract class ActivityView extends AppCompatActivity implements View {
         if (translator == null)
             translator = WordsRemember.getLocaleTranslator(getApplicationContext());
         return translator;
+    }
+
+    protected void setupAndShowToolbar(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", title));
+        }
+        setSupportActionBar(toolbar);
     }
 
 }

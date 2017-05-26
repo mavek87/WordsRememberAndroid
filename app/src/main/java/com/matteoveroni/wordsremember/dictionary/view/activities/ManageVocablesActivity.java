@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.Toolbar;
 
+import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
@@ -14,7 +17,6 @@ import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 /**
  * Dictionary Management Activity
@@ -32,6 +34,7 @@ public class ManageVocablesActivity extends ActivityView implements ManageVocabl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_manage_vocables);
         ButterKnife.bind(this);
+        setupAndShowToolbar(getString(R.string.vocables_manager));
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
