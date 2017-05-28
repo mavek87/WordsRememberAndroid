@@ -19,11 +19,18 @@
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/lbl_SelectGameDifficulty"
+        android:id="@+id/lbl_gameVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select game difficulty"
-        android:layout_weight="0.07" />
+        android:text="@string/version"
+        android:layout_weight="0.12" />
+
+    <TextView
+        android:id="@+id/lbl_selectGameDifficulty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_select_game_difficulty"
+        android:layout_weight="0.04" />
 
     <RadioGroup
         android:id="@+id/radio_group_gameDifficulty"
@@ -36,21 +43,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Easy" />
+            android:text="@string/easy" />
 
         <RadioButton
             android:id="@+id/radio_btn_secondGameDifficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Medium" />
+            android:text="@string/medium" />
 
         <RadioButton
             android:id="@+id/radio_btn_thirdGameDifficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Hard" />
+            android:text="@string/hard" />
     </RadioGroup>
 
 </LinearLayout>

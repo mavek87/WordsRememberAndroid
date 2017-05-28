@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.adapters;
+package com.matteoveroni.wordsremember.ui.listview.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.ui.items.WordsListViewItem;
+import com.matteoveroni.wordsremember.ui.listview.items.WordsListViewItem;
 
 /**
  * @author Matteo Veroni

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.ui.items;
+package com.matteoveroni.wordsremember.ui.listview.items;
 
 import android.content.Context;
 import android.util.AttributeSet;

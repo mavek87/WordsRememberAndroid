@@ -28,7 +28,7 @@ import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
-import com.matteoveroni.wordsremember.ui.adapters.TranslationsListViewAdapter;
+import com.matteoveroni.wordsremember.ui.listview.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 

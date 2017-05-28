@@ -3,10 +3,9 @@ package com.matteoveroni.wordsremember.settings.view;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
@@ -26,6 +25,9 @@ import butterknife.OnClick;
  */
 
 public class SettingsActivity extends ActivityView implements SettingsView, LoaderManager.LoaderCallbacks<SettingsPresenter> {
+
+    @BindView(R.id.lbl_gameVersion)
+    TextView lbl_gameVersion;
 
     @BindView(R.id.radio_group_gameDifficulty)
     RadioGroup radio_group_gameDifficulty;
@@ -76,6 +78,7 @@ public class SettingsActivity extends ActivityView implements SettingsView, Load
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.settings));
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+        lbl_gameVersion.setText(Str.concat(getString(R.string.game_version), ": ", WordsRemember.VERSION));
     }
 
     @Override

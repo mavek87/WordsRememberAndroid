@@ -19,6 +19,7 @@
     <string name="hard">Hard</string>
     <string name="main_menu">Main Menu</string>
     <string name="quiz_game">Quiz Game</string>
+    <string name="version">Version</string>
     <string name="game_result">Game Results</string>
     <string name="start_training">Start training</string>
     <string name="correct_answer">Correct answer</string>
@@ -49,4 +50,6 @@
     <string name="msg_game_completed">You\'ve just completed a game session!</string>
     <string name="msg_press_ok_to_continue">Press OK to continue</string>
     <string name="msg_game_difficulty_changed">Game difficulty changed</string>
+    <string name="msg_select_game_difficulty">Select game difficulty</string>
+
 </resources>

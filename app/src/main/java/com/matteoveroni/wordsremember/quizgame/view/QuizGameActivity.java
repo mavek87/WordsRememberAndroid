@@ -7,7 +7,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,9 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
@@ -43,16 +40,16 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     @BindView(R.id.quiz_game_answer_edit_text)
     EditText txt_answer;
 
-    private static final String LBL_QUESTION_KEY = "lbl_question_key";
-    private static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
-    private static final String LBL_ANSWER_KEY = "txt_answer_key";
-
     private Quiz currentQuiz;
     private AlertDialog quizAlert;
     private AlertDialog.Builder alertDialogBuilder;
 
     private QuizGamePresenter presenter;
     private static final int PRESENTER_LOADER_ID = 1;
+
+    public static final String LBL_QUESTION = "lbl_question";
+    public static final String LBL_QUESTION_VOCABLE = "lbl_question_vocable";
+    public static final String TXT_ANSWER = "txt_answer";
 
     @Override
     public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {
@@ -90,7 +87,13 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
         if (savedInstanceState != null) restoreViewData(savedInstanceState);
 
-        // Associate softkey action button to confirmQuizAnswerAction()
+        setSoftkeyActionButtonToConfirmQuizAnswer();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
+    }
+
+    private void setSoftkeyActionButtonToConfirmQuizAnswer() {
         txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -102,9 +105,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
                 }
             }
         });
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     @Override
@@ -114,20 +114,20 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     }
 
     private void saveViewData(Bundle instanceState) {
-        instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
-        instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
-        instanceState.putString(LBL_ANSWER_KEY, txt_answer.getText().toString());
+        instanceState.putString(LBL_QUESTION, lbl_question.getText().toString());
+        instanceState.putString(LBL_QUESTION_VOCABLE, lbl_question_vocable.getText().toString());
+        instanceState.putString(TXT_ANSWER, txt_answer.getText().toString());
     }
 
     private void restoreViewData(Bundle instanceState) {
-        if (instanceState.containsKey(LBL_QUESTION_KEY)) {
-            lbl_question.setText(instanceState.getString(LBL_QUESTION_KEY));
+        if (instanceState.containsKey(LBL_QUESTION)) {
+            lbl_question.setText(instanceState.getString(LBL_QUESTION));
         }
-        if (instanceState.containsKey(LBL_QUESTION_VOCABLE_KEY)) {
-            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE_KEY));
+        if (instanceState.containsKey(LBL_QUESTION_VOCABLE)) {
+            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE));
         }
-        if (instanceState.containsKey(LBL_ANSWER_KEY)) {
-            txt_answer.setText(instanceState.getString(LBL_ANSWER_KEY));
+        if (instanceState.containsKey(TXT_ANSWER)) {
+            txt_answer.setText(instanceState.getString(TXT_ANSWER));
         }
     }
 
@@ -152,7 +152,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     public void showQuizResultDialog(Quiz.Result quizResult) {
-        // TODO: use string resources not fixed strings
         Drawable img_alertDialog;
         String quizResultTitle;
         switch (quizResult) {
