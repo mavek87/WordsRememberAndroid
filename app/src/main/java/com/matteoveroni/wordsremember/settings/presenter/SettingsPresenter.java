@@ -68,11 +68,11 @@ public class SettingsPresenter implements Presenter<SettingsView> {
                 break;
         }
 
-        FormattedString formattedLocaleMessage = new FormattedString(
+        FormattedString msg_gameDifficultyChanged = new FormattedString(
                 "%s (%s)",
                 LocaleKey.MSG_GAME_DIFFICULTY_CHANGED,
                 difficultyTranslationKey
         );
-        view.showMessage(formattedLocaleMessage);
+        view.showMessage(msg_gameDifficultyChanged);
     }
 }
