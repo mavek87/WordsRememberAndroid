@@ -2,18 +2,16 @@ package com.matteoveroni.wordsremember.main_menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.NonNull;
 import android.widget.Button;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
-import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
 
 import butterknife.BindView;
@@ -23,10 +21,11 @@ import butterknife.OnClick;
 /**
  * Main Menu Activity
  */
-public class MainMenuActivity extends ActivityView implements MainMenuView, LoaderManager.LoaderCallbacks<MainMenuPresenter> {
+public class MainMenuActivity extends BaseActivityMVP implements MainMenuView {
+
+    public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 
     private MainMenuPresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
 
     @BindView(R.id.main_menu_btn_start)
     Button btn_start;
@@ -37,25 +36,23 @@ public class MainMenuActivity extends ActivityView implements MainMenuView, Load
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
 
+    @NonNull
+    @Override
+    protected PresenterFactory getPresenterFactory() {
+        return new MainMenuPresenterFactory();
+    }
+
+    @Override
+    protected void onPresenterCreatedOrRestored(@NonNull Presenter presenter) {
+        this.presenter = (MainMenuPresenter) presenter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
-        setupAndShowToolbar("Main menu");
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.destroy();
-        super.onStop();
+        setupAndShowToolbar(getString(R.string.main_menu));
     }
 
     @OnClick(R.id.main_menu_btn_start)
@@ -78,7 +75,6 @@ public class MainMenuActivity extends ActivityView implements MainMenuView, Load
         startActivity(new Intent(getApplicationContext(), ManageVocablesActivity.class));
     }
 
-
     @OnClick(R.id.main_menu_btn_settings)
     public void onButtonSettingsClicked() {
         presenter.onButtonSettingsClicked();
@@ -87,21 +83,6 @@ public class MainMenuActivity extends ActivityView implements MainMenuView, Load
     @Override
     public void startSettings() {
         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-    }
-
-    @Override
-    public Loader<MainMenuPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new MainMenuPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<MainMenuPresenter> loader, MainMenuPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<MainMenuPresenter> loader) {
-        presenter = null;
     }
 }
 

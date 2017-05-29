@@ -74,7 +74,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     @Override
     protected void onStop() {
-        presenter.destroy();
+        presenter.detachView();
         super.onStop();
     }
 
@@ -220,7 +220,7 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
     private void quitGame() {
         presenter.abortGame();
-        presenter.destroy();
+        presenter.detachView();
         finish();
     }
 

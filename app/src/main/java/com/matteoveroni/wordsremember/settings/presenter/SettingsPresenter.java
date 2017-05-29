@@ -41,7 +41,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
     }
 
     @Override
-    public void destroy() {
+    public void detachView() {
         this.view = null;
 //        EVENT_BUS.unregister(this);
         Log.d(TAG, "View Destroyed");

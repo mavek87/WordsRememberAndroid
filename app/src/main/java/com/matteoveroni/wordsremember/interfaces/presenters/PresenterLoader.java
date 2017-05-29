@@ -2,10 +2,15 @@ package com.matteoveroni.wordsremember.interfaces.presenters;
 
 import android.content.Context;
 import android.support.v4.content.Loader;
+import android.util.Log;
+
+/**
+ * Useful Resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/PresenterLoader.java
+ */
 
 public class PresenterLoader<T extends Presenter> extends Loader<T> {
 
-    private PresenterFactory<T> presenterFactory;
+    private final PresenterFactory<T> factory;
     private T presenter;
 
     /**
@@ -16,12 +21,12 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
      * The Context returned by {@link #getContext} is safe to use across
      * Activity instances.
      *
-     * @param context used to retrieve the application context.
-     * @param presenterFactory
+     * @param context          used to retrieve the application context.
+     * @param factory
      */
-    public PresenterLoader(Context context, PresenterFactory<T> presenterFactory) {
+    public PresenterLoader(Context context, PresenterFactory<T> factory) {
         super(context);
-        this.presenterFactory = presenterFactory;
+        this.factory = factory;
     }
 
     @Override
@@ -35,13 +40,26 @@ public class PresenterLoader<T extends Presenter> extends Loader<T> {
 
     @Override
     protected void onForceLoad() {
-        presenter = presenterFactory.create();
+        presenter = factory.create();
         deliverResult(presenter);
     }
 
     @Override
     protected void onReset() {
-        presenter.destroy();
+        presenter.detachView();
         presenter = null;
+    }
+
+//    @Override
+//    protected void onReset() {
+//        Log.i("loader", "onReset-" + activityTag);
+//        if (presenter != null) {
+//            presenter.onDestroyed();
+//            presenter = null;
+//        }
+//    }
+
+    public T getPresenter() {
+        return presenter;
     }
 }

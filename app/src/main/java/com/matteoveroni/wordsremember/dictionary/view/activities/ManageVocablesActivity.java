@@ -4,11 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
 
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
@@ -46,7 +43,7 @@ public class ManageVocablesActivity extends ActivityView implements ManageVocabl
 
     @Override
     protected void onStop() {
-        presenter.destroy();
+        presenter.detachView();
         super.onStop();
     }
 

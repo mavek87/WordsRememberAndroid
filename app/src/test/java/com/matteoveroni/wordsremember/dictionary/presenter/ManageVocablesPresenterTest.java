@@ -57,7 +57,7 @@ public class ManageVocablesPresenterTest {
 
     @After
     public void tearDown() {
-        presenter.destroy();
+        presenter.detachView();
         assertFalse("Presenter should be unregistered to event bus after each test", EVENT_BUS.isRegistered(presenter));
     }
 

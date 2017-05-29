@@ -30,7 +30,7 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
     }
 
     @Override
-    public void destroy() {
+    public void detachView() {
         this.view = null;
     }
 

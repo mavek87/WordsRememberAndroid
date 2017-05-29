@@ -67,7 +67,7 @@ public class SettingsActivity extends ActivityView implements SettingsView, Load
 
     @Override
     protected void onStop() {
-        presenter.destroy();
+        presenter.detachView();
         super.onStop();
     }
 
@@ -78,7 +78,7 @@ public class SettingsActivity extends ActivityView implements SettingsView, Load
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.settings));
         getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-        lbl_gameVersion.setText(Str.concat(getString(R.string.game_version), ": ", WordsRemember.VERSION));
+        lbl_gameVersion.setText(Str.concat(getString(R.string.version), ": ", WordsRemember.VERSION));
     }
 
     @Override

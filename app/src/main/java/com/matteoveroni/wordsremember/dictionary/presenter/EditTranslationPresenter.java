@@ -43,7 +43,7 @@ public class EditTranslationPresenter implements Presenter {
     }
 
     @Override
-    public void destroy() {
+    public void detachView() {
         EVENT_BUS.unregister(this);
         view = null;
     }

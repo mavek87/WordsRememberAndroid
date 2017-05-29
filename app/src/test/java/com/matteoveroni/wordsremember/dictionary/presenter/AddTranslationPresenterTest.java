@@ -58,7 +58,7 @@ public class AddTranslationPresenterTest {
 
     @After
     public void tearDown() {
-        presenter.destroy();
+        presenter.detachView();
 
         assertFalse("Presenter should be unregistered to eventbus after each test", EVENT_BUS.isRegistered(presenter));
     }

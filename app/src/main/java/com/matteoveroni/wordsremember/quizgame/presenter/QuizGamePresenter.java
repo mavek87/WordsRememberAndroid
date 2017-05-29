@@ -45,7 +45,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     @Override
-    public void destroy() {
+    public void detachView() {
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
         game.pauseGame();

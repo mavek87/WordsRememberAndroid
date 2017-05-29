@@ -44,7 +44,7 @@ dependencies {
 
     /*************** Dependencies taken from git by jitpack.io ******************/
 
-    // Example using tag:
+    // Example using Tag:
     // compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
 
     compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'

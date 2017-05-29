@@ -73,7 +73,7 @@ public class EditVocablePresenterTest {
 
     @After
     public void tearDown() {
-        presenter.destroy();
+        presenter.detachView();
 
         assertFalse("Presenter should be unregistered to eventbus after each test", EVENT_BUS.isRegistered(presenter));
 
@@ -220,7 +220,7 @@ public class EditVocablePresenterTest {
 
     private void attachViewToPresenter(EditVocable view) {
         if (presenter != null) {
-            presenter.destroy();
+            presenter.detachView();
         }
         presenter.attachView(view);
     }

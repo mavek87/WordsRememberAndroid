@@ -3,16 +3,13 @@ package com.matteoveroni.wordsremember.dictionary.view.activities;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
@@ -70,7 +67,7 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
 
     @Override
     protected void onStop() {
-        presenter.destroy();
+        presenter.detachView();
         super.onStop();
     }
 

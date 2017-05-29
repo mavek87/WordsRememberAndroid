@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.Toolbar;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
@@ -45,7 +42,7 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
 
     @Override
     protected void onStop() {
-        presenter.destroy();
+        presenter.detachView();
         super.onStop();
     }
 
