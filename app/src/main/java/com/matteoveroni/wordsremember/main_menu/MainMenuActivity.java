@@ -20,7 +20,10 @@ import butterknife.OnClick;
 
 /**
  * Main Menu Activity
+ *
+ * @author Matteo Veroni
  */
+
 public class MainMenuActivity extends BaseActivityMVP implements MainMenuView {
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
@@ -36,14 +39,13 @@ public class MainMenuActivity extends BaseActivityMVP implements MainMenuView {
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
 
-    @NonNull
     @Override
     protected PresenterFactory getPresenterFactory() {
         return new MainMenuPresenterFactory();
     }
 
     @Override
-    protected void onPresenterCreatedOrRestored(@NonNull Presenter presenter) {
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
         this.presenter = (MainMenuPresenter) presenter;
     }
 

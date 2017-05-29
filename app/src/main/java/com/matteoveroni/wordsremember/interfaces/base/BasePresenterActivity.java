@@ -78,14 +78,13 @@ public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends A
      * Instance of {@link PresenterFactory} use to create a Presenter when needed. This instance should
      * not contain {@link android.app.Activity} context reference since it will be keep on rotations.
      */
-    @NonNull
     protected abstract PresenterFactory<P> getPresenterFactory();
 
     /**
      * Hook for subclasses that deliver the {@link Presenter} before its View is attached.
      * Can be use to initialize the Presenter or simple hold a reference to it.
      */
-    protected abstract void onPresenterCreatedOrRestored(@NonNull P presenter);
+    protected abstract void onPresenterCreatedOrRestored(P presenter);
 
     /**
      * Override in case of fragment not implementing Presenter<View> interface

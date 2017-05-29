@@ -88,11 +88,11 @@ public class WordsRemember extends Application {
 
     private void printAppSpecs() {
         Log.i(APP_NAME, Str.concat("APP_NAME: ", APP_NAME));
-        Log.i(APP_NAME, Str.concat("LOWERCASE_APP_NAME: ", LOWERCASE_APP_NAME));
+        Log.d(APP_NAME, Str.concat("LOWERCASE_APP_NAME: ", LOWERCASE_APP_NAME));
         Log.i(APP_NAME, Str.concat("VERSION: ", VERSION));
-        Log.i(APP_NAME, Str.concat("AUTHOR: ", AUTHOR));
-        Log.i(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
-        Log.i(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
+        Log.d(APP_NAME, Str.concat("AUTHOR: ", AUTHOR));
+        Log.d(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
+        Log.d(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
         Log.i(APP_NAME, Str.concat("CURRENT LOCALE: ", getCurrentLocale().toString()));
     }
 

@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.view;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.res.ResourcesCompat;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
@@ -29,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends ActivityView implements QuizGameView, LoaderManager.LoaderCallbacks<QuizGamePresenter> {
+public class QuizGameActivity extends BaseActivityMVP implements QuizGameView {
 
     @BindView(R.id.quiz_game_question)
     TextView lbl_question;
@@ -45,37 +49,19 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
     private AlertDialog.Builder alertDialogBuilder;
 
     private QuizGamePresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
 
     public static final String LBL_QUESTION = "lbl_question";
     public static final String LBL_QUESTION_VOCABLE = "lbl_question_vocable";
     public static final String TXT_ANSWER = "txt_answer";
 
     @Override
-    public Loader<QuizGamePresenter> onCreateLoader(int id, Bundle args) {
-        return new PresenterLoader<>(this, new QuizGamePresenterFactory());
+    protected PresenterFactory getPresenterFactory() {
+        return new QuizGamePresenterFactory();
     }
 
     @Override
-    public void onLoadFinished(Loader<QuizGamePresenter> loader, QuizGamePresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<QuizGamePresenter> loader) {
-        this.presenter = null;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.detachView();
-        super.onStop();
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (QuizGamePresenter) presenter;
     }
 
     @Override
@@ -89,8 +75,6 @@ public class QuizGameActivity extends ActivityView implements QuizGameView, Load
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {
