@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
@@ -29,29 +32,25 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivity extends ActivityView implements EditVocable, LoaderManager.LoaderCallbacks<EditVocablePresenter> {
+public class EditVocableActivity extends BaseActivityMVP implements EditVocable {
 
     public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
-    private FragmentManager fragmentManager;
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;
 
     private EditVocablePresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
 
     private AlertDialog dialogCannotAddTranslation;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
+    protected PresenterFactory getPresenterFactory() {
+        return new EditVocablePresenterFactory();
     }
 
     @Override
-    protected void onStop() {
-        presenter.detachView();
-        super.onStop();
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (EditVocablePresenter) presenter;
     }
 
     @Override
@@ -60,7 +59,7 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
 
-        fragmentManager = getSupportFragmentManager();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
         translationsListFragment = createTranslationListFragmentForVocable();
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
@@ -68,7 +67,6 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
 
         setupAndShowToolbar(getString(R.string.vocable_editor));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     private TranslationsListFragment createTranslationListFragmentForVocable() {
@@ -150,20 +148,5 @@ public class EditVocableActivity extends ActivityView implements EditVocable, Lo
     @Override
     public void returnToPreviousView() {
         onBackPressed();
-    }
-
-    @Override
-    public Loader<EditVocablePresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new EditVocablePresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<EditVocablePresenter> loader, EditVocablePresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<EditVocablePresenter> loader) {
-        presenter = null;
     }
 }

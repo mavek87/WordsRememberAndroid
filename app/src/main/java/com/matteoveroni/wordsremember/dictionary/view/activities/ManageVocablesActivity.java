@@ -9,6 +9,9 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 
@@ -21,10 +24,19 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivity extends ActivityView implements ManageVocablesView, LoaderManager.LoaderCallbacks<ManageVocablesPresenter> {
+public class ManageVocablesActivity extends BaseActivityMVP implements ManageVocablesView {
 
     private ManageVocablesPresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
+
+    @Override
+    protected PresenterFactory getPresenterFactory() {
+        return new ManageVocablesPresenterFactory();
+    }
+
+    @Override
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (ManageVocablesPresenter) presenter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +44,6 @@ public class ManageVocablesActivity extends ActivityView implements ManageVocabl
         setContentView(R.layout.activity_dictionary_manage_vocables);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.vocables_manager));
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.detachView();
-        super.onStop();
     }
 
     @OnClick(R.id.add_vocable_floating_action_button)
@@ -57,20 +56,5 @@ public class ManageVocablesActivity extends ActivityView implements ManageVocabl
     public void goToEditVocableView() {
         final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
         startActivity(intent_goToEditVocableView);
-    }
-
-    @Override
-    public Loader<ManageVocablesPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new ManageVocablesPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ManageVocablesPresenter> loader, ManageVocablesPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<ManageVocablesPresenter> loader) {
-        presenter = null;
     }
 }

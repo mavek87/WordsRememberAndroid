@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
@@ -23,14 +26,50 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends ActivityView implements EditTranslation, LoaderManager.LoaderCallbacks<EditTranslationPresenter> {
+public class EditTranslationActivity extends BaseActivityMVP implements EditTranslation {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 
     private TranslationEditorFragment translationEditorFragment;
     private EditTranslationPresenter presenter;
 
-    private static final int PRESENTER_LOADER_ID = 1;
+    @Override
+    protected PresenterFactory getPresenterFactory() {
+        return new EditTranslationPresenterFactory();
+    }
+
+    @Override
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (EditTranslationPresenter) presenter;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dictionary_edit_translation);
+        ButterKnife.bind(this);
+        setupAndShowToolbar(getString(R.string.edit_translation));
+
+        translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dictionary_top_bar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_action_done:
+                saveTranslationAction();
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public void saveTranslationAction() {
@@ -57,62 +96,5 @@ public class EditTranslationActivity extends ActivityView implements EditTransla
     @Override
     public void setPojoUsed(VocableTranslation vocableTranslation) {
         this.translationEditorFragment.setPojoUsed(vocableTranslation);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
-    }
-
-    @Override
-    protected void onStop() {
-        presenter.detachView();
-        super.onStop();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary_edit_translation);
-        ButterKnife.bind(this);
-        setupAndShowToolbar(getString(R.string.edit_translation));
-
-        translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary_top_bar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_action_done:
-                saveTranslationAction();
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Loader<EditTranslationPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new EditTranslationPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<EditTranslationPresenter> loader, EditTranslationPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<EditTranslationPresenter> loader) {
-        presenter = null;
     }
 }

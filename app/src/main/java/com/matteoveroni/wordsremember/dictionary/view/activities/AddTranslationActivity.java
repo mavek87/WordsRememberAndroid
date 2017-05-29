@@ -7,6 +7,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
+import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.AddTranslationPresenter;
@@ -23,27 +26,23 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class AddTranslationActivity extends ActivityView implements AddTranslation, LoaderManager.LoaderCallbacks<AddTranslationPresenter> {
+public class AddTranslationActivity extends BaseActivityMVP implements AddTranslation {
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
     private TranslationsListFragment translationsListFragment;
-
     private AddTranslationPresenter presenter;
-    private static final int PRESENTER_LOADER_ID = 1;
 
     private static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        presenter.attachView(this);
+    protected PresenterFactory getPresenterFactory() {
+        return new AddTranslationPresenterFactory();
     }
 
     @Override
-    protected void onStop() {
-        presenter.detachView();
-        super.onStop();
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (AddTranslationPresenter) presenter;
     }
 
     @Override
@@ -58,7 +57,6 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
         fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar(getString(R.string.add_translation));
-        getSupportLoaderManager().initLoader(PRESENTER_LOADER_ID, null, this);
     }
 
     private TranslationsListFragment createTranslationListFragmentNotForVocable() {
@@ -98,20 +96,5 @@ public class AddTranslationActivity extends ActivityView implements AddTranslati
     @Override
     public void returnToPreviousView() {
         finish();
-    }
-
-    @Override
-    public Loader<AddTranslationPresenter> onCreateLoader(int id, Bundle arg) {
-        return new PresenterLoader<>(this, new AddTranslationPresenterFactory());
-    }
-
-    @Override
-    public void onLoadFinished(Loader<AddTranslationPresenter> loader, AddTranslationPresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void onLoaderReset(Loader<AddTranslationPresenter> loader) {
-        presenter = null;
     }
 }
