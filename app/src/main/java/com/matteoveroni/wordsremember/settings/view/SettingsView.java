@@ -8,10 +8,16 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 
 public interface SettingsView extends View {
 
-    void firstGameDifficultySelected();
+    void toggleEasyDifficulty();
 
-    void secondGameDifficultySelected();
+    void toggleMediumDifficulty();
 
-    void thirdGameDifficultySelected();
+    void toggleHardDifficulty();
+
+    void easyDifficultySelected();
+
+    void mediumDifficultySelected();
+
+    void hardDifficultySelected();
 
 }

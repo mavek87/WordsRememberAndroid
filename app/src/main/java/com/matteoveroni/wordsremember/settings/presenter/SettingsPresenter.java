@@ -11,9 +11,6 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 /**
  * @author Matteo Veroni
  */
@@ -38,6 +35,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         this.view = view;
 //        EVENT_BUS.register(this);
         Log.d(TAG, "View Attached");
+        initGameDifficulty();
     }
 
     @Override
@@ -51,6 +49,20 @@ public class SettingsPresenter implements Presenter<SettingsView> {
 //    public void eventAbc(){
 //
 //    }
+
+    private void initGameDifficulty() {
+        switch (settings.getDifficulty()) {
+            case EASY:
+                view.toggleEasyDifficulty();
+                break;
+            case MEDIUM:
+                view.toggleMediumDifficulty();
+                break;
+            case HARD:
+                view.toggleHardDifficulty();
+                break;
+        }
+    }
 
     public void onGameDifficultySelected(QuizGameDifficulty difficulty) {
         settings.setDifficulty(difficulty);

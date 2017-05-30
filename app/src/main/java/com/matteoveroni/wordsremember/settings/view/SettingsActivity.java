@@ -65,21 +65,39 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
         lbl_gameVersion.setText(Str.concat(getString(R.string.version), ": ", WordsRemember.VERSION));
     }
 
+
+    @Override
+    public void toggleEasyDifficulty() {
+        radio_btn_easyGameDifficulty.toggle();
+    }
+
+    @Override
+    public void toggleMediumDifficulty() {
+        radio_btn_mediumGameDifficulty.toggle();
+
+    }
+
+    @Override
+    public void toggleHardDifficulty() {
+        radio_btn_hardGameDifficulty.toggle();
+    }
+
     @Override
     @OnClick(R.id.radio_btn_firstGameDifficulty)
-    public void firstGameDifficultySelected() {
+    public void easyDifficultySelected() {
         presenter.onGameDifficultySelected(QuizGameDifficulty.EASY);
+        radio_btn_easyGameDifficulty.toggle();
     }
 
     @Override
     @OnClick(R.id.radio_btn_secondGameDifficulty)
-    public void secondGameDifficultySelected() {
+    public void mediumDifficultySelected() {
         presenter.onGameDifficultySelected(QuizGameDifficulty.MEDIUM);
     }
 
     @Override
     @OnClick(R.id.radio_btn_thirdGameDifficulty)
-    public void thirdGameDifficultySelected() {
+    public void hardDifficultySelected() {
         presenter.onGameDifficultySelected(QuizGameDifficulty.HARD);
     }
 }

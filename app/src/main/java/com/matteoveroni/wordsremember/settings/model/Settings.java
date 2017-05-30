@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 import org.joda.time.DateTime;
@@ -19,13 +20,16 @@ public class Settings {
 
     private final SharedPreferences preferences;
 
-    private QuizGameDifficulty difficulty;
     private int numberOfQuestions;
 
+    public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
     public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
 
     public Settings(SharedPreferences preferences) {
         this.preferences = preferences;
+        if (preferences.contains(GAME_DIFFICULTY_KEY)) {
+            this.numberOfQuestions = getDifficulty().getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
+        }
     }
 
     public Settings(SharedPreferences preferences, QuizGameDifficulty difficulty) {
@@ -34,12 +38,18 @@ public class Settings {
     }
 
     public QuizGameDifficulty getDifficulty() {
+        String json_difficulty = preferences.getString(GAME_DIFFICULTY_KEY, "");
+        QuizGameDifficulty difficulty = Json.getInstance().fromJson(json_difficulty, QuizGameDifficulty.class);
         return difficulty;
     }
 
     public void setDifficulty(QuizGameDifficulty difficulty) {
-        this.difficulty = difficulty;
-        this.numberOfQuestions = this.difficulty.getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
+        preferences
+                .edit()
+                .putString(GAME_DIFFICULTY_KEY, Json.getInstance().toJson(difficulty))
+                .apply();
+
+        this.numberOfQuestions = difficulty.getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
     }
 
     public int getNumberOfQuestions() {

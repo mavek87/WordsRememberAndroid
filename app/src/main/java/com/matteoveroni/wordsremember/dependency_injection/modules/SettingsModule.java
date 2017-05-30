@@ -23,10 +23,15 @@ public class SettingsModule {
     @Provides
     @Singleton
     public Settings providesSettings(SharedPreferences preferences) {
-        Settings settings = new Settings(
-                preferences,
-                QuizGameDifficulty.EASY
-        );
+        Settings settings;
+        if (preferences.contains(Settings.GAME_DIFFICULTY_KEY)) {
+            settings = new Settings(preferences);
+        } else {
+            settings = new Settings(
+                    preferences,
+                    QuizGameDifficulty.EASY
+            );
+        }
         return settings;
     }
 }

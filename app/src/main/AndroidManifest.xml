@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.matteoveroni.wordsremember">
 
@@ -16,7 +17,7 @@
         android:theme="@style/AppTheme">
 
         <provider
-            android:name="com.matteoveroni.wordsremember.provider.DictionaryProvider"
+            android:name=".provider.DictionaryProvider"
             android:authorities="com.matteoveroni.wordsremember.provider"
             android:exported="false" />
 
