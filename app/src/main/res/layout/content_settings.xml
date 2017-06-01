@@ -13,24 +13,31 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".settings.view.SettingsActivity"
-    tools:showIn="@layout/activity_settings"
-    android:weightSum="1">
+    tools:showIn="@layout/activity_settings">
 
     <TextView
         android:id="@+id/lbl_gameVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/version"
-        android:layout_weight="0.12" />
+        android:layout_weight="0.12"
+        android:text="@string/version" />
+
+    <TextView
+        android:id="@+id/lbl_deviceLocale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.12"
+        android:text="@string/deviceLocale" />
 
     <TextView
         android:id="@+id/lbl_selectGameDifficulty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/msg_select_game_difficulty"
-        android:layout_weight="0.04" />
+        android:layout_weight="0.04"
+        android:text="@string/msg_select_game_difficulty" />
 
     <RadioGroup
         android:id="@+id/radio_group_gameDifficulty"

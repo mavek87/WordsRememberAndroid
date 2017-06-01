@@ -2,10 +2,13 @@ package com.matteoveroni.wordsremember.localization;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+
+import java.util.Locale;
 
 /**
  * @author Matteo Veroni
@@ -37,7 +40,7 @@ public class LocaleTranslator {
     public String localize(FormattedString formattedString) {
         Object[] placeholders = formattedString.getArgs();
 
-        if(placeholders == null || placeholders.length == 0) {
+        if (placeholders == null || placeholders.length == 0) {
             return localize(formattedString.getFormattedString());
         }
 
@@ -48,5 +51,13 @@ public class LocaleTranslator {
         }
 
         return String.format(formattedString.getFormattedString(), placeholders);
+    }
+
+    public static Locale getLocale(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
     }
 }

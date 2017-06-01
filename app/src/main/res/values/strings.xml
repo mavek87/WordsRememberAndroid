@@ -20,6 +20,7 @@
     <string name="main_menu">Main Menu</string>
     <string name="quiz_game">Quiz Game</string>
     <string name="version">Version</string>
+    <string name="deviceLocale">Device locale</string>
     <string name="game_result">Game Results</string>
     <string name="start_training">Start training</string>
     <string name="correct_answer">Correct answer</string>

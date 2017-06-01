@@ -15,6 +15,7 @@ import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
+import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
@@ -31,6 +32,9 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
 
     @BindView(R.id.lbl_gameVersion)
     TextView lbl_gameVersion;
+
+    @BindView(R.id.lbl_deviceLocale)
+    TextView lbl_deviceLocale;
 
     @BindView(R.id.radio_group_gameDifficulty)
     RadioGroup radio_group_gameDifficulty;
@@ -61,8 +65,27 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+
         setupAndShowToolbar(getString(R.string.settings));
+
+        printGameVersion();
+        printDeviceLocale();
+    }
+
+    private void printGameVersion() {
         lbl_gameVersion.setText(Str.concat(getString(R.string.version), ": ", WordsRemember.VERSION));
+    }
+
+    private void printDeviceLocale() {
+        String text_lbl_deviceLocale = lbl_deviceLocale.getText().toString();
+        if (!text_lbl_deviceLocale.trim().isEmpty()) {
+            String str_deviceLocale = Str.concat(
+                    lbl_deviceLocale.getText().toString(),
+                    ": ",
+                    LocaleTranslator.getLocale(getApplicationContext()).toString()
+            );
+            lbl_deviceLocale.setText(str_deviceLocale);
+        }
     }
 
 
