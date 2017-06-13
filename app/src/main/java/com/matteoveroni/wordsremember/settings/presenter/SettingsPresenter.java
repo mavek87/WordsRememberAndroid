@@ -11,8 +11,6 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsView;
 
-import org.joda.time.DateTime;
-
 /**
  * @author Matteo Veroni
  */
@@ -21,40 +19,27 @@ public class SettingsPresenter implements Presenter<SettingsView> {
 
     public static final String TAG = TagGenerator.tag(SettingsPresenter.class);
 
-//    private static final EventBus EVENT_BUS = EventBus.getDefault();
-
     private final Settings settings;
-    private final DictionaryDAO dao;
     private SettingsView view;
 
     public SettingsPresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
-        this.dao = dao;
     }
 
     @Override
     public void attachView(SettingsView view) {
         this.view = view;
-//        EVENT_BUS.register(this);
         Log.d(TAG, "View Attached");
-        initGameDifficulty();
-        DateTime lastGameDate = settings.getLastGameDate();
-        this.view.setLastGameDate(lastGameDate);
+        showGameDifficultyInView();
     }
 
     @Override
     public void detachView() {
         this.view = null;
-//        EVENT_BUS.unregister(this);
         Log.d(TAG, "View Destroyed");
     }
 
-//    @Subscribe
-//    public void eventAbc(){
-//
-//    }
-
-    private void initGameDifficulty() {
+    private void showGameDifficultyInView() {
         switch (settings.getDifficulty()) {
             case EASY:
                 view.toggleEasyDifficulty();

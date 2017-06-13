@@ -29,7 +29,7 @@ public class SettingsModule {
         } else {
             settings = new Settings(
                     preferences,
-                    QuizGameDifficulty.EASY
+                    Settings.DEFAULT_DIFFICULTY
             );
         }
         return settings;

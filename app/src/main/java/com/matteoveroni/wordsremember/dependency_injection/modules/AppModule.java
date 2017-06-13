@@ -32,7 +32,6 @@ public class AppModule {
     @Provides
     @Singleton
     SharedPreferences provideSharedPreferences() {
-        final int PREFERENCES_ID = 1;
         return app.getApplicationContext().getSharedPreferences(app.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
     }
 }

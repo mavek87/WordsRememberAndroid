@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">WordsRemember</string>
 
-    <string name="preference_file_key">Preferences</string>
+    <string name="preference_file_key">wr_prefs</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

@@ -1,8 +1,7 @@
 package com.matteoveroni.wordsremember.settings.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -13,10 +12,9 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
 import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
 
@@ -75,24 +73,8 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
 
         printGameVersion();
         printDeviceLocale();
+        setLabelsForRadioButtons();
     }
-
-    private void printGameVersion() {
-        lbl_gameVersion.setText(Str.concat(getString(R.string.version), ": ", WordsRemember.VERSION));
-    }
-
-    private void printDeviceLocale() {
-        String text_lbl_deviceLocale = lbl_deviceLocale.getText().toString();
-        if (!text_lbl_deviceLocale.trim().isEmpty()) {
-            String str_deviceLocale = Str.concat(
-                    lbl_deviceLocale.getText().toString(),
-                    ": ",
-                    LocaleTranslator.getLocale(getApplicationContext()).toString()
-            );
-            lbl_deviceLocale.setText(str_deviceLocale);
-        }
-    }
-
 
     @Override
     public void toggleEasyDifficulty() {
@@ -131,12 +113,53 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
 
     @Override
     public void setLastGameDate(DateTime lastGameDate) {
-        lbl_last_game_date.setText(getString(R.string.lastGameDate) + ": "
-                + lastGameDate.toLocalDate().toString()
-                + " - "
-                + lastGameDate.getHourOfDay() + ":"
-                + lastGameDate.getMinuteOfHour() + ":"
-                + lastGameDate.getSecondOfMinute()
+        String str_date = lastGameDate.toLocalDate().toString();
+        String str_time = lastGameDate.getHourOfDay() + ":" + lastGameDate.getMinuteOfHour() + ":" + lastGameDate.getSecondOfMinute();
+        lbl_last_game_date.setText(getString(R.string.lastGameDate) + ": " + str_date + " - " + str_time);
+    }
+
+    private void printGameVersion() {
+        lbl_gameVersion.setText(Str.concat(getString(R.string.version), ": ", WordsRemember.VERSION));
+    }
+
+    private void printDeviceLocale() {
+        String text_lbl_deviceLocale = lbl_deviceLocale.getText().toString();
+        if (!text_lbl_deviceLocale.trim().isEmpty()) {
+            String str_deviceLocale = Str.concat(
+                    lbl_deviceLocale.getText().toString(),
+                    ": ",
+                    LocaleTranslator.getLocale(getApplicationContext()).toString()
+            );
+            lbl_deviceLocale.setText(str_deviceLocale);
+        }
+    }
+
+    private void setLabelsForRadioButtons() {
+        int numberOfQuestionsForEasy = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
+        String lbl_btn_EasyGameDifficulty = String.format(
+                "%s (%s %s)",
+                getString(R.string.easy),
+                numberOfQuestionsForEasy,
+                (numberOfQuestionsForEasy > 1) ? "questions" : "question"
         );
+        radio_btn_easyGameDifficulty.setText(lbl_btn_EasyGameDifficulty);
+
+        int numberOfQuestionsForMedium = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.MEDIUM);
+        String lbl_btn_MediumGameDifficulty = String.format(
+                "%s (%s %s)",
+                getString(R.string.medium),
+                numberOfQuestionsForMedium,
+                (numberOfQuestionsForMedium > 1) ? "questions" : "question"
+        );
+        radio_btn_mediumGameDifficulty.setText(lbl_btn_MediumGameDifficulty);
+
+        int numberOfQuestionsForHard = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.HARD);
+        String lbl_btn_HardGameDifficulty = String.format(
+                "%s (%s %s)",
+                getString(R.string.hard),
+                numberOfQuestionsForHard,
+                (numberOfQuestionsForHard > 1) ? "questions" : "question"
+        );
+        radio_btn_hardGameDifficulty.setText(lbl_btn_HardGameDifficulty);
     }
 }
