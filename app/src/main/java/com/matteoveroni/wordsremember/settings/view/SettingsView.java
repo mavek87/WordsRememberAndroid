@@ -2,6 +2,8 @@ package com.matteoveroni.wordsremember.settings.view;
 
 import com.matteoveroni.wordsremember.interfaces.view.View;
 
+import org.joda.time.DateTime;
+
 /**
  * @author Matteo Veroni
  */
@@ -20,4 +22,5 @@ public interface SettingsView extends View {
 
     void hardDifficultySelected();
 
+    void setLastGameDate(DateTime lastGameDate);
 }

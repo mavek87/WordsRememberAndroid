@@ -33,6 +33,13 @@
         android:text="@string/deviceLocale" />
 
     <TextView
+        android:id="@+id/lbl_last_game_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.12"
+        android:text="@string/lastGameDate" />
+
+    <TextView
         android:id="@+id/lbl_selectGameDifficulty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

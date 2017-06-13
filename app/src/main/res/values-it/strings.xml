@@ -49,4 +49,5 @@
     <string name="msg_select_game_difficulty">Seleziona difficoltà gioco</string>
     <string name="game_version">Versione</string>
     <string name="deviceLocale">Locale dispositivo</string>
+    <string name="lastGameDate">Data ultima partita</string>
 </resources>

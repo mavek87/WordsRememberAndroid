@@ -11,6 +11,8 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsView;
 
+import org.joda.time.DateTime;
+
 /**
  * @author Matteo Veroni
  */
@@ -36,6 +38,8 @@ public class SettingsPresenter implements Presenter<SettingsView> {
 //        EVENT_BUS.register(this);
         Log.d(TAG, "View Attached");
         initGameDifficulty();
+        DateTime lastGameDate = settings.getLastGameDate();
+        this.view.setLastGameDate(lastGameDate);
     }
 
     @Override

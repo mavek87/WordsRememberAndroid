@@ -20,6 +20,8 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
 
+import org.joda.time.DateTime;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,6 +37,9 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
 
     @BindView(R.id.lbl_deviceLocale)
     TextView lbl_deviceLocale;
+
+    @BindView(R.id.lbl_last_game_date)
+    TextView lbl_last_game_date;
 
     @BindView(R.id.radio_group_gameDifficulty)
     RadioGroup radio_group_gameDifficulty;
@@ -122,5 +127,16 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
     @OnClick(R.id.radio_btn_thirdGameDifficulty)
     public void hardDifficultySelected() {
         presenter.onGameDifficultySelected(QuizGameDifficulty.HARD);
+    }
+
+    @Override
+    public void setLastGameDate(DateTime lastGameDate) {
+        lbl_last_game_date.setText(getString(R.string.lastGameDate) + ": "
+                + lastGameDate.toLocalDate().toString()
+                + " - "
+                + lastGameDate.getHourOfDay() + ":"
+                + lastGameDate.getMinuteOfHour() + ":"
+                + lastGameDate.getSecondOfMinute()
+        );
     }
 }

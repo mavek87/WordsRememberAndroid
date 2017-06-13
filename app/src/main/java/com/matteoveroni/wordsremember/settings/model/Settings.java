@@ -71,8 +71,7 @@ public class Settings {
                 .apply();
     }
 
-    public DateTime getLastGameDate() throws Exception {
+    public DateTime getLastGameDate() {
         return DateTime.parse(preferences.getString(LAST_GAME_DATE_KEY, ""));
-//        return DateManager.DATE_FORMATTER.parseDateTime(preferences.getString(LAST_GAME_DATE_KEY, ""));
     }
 }

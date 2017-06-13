@@ -12,10 +12,6 @@ import android.support.v4.app.TaskStackBuilder;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 /**
- * @author Matteo Veroni
- */
-
-/**
  * Useful resources:
  * https://developer.android.com/training/scheduling/alarms.html
  * http://stackoverflow.com/questions/2179644/how-to-calculate-elapsed-time-from-now-with-joda-time
@@ -53,20 +49,19 @@ public class AndroidSimpleNotifier {
         // The stack builder object will contain an artificial back stack for the
         // started Activity. This ensures that navigating backward from the Activity leads out of
         // your application to the Home screen.
-        final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(activity.getClass());
 
         // Creates an explicit intent for an Activity in your app
-        final Intent resultIntent = new Intent(context, activity.getClass());
+        Intent resultIntent = new Intent(context, activity.getClass());
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
 
-        final PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+        final PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
 
         notificationBuilder.setContentIntent(resultPendingIntent);
         notification = notificationBuilder.build();
