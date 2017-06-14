@@ -1,23 +1,19 @@
 package com.matteoveroni.wordsremember.dictionary.view.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 
 import butterknife.ButterKnife;
@@ -26,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends BaseActivityMVP implements EditTranslation {
+public class EditTranslationActivity extends BaseActivityView implements EditTranslation {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 

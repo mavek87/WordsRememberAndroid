@@ -1,8 +1,7 @@
-package com.matteoveroni.wordsremember.interfaces.presenters;
+package com.matteoveroni.wordsremember.interfaces.presenter;
 
 import android.content.Context;
 import android.support.v4.content.Loader;
-import android.util.Log;
 
 /**
  * Useful Resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/PresenterLoader.java

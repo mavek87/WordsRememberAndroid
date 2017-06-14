@@ -12,8 +12,10 @@ public class Quiz {
     private final int totalNumberOfQuizzes;
     private final String question;
     private final List<String> rightAnswers;
+    private String finalAnswer;
+    private FinalResult finalFinalResult;
 
-    public enum Result {
+    public enum FinalResult {
         RIGHT, WRONG;
     }
 
@@ -41,5 +43,21 @@ public class Quiz {
 
     public List<String> getRightAnswers() {
         return rightAnswers;
+    }
+
+    public String getFinalAnswer() {
+        return finalAnswer;
+    }
+
+    public void setFinalAnswer(String finalAnswer) {
+        this.finalAnswer = finalAnswer;
+    }
+
+    public FinalResult getFinalFinalResult() {
+        return finalFinalResult;
+    }
+
+    public void setFinalFinalResult(FinalResult finalFinalResult) {
+        this.finalFinalResult = finalFinalResult;
     }
 }

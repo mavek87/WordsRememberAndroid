@@ -3,9 +3,6 @@ package com.matteoveroni.wordsremember.quizgame.view;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
@@ -17,11 +14,9 @@ import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
@@ -33,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityMVP implements QuizGameView {
+public class QuizGameActivity extends BaseActivityView implements QuizGameView {
 
     @BindView(R.id.quiz_game_question)
     TextView lbl_question;
@@ -135,10 +130,10 @@ public class QuizGameActivity extends BaseActivityMVP implements QuizGameView {
     }
 
     @Override
-    public void showQuizResultDialog(Quiz.Result quizResult) {
+    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, String message) {
         Drawable img_alertDialog;
         String quizResultTitle;
-        switch (quizResult) {
+        switch (quizFinalResult) {
             case RIGHT:
                 quizResultTitle = getString(R.string.correct_answer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
@@ -154,7 +149,7 @@ public class QuizGameActivity extends BaseActivityMVP implements QuizGameView {
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(quizResultTitle)
-                .setMessage(getString(R.string.msg_press_ok_to_continue))
+                .setMessage(message + "\n\n" + getString(R.string.msg_press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.continueToPlay();

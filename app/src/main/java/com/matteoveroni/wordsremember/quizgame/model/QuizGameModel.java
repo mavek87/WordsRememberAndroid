@@ -22,7 +22,9 @@ public interface QuizGameModel {
 
     void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException;
 
-    Quiz.Result checkAnswer(String answer);
+    void calculateFinalAnswerCorrectness(String finalAnswer);
+
+    Quiz getCurrentQuiz();
 
     int getScore();
 

@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.settings.view;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -9,9 +8,9 @@ import android.widget.TextView;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
@@ -28,7 +27,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class SettingsActivity extends BaseActivityMVP implements SettingsView {
+public class SettingsActivity extends BaseActivityView implements SettingsView {
 
     @BindView(R.id.lbl_gameVersion)
     TextView lbl_gameVersion;
@@ -136,30 +135,30 @@ public class SettingsActivity extends BaseActivityMVP implements SettingsView {
 
     private void setLabelsForRadioButtons() {
         int numberOfQuestionsForEasy = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
-        String lbl_btn_EasyGameDifficulty = String.format(
+        String str_btn_EasyGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.easy),
                 numberOfQuestionsForEasy,
                 (numberOfQuestionsForEasy > 1) ? "questions" : "question"
         );
-        radio_btn_easyGameDifficulty.setText(lbl_btn_EasyGameDifficulty);
+        radio_btn_easyGameDifficulty.setText(str_btn_EasyGameDifficulty);
 
         int numberOfQuestionsForMedium = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.MEDIUM);
-        String lbl_btn_MediumGameDifficulty = String.format(
+        String str_btn_MediumGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.medium),
                 numberOfQuestionsForMedium,
                 (numberOfQuestionsForMedium > 1) ? "questions" : "question"
         );
-        radio_btn_mediumGameDifficulty.setText(lbl_btn_MediumGameDifficulty);
+        radio_btn_mediumGameDifficulty.setText(str_btn_MediumGameDifficulty);
 
         int numberOfQuestionsForHard = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.HARD);
-        String lbl_btn_HardGameDifficulty = String.format(
+        String str_btn_HardGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.hard),
                 numberOfQuestionsForHard,
                 (numberOfQuestionsForHard > 1) ? "questions" : "question"
         );
-        radio_btn_hardGameDifficulty.setText(lbl_btn_HardGameDifficulty);
+        radio_btn_hardGameDifficulty.setText(str_btn_HardGameDifficulty);
     }
 }

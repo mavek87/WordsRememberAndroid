@@ -5,7 +5,7 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
@@ -17,6 +17,8 @@ import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 /**
  * Created by Matteo Veroni
@@ -65,6 +67,42 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         startNewQuizOrShowError();
     }
 
+    @Subscribe
+    public void onEventQuizGenerated(EventQuizGenerated event) {
+        view.setPojoUsed(event.getQuiz());
+    }
+
+    public void onQuizAnswerFromView(String givenAnswer) {
+        if (givenAnswer.trim().isEmpty()) {
+            view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
+        } else {
+            game.calculateFinalAnswerCorrectness(givenAnswer);
+            Quiz quiz = game.getCurrentQuiz();
+            Quiz.FinalResult quizFinalResult = quiz.getFinalFinalResult();
+
+            String str_message = "";
+            switch (quiz.getFinalFinalResult()) {
+                case RIGHT:
+                    str_message += "Right answer";
+                    break;
+                case WRONG:
+                    str_message += "Wrong answer";
+                    str_message += "\nRight answer are: \n";
+
+                    List<String> rightAnswers = quiz.getRightAnswers();
+                    for (int i = 0; i < rightAnswers.size(); i++) {
+                        str_message += rightAnswers.get(i);
+                        if (i != rightAnswers.size() - 1) {
+                            str_message += ", ";
+                        }
+                    }
+
+                    break;
+            }
+            view.showQuizResultDialog(quizFinalResult, str_message);
+        }
+    }
+
     private void startNewQuizOrShowError() {
         view.clearAndHideFields();
         try {
@@ -81,21 +119,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
             view.showGameResultDialog(gameResultMessage);
         } catch (ZeroQuizzesException ex) {
             view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
-        }
-    }
-
-    @Subscribe
-    public void onEventQuizGenerated(EventQuizGenerated event) {
-        Quiz quiz = event.getQuiz();
-        view.setPojoUsed(quiz);
-    }
-
-    public void onQuizAnswerFromView(String givenAnswer) {
-        if (givenAnswer.trim().isEmpty()) {
-            view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
-        } else {
-            Quiz.Result quizResult = game.checkAnswer(givenAnswer);
-            view.showQuizResultDialog(quizResult);
         }
     }
 }

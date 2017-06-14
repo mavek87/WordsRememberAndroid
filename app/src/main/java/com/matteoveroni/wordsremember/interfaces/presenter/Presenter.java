@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.interfaces.presenters;
+package com.matteoveroni.wordsremember.interfaces.presenter;
 
 public interface Presenter<V> {
 

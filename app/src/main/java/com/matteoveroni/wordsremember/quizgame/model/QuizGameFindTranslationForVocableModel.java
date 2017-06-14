@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.quizgame.model;
 
 import com.matteoveroni.myutils.Int;
 import com.matteoveroni.myutils.IntRange;
-import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
@@ -14,6 +13,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -92,10 +92,6 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         score = 0;
         numberOfQuestions = 0;
         questionNumber = 0;
-        adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable();
-    }
-
-    private void adjustNumberOfQuizzesCountingMaxNumberOfQuizCreatable() {
         dao.countDistinctVocablesWithTranslations();
     }
 
@@ -116,9 +112,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
         questionNumber++;
 
-        int vocablePosition = extractUniqueRandomVocablePosition();
-
-        dao.asyncSearchDistinctVocableWithTranslationByOffsetCommand(vocablePosition);
+        dao.asyncSearchDistinctVocableWithTranslationByOffset(extractUniqueRandomVocablePosition());
     }
 
     private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
@@ -153,32 +147,29 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         Word vocable = event.getVocable();
         String vocableQuestion = vocable.getName();
 
-        List<Word> translations = event.getTranslations();
-        List<String> answers = populateRightAnswers(translations);
+        List<String> rightAnswersForCurrentQuiz = new ArrayList<>();
+        for (Word translation : event.getTranslations()) {
+            rightAnswersForCurrentQuiz.add(translation.getName());
+        }
 
-        currentQuiz = new Quiz(questionNumber, numberOfQuestions, vocableQuestion, answers);
+        currentQuiz = new Quiz(questionNumber, numberOfQuestions, vocableQuestion, rightAnswersForCurrentQuiz);
         EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
     }
 
-    private List<String> populateRightAnswers(List<Word> translations) {
-        List<String> answers = new ArrayList<>();
-        for (Word translation : translations) {
-            answers.add(translation.getName());
-        }
-        return answers;
+    @Override
+    public Quiz getCurrentQuiz() {
+        return currentQuiz;
     }
 
     @Override
-    public Quiz.Result checkAnswer(String answer) {
-        if (currentQuiz == null)
-            throw new RuntimeException("Unexpected exception. No current quiz set in QuizGame model");
-
+    public void calculateFinalAnswerCorrectness(String finalAnswer) {
+        currentQuiz.setFinalAnswer(finalAnswer);
         QuizAnswerChecker answerChecker = new QuizAnswerChecker(currentQuiz);
-        if (answerChecker.isAnswerCorrect(answer)) {
+        if (answerChecker.isFinalAnswerCorrect()) {
             score++;
-            return Quiz.Result.RIGHT;
+            currentQuiz.setFinalFinalResult(Quiz.FinalResult.RIGHT);
         } else {
-            return Quiz.Result.WRONG;
+            currentQuiz.setFinalFinalResult(Quiz.FinalResult.WRONG);
         }
     }
 

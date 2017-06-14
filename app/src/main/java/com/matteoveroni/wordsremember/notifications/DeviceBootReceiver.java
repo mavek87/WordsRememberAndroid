@@ -8,9 +8,9 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 import org.joda.time.DateTime;
 

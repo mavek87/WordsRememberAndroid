@@ -2,14 +2,13 @@ package com.matteoveroni.wordsremember.main_menu;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.widget.Button;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
@@ -24,7 +23,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class MainMenuActivity extends BaseActivityMVP implements MainMenuView {
+public class MainMenuActivity extends BaseActivityView implements MainMenuView {
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 
@@ -74,7 +73,7 @@ public class MainMenuActivity extends BaseActivityMVP implements MainMenuView {
 
     @Override
     public void startDictionaryManagement() {
-        startActivity(new Intent(getApplicationContext(), ManageVocablesActivity.class));
+        startActivity(new Intent(getApplicationContext(), ManageVocablesActivityView.class));
     }
 
     @OnClick(R.id.main_menu_btn_settings)

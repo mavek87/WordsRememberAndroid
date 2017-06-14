@@ -4,23 +4,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
@@ -32,9 +28,9 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivity extends BaseActivityMVP implements EditVocable {
+public class EditVocableActivityView extends BaseActivityView implements EditVocable {
 
-    public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
+    public static final String TAG = TagGenerator.tag(EditVocableActivityView.class);
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;

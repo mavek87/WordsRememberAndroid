@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.interfaces.base;
+package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,17 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
 
-public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends AppCompatActivity {
+public abstract class PresentedActivity<P extends Presenter<V>, V> extends AppCompatActivity {
 
-    private static final String TAG = TagGenerator.tag(BasePresenterActivity.class);
+    private static final String TAG = TagGenerator.tag(PresentedActivity.class);
     private static final int PRESENTER_LOADER_ID = 999;
     private P presenter;
 
@@ -42,20 +42,20 @@ public abstract class BasePresenterActivity<P extends Presenter<V>, V> extends A
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
                 Log.d(TAG, "onCreateLoader");
-                return new PresenterLoader<>(BasePresenterActivity.this, getPresenterFactory());
+                return new PresenterLoader<>(PresentedActivity.this, getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.d(TAG, "onLoadFinished");
-                BasePresenterActivity.this.presenter = presenter;
+                PresentedActivity.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.d(TAG, "onLoaderReset");
-                BasePresenterActivity.this.presenter = null;
+                PresentedActivity.this.presenter = null;
             }
         });
     }

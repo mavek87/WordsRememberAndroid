@@ -1,17 +1,16 @@
-package com.matteoveroni.wordsremember.interfaces.base;
+package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.widget.Toast;
 
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 /**
  * @author Matteo Veroni
  */
 
-public abstract class BaseFragmentMVP extends BasePresenterFragment implements View {
+public abstract class BaseFragmentView extends PresentedFragment implements View {
     private LocaleTranslator translator;
 
     @Override

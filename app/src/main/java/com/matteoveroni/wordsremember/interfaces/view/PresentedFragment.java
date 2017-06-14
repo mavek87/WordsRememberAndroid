@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.interfaces.base;
+package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,17 +8,17 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterFragment.java
  */
 
-public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends Fragment {
+public abstract class PresentedFragment<P extends Presenter<V>, V> extends Fragment {
 
-    private static final String TAG = TagGenerator.tag(BasePresenterFragment.class);
+    private static final String TAG = TagGenerator.tag(PresentedFragment.class);
     private static final int PRESENTER_LOADER_ID = 999;
     private P presenter;
 
@@ -48,14 +48,14 @@ public abstract class BasePresenterFragment<P extends Presenter<V>, V> extends F
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished");
-                BasePresenterFragment.this.presenter = presenter;
+                PresentedFragment.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.i(TAG, "onLoaderReset");
-                BasePresenterFragment.this.presenter = null;
+                PresentedFragment.this.presenter = null;
             }
         });
     }

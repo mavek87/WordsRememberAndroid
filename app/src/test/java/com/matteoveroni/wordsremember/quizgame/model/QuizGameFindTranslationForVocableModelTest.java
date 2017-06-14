@@ -99,7 +99,7 @@ public class QuizGameFindTranslationForVocableModelTest {
 
         model.generateQuiz();
 
-        verify(dao).asyncSearchDistinctVocableWithTranslationByOffsetCommand(anyInt());
+        verify(dao).asyncSearchDistinctVocableWithTranslationByOffset(anyInt());
     }
 
     @Test

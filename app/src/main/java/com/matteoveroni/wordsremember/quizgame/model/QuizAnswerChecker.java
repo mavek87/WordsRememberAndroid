@@ -14,9 +14,10 @@ public class QuizAnswerChecker {
         this.quiz = quiz;
     }
 
-    public boolean isAnswerCorrect(String answer) {
+    public boolean isFinalAnswerCorrect() {
+        String finalAnswer = quiz.getFinalAnswer();
         for (String rightAnswer : quiz.getRightAnswers()) {
-            if (answer.equalsIgnoreCase(rightAnswer)) {
+            if (finalAnswer.equalsIgnoreCase(rightAnswer)) {
                 return true;
             }
         }

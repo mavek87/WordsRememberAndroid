@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
@@ -14,7 +13,7 @@ import com.matteoveroni.wordsremember.localization.LocaleTranslator;
  * @author Matteo Veroni
  */
 
-public abstract class ActivityView extends AppCompatActivity implements View {
+public abstract class BaseActivityView extends PresentedActivity implements View {
 
     private LocaleTranslator translator;
 

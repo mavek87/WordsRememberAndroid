@@ -50,12 +50,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.ManageVocablesActivity"
+            android:name=".dictionary.view.activities.ManageVocablesActivityView"
             android:label="@string/vocables_manager"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.EditVocableActivity"
+            android:name=".dictionary.view.activities.EditVocableActivityView"
             android:label="@string/vocable_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 

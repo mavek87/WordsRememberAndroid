@@ -15,7 +15,7 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void showErrorDialog(String msgErrorText);
 
-    void showQuizResultDialog(Quiz.Result quizResult);
+    void showQuizResultDialog(Quiz.FinalResult quizFinalResult, String message);
 
     void showGameResultDialog(FormattedString localizedMessage);
 

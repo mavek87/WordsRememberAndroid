@@ -141,7 +141,7 @@ public class DictionaryDAO {
         new AsyncSearchVocableTranslationsCommand(contentResolver, vocable, null).execute();
     }
 
-    public void asyncSearchDistinctVocableWithTranslationByOffsetCommand(int offset) throws IllegalArgumentException {
+    public void asyncSearchDistinctVocableWithTranslationByOffset(int offset) throws IllegalArgumentException {
         if (offset < 0) throw new IllegalArgumentException("Negative offset");
 
         new AsyncSearchDistinctVocableWithTranslationByOffsetCommand(contentResolver, String.valueOf(offset)).execute();

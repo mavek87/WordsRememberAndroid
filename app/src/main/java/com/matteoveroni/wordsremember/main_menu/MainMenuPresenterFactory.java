@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.main_menu;
 
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.main_menu.MainMenuPresenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 
 class MainMenuPresenterFactory implements PresenterFactory {
 

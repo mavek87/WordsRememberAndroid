@@ -2,18 +2,14 @@ package com.matteoveroni.wordsremember.dictionary.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
-import com.matteoveroni.wordsremember.interfaces.base.BaseActivityMVP;
-import com.matteoveroni.wordsremember.interfaces.presenters.Presenter;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.presenters.PresenterLoader;
-import com.matteoveroni.wordsremember.interfaces.view.ActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -24,7 +20,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivity extends BaseActivityMVP implements ManageVocablesView {
+public class ManageVocablesActivityView extends BaseActivityView implements ManageVocablesView {
 
     private ManageVocablesPresenter presenter;
 
@@ -54,7 +50,7 @@ public class ManageVocablesActivity extends BaseActivityMVP implements ManageVoc
 
     @Override
     public void goToEditVocableView() {
-        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
+        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivityView.class);
         startActivity(intent_goToEditVocableView);
     }
 }
