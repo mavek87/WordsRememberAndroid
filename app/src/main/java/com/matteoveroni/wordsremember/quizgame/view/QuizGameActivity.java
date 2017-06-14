@@ -146,6 +146,7 @@ public class QuizGameActivity extends BaseActivityView implements QuizGameView {
                 throw new RuntimeException("Unknown quiz result");
         }
 
+        // TODO: send a complete message from presenter (formatted string)
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(quizResultTitle)

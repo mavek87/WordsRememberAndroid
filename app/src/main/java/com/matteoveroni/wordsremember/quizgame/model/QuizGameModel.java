@@ -18,14 +18,12 @@ public interface QuizGameModel {
 
     int getNumberOfQuestions();
 
-    int getQuestionNumber();
-
     void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException;
 
-    void calculateFinalAnswerCorrectness(String finalAnswer);
+    void giveFinalAnswer(String finalAnswer);
 
     Quiz getCurrentQuiz();
 
-    int getScore();
+    int getTotalScore();
 
 }

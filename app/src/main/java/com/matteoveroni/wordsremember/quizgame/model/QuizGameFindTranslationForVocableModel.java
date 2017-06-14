@@ -33,38 +33,19 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     private final DictionaryDAO dao;
     private final Settings settings;
-
+    private UniqueRandomNumberGenerator uniqueRandIntGenerator;
     private final Set<Integer> extractedVocablesIndexes = new HashSet<>();
 
-    private boolean isGameStarted = false;
-
     private Quiz currentQuiz;
+    private int numberOfVocablesWithTranslations;
     private int numberOfQuestions;
-    private int questionNumber;
-    private int score;
+    private int quizNumber;
+    private int totalScore;
+    private boolean isGameStarted = false;
 
     public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
-    }
-
-    @Override
-    public int getScore() {
-        return score;
-    }
-
-    @Override
-    public int getNumberOfQuestions() {
-        return numberOfQuestions;
-    }
-
-    void setNumberOfQuestions(int numberOfQuestions) {
-        this.numberOfQuestions = numberOfQuestions;
-    }
-
-    @Override
-    public int getQuestionNumber() {
-        return questionNumber;
     }
 
     @Override
@@ -74,6 +55,15 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
             isGameStarted = true;
         }
         registerToEventBus();
+    }
+
+    private void initGame() {
+        extractedVocablesIndexes.clear();
+        totalScore = 0;
+        numberOfVocablesWithTranslations = 0;
+        numberOfQuestions = 0;
+        quizNumber = 0;
+        dao.countDistinctVocablesWithTranslations();
     }
 
     @Override
@@ -87,47 +77,42 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         unregisterToEventBus();
     }
 
-    private void initGame() {
-        extractedVocablesIndexes.clear();
-        score = 0;
-        numberOfQuestions = 0;
-        questionNumber = 0;
-        dao.countDistinctVocablesWithTranslations();
-    }
-
     @Subscribe
     public void onEventCalculateNumberOfQuestions(EventCountDistinctVocablesWithTranslationsCompleted event) {
-        numberOfQuestions = event.getNumberOfVocablesWithTranslation();
-
-        if (numberOfQuestions > settings.getNumberOfQuestions()) {
+        numberOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
+        if (numberOfVocablesWithTranslations > settings.getNumberOfQuestions()) {
             numberOfQuestions = settings.getNumberOfQuestions();
+        } else {
+            numberOfQuestions = numberOfVocablesWithTranslations;
         }
+
+        int minNumber = 0;
+        int maxNumber = numberOfVocablesWithTranslations - 1;
+        int maxNumberOfExtractions = numberOfQuestions;
+        uniqueRandIntGenerator = new UniqueRandomNumberGenerator(minNumber, maxNumber, maxNumberOfExtractions);
 
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
 
     @Override
-    public void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
-        if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
-
-        questionNumber++;
-
-        dao.asyncSearchDistinctVocableWithTranslationByOffset(extractUniqueRandomVocablePosition());
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
     }
 
-    private int extractUniqueRandomVocablePosition() throws NoMoreQuizzesException {
-        int initialNumberOfExtractedVocablesIndexes = extractedVocablesIndexes.size();
-        if (initialNumberOfExtractedVocablesIndexes >= numberOfQuestions) {
+    void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
+    @Override
+    public void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
+        if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
+        quizNumber++;
+        try {
+            int uniqueRandomNumber = uniqueRandIntGenerator.extractNext();
+            dao.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandomNumber);
+        } catch (UniqueRandomNumberGenerator.NoMoreUniqueRandNumberExtractableException ex) {
             throw new NoMoreQuizzesException();
         }
-
-        IntRange positionsRange = new IntRange(0, numberOfQuestions - 1);
-        int randPosition;
-        do {
-            randPosition = Int.getRandomInt(positionsRange);
-            extractedVocablesIndexes.add(randPosition);
-        } while (extractedVocablesIndexes.size() == initialNumberOfExtractedVocablesIndexes);
-        return randPosition;
     }
 
     @Subscribe
@@ -152,7 +137,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
             rightAnswersForCurrentQuiz.add(translation.getName());
         }
 
-        currentQuiz = new Quiz(questionNumber, numberOfQuestions, vocableQuestion, rightAnswersForCurrentQuiz);
+        currentQuiz = new Quiz(quizNumber, numberOfQuestions, vocableQuestion, rightAnswersForCurrentQuiz);
         EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
     }
 
@@ -162,15 +147,19 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     @Override
-    public void calculateFinalAnswerCorrectness(String finalAnswer) {
+    public void giveFinalAnswer(String finalAnswer) {
         currentQuiz.setFinalAnswer(finalAnswer);
-        QuizAnswerChecker answerChecker = new QuizAnswerChecker(currentQuiz);
-        if (answerChecker.isFinalAnswerCorrect()) {
-            score++;
+        if (QuizFinalAnswerChecker.isFinalAnswerCorrect(currentQuiz)) {
+            totalScore++;
             currentQuiz.setFinalFinalResult(Quiz.FinalResult.RIGHT);
         } else {
             currentQuiz.setFinalFinalResult(Quiz.FinalResult.WRONG);
         }
+    }
+
+    @Override
+    public int getTotalScore() {
+        return totalScore;
     }
 
     private void registerToEventBus() {

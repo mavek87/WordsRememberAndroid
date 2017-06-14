@@ -72,11 +72,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(event.getQuiz());
     }
 
+    // TODO: refactoring of this method
     public void onQuizAnswerFromView(String givenAnswer) {
         if (givenAnswer.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            game.calculateFinalAnswerCorrectness(givenAnswer);
+            game.giveFinalAnswer(givenAnswer);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalFinalResult();
 
@@ -112,7 +113,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
                     "%s %s %d/%d %s",
                     LocaleKey.MSG_GAME_COMPLETED,
                     LocaleKey.SCORE,
-                    game.getScore(),
+                    game.getTotalScore(),
                     game.getNumberOfQuestions(),
                     LocaleKey.POINTS
             );

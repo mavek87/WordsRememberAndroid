@@ -6,15 +6,9 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
  * @author Matteo Veroni
  */
 
-public class QuizAnswerChecker {
+public class QuizFinalAnswerChecker {
 
-    private final Quiz quiz;
-
-    public QuizAnswerChecker(Quiz quiz) {
-        this.quiz = quiz;
-    }
-
-    public boolean isFinalAnswerCorrect() {
+    public static final boolean isFinalAnswerCorrect(Quiz quiz) {
         String finalAnswer = quiz.getFinalAnswer();
         for (String rightAnswer : quiz.getRightAnswers()) {
             if (finalAnswer.equalsIgnoreCase(rightAnswer)) {
