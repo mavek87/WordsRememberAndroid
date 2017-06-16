@@ -83,7 +83,6 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     @Override
     public void toggleMediumDifficulty() {
         radio_btn_mediumGameDifficulty.toggle();
-
     }
 
     @Override

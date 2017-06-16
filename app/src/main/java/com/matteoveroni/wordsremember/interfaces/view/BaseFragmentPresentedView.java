@@ -22,10 +22,11 @@ import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> extends Fragment implements View {
 
-    private static final String TAG = TagGenerator.tag(BaseFragmentPresentedView.class);
-    private LocaleTranslator translator;
-    private static final int PRESENTER_LOADER_ID = 999;
+    public static final String TAG = TagGenerator.tag(BaseFragmentPresentedView.class);
+
+    private static final int PRESENTER_LOADER_ID = 1;
     private P presenter;
+    private LocaleTranslator translator;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

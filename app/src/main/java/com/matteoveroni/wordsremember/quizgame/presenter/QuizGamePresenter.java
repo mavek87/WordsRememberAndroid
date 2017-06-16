@@ -73,11 +73,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
     }
 
     // TODO: refactoring of this method
-    public void onQuizAnswerFromView(String givenAnswer) {
-        if (givenAnswer.trim().isEmpty()) {
+    public void onQuizAnswerFromView(String answerFromView) {
+        if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            game.giveFinalAnswer(givenAnswer);
+            game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalFinalResult();
 
