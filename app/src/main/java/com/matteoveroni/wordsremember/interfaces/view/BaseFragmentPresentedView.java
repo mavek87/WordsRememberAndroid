@@ -6,19 +6,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
+import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterFragment.java
  */
 
-public abstract class PresentedFragment<P extends Presenter<V>, V> extends Fragment {
+public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> extends Fragment implements View {
 
-    private static final String TAG = TagGenerator.tag(PresentedFragment.class);
+    private static final String TAG = TagGenerator.tag(BaseFragmentPresentedView.class);
+    private LocaleTranslator translator;
     private static final int PRESENTER_LOADER_ID = 999;
     private P presenter;
 
@@ -48,14 +53,14 @@ public abstract class PresentedFragment<P extends Presenter<V>, V> extends Fragm
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished");
-                PresentedFragment.this.presenter = presenter;
+                BaseFragmentPresentedView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.i(TAG, "onLoaderReset");
-                PresentedFragment.this.presenter = null;
+                BaseFragmentPresentedView.this.presenter = null;
             }
         });
     }
@@ -101,5 +106,30 @@ public abstract class PresentedFragment<P extends Presenter<V>, V> extends Fragm
      */
     protected int loaderId() {
         return PRESENTER_LOADER_ID;
+    }
+
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), localize(message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(FormattedString formattedLocaleMessage) {
+        Toast.makeText(getActivity().getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
+    }
+
+    public String localize(String localeStringKey) {
+        return getTranslator().localize(localeStringKey);
+    }
+
+    public String localize(FormattedString formattedLocaleString) {
+        return getTranslator().localize(formattedLocaleString);
+    }
+
+    protected LocaleTranslator getTranslator() {
+        if (translator == null)
+            translator = WordsRemember.getLocaleTranslator(getActivity().getApplicationContext());
+        return translator;
     }
 }

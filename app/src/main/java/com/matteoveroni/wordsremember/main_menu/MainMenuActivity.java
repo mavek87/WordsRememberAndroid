@@ -6,10 +6,10 @@ import android.widget.Button;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivityView;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
 
@@ -23,7 +23,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class MainMenuActivity extends BaseActivityView implements MainMenuView {
+public class MainMenuActivity extends BaseActivityPresentedView implements MainMenuView {
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 

@@ -50,7 +50,7 @@ public class QuizGameFindTranslationForVocableModelTest {
     public void test_After_onEventCalculateNumberOfQuizzes_EventQuizModelInitialized() {
         final int NUMBER_OF_VOCABLES_WITH_TRANSLATIONS = 1;
 
-        model.onEventCalculateNumberOfQuestions(
+        model.onEventCountDistinctVocablesWithTranslations(
                 new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
         );
 
@@ -80,7 +80,7 @@ public class QuizGameFindTranslationForVocableModelTest {
     private void eventCalculateNumberOfQuestions(int numberOfQuestionsFromSettings, int numberOfVocablesWithTranslations) {
         when(settings.getNumberOfQuestions()).thenReturn(numberOfQuestionsFromSettings);
 
-        model.onEventCalculateNumberOfQuestions(
+        model.onEventCountDistinctVocablesWithTranslations(
                 new EventCountDistinctVocablesWithTranslationsCompleted(numberOfVocablesWithTranslations)
         );
     }

@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
@@ -15,6 +14,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTransla
 import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 
 import butterknife.ButterKnife;
 
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends BaseActivityView implements EditTranslation {
+public class EditTranslationActivity extends BaseActivityPresentedView implements EditTranslation {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 

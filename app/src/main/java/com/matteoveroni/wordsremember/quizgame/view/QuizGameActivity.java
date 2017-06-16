@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityView implements QuizGameView {
+public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView {
 
     @BindView(R.id.quiz_game_question)
     TextView lbl_question;

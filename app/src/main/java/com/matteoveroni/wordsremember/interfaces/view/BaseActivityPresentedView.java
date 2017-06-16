@@ -5,22 +5,30 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
+import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
 
-public abstract class PresentedActivity<V, P extends Presenter<V>> extends AppCompatActivity {
+public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> extends AppCompatActivity implements View {
 
-    private static final String TAG = TagGenerator.tag(PresentedActivity.class);
-    private static final int PRESENTER_LOADER_ID = 999;
+    private static final String TAG = TagGenerator.tag(BaseActivityPresentedView.class);
+    private static final int PRESENTER_LOADER_ID = 1;
     private P presenter;
+    private LocaleTranslator translator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +50,20 @@ public abstract class PresentedActivity<V, P extends Presenter<V>> extends AppCo
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
                 Log.d(TAG, "onCreateLoader");
-                return new PresenterLoader<>(PresentedActivity.this, getPresenterFactory());
+                return new PresenterLoader<>(BaseActivityPresentedView.this, getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.d(TAG, "onLoadFinished");
-                PresentedActivity.this.presenter = presenter;
+                BaseActivityPresentedView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.d(TAG, "onLoaderReset");
-                PresentedActivity.this.presenter = null;
+                BaseActivityPresentedView.this.presenter = null;
             }
         });
     }
@@ -100,5 +108,38 @@ public abstract class PresentedActivity<V, P extends Presenter<V>> extends AppCo
      */
     protected int loaderId() {
         return PRESENTER_LOADER_ID;
+    }
+
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(getApplicationContext(), localize(message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(FormattedString formattedLocaleMessage) {
+        Toast.makeText(getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
+    }
+
+    public String localize(String localeStringKey) {
+        return getTranslator().localize(localeStringKey);
+    }
+
+    public String localize(FormattedString formattedLocaleString) {
+        return getTranslator().localize(formattedLocaleString);
+    }
+
+    protected LocaleTranslator getTranslator() {
+        if (translator == null)
+            translator = WordsRemember.getLocaleTranslator(getApplicationContext());
+        return translator;
+    }
+
+    protected void setupAndShowToolbar(String title) {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle(Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", title));
+        }
+        setSupportActionBar(toolbar);
     }
 }

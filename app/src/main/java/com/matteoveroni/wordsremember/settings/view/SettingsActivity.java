@@ -8,9 +8,9 @@ import android.widget.TextView;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class SettingsActivity extends BaseActivityView implements SettingsView {
+public class SettingsActivity extends BaseActivityPresentedView implements SettingsView {
 
     @BindView(R.id.lbl_gameVersion)
     TextView lbl_gameVersion;

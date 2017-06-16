@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
@@ -14,6 +13,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslat
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class AddTranslationActivity extends BaseActivityView implements AddTranslation {
+public class AddTranslationActivity extends BaseActivityPresentedView implements AddTranslation {
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
