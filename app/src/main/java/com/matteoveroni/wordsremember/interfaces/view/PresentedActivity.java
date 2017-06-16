@@ -16,7 +16,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
 
-public abstract class PresentedActivity<P extends Presenter<V>, V> extends AppCompatActivity {
+public abstract class PresentedActivity<V, P extends Presenter<V>> extends AppCompatActivity {
 
     private static final String TAG = TagGenerator.tag(PresentedActivity.class);
     private static final int PRESENTER_LOADER_ID = 999;

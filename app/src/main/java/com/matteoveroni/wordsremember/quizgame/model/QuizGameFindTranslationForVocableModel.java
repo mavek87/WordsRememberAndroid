@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
-import com.matteoveroni.myutils.Int;
-import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
@@ -14,14 +12,13 @@ import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.settings.model.Settings;
+import com.matteoveroni.myutils.UniqueRandomNumbersGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Matteo Veroni
@@ -31,12 +28,10 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
-    private final DictionaryDAO dao;
     private final Settings settings;
-    private UniqueRandomNumberGenerator uniqueRandIntGenerator;
-    private final Set<Integer> extractedVocablesIndexes = new HashSet<>();
-
+    private final DictionaryDAO dao;
     private Quiz currentQuiz;
+    private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
     private int numberOfVocablesWithTranslations;
     private int numberOfQuestions;
     private int quizNumber;
@@ -58,11 +53,10 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     private void initGame() {
-        extractedVocablesIndexes.clear();
-        totalScore = 0;
         numberOfVocablesWithTranslations = 0;
         numberOfQuestions = 0;
         quizNumber = 0;
+        totalScore = 0;
         dao.countDistinctVocablesWithTranslations();
     }
 
@@ -78,7 +72,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     }
 
     @Subscribe
-    public void onEventCalculateNumberOfQuestions(EventCountDistinctVocablesWithTranslationsCompleted event) {
+    public void onEventCountDistinctVocablesWithTranslations(EventCountDistinctVocablesWithTranslationsCompleted event) {
         numberOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
         if (numberOfVocablesWithTranslations > settings.getNumberOfQuestions()) {
             numberOfQuestions = settings.getNumberOfQuestions();
@@ -89,7 +83,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         int minNumber = 0;
         int maxNumber = numberOfVocablesWithTranslations - 1;
         int maxNumberOfExtractions = numberOfQuestions;
-        uniqueRandIntGenerator = new UniqueRandomNumberGenerator(minNumber, maxNumber, maxNumberOfExtractions);
+        uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(minNumber, maxNumber, maxNumberOfExtractions);
 
         EVENT_BUS.post(new EventQuizModelInitialized());
     }
@@ -108,9 +102,9 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
         quizNumber++;
         try {
-            int uniqueRandomNumber = uniqueRandIntGenerator.extractNext();
-            dao.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandomNumber);
-        } catch (UniqueRandomNumberGenerator.NoMoreUniqueRandNumberExtractableException ex) {
+            int uniqueRandNumber = uniqueRandIntGenerator.extractNext();
+            dao.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandNumber);
+        } catch (UniqueRandomNumbersGenerator.NoMoreUniqueRandNumberExtractableException ex) {
             throw new NoMoreQuizzesException();
         }
     }
