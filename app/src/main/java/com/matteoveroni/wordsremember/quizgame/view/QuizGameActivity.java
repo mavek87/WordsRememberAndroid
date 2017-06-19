@@ -130,7 +130,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, String message) {
+    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
         Drawable img_alertDialog;
         String quizResultTitle;
         switch (quizFinalResult) {
@@ -146,11 +146,10 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 throw new RuntimeException("Unknown quiz result");
         }
 
-        // TODO: send a complete message from presenter (formatted string)
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(quizResultTitle)
-                .setMessage(message + "\n\n" + getString(R.string.msg_press_ok_to_continue))
+                .setMessage(localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         presenter.continueToPlay();

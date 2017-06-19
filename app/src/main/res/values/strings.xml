@@ -42,6 +42,9 @@
     <string name="translation_saved">Translation saved</string>
     <string name="translation_added">Translation added</string>
     <string name="lastGameDate">Last game date</string>
+    <string name="correctAnswer">Correct answer</string>
+    <string name="correctAnswers">Correct answers</string>
+    <string name="wrongAnswer">Wrong answer</string>
     <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Invalid vocable, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_vocable_name">Cannot save the vocable using this name. Name already used.</string>

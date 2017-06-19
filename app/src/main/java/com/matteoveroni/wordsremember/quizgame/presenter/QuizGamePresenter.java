@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Matteo Veroni
@@ -79,28 +80,29 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         } else {
             game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
-            Quiz.FinalResult quizFinalResult = quiz.getFinalFinalResult();
+            Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
 
-            String str_message = "";
-            switch (quiz.getFinalFinalResult()) {
+            FormattedString formattedString = new FormattedString();
+            switch (quiz.getFinalResult()) {
                 case RIGHT:
-                    str_message += "Right answer";
+                    formattedString.setFormattedString("%s");
+                    formattedString.setArgs(LocaleKey.CORRECT_ANSWER);
                     break;
                 case WRONG:
-                    str_message += "Wrong answer";
-                    str_message += "\nRight answer are: \n";
+                    formattedString.setFormattedString("%s");
+                    formattedString.setArgs(LocaleKey.WRONG_ANSWER);
+                    formattedString = formattedString.concat(new FormattedString("\n\n%s:\n", LocaleKey.CORRECT_ANSWERS));
 
                     List<String> rightAnswers = quiz.getRightAnswers();
                     for (int i = 0; i < rightAnswers.size(); i++) {
-                        str_message += rightAnswers.get(i);
+                        formattedString = formattedString.concat(new FormattedString(rightAnswers.get(i)));
                         if (i != rightAnswers.size() - 1) {
-                            str_message += ", ";
+                            formattedString = formattedString.concat(new FormattedString(", "));
                         }
                     }
-
                     break;
             }
-            view.showQuizResultDialog(quizFinalResult, str_message);
+            view.showQuizResultDialog(quizFinalResult, formattedString);
         }
     }
 
