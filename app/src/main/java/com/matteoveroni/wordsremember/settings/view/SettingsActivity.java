@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
@@ -133,12 +134,15 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     }
 
     private void setLabelsForRadioButtons() {
+        String question = getString(R.string.question).toLowerCase();
+        String questions = getString(R.string.questions).toLowerCase();
+
         int numberOfQuestionsForEasy = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
         String str_btn_EasyGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.easy),
                 numberOfQuestionsForEasy,
-                (numberOfQuestionsForEasy > 1) ? "questions" : "question"
+                (numberOfQuestionsForEasy > 1) ? questions : question
         );
         radio_btn_easyGameDifficulty.setText(str_btn_EasyGameDifficulty);
 
@@ -147,7 +151,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
                 "%s (%s %s)",
                 getString(R.string.medium),
                 numberOfQuestionsForMedium,
-                (numberOfQuestionsForMedium > 1) ? "questions" : "question"
+                (numberOfQuestionsForMedium > 1) ? questions : question
         );
         radio_btn_mediumGameDifficulty.setText(str_btn_MediumGameDifficulty);
 
@@ -156,7 +160,8 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
                 "%s (%s %s)",
                 getString(R.string.hard),
                 numberOfQuestionsForHard,
-                (numberOfQuestionsForHard > 1) ? "questions" : "question"
+                (numberOfQuestionsForHard > 1) ? questions : question
+
         );
         radio_btn_hardGameDifficulty.setText(str_btn_HardGameDifficulty);
     }

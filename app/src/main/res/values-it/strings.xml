@@ -53,4 +53,9 @@
     <string name="msg_wrongAnswer">La risposta è errata</string>
     <string name="version">Versione</string>
     <string name="wrongAnswer">RispostaErrata</string>
+    <string name="msg_enable_online_translations_check">Abilita controllo traduzioni online</string>
+    <string name="disable">Disabilita</string>
+    <string name="enable">Abilita</string>
+    <string name="question">Domanda</string>
+    <string name="questions">Domande</string>
 </resources>

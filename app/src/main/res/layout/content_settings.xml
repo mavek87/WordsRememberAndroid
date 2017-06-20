@@ -22,28 +22,47 @@
         android:id="@+id/lbl_gameVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.12"
+        android:layout_weight="0.10"
         android:text="@string/version" />
 
     <TextView
         android:id="@+id/lbl_deviceLocale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.12"
+        android:layout_weight="0.10"
         android:text="@string/deviceLocale" />
 
     <TextView
         android:id="@+id/lbl_last_game_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.12"
+        android:layout_weight="0.10"
         android:text="@string/lastGameDate" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:text="@string/msg_enable_online_translations_check" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enable" />
+
+    <TextView
+        android:id="@+id/spaceTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04" />
 
     <TextView
         android:id="@+id/lbl_selectGameDifficulty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.04"
+        android:layout_weight="0.09"
         android:text="@string/msg_select_game_difficulty" />
 
     <RadioGroup

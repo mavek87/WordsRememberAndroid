@@ -52,14 +52,6 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         registerToEventBus();
     }
 
-    private void initGame() {
-        numberOfVocablesWithTranslations = 0;
-        numberOfQuestions = 0;
-        quizNumber = 0;
-        totalScore = 0;
-        dao.countDistinctVocablesWithTranslations();
-    }
-
     @Override
     public void pauseGame() {
         unregisterToEventBus();
@@ -154,6 +146,14 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     @Override
     public int getTotalScore() {
         return totalScore;
+    }
+
+    private void initGame() {
+        numberOfVocablesWithTranslations = 0;
+        numberOfQuestions = 0;
+        quizNumber = 0;
+        totalScore = 0;
+        dao.countDistinctVocablesWithTranslations();
     }
 
     private void registerToEventBus() {

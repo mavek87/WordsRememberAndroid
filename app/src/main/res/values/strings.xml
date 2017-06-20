@@ -6,6 +6,8 @@
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
     <string name="done">Done</string>
     <string name="edit">Edit</string>
     <string name="remove">Remove</string>
@@ -14,6 +16,8 @@
     <string name="error">Error</string>
     <string name="score">Score</string>
     <string name="points">Points</string>
+    <string name="question">Question</string>
+    <string name="questions">Questions</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
@@ -56,4 +60,5 @@
     <string name="msg_press_ok_to_continue">Press OK to continue</string>
     <string name="msg_game_difficulty_changed">Game difficulty changed</string>
     <string name="msg_select_game_difficulty">Select game difficulty</string>
+    <string name="msg_enable_online_translations_check">Enable online translations check</string>
 </resources>

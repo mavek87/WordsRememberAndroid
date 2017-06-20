@@ -31,6 +31,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         this.view = view;
         Log.d(TAG, "View Attached");
         showGameDifficultyInView();
+        view.setLastGameDate(settings.getLastGameDate());
     }
 
     @Override
