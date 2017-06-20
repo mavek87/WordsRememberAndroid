@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Matteo Veroni
@@ -73,7 +72,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(event.getQuiz());
     }
 
-    // TODO: refactoring of this method
     public void onQuizAnswerFromView(String answerFromView) {
         if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
@@ -82,27 +80,27 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
 
-            FormattedString formattedString = new FormattedString();
+            FormattedString quizResultMessage = new FormattedString();
             switch (quiz.getFinalResult()) {
-                case RIGHT:
-                    formattedString.setFormattedString("%s");
-                    formattedString.setArgs(LocaleKey.CORRECT_ANSWER);
+                case CORRECT:
+                    quizResultMessage.setFormattedString("%s");
+                    quizResultMessage.setArgs(LocaleKey.MSG_CORRECT_ANSWER);
                     break;
                 case WRONG:
-                    formattedString.setFormattedString("%s");
-                    formattedString.setArgs(LocaleKey.WRONG_ANSWER);
-                    formattedString = formattedString.concat(new FormattedString("\n\n%s:\n", LocaleKey.CORRECT_ANSWERS));
+                    quizResultMessage = quizResultMessage.concat(
+                            new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS)
+                    );
 
-                    List<String> rightAnswers = quiz.getRightAnswers();
-                    for (int i = 0; i < rightAnswers.size(); i++) {
-                        formattedString = formattedString.concat(new FormattedString(rightAnswers.get(i)));
-                        if (i != rightAnswers.size() - 1) {
-                            formattedString = formattedString.concat(new FormattedString(", "));
+                    List<String> correctAnswers = quiz.getRightAnswers();
+                    for (int i = 0; i < correctAnswers.size(); i++) {
+                        quizResultMessage = quizResultMessage.concat(new FormattedString(correctAnswers.get(i)));
+                        if (i != correctAnswers.size() - 1) {
+                            quizResultMessage = quizResultMessage.concat(new FormattedString(", "));
                         }
                     }
                     break;
             }
-            view.showQuizResultDialog(quizFinalResult, formattedString);
+            view.showQuizResultDialog(quizFinalResult, quizResultMessage);
         }
     }
 

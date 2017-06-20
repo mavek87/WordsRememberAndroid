@@ -19,8 +19,6 @@
     <string name="msg_error_trying_to_store_invalid_translation">Traduzione non valida, impossibile salvarla! Compila tutti i dati e riprova.</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Vocabolo non valido, impossibile salvarlo! Compila tutti i dati e riprova.</string>
     <string name="msg_vocable_not_saved">Impossibile aggiungere traduzioni se il vocabolo non è ancora salvato. Vuoi salvare il vocabolo e procedere?</string>
-    <string name="wrong_answer">Risposta errata</string>
-    <string name="correct_answer">Risposta corretta</string>
     <string name="points">Punti</string>
     <string name="score">Punteggio</string>
     <string name="game_result">Risultati del gioco</string>
@@ -47,7 +45,12 @@
     <string name="hard">Difficile</string>
     <string name="medium">Media</string>
     <string name="msg_select_game_difficulty">Seleziona difficoltà gioco</string>
-    <string name="game_version">Versione</string>
     <string name="deviceLocale">Locale dispositivo</string>
     <string name="lastGameDate">Data ultima partita</string>
+    <string name="correctAnswer">Risposta corretta</string>
+    <string name="correctAnswers">Risposte corrette</string>
+    <string name="msg_correctAnswer">La risposta è corretta</string>
+    <string name="msg_wrongAnswer">La risposta è errata</string>
+    <string name="version">Versione</string>
+    <string name="wrongAnswer">RispostaErrata</string>
 </resources>

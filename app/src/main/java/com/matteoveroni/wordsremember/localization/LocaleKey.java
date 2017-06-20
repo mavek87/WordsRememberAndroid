@@ -27,7 +27,10 @@ public class LocaleKey {
     public static final String MSG_GAME_DIFFICULTY_CHANGED = "msg_game_difficulty_changed";
 
     public static final String CORRECT_ANSWER = "correctAnswer";
-    public static final String WRONG_ANSWER = "wrongAnswer";
     public static final String CORRECT_ANSWERS = "correctAnswers";
+    public static final String WRONG_ANSWER = "wrongAnswer";
+    public static final String MSG_CORRECT_ANSWER = "msg_correctAnswer";
+    public static final String MSG_WRONG_ANSWER = "msg_wrongAnswer";
+
 
 }

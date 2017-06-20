@@ -134,12 +134,12 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         Drawable img_alertDialog;
         String quizResultTitle;
         switch (quizFinalResult) {
-            case RIGHT:
-                quizResultTitle = getString(R.string.correct_answer);
+            case CORRECT:
+                quizResultTitle = getString(R.string.correctAnswer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
                 break;
             case WRONG:
-                quizResultTitle = getString(R.string.wrong_answer);
+                quizResultTitle = getString(R.string.wrongAnswer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
                 break;
             default:

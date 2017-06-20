@@ -145,7 +145,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
         currentQuiz.setFinalAnswer(finalAnswer);
         if (QuizFinalAnswerChecker.isFinalAnswerCorrect(currentQuiz)) {
             totalScore++;
-            currentQuiz.setFinalResult(Quiz.FinalResult.RIGHT);
+            currentQuiz.setFinalResult(Quiz.FinalResult.CORRECT);
         } else {
             currentQuiz.setFinalResult(Quiz.FinalResult.WRONG);
         }

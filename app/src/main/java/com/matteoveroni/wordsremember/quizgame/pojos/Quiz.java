@@ -16,7 +16,7 @@ public class Quiz {
     private FinalResult finalResult;
 
     public enum FinalResult {
-        RIGHT, WRONG;
+        CORRECT, WRONG;
     }
 
     public Quiz(int quizNumber, int totalNumberOfQuizzes, String question, List<String> rightAnswers) {

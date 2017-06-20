@@ -23,8 +23,6 @@
     <string name="deviceLocale">Device locale</string>
     <string name="game_result">Game Results</string>
     <string name="start_training">Start training</string>
-    <string name="correct_answer">Correct answer</string>
-    <string name="wrong_answer">Wrong answer</string>
     <string name="dictionary">Dictionary</string>
     <string name="manage_dictionary">Manage dictionary</string>
     <string name="add_word">Add Word</string>
@@ -45,6 +43,8 @@
     <string name="correctAnswer">Correct answer</string>
     <string name="correctAnswers">Correct answers</string>
     <string name="wrongAnswer">Wrong answer</string>
+    <string name="msg_correctAnswer">The answer is correct</string>
+    <string name="msg_wrongAnswer">The answer is wrong</string>
     <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>
     <string name="msg_error_trying_to_store_invalid_vocable">Invalid vocable, cannot save it! Compile all the data and retry.</string>
     <string name="msg_error_trying_to_store_duplicate_vocable_name">Cannot save the vocable using this name. Name already used.</string>
@@ -56,6 +56,4 @@
     <string name="msg_press_ok_to_continue">Press OK to continue</string>
     <string name="msg_game_difficulty_changed">Game difficulty changed</string>
     <string name="msg_select_game_difficulty">Select game difficulty</string>
-
-
 </resources>
