@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
@@ -17,8 +17,6 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
-
-import org.joda.time.DateTime;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,10 +109,8 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     }
 
     @Override
-    public void setLastGameDate(DateTime lastGameDate) {
-        String str_date = lastGameDate.toLocalDate().toString();
-        String str_time = lastGameDate.getHourOfDay() + ":" + lastGameDate.getMinuteOfHour() + ":" + lastGameDate.getSecondOfMinute();
-        lbl_last_game_date.setText(getString(R.string.lastGameDate) + ": " + str_date + " - " + str_time);
+    public void setLastGameDate(FormattedString lastGameDate) {
+        lbl_last_game_date.setText(localize(lastGameDate));
     }
 
     private void printGameVersion() {
@@ -137,30 +133,30 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
         String question = getString(R.string.question).toLowerCase();
         String questions = getString(R.string.questions).toLowerCase();
 
-        int numberOfQuestionsForEasy = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
+        int numberOfEasyQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
         String str_btn_EasyGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.easy),
-                numberOfQuestionsForEasy,
-                (numberOfQuestionsForEasy > 1) ? questions : question
+                numberOfEasyQuestions,
+                (numberOfEasyQuestions > 1) ? questions : question
         );
         radio_btn_easyGameDifficulty.setText(str_btn_EasyGameDifficulty);
 
-        int numberOfQuestionsForMedium = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.MEDIUM);
+        int numberOfMediumQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.MEDIUM);
         String str_btn_MediumGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.medium),
-                numberOfQuestionsForMedium,
-                (numberOfQuestionsForMedium > 1) ? questions : question
+                numberOfMediumQuestions,
+                (numberOfMediumQuestions > 1) ? questions : question
         );
         radio_btn_mediumGameDifficulty.setText(str_btn_MediumGameDifficulty);
 
-        int numberOfQuestionsForHard = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.HARD);
+        int numberOfHardQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.HARD);
         String str_btn_HardGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.hard),
-                numberOfQuestionsForHard,
-                (numberOfQuestionsForHard > 1) ? questions : question
+                numberOfHardQuestions,
+                (numberOfHardQuestions > 1) ? questions : question
 
         );
         radio_btn_hardGameDifficulty.setText(str_btn_HardGameDifficulty);

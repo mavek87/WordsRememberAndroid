@@ -26,6 +26,8 @@ public class LocaleKey {
     public static final String HARD = "hard";
     public static final String MSG_GAME_DIFFICULTY_CHANGED = "msg_game_difficulty_changed";
 
+    public static final String LAST_GAME_DATE = "lastGameDate";
+
     public static final String CORRECT_ANSWER = "correctAnswer";
     public static final String CORRECT_ANSWERS = "correctAnswers";
     public static final String WRONG_ANSWER = "wrongAnswer";

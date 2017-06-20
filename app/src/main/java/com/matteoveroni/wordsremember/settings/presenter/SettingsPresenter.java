@@ -11,6 +11,8 @@ import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsView;
 
+import org.joda.time.DateTime;
+
 /**
  * @author Matteo Veroni
  */
@@ -30,14 +32,25 @@ public class SettingsPresenter implements Presenter<SettingsView> {
     public void attachView(SettingsView view) {
         this.view = view;
         Log.d(TAG, "View Attached");
+        showLastGameDate();
         showGameDifficultyInView();
-        view.setLastGameDate(settings.getLastGameDate());
     }
 
     @Override
     public void detachView() {
         this.view = null;
         Log.d(TAG, "View Destroyed");
+    }
+
+    private void showLastGameDate() {
+        DateTime lastGameDate = settings.getLastGameDate();
+        if (lastGameDate != null) {
+            String str_date = lastGameDate.toLocalDate().toString();
+            String str_time = lastGameDate.getHourOfDay() + ":" + lastGameDate.getMinuteOfHour() + ":" + lastGameDate.getSecondOfMinute();
+            view.setLastGameDate(new FormattedString("%s: %s - %s", LocaleKey.LAST_GAME_DATE, str_date, str_time));
+        } else {
+            view.setLastGameDate(new FormattedString(" - "));
+        }
     }
 
     private void showGameDifficultyInView() {
