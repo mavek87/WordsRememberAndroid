@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameFindTranslationForVocableModel;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
@@ -36,7 +36,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
-        this.game = new QuizGameFindTranslationForVocableModel(settings, dao);
+        this.game = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
     @Override
@@ -79,29 +79,32 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
             game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
-
-            FormattedString quizResultMessage = new FormattedString();
-            switch (quiz.getFinalResult()) {
-                case CORRECT:
-                    quizResultMessage.setFormattedString("%s");
-                    quizResultMessage.setArgs(LocaleKey.MSG_CORRECT_ANSWER);
-                    break;
-                case WRONG:
-                    quizResultMessage = quizResultMessage.concat(
-                            new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS)
-                    );
-
-                    List<String> correctAnswers = quiz.getRightAnswers();
-                    for (int i = 0; i < correctAnswers.size(); i++) {
-                        quizResultMessage = quizResultMessage.concat(new FormattedString(correctAnswers.get(i)));
-                        if (i != correctAnswers.size() - 1) {
-                            quizResultMessage = quizResultMessage.concat(new FormattedString(", "));
-                        }
-                    }
-                    break;
-            }
-            view.showQuizResultDialog(quizFinalResult, quizResultMessage);
+            view.showQuizResultDialog(quizFinalResult, calculateQuizResultMessage(quiz));
         }
+    }
+
+    private FormattedString calculateQuizResultMessage(Quiz quiz) {
+        FormattedString quizResultMessage = new FormattedString();
+        switch (quiz.getFinalResult()) {
+            case CORRECT:
+                quizResultMessage.setFormattedString("%s");
+                quizResultMessage.setArgs(LocaleKey.MSG_CORRECT_ANSWER);
+                break;
+            case WRONG:
+                quizResultMessage = quizResultMessage.concat(
+                        new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS)
+                );
+
+                List<String> correctAnswers = quiz.getRightAnswers();
+                for (int i = 0; i < correctAnswers.size(); i++) {
+                    quizResultMessage = quizResultMessage.concat(new FormattedString(correctAnswers.get(i)));
+                    if (i != correctAnswers.size() - 1) {
+                        quizResultMessage = quizResultMessage.concat(new FormattedString(", "));
+                    }
+                }
+                break;
+        }
+        return quizResultMessage;
     }
 
     private void startNewQuizOrShowError() {

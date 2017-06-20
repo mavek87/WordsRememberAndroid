@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  * @author Matteo Veroni
  */
 
-public class QuizGameFindTranslationForVocableModelTest {
+public class QuizGameModelFindTranslationForVocableTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -39,11 +39,11 @@ public class QuizGameFindTranslationForVocableModelTest {
 
     private static final Word FAKE_VOCABLE_EXTRACTED = new Word(1, "FakeVocable");
 
-    private QuizGameFindTranslationForVocableModel model;
+    private QuizGameModelFindTranslationForVocable model;
 
     @Before
     public void setUp() {
-        model = new QuizGameFindTranslationForVocableModel(settings, dao);
+        model = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
     @Test

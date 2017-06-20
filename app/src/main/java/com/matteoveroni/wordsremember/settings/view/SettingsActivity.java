@@ -1,9 +1,11 @@
 package com.matteoveroni.wordsremember.settings.view;
 
 import android.os.Bundle;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
@@ -48,6 +50,9 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
 
     @BindView(R.id.radio_btn_thirdGameDifficulty)
     RadioButton radio_btn_hardGameDifficulty;
+
+    @BindView(R.id.check_OnlineTranslationsCheck)
+    CheckBox check_OnlineTranslationsCheck;
 
     private SettingsPresenter presenter;
 
@@ -106,6 +111,19 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     @OnClick(R.id.radio_btn_thirdGameDifficulty)
     public void hardDifficultySelected() {
         presenter.onGameDifficultySelected(QuizGameDifficulty.HARD);
+    }
+
+    @Override
+    @OnClick(R.id.check_OnlineTranslationsCheck)
+    public void onlineTranslationsCheckSelected() {
+        boolean isChecked = check_OnlineTranslationsCheck.isChecked();
+        presenter.onOnlineTranslationsCheckSelected(isChecked);
+        Toast.makeText(this, isChecked + "", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void checkOnlineTranslationsCheckPreference(boolean check) {
+        check_OnlineTranslationsCheck.setChecked(check);
     }
 
     @Override

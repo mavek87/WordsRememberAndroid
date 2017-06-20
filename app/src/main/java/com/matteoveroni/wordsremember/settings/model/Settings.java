@@ -20,6 +20,7 @@ public class Settings {
     public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
     public static final String GAME_NUMBER_OF_QUESTIONS_KEY = "game_number_of_questions_key";
     public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
+    public static final String ONLINE_TRANSLATIONS_CHECK_KEY = "online_translations_check_key";
     public static final QuizGameDifficulty DEFAULT_DIFFICULTY = QuizGameDifficulty.EASY;
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
 
@@ -69,5 +70,13 @@ public class Settings {
 
     public DateTime getLastGameDate() {
         return DateTime.parse(prefs.getString(LAST_GAME_DATE_KEY, ""));
+    }
+
+    public void setOnlineTranslationsCheckPreference(boolean preference) {
+        prefs.edit().putBoolean(ONLINE_TRANSLATIONS_CHECK_KEY, preference).apply();
+    }
+
+    public boolean getOnlineTranslationsCheckPreference() {
+        return prefs.getBoolean(ONLINE_TRANSLATIONS_CHECK_KEY, false);
     }
 }

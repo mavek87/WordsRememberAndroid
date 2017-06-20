@@ -1,11 +1,16 @@
 package com.matteoveroni.wordsremember.quizgame.model;
 
+import android.util.Log;
+
+import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.main_menu.MainMenuPresenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
@@ -13,18 +18,21 @@ import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.myutils.UniqueRandomNumbersGenerator;
+import com.matteoveroni.wordsremember.web.WebTranslator;
+import com.matteoveroni.wordsremember.web.WebTranslatorListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Matteo Veroni
  */
 
-public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
+public class QuizGameModelFindTranslationForVocable implements QuizGameModel, WebTranslatorListener {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
@@ -38,7 +46,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     private int totalScore;
     private boolean isGameStarted = false;
 
-    public QuizGameFindTranslationForVocableModel(Settings settings, DictionaryDAO dao) {
+    public QuizGameModelFindTranslationForVocable(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.dao = dao;
     }
@@ -111,6 +119,7 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
     public void onEventGetExtractedVocable(EventAsyncSearchVocableCompleted event) {
         Word vocable = event.getVocable();
         dao.asyncSearchVocableTranslations(vocable);
+        WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
     }
 
     @Subscribe
@@ -125,6 +134,16 @@ public class QuizGameFindTranslationForVocableModel implements QuizGameModel {
 
         currentQuiz = new Quiz(quizNumber, numberOfQuestions, vocableQuestion, rightAnswersForCurrentQuiz);
         EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
+    }
+
+    @Override
+    public void onTranslationCompletedSuccessfully(List<Word> translationsFound) {
+        Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), "Translations found from the web: \n" + Json.getInstance().toJson(translationsFound));
+    }
+
+    @Override
+    public void onTranslationCompletedWithError(Throwable t) {
+        Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), t.getMessage());
     }
 
     @Override

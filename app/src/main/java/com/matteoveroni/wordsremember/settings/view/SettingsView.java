@@ -23,5 +23,9 @@ public interface SettingsView extends View {
 
     void hardDifficultySelected();
 
+    void onlineTranslationsCheckSelected();
+
+    void checkOnlineTranslationsCheckPreference(boolean check);
+
     void setLastGameDate(FormattedString lastGameDate);
 }

@@ -34,6 +34,11 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         Log.d(TAG, "View Attached");
         showLastGameDate();
         showGameDifficultyInView();
+        if (settings.getOnlineTranslationsCheckPreference()) {
+            view.checkOnlineTranslationsCheckPreference(true);
+        } else {
+            view.checkOnlineTranslationsCheckPreference(false);
+        }
     }
 
     @Override
@@ -89,5 +94,9 @@ public class SettingsPresenter implements Presenter<SettingsView> {
                 difficultyTranslationKey
         );
         view.showMessage(msg_gameDifficultyChanged);
+    }
+
+    public void onOnlineTranslationsCheckSelected(boolean value) {
+        settings.setOnlineTranslationsCheckPreference(value);
     }
 }

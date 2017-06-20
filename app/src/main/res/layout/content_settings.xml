@@ -47,7 +47,7 @@
         android:text="@string/msg_enable_online_translations_check" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/check_OnlineTranslationsCheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enable" />

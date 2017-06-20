@@ -11,7 +11,7 @@ public class Quiz {
     private final int quizNumber;
     private final int totalNumberOfQuizzes;
     private final String question;
-    private final List<String> rightAnswers;
+    private volatile List<String> rightAnswers;
     private String finalAnswer;
     private FinalResult finalResult;
 
@@ -41,8 +41,16 @@ public class Quiz {
         return question;
     }
 
-    public List<String> getRightAnswers() {
+    public synchronized List<String> getRightAnswers() {
         return rightAnswers;
+    }
+
+    public synchronized void addRightAnswer(String answer) {
+        rightAnswers.add(answer);
+    }
+
+    public synchronized void addRightAnswers(List<String> newRightAnswers){
+        this.rightAnswers.addAll(newRightAnswers);
     }
 
     public String getFinalAnswer() {
