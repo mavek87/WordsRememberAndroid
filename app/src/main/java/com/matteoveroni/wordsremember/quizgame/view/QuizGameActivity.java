@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -31,6 +33,12 @@ import butterknife.ButterKnife;
 
 public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView {
 
+    public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
+    public static final String QUIZ_GAME_TIMER_KEY = "quiz_game_timer_key";
+    public static final String LBL_QUESTION_KEY = "lbl_question_key";
+    public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
+    public static final String TXT_ANSWER_KEY = "txt_answer_key";
+
     @BindView(R.id.lbl_remainingTime)
     TextView lbl_remainingTime;
 
@@ -43,16 +51,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @BindView(R.id.quiz_game_answer_edit_text)
     EditText txt_answer;
 
-    public static final String QUIZ_GAME_TIMER_KEY = "quiz_game_timer_key";
-    public static final String LBL_QUESTION_KEY = "lbl_question_key";
-    public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
-    public static final String TXT_ANSWER_KEY = "txt_answer_key";
-
-    private Quiz currentQuiz;
-    private AlertDialog quizAlert;
     private AlertDialog.Builder alertDialogBuilder;
+    private AlertDialog quizAlert;
     private QuizGamePresenter presenter;
-    private QuizGameTimer quizTimer;
+    private Quiz currentQuiz;
+    private QuizGameTimer quizGameTimer;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -72,7 +75,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
-            quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         } else {
             restoreQuizGameTimer(savedInstanceState);
             restoreViewData(savedInstanceState);
@@ -82,48 +85,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
-    private void setSoftkeyActionButtonToConfirmQuizAnswer() {
-        txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    confirmQuizAnswerAction();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
         saveViewData(instanceState);
         saveQuizGameTimer(instanceState);
-    }
-
-    @Override
-    public void startQuizTimerCount() {
-        quizTimer.listenUntillTimerStops(this.presenter);
-        quizTimer.start();
-    }
-
-    @Override
-    public void stopQuizTimerCount() {
-        quizTimer.cancel();
-    }
-
-    private void saveQuizGameTimer(Bundle instanceState) {
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizTimer.getMillisRemaining());
-        quizTimer.cancel();
-    }
-
-    private void restoreQuizGameTimer(Bundle instanceState) {
-        if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-            long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
-            quizTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-        }
     }
 
     private void saveViewData(Bundle instanceState) {
@@ -144,10 +110,29 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         }
     }
 
+    private void saveQuizGameTimer(Bundle instanceState) {
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
+        Log.d(TAG, "save: " + quizGameTimer.getMillisRemaining());
+        quizGameTimer.cancel();
+    }
+
+    private void restoreQuizGameTimer(Bundle instanceState) {
+        if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
+            Log.d(TAG, "restore: " + quizGameTimer.getMillisRemaining());
+            long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
+            quizGameTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        }
+    }
+
     @Override
-    public void confirmQuizAnswerAction() {
-        String givenAnswer = txt_answer.getText().toString();
-        presenter.onQuizAnswerFromView(givenAnswer);
+    public void startQuizTimerCount() {
+        quizGameTimer.listenUntillTimerStops(this.presenter);
+        quizGameTimer.start();
+    }
+
+    @Override
+    public void stopQuizTimerCount() {
+        quizGameTimer.cancel();
     }
 
     @Override
@@ -161,6 +146,24 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         lbl_question.setText(getString(R.string.translate_vocable) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
         lbl_question_vocable.setText(currentQuiz.getQuestion());
         showAllViewFields(true);
+    }
+
+    @Override
+    public void confirmQuizAnswerAction() {
+        String givenAnswer = txt_answer.getText().toString();
+        presenter.onQuizAnswerFromView(givenAnswer);
+    }
+
+    @Override
+    public void onBackPressed() {
+        quitGame();
+    }
+
+    private void quitGame() {
+        quizGameTimer.cancel();
+        presenter.abortGame();
+        presenter.detachView();
+        finish();
     }
 
     @Override
@@ -226,21 +229,23 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         quizAlert.show();
     }
 
-    @Override
-    public void onBackPressed() {
-        quitGame();
-    }
-
-    private void quitGame() {
-        quizTimer.cancel();
-        presenter.abortGame();
-        presenter.detachView();
-        finish();
+    private void setSoftkeyActionButtonToConfirmQuizAnswer() {
+        txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    confirmQuizAnswerAction();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
     }
 
     @Override
     public void clearAndHideFields() {
-        lbl_remainingTime.setText("");
+//        lbl_remainingTime.setText("");
         lbl_question.setText("");
         txt_answer.setText("");
         showAllViewFields(false);
@@ -248,7 +253,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     private void showAllViewFields(boolean isViewVisible) {
         int visibility = isViewVisible ? View.VISIBLE : View.INVISIBLE;
-        lbl_remainingTime.setVisibility(visibility);
+//        lbl_remainingTime.setVisibility(visibility);
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);

@@ -70,8 +70,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
 
     @Subscribe
     public void onEventQuizGenerated(EventQuizGenerated event) {
-        view.setPojoUsed(event.getQuiz());
         view.startQuizTimerCount();
+        view.setPojoUsed(event.getQuiz());
     }
 
     @Override
@@ -89,11 +89,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
             game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
-            view.showQuizResultDialog(quizFinalResult, calculateQuizResultMessage(quiz));
+            view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
         }
     }
 
-    private FormattedString calculateQuizResultMessage(Quiz quiz) {
+    private FormattedString buildQuizResultMessage(Quiz quiz) {
         FormattedString quizResultMessage = new FormattedString();
         switch (quiz.getFinalResult()) {
             case CORRECT:

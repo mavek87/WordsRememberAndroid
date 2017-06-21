@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember.quizgame.business_logic.model;
 
 import com.matteoveroni.wordsremember.quizgame.business_logic.model.QuizGameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.settings.model.Settings;
