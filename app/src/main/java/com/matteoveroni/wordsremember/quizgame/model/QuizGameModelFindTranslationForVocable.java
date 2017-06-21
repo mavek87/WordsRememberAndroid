@@ -167,6 +167,11 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
         return totalScore;
     }
 
+    @Override
+    public void setCurrentQuizFinalResult(Quiz.FinalResult result) {
+        currentQuiz.setFinalResult(result);
+    }
+
     private void initGame() {
         numberOfVocablesWithTranslations = 0;
         numberOfQuestions = 0;

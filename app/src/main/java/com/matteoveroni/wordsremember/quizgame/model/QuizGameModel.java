@@ -26,4 +26,5 @@ public interface QuizGameModel {
 
     int getTotalScore();
 
+    void setCurrentQuizFinalResult(Quiz.FinalResult result);
 }

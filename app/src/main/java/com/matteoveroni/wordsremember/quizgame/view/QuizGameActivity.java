@@ -17,9 +17,12 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameTimer;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
+
+import java.util.function.ToDoubleBiFunction;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +32,9 @@ import butterknife.ButterKnife;
  */
 
 public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView {
+
+    @BindView(R.id.lbl_remainingTime)
+    TextView lbl_remainingTime;
 
     @BindView(R.id.quiz_game_question)
     TextView lbl_question;
@@ -42,7 +48,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     private Quiz currentQuiz;
     private AlertDialog quizAlert;
     private AlertDialog.Builder alertDialogBuilder;
-
     private QuizGamePresenter presenter;
 
     public static final String LBL_QUESTION = "lbl_question";
@@ -70,6 +75,13 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    @Override
+    public void startQuizTimer() {
+        QuizGameTimer quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        quizTimer.startToListen(this.presenter);
+        quizTimer.start();
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {
@@ -205,6 +217,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     @Override
     public void clearAndHideFields() {
+        lbl_remainingTime.setText("");
         lbl_question.setText("");
         txt_answer.setText("");
         showAllViewFields(false);
@@ -212,6 +225,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     private void showAllViewFields(boolean isViewVisible) {
         int visibility = isViewVisible ? View.VISIBLE : View.INVISIBLE;
+        lbl_remainingTime.setVisibility(visibility);
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);

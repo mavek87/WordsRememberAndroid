@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.quizgame.model.QuizGameTimer;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -24,7 +25,7 @@ import java.util.List;
  * Created by Matteo Veroni
  */
 
-public class QuizGamePresenter implements Presenter<QuizGameView> {
+public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer.Listener {
 
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
@@ -72,6 +73,12 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
         view.setPojoUsed(event.getQuiz());
     }
 
+    @Override
+    public void onQuizGameTimerFinished() {
+        game.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
+        view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
+    }
+
     public void onQuizAnswerFromView(String answerFromView) {
         if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
@@ -109,6 +116,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView> {
 
     private void startNewQuizOrShowError() {
         view.clearAndHideFields();
+        view.startQuizTimer();
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {

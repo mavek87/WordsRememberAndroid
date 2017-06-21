@@ -11,6 +11,8 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
+    void startQuizTimer();
+
     void confirmQuizAnswerAction();
 
     void showErrorDialog(String msgErrorText);
