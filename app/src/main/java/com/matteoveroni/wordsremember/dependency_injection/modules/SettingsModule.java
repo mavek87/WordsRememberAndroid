@@ -3,7 +3,6 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 import android.content.SharedPreferences;
 
 import com.matteoveroni.wordsremember.settings.model.Settings;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
 
 import javax.inject.Singleton;
 

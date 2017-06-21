@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.settings.model;
 import android.content.SharedPreferences;
 
 import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameDifficulty;
 
 import org.joda.time.DateTime;
 

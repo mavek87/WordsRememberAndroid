@@ -7,7 +7,7 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.view.SettingsView;
 

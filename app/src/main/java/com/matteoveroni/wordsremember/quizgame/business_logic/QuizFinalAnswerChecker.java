@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember.quizgame.business_logic;
 
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 

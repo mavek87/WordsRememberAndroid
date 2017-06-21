@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember.quizgame.business_logic.model;
 
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;

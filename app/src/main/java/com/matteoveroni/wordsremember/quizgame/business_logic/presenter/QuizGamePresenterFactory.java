@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame.presenter;
+package com.matteoveroni.wordsremember.quizgame.business_logic.presenter;
 
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.WordsRemember;

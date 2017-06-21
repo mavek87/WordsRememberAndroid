@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember.quizgame.business_logic.model;
 
 import android.util.Log;
 
@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistin
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.main_menu.MainMenuPresenter;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizFinalAnswerChecker;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;

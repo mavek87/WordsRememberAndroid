@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.quizgame.presenter;
+package com.matteoveroni.wordsremember.quizgame.business_logic.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameTimer;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -11,8 +11,8 @@ import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameModelFindTranslationForVocable;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameModel;
+import com.matteoveroni.wordsremember.quizgame.business_logic.model.QuizGameModelFindTranslationForVocable;
+import com.matteoveroni.wordsremember.quizgame.business_logic.model.QuizGameModel;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
@@ -71,6 +71,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     @Subscribe
     public void onEventQuizGenerated(EventQuizGenerated event) {
         view.setPojoUsed(event.getQuiz());
+        view.startQuizTimerCount();
     }
 
     @Override
@@ -83,6 +84,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
+            view.stopQuizTimerCount();
+
             game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
@@ -116,7 +119,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
 
     private void startNewQuizOrShowError() {
         view.clearAndHideFields();
-        view.startQuizTimer();
         try {
             game.generateQuiz();
         } catch (NoMoreQuizzesException ex) {

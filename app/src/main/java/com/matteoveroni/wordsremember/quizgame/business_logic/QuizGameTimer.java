@@ -1,29 +1,29 @@
-package com.matteoveroni.wordsremember.quizgame.model;
+package com.matteoveroni.wordsremember.quizgame.business_logic;
 
-import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Matteo Veroni
  */
 
-public class QuizGameTimer extends CountDownTimer {
+public class QuizGameTimer extends CountDownTimerPausable implements Serializable {
 
     // TODO: use variable stored in settings
     public static final int DEFAULT_TIME = 10000;
     public static final int DEFAULT_TICK = 1000;
 
-    private final int tick;
     private final View androidViewShowingTimer;
-    private final ArrayList<Listener> listeners = new ArrayList<>();
+    private final Set<Listener> listeners = new HashSet<>();
 
-    public QuizGameTimer(int time, int tick, View androidViewShowingTimer) {
-        super(time, tick);
-        this.tick = tick;
+    public QuizGameTimer(long timeToCount, long countDownInterval, View androidViewShowingTimer) {
+        super(timeToCount, countDownInterval);
+        this.countDownInterval = countDownInterval;
         if (androidViewShowingTimer instanceof EditText || androidViewShowingTimer instanceof TextView) {
             this.androidViewShowingTimer = androidViewShowingTimer;
         } else {
@@ -34,14 +34,16 @@ public class QuizGameTimer extends CountDownTimer {
     @Override
     public void onTick(long millisUntilFinished) {
         if (androidViewShowingTimer instanceof EditText) {
-            ((EditText) (androidViewShowingTimer)).setText("seconds remaining: " + millisUntilFinished / tick);
+            ((EditText) (androidViewShowingTimer)).setText("Time remaining: " + millisUntilFinished / countDownInterval);
         } else if (androidViewShowingTimer instanceof TextView) {
-            ((TextView) (androidViewShowingTimer)).setText("seconds remaining: " + millisUntilFinished / tick);
+            ((TextView) (androidViewShowingTimer)).setText("Time remaining: " + millisUntilFinished / countDownInterval);
         }
     }
 
-    public void startToListen(Listener listener) {
-        listeners.add(listener);
+    @Override
+    public final void cancel() {
+        super.cancel();
+        listeners.clear();
     }
 
     @Override
@@ -50,6 +52,10 @@ public class QuizGameTimer extends CountDownTimer {
             listener.onQuizGameTimerFinished();
         }
         listeners.clear();
+    }
+
+    public void startToListen(Listener listener) {
+        listeners.add(listener);
     }
 
     public interface Listener {

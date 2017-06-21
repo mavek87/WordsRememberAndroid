@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTransla
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
-import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
+import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
 
 import javax.inject.Singleton;

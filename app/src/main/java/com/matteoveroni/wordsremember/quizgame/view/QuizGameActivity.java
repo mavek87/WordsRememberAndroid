@@ -13,16 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
-import com.matteoveroni.wordsremember.quizgame.model.QuizGameTimer;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
-import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenter;
-import com.matteoveroni.wordsremember.quizgame.presenter.QuizGamePresenterFactory;
-
-import java.util.function.ToDoubleBiFunction;
+import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenter;
+import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,14 +44,16 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @BindView(R.id.quiz_game_answer_edit_text)
     EditText txt_answer;
 
+    public static final String QUIZ_GAME_TIMER_KEY = "quiz_game_timer_key";
+    public static final String LBL_QUESTION_KEY = "lbl_question_key";
+    public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
+    public static final String TXT_ANSWER_KEY = "txt_answer_key";
+
     private Quiz currentQuiz;
     private AlertDialog quizAlert;
     private AlertDialog.Builder alertDialogBuilder;
     private QuizGamePresenter presenter;
-
-    public static final String LBL_QUESTION = "lbl_question";
-    public static final String LBL_QUESTION_VOCABLE = "lbl_question_vocable";
-    public static final String TXT_ANSWER = "txt_answer";
+    private QuizGameTimer quizTimer;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -71,17 +72,15 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.quiz_game));
 
-        if (savedInstanceState != null) restoreViewData(savedInstanceState);
+        if (savedInstanceState == null) {
+//            quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        } else {
+//            restoreQuizGameTimer(savedInstanceState);
+//            restoreViewData(savedInstanceState);
+        }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-    }
-
-    @Override
-    public void startQuizTimer() {
-        QuizGameTimer quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-        quizTimer.startToListen(this.presenter);
-        quizTimer.start();
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {
@@ -102,23 +101,50 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
         saveViewData(instanceState);
+        saveQuizGameTimer(instanceState);
+    }
+
+    @Override
+    public void startQuizTimerCount() {
+        quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        quizTimer.startToListen(this.presenter);
+        quizTimer.start();
+    }
+
+    @Override
+    public void stopQuizTimerCount() {
+        quizTimer.cancel();
+    }
+
+    private void saveQuizGameTimer(Bundle instanceState) {
+//        quizTimer.pause();
+//        instanceState.putString(QUIZ_GAME_TIMER_KEY, Json.getInstance().toJson(quizTimer, QuizGameTimer.class));
+        instanceState.putSerializable(QUIZ_GAME_TIMER_KEY, quizTimer);
+    }
+
+    private void restoreQuizGameTimer(Bundle instanceState) {
+        if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
+//            String json_QuizGameTimer = instanceState.getString(QUIZ_GAME_TIMER_KEY, "");
+//            quizTimer = Json.getInstance().fromJson(json_QuizGameTimer, QuizGameTimer.class);
+            quizTimer = (QuizGameTimer) instanceState.getSerializable(QUIZ_GAME_TIMER_KEY);
+        }
     }
 
     private void saveViewData(Bundle instanceState) {
-        instanceState.putString(LBL_QUESTION, lbl_question.getText().toString());
-        instanceState.putString(LBL_QUESTION_VOCABLE, lbl_question_vocable.getText().toString());
-        instanceState.putString(TXT_ANSWER, txt_answer.getText().toString());
+        instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
+        instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
+        instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
     }
 
     private void restoreViewData(Bundle instanceState) {
-        if (instanceState.containsKey(LBL_QUESTION)) {
-            lbl_question.setText(instanceState.getString(LBL_QUESTION));
+        if (instanceState.containsKey(LBL_QUESTION_KEY)) {
+            lbl_question.setText(instanceState.getString(LBL_QUESTION_KEY));
         }
-        if (instanceState.containsKey(LBL_QUESTION_VOCABLE)) {
-            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE));
+        if (instanceState.containsKey(LBL_QUESTION_VOCABLE_KEY)) {
+            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE_KEY));
         }
-        if (instanceState.containsKey(TXT_ANSWER)) {
-            txt_answer.setText(instanceState.getString(TXT_ANSWER));
+        if (instanceState.containsKey(TXT_ANSWER_KEY)) {
+            txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
     }
 
@@ -210,6 +236,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     private void quitGame() {
+        quizTimer.cancel();
         presenter.abortGame();
         presenter.detachView();
         finish();
