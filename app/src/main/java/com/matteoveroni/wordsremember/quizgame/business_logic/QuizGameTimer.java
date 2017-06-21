@@ -15,8 +15,8 @@ import java.util.Set;
 public class QuizGameTimer extends CountDownTimerPausable implements Serializable {
 
     // TODO: use variable stored in settings
-    public static final int DEFAULT_TIME = 10000;
-    public static final int DEFAULT_TICK = 1000;
+    public static final long DEFAULT_TIME = 10000;
+    public static final long DEFAULT_TICK = 1000;
 
     private final View androidViewShowingTimer;
     private final Set<Listener> listeners = new HashSet<>();
@@ -54,7 +54,7 @@ public class QuizGameTimer extends CountDownTimerPausable implements Serializabl
         listeners.clear();
     }
 
-    public void startToListen(Listener listener) {
+    public void listenUntillTimerStops(Listener listener) {
         listeners.add(listener);
     }
 

@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.matteoveroni.myutils.FormattedString;
-import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
@@ -73,10 +72,10 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
-//            quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         } else {
-//            restoreQuizGameTimer(savedInstanceState);
-//            restoreViewData(savedInstanceState);
+            restoreQuizGameTimer(savedInstanceState);
+            restoreViewData(savedInstanceState);
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -106,8 +105,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     @Override
     public void startQuizTimerCount() {
-        quizTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-        quizTimer.startToListen(this.presenter);
+        quizTimer.listenUntillTimerStops(this.presenter);
         quizTimer.start();
     }
 
@@ -117,16 +115,14 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     private void saveQuizGameTimer(Bundle instanceState) {
-//        quizTimer.pause();
-//        instanceState.putString(QUIZ_GAME_TIMER_KEY, Json.getInstance().toJson(quizTimer, QuizGameTimer.class));
-        instanceState.putSerializable(QUIZ_GAME_TIMER_KEY, quizTimer);
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizTimer.getMillisRemaining());
+        quizTimer.cancel();
     }
 
     private void restoreQuizGameTimer(Bundle instanceState) {
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-//            String json_QuizGameTimer = instanceState.getString(QUIZ_GAME_TIMER_KEY, "");
-//            quizTimer = Json.getInstance().fromJson(json_QuizGameTimer, QuizGameTimer.class);
-            quizTimer = (QuizGameTimer) instanceState.getSerializable(QUIZ_GAME_TIMER_KEY);
+            long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
+            quizTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         }
     }
 
