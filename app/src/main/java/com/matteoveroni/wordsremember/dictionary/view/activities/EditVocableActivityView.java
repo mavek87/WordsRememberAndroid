@@ -55,7 +55,7 @@ public class EditVocableActivityView extends BaseActivityPresentedView implement
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
         translationsListFragment = createTranslationListFragmentForVocable();
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
@@ -118,7 +118,7 @@ public class EditVocableActivityView extends BaseActivityPresentedView implement
     }
 
     private void buildDialogCannotAddTranslationIfVocableNotSaved() {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder
                 .setTitle(R.string.vocable_not_saved)
                 .setMessage(R.string.msg_vocable_not_saved)
