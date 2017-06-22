@@ -59,7 +59,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         game.abortGame();
     }
 
-    public void continueToPlay() {
+    public void playNextQuiz() {
+        view.resetQuizTimerCount();
         startNewQuizOrShowError();
     }
 
@@ -68,15 +69,35 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         startNewQuizOrShowError();
     }
 
+    private void startNewQuizOrShowError() {
+        view.clearAndHideFields();
+        try {
+            game.generateQuiz();
+        } catch (NoMoreQuizzesException ex) {
+            FormattedString gameResultMessage = new FormattedString(
+                    "%s %s %d/%d %s",
+                    LocaleKey.MSG_GAME_COMPLETED,
+                    LocaleKey.SCORE,
+                    game.getTotalScore(),
+                    game.getNumberOfQuestions(),
+                    LocaleKey.POINTS
+            );
+            view.showGameResultDialog(gameResultMessage);
+        } catch (ZeroQuizzesException ex) {
+            view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
+        }
+    }
+
     @Subscribe
     public void onEventQuizGenerated(EventQuizGenerated event) {
-        view.startQuizTimerCount();
         view.setPojoUsed(event.getQuiz());
+        view.startQuizTimerCount();
     }
 
     @Override
     public void onQuizGameTimerFinished() {
         game.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
+        view.stopQuizTimerCount();
         view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
     }
 
@@ -84,11 +105,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            view.stopQuizTimerCount();
-
             game.giveFinalAnswer(answerFromView);
             Quiz quiz = game.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
+            view.stopQuizTimerCount();
             view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
         }
     }
@@ -115,24 +135,5 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
                 break;
         }
         return quizResultMessage;
-    }
-
-    private void startNewQuizOrShowError() {
-        view.clearAndHideFields();
-        try {
-            game.generateQuiz();
-        } catch (NoMoreQuizzesException ex) {
-            FormattedString gameResultMessage = new FormattedString(
-                    "%s %s %d/%d %s",
-                    LocaleKey.MSG_GAME_COMPLETED,
-                    LocaleKey.SCORE,
-                    game.getTotalScore(),
-                    game.getNumberOfQuestions(),
-                    LocaleKey.POINTS
-            );
-            view.showGameResultDialog(gameResultMessage);
-        } catch (ZeroQuizzesException ex) {
-            view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
-        }
     }
 }

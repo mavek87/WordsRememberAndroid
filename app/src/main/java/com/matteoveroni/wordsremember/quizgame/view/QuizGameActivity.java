@@ -39,6 +39,8 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
     public static final String TXT_ANSWER_KEY = "txt_answer_key";
 
+    private static final QuizGamePresenterFactory PRESENTER_FACTORY = new QuizGamePresenterFactory();
+
     @BindView(R.id.lbl_remainingTime)
     TextView lbl_remainingTime;
 
@@ -59,7 +61,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new QuizGamePresenterFactory();
+        return PRESENTER_FACTORY;
     }
 
     @Override
@@ -77,8 +79,8 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (savedInstanceState == null) {
             quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         } else {
-            restoreQuizGameTimer(savedInstanceState);
             restoreViewData(savedInstanceState);
+            startQuizTimerCount();
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -89,13 +91,19 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
         saveViewData(instanceState);
-        saveQuizGameTimer(instanceState);
+
+        // TODO: cancel or pause?
+//        quizGameTimer.pause();
+        stopQuizTimerCount();
     }
 
     private void saveViewData(Bundle instanceState) {
         instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
+
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
+        Log.d(TAG, "quizGameTimer time remaining saved: " + quizGameTimer.getMillisRemaining());
     }
 
     private void restoreViewData(Bundle instanceState) {
@@ -108,31 +116,30 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (instanceState.containsKey(TXT_ANSWER_KEY)) {
             txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
-    }
-
-    private void saveQuizGameTimer(Bundle instanceState) {
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
-        Log.d(TAG, "save: " + quizGameTimer.getMillisRemaining());
-        quizGameTimer.cancel();
-    }
-
-    private void restoreQuizGameTimer(Bundle instanceState) {
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-            Log.d(TAG, "restore: " + quizGameTimer.getMillisRemaining());
             long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
             quizGameTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            Log.d(TAG, "quizGameTimer time remaining restored: " + quizGameTimer.getMillisRemaining());
         }
     }
 
     @Override
     public void startQuizTimerCount() {
-        quizGameTimer.listenUntillTimerStops(this.presenter);
+        quizGameTimer.addTimerListener(this.presenter);
         quizGameTimer.start();
     }
 
     @Override
     public void stopQuizTimerCount() {
-        quizGameTimer.cancel();
+        if (quizGameTimer != null) {
+            quizGameTimer.cancel();
+        }
+    }
+
+    @Override
+    public void resetQuizTimerCount() {
+        stopQuizTimerCount();
+        quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
     }
 
     @Override
@@ -160,7 +167,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     private void quitGame() {
-        quizGameTimer.cancel();
+        stopQuizTimerCount();
         presenter.abortGame();
         presenter.detachView();
         finish();
@@ -189,7 +196,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 .setMessage(localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        presenter.continueToPlay();
+                        presenter.playNextQuiz();
                     }
                 })
                 .setIcon(img_alertDialog);

@@ -54,7 +54,7 @@ public class QuizGameTimer extends CountDownTimerPausable implements Serializabl
         listeners.clear();
     }
 
-    public void listenUntillTimerStops(Listener listener) {
+    public void addTimerListener(Listener listener) {
         listeners.add(listener);
     }
 
