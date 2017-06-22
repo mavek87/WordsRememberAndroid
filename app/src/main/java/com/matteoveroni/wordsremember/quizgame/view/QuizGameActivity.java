@@ -77,10 +77,18 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
+            // FIRST TIME CREATED
             quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         } else {
+            // RE-CREATED AFTER ROTATION
             restoreViewData(savedInstanceState);
-            startQuizTimerCount();
+            if (quizGameTimer.getMillisRemaining() <= 0) {
+                // IF TIME IS EXPIRED OR TIMER WAS RESET AND A BLOCKING WINDOW IS NOW OPEN
+                quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            } else {
+                // IF A NEW QUIZ IS STARTED
+                startQuizTimerCount();
+            }
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -90,11 +98,9 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @Override
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
-        saveViewData(instanceState);
-
         // TODO: cancel or pause?
-//        quizGameTimer.pause();
         stopQuizTimerCount();
+        saveViewData(instanceState);
     }
 
     private void saveViewData(Bundle instanceState) {
@@ -102,8 +108,9 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
 
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
-        Log.d(TAG, "quizGameTimer time remaining saved: " + quizGameTimer.getMillisRemaining());
+        long quizTimeRemaining = quizGameTimer.getMillisRemaining();
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizTimeRemaining);
+        Log.d(TAG, "quizGameTimer time remaining saved: " + quizTimeRemaining);
     }
 
     private void restoreViewData(Bundle instanceState) {
@@ -118,8 +125,10 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
             long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
+//            if (quizGameTimer.getMillisRemaining() > 0) {
             quizGameTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-            Log.d(TAG, "quizGameTimer time remaining restored: " + quizGameTimer.getMillisRemaining());
+//            }
+//            Log.d(TAG, "quizGameTimer time remaining restored: " + quizGameTimer.getMillisRemaining());
         }
     }
 
@@ -199,6 +208,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                         presenter.playNextQuiz();
                     }
                 })
+                .setCancelable(false)
                 .setIcon(img_alertDialog);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();

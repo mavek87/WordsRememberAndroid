@@ -1,10 +1,14 @@
 package com.matteoveroni.wordsremember.quizgame.business_logic;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
+
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +16,9 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGameTimer extends CountDownTimerPausable implements Serializable {
+public class QuizGameTimer extends CountDownTimerPausable {
+
+    public static final String TAG = TagGenerator.tag(QuizGameTimer.class);
 
     // TODO: use variable stored in settings
     public static final long DEFAULT_TIME = 10000;

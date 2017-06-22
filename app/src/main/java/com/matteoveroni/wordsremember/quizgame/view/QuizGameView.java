@@ -27,4 +27,6 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void resetQuizTimerCount();
 
+//    void pauseQuizTimerCount();
+
 }

@@ -32,31 +32,31 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final Settings settings;
-    private final QuizGameModel game;
+    private final QuizGameModel gameModel;
     private QuizGameView view;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
-        this.game = new QuizGameModelFindTranslationForVocable(settings, dao);
+        this.gameModel = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
     @Override
     public void attachView(QuizGameView quizGameView) {
         this.view = quizGameView;
         EVENT_BUS.register(this);
-        game.startGame();
+        gameModel.startGame();
     }
 
     @Override
     public void detachView() {
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
-        game.pauseGame();
+        gameModel.pauseGame();
         view = null;
     }
 
     public void abortGame() {
-        game.abortGame();
+        gameModel.abortGame();
     }
 
     public void playNextQuiz() {
@@ -72,14 +72,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     private void startNewQuizOrShowError() {
         view.clearAndHideFields();
         try {
-            game.generateQuiz();
+            gameModel.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
             FormattedString gameResultMessage = new FormattedString(
                     "%s %s %d/%d %s",
                     LocaleKey.MSG_GAME_COMPLETED,
                     LocaleKey.SCORE,
-                    game.getTotalScore(),
-                    game.getNumberOfQuestions(),
+                    gameModel.getTotalScore(),
+                    gameModel.getNumberOfQuestions(),
                     LocaleKey.POINTS
             );
             view.showGameResultDialog(gameResultMessage);
@@ -96,7 +96,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
 
     @Override
     public void onQuizGameTimerFinished() {
-        game.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
+        gameModel.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
         view.stopQuizTimerCount();
         view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
     }
@@ -105,8 +105,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         if (answerFromView.trim().isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            game.giveFinalAnswer(answerFromView);
-            Quiz quiz = game.getCurrentQuiz();
+            gameModel.giveFinalAnswer(answerFromView);
+            Quiz quiz = gameModel.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
             view.stopQuizTimerCount();
             view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
