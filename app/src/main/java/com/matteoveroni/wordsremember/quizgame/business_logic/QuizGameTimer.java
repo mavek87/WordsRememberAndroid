@@ -18,8 +18,6 @@ import java.util.Set;
 
 public class QuizGameTimer extends CountDownTimerPausable {
 
-    public static final String TAG = TagGenerator.tag(QuizGameTimer.class);
-
     // TODO: use variable stored in settings
     public static final long DEFAULT_TIME = 10000;
     public static final long DEFAULT_TICK = 1000;

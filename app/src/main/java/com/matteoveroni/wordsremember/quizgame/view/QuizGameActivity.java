@@ -22,8 +22,7 @@ import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
-
-import org.apache.commons.lang3.StringUtils;
+import com.matteoveroni.wordsremember.quizgame.view.dialogs.QuizResultDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,14 +31,15 @@ import butterknife.ButterKnife;
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView {
+public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView, QuizResultDialog.QuizResultDialogListener {
 
     public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
 
-    public static final String QUIZ_GAME_TIMER_KEY = "quiz_game_timer_key";
-    public static final String LBL_QUESTION_KEY = "lbl_question_key";
-    public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable_key";
-    public static final String TXT_ANSWER_KEY = "txt_answer_key";
+    public static final String QUIZ_GAME_TIMER_KEY = "quiz_game_timer";
+    public static final String LBL_QUESTION_KEY = "lbl_question";
+    public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable";
+    public static final String TXT_ANSWER_KEY = "txt_answer";
+    public static final String IS_DIALOG_SHOWN_KEY = "is_dialog_shown";
 
     private static final QuizGamePresenterFactory PRESENTER_FACTORY = new QuizGamePresenterFactory();
 
@@ -60,6 +60,10 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     private QuizGamePresenter presenter;
     private Quiz currentQuiz;
     private QuizGameTimer quizGameTimer;
+
+    private boolean isDialogShown = false;
+
+    private QuizResultDialog quizResultDialog;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -84,13 +88,23 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         } else {
             // RE-CREATED AFTER ROTATION
             restoreViewData(savedInstanceState);
-            if (quizGameTimer.getMillisRemaining() <= 0) {
-                // IF TIME IS EXPIRED OR TIMER WAS RESET AND A BLOCKING WINDOW IS NOW OPEN
+            if (isDialogShown) {
                 quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
             } else {
-                // IF A NEW QUIZ IS STARTED
+                if (quizGameTimer.getMillisRemaining() <= 0) {
+                    quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+                }
                 startQuizTimerCount();
             }
+//            if (quizGameTimer.getMillisRemaining() <= 0) {
+//                // IF TIME IS EXPIRED OR TIMER WAS RESET AND A BLOCKING WINDOW IS NOW OPEN
+//                if (!isDialogShown) {
+//                    quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+//                }
+//            } else {
+//                // IF A NEW QUIZ IS STARTED
+//                startQuizTimerCount();
+//            }
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -111,6 +125,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
         instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
+        instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
     }
 
     private void restoreViewData(Bundle instanceState) {
@@ -126,6 +141,9 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
             long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
             quizGameTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        }
+        if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
+            isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
         }
     }
 
@@ -179,8 +197,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         finish();
     }
 
+
     @Override
     public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
+        hideAndroidKeyboard();
+
         Drawable img_alertDialog;
         String quizResultTitle;
         switch (quizFinalResult) {
@@ -196,20 +217,19 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 throw new RuntimeException("Unknown quiz result");
         }
 
-        alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder
-                .setTitle(quizResultTitle)
-                .setMessage(localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //                        quizAlert.dismiss();
-                        presenter.playNextQuiz();
-                    }
-                })
-                .setCancelable(false)
-                .setIcon(img_alertDialog);
-        quizAlert = alertDialogBuilder.create();
-        quizAlert.show();
+        String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
+
+        quizResultDialog = QuizResultDialog.newInstance(quizResultTitle, quizResultMessage);
+        quizResultDialog.show(getSupportFragmentManager(), "QuizResultDialog");
+        isDialogShown = true;
+    }
+
+    @Override
+    public void quizResultDialogConfirm() {
+        presenter.playNextQuiz();
+        quizResultDialog.dismiss();
+        isDialogShown = false;
+        showAndroidKeyboard();
     }
 
     @Override
@@ -220,13 +240,14 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 .setMessage(localize(gameResultMessage))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //                        quizAlert.dismiss();
+                        isDialogShown = false;
                         quitGame();
                     }
                 })
                 .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
+        isDialogShown = true;
     }
 
     @Override
@@ -237,13 +258,14 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //                        quizAlert.dismiss();
+                        isDialogShown = false;
                         presenter.abortGame();
                     }
                 })
                 .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
+        isDialogShown = true;
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {

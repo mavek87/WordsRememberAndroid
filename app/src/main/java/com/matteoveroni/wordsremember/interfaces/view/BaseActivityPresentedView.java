@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -7,6 +8,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -127,6 +129,16 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
 
     public String localize(FormattedString formattedLocaleString) {
         return getTranslator().localize(formattedLocaleString);
+    }
+
+    public void showAndroidKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    public void hideAndroidKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     protected LocaleTranslator getTranslator() {
