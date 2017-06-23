@@ -16,6 +16,7 @@ import com.matteoveroni.wordsremember.quizgame.business_logic.model.QuizGameMode
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -102,10 +103,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     }
 
     public void onQuizAnswerFromView(String answerFromView) {
-        if (answerFromView.trim().isEmpty()) {
+        String answer = StringUtils.strip(answerFromView);
+        if (answer.isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            gameModel.giveFinalAnswer(answerFromView);
+            gameModel.giveFinalAnswer(answer);
             Quiz quiz = gameModel.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
             view.stopQuizTimerCount();
