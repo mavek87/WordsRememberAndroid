@@ -83,28 +83,15 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
-            // FIRST TIME CREATED
             quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
         } else {
-            // RE-CREATED AFTER ROTATION
             restoreViewData(savedInstanceState);
-            if (isDialogShown) {
-                quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-            } else {
-                if (quizGameTimer.getMillisRemaining() <= 0) {
+            if (!isDialogShown) {
+                if (quizGameTimer == null || quizGameTimer.getMillisRemaining() <= 0) {
                     quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
                 }
                 startQuizTimerCount();
             }
-//            if (quizGameTimer.getMillisRemaining() <= 0) {
-//                // IF TIME IS EXPIRED OR TIMER WAS RESET AND A BLOCKING WINDOW IS NOW OPEN
-//                if (!isDialogShown) {
-//                    quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
-//                }
-//            } else {
-//                // IF A NEW QUIZ IS STARTED
-//                startQuizTimerCount();
-//            }
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -167,7 +154,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public Quiz getPojoUsed() {
+    public  Quiz getPojoUsed() {
         return currentQuiz;
     }
 
@@ -202,32 +189,16 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
         hideAndroidKeyboard();
 
-        Drawable img_alertDialog;
-        String quizResultTitle;
-        switch (quizFinalResult) {
-            case CORRECT:
-                quizResultTitle = getString(R.string.correctAnswer);
-                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
-                break;
-            case WRONG:
-                quizResultTitle = getString(R.string.wrongAnswer);
-                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
-                break;
-            default:
-                throw new RuntimeException("Unknown quiz result");
-        }
-
         String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
 
-        quizResultDialog = QuizResultDialog.newInstance(quizResultTitle, quizResultMessage);
-        quizResultDialog.show(getSupportFragmentManager(), "QuizResultDialog");
+        quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
+        quizResultDialog.show(getSupportFragmentManager(), QuizResultDialog.TAG);
         isDialogShown = true;
     }
 
     @Override
     public void quizResultDialogConfirm() {
         presenter.playNextQuiz();
-        quizResultDialog.dismiss();
         isDialogShown = false;
         showAndroidKeyboard();
     }
