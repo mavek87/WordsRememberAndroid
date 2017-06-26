@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
+import android.widget.TextView;
+
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.interfaces.view.View;
@@ -20,6 +22,8 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
     void showGameResultDialog(FormattedString localizedMessage);
 
     void clearAndHideFields();
+
+    void printTime(long remainingTime);
 
     void startQuizTimerCount();
 

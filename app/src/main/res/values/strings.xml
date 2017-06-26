@@ -61,4 +61,5 @@
     <string name="msg_game_difficulty_changed">Game difficulty changed</string>
     <string name="msg_select_game_difficulty">Select game difficulty</string>
     <string name="msg_enable_online_translations_check">Enable online translations check</string>
+    <string name="timeRemaining">Time remaining</string>
 </resources>

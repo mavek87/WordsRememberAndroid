@@ -1,9 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -63,8 +61,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
     private boolean isDialogShown = false;
 
-    private QuizResultDialog quizResultDialog;
-
     @Override
     protected PresenterFactory getPresenterFactory() {
         return PRESENTER_FACTORY;
@@ -83,12 +79,12 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
-            quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
         } else {
             restoreViewData(savedInstanceState);
             if (!isDialogShown) {
-                if (quizGameTimer == null || quizGameTimer.getMillisRemaining() <= 0) {
-                    quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+                if (quizGameTimer.isCanceled()) {
+                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
                 }
                 startQuizTimerCount();
             }
@@ -101,7 +97,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @Override
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
-        // Save data
         saveViewData(instanceState);
         // TODO: cancel or pause?
         stopQuizTimerCount();
@@ -111,7 +106,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getMillisRemaining());
+        instanceState.putInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInSeconds());
         instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
     }
 
@@ -126,12 +121,19 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
             txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-            long timerMillisRemaining = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
-            quizGameTimer = new QuizGameTimer(timerMillisRemaining, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+            long timeRemaining = instanceState.getInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.DEFAULT_TIME_IN_SECONDS / 1000);
+            quizGameTimer = new QuizGameTimer(this, timeRemaining, QuizGameTimer.DEFAULT_TICK);
+            printTime(timeRemaining);
         }
         if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
             isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
         }
+    }
+
+    @Override
+    public void printTime(long timeRemaining) {
+        int time = (int) timeRemaining;
+        lbl_remainingTime.setText(getString(R.string.timeRemaining) + ": " + String.valueOf(time));
     }
 
     @Override
@@ -150,11 +152,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @Override
     public void resetQuizTimerCount() {
         stopQuizTimerCount();
-        quizGameTimer = new QuizGameTimer(QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK, lbl_remainingTime);
+        quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
     }
 
     @Override
-    public  Quiz getPojoUsed() {
+    public Quiz getPojoUsed() {
         return currentQuiz;
     }
 
@@ -184,14 +186,13 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         finish();
     }
 
-
     @Override
     public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
         hideAndroidKeyboard();
 
         String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
 
-        quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
+        QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
         quizResultDialog.show(getSupportFragmentManager(), QuizResultDialog.TAG);
         isDialogShown = true;
     }
@@ -267,5 +268,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
+    }
+
+    @Override
+    protected void onDestroy() {
+        quizGameTimer.destroy();
+        super.onDestroy();
     }
 }

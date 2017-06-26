@@ -18,7 +18,7 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 public class QuizResultDialog extends DialogFragment {
 
-    public static final String TAG = "QuizResultDialog";
+    public static final String TAG = QuizResultDialog.class.getSimpleName();
 
     private Quiz.FinalResult result;
     private static final String DIALOG_RESULT_KEY = "dialog_result";
