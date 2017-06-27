@@ -100,7 +100,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
         instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInMillis());
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTime());
     }
 
     private void restoreViewData(Bundle instanceState) {
@@ -119,12 +119,15 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
             long timeRemainingInMillis = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
             long timeRemainingInSeconds = (int) (timeRemainingInMillis / 1000);
-            quizGameTimer = new QuizGameTimer(this, timeRemainingInMillis, QuizGameTimer.DEFAULT_TICK);
             printTime(timeRemainingInSeconds);
+
+            if (timeRemainingInMillis > 0) {
+                quizGameTimer = new QuizGameTimer(this, timeRemainingInMillis, QuizGameTimer.DEFAULT_TICK);
+            } else {
+                quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
+            }
+
             if (!isDialogShown) {
-                if (quizGameTimer.isCanceled()) {
-                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
-                }
                 startQuizTimerCount();
             }
         }

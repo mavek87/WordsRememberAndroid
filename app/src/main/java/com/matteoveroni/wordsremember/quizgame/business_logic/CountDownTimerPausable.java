@@ -42,12 +42,10 @@ public abstract class CountDownTimerPausable {
      * Cancel the countdown.
      */
     public void cancel() {
-        if (!isCanceled) {
-            if (countDownTimer != null) {
-                countDownTimer.cancel();
-            }
-            isCanceled = true;
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
+        isCanceled = true;
 //        this.millisRemaining = 0;
     }
 
@@ -57,9 +55,6 @@ public abstract class CountDownTimerPausable {
      * @return CountDownTimerPausable current instance
      */
     public synchronized final CountDownTimerPausable start() {
-        if (isCanceled) {
-            throw new IllegalStateException("CountDownTimerPausable is canceled. Cannot pause it.");
-        }
         if (isPaused) {
             createCountDownTimer();
             countDownTimer.start();
@@ -89,9 +84,6 @@ public abstract class CountDownTimerPausable {
      * later from the same point where it was paused.
      */
     public void pause() throws IllegalStateException {
-        if (isCanceled) {
-            throw new IllegalStateException("CountDownTimerPausable is canceled. Cannot pause it.");
-        }
         if (isPaused) {
             throw new IllegalStateException("CountDownTimerPausable is already in pause state, start counter before pausing it.");
         } else {
@@ -100,19 +92,11 @@ public abstract class CountDownTimerPausable {
         isPaused = true;
     }
 
-    public long getRemainingTimeInMillis() {
+    public long getRemainingTime() {
         return millisRemaining;
-    }
-
-    public int getRemainingTimeInSeconds() {
-        return (int) (millisRemaining / countDownInterval);
     }
 
     public boolean isPaused() {
         return isPaused;
-    }
-
-    public boolean isCanceled() {
-        return isCanceled;
     }
 }
