@@ -82,12 +82,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
             quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
         } else {
             restoreViewData(savedInstanceState);
-            if (!isDialogShown) {
-                if (quizGameTimer.isCanceled()) {
-                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
-                }
-                startQuizTimerCount();
-            }
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
@@ -98,7 +92,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
         saveViewData(instanceState);
-        // TODO: cancel or pause?
         stopQuizTimerCount();
     }
 
@@ -106,8 +99,8 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
-        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInMillis());
         instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInMillis());
     }
 
     private void restoreViewData(Bundle instanceState) {
@@ -120,14 +113,20 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (instanceState.containsKey(TXT_ANSWER_KEY)) {
             txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
+        if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
+            isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
+        }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-            long timeRemainingInMillis = instanceState.getLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.DEFAULT_TIME);
+            long timeRemainingInMillis = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
             long timeRemainingInSeconds = (int) (timeRemainingInMillis / 1000);
             quizGameTimer = new QuizGameTimer(this, timeRemainingInMillis, QuizGameTimer.DEFAULT_TICK);
             printTime(timeRemainingInSeconds);
-        }
-        if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
-            isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
+            if (!isDialogShown) {
+                if (quizGameTimer.isCanceled()) {
+                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
+                }
+                startQuizTimerCount();
+            }
         }
     }
 
@@ -270,5 +269,4 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
     }
-
 }
