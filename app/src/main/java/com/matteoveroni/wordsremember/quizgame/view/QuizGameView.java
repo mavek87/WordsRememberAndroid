@@ -5,6 +5,7 @@ import android.widget.TextView;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
 
 /**
@@ -28,7 +29,4 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
     void stopQuizTimerCount();
 
     void resetQuizTimerCount();
-
-//    void pauseQuizTimerCount();
-
 }

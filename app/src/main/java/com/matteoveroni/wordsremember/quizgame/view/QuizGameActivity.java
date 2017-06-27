@@ -3,7 +3,6 @@ package com.matteoveroni.wordsremember.quizgame.view;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -80,12 +79,12 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setupAndShowToolbar(getString(R.string.quiz_game));
 
         if (savedInstanceState == null) {
-            quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
+            quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
         } else {
             restoreViewData(savedInstanceState);
             if (!isDialogShown) {
                 if (quizGameTimer.isCanceled()) {
-                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
+                    quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
                 }
                 startQuizTimerCount();
             }
@@ -107,8 +106,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
-        instanceState.putInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInSeconds());
-        Log.d(TAG, "Ho salvato: " + quizGameTimer.getRemainingTimeInSeconds());
+        instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInMillis());
         instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
     }
 
@@ -123,10 +121,10 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
             txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
-            long timeRemaining = instanceState.getInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.DEFAULT_TIME_IN_SECONDS / 1000);
-            Log.d(TAG, "Ho caricato: " + timeRemaining);
-            quizGameTimer = new QuizGameTimer(this, timeRemaining, QuizGameTimer.DEFAULT_TICK);
-            printTime(timeRemaining);
+            long timeRemainingInMillis = instanceState.getLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.DEFAULT_TIME);
+            long timeRemainingInSeconds = (int) (timeRemainingInMillis / 1000);
+            quizGameTimer = new QuizGameTimer(this, timeRemainingInMillis, QuizGameTimer.DEFAULT_TICK);
+            printTime(timeRemainingInSeconds);
         }
         if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
             isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
@@ -155,7 +153,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @Override
     public void resetQuizTimerCount() {
         stopQuizTimerCount();
-        quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME_IN_MILLIS, QuizGameTimer.DEFAULT_TICK);
+        quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
     }
 
     @Override

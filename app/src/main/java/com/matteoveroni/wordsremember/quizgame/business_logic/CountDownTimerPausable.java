@@ -23,7 +23,7 @@ public abstract class CountDownTimerPausable {
         super();
         this.timeToCount = timeToCount;
         this.countDownInterval = countDownInterval;
-        this.millisRemaining = this.timeToCount;
+        this.millisRemaining = timeToCount;
     }
 
     /**

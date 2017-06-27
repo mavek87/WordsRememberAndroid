@@ -10,8 +10,7 @@ import java.util.Set;
 public class QuizGameTimer extends CountDownTimerPausable {
 
     // TODO: use variable stored in settings
-    public static final long DEFAULT_TIME_IN_MILLIS = 10000;
-    public static final int DEFAULT_TIME_IN_SECONDS = (int) (DEFAULT_TIME_IN_MILLIS / 1000);
+    public static final long DEFAULT_TIME = 10000;
     public static final long DEFAULT_TICK = 1000;
 
     public interface TimerPrinter {
