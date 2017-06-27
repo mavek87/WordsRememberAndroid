@@ -27,7 +27,7 @@ public class QuizResultDialog extends DialogFragment {
     private static final String DIALOG_MESSAGE_KEY = "dialog_message";
 
     public interface QuizResultDialogListener {
-        void quizResultDialogConfirm();
+        void confirmQuizResultDialogAction();
     }
 
     public static QuizResultDialog newInstance(Quiz.FinalResult result, String message) {
@@ -75,7 +75,7 @@ public class QuizResultDialog extends DialogFragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((QuizResultDialogListener) getActivity()).quizResultDialogConfirm();
+                        ((QuizResultDialogListener) getActivity()).confirmQuizResultDialogAction();
                     }
                 })
                 .create();
@@ -84,6 +84,17 @@ public class QuizResultDialog extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
+
+//    @Override
+//    public void show(FragmentManager manager, String tag) {
+//        super.show(manager, tag);
+//        isShownInActivity = true;
+//    }
+//
+//    @Override
+//    public void dismiss() {
+//        super.dismiss();
+//    }
 
     // TODO: check if this method is needed
     @Override

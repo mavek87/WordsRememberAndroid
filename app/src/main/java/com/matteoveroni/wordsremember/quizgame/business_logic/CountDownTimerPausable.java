@@ -26,22 +26,6 @@ public abstract class CountDownTimerPausable {
         this.millisRemaining = this.timeToCount;
     }
 
-    private void createCountDownTimer() {
-        countDownTimer = new CountDownTimer(millisRemaining, countDownInterval) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                millisRemaining = millisUntilFinished;
-                CountDownTimerPausable.this.onTick(millisUntilFinished);
-            }
-
-            @Override
-            public void onFinish() {
-                CountDownTimerPausable.this.onFinish();
-            }
-        };
-    }
-
     /**
      * Callback fired on regular interval.
      *
@@ -84,6 +68,22 @@ public abstract class CountDownTimerPausable {
         return this;
     }
 
+    private void createCountDownTimer() {
+        countDownTimer = new CountDownTimer(millisRemaining, countDownInterval) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                millisRemaining = millisUntilFinished;
+                CountDownTimerPausable.this.onTick(millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                CountDownTimerPausable.this.onFinish();
+            }
+        };
+    }
+
     /**
      * Pauses the CountDownTimerPausable, so it could be resumed(start)
      * later from the same point where it was paused.
@@ -115,6 +115,4 @@ public abstract class CountDownTimerPausable {
     public boolean isCanceled() {
         return isCanceled;
     }
-
-
 }

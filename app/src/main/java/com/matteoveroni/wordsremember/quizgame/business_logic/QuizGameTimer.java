@@ -1,11 +1,5 @@
 package com.matteoveroni.wordsremember.quizgame.business_logic;
 
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,49 +14,44 @@ public class QuizGameTimer extends CountDownTimerPausable {
     public static final int DEFAULT_TIME_IN_SECONDS = (int) (DEFAULT_TIME_IN_MILLIS / 1000);
     public static final long DEFAULT_TICK = 1000;
 
-    private final Set<Listener> listeners = new HashSet<>();
+    public interface TimerPrinter {
+        void printTime(long timeRemaining);
+    }
 
-    private QuizGameActivity quizGameActivity;
+    private final TimerPrinter timerPrinter;
 
-    public QuizGameTimer(QuizGameActivity activity, long timeToCount, long countDownInterval) {
+    public interface TimerListener {
+        void onQuizGameTimerFinished();
+    }
+
+    private final Set<TimerListener> timerListeners = new HashSet<>();
+
+    public QuizGameTimer(TimerPrinter timerPrinter, long timeToCount, long countDownInterval) {
         super(timeToCount, countDownInterval);
-        this.quizGameActivity = activity;
+        this.timerPrinter = timerPrinter;
         this.countDownInterval = countDownInterval;
     }
 
-    public long getCountDownInterval() {
-        return countDownInterval;
+    public void addTimerListener(TimerListener listener) {
+        timerListeners.add(listener);
     }
 
     @Override
     public void onTick(long millisUntilFinished) {
-        quizGameActivity.printTime(millisUntilFinished / countDownInterval);
+        timerPrinter.printTime(millisUntilFinished / countDownInterval);
     }
 
     @Override
     public final void cancel() {
         super.cancel();
-        listeners.clear();
+        timerListeners.clear();
     }
 
     @Override
     public void onFinish() {
-        for (Listener listener : listeners) {
+        for (TimerListener listener : timerListeners) {
             listener.onQuizGameTimerFinished();
         }
-        listeners.clear();
-    }
-
-    public void addTimerListener(Listener listener) {
-        listeners.add(listener);
-    }
-
-    public interface Listener {
-
-        void onQuizGameTimerFinished();
-    }
-
-    public void destroy() {
-        quizGameActivity = null;
+        timerListeners.clear();
     }
 }

@@ -23,8 +23,6 @@ public interface QuizGameView extends View, PojoManipulable<Quiz> {
 
     void clearAndHideFields();
 
-    void printTime(long remainingTime);
-
     void startQuizTimerCount();
 
     void stopQuizTimerCount();

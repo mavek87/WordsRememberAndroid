@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.quizgame.view;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView, QuizResultDialog.QuizResultDialogListener {
+public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView, QuizGameTimer.TimerPrinter, QuizResultDialog.QuizResultDialogListener {
 
     public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
 
@@ -107,6 +108,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
         instanceState.putInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTimeInSeconds());
+        Log.d(TAG, "Ho salvato: " + quizGameTimer.getRemainingTimeInSeconds());
         instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
     }
 
@@ -122,6 +124,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
             long timeRemaining = instanceState.getInt(QUIZ_GAME_TIMER_KEY, quizGameTimer.DEFAULT_TIME_IN_SECONDS / 1000);
+            Log.d(TAG, "Ho caricato: " + timeRemaining);
             quizGameTimer = new QuizGameTimer(this, timeRemaining, QuizGameTimer.DEFAULT_TICK);
             printTime(timeRemaining);
         }
@@ -169,12 +172,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public void confirmQuizAnswerAction() {
-        String givenAnswer = txt_answer.getText().toString();
-        presenter.onQuizAnswerFromView(givenAnswer);
-    }
-
-    @Override
     public void onBackPressed() {
         quitGame();
     }
@@ -198,7 +195,13 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public void quizResultDialogConfirm() {
+    public void confirmQuizAnswerAction() {
+        String givenAnswer = txt_answer.getText().toString();
+        presenter.onQuizAnswerFromView(givenAnswer);
+    }
+
+    @Override
+    public void confirmQuizResultDialogAction() {
         presenter.playNextQuiz();
         isDialogShown = false;
         showAndroidKeyboard();
@@ -270,9 +273,4 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         txt_answer.setVisibility(visibility);
     }
 
-    @Override
-    protected void onDestroy() {
-        quizGameTimer.destroy();
-        super.onDestroy();
-    }
 }

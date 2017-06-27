@@ -26,7 +26,7 @@ import java.util.List;
  * Created by Matteo Veroni
  */
 
-public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer.Listener {
+public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer.TimerListener {
 
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
