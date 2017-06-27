@@ -37,7 +37,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     public static final String LBL_QUESTION_KEY = "lbl_question";
     public static final String LBL_QUESTION_VOCABLE_KEY = "lbl_question_vocable";
     public static final String TXT_ANSWER_KEY = "txt_answer";
-    public static final String IS_DIALOG_SHOWN_KEY = "is_dialog_shown";
 
     private static final QuizGamePresenterFactory PRESENTER_FACTORY = new QuizGamePresenterFactory();
 
@@ -58,8 +57,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     private QuizGamePresenter presenter;
     private Quiz currentQuiz;
     private QuizGameTimer quizGameTimer;
-
-    private boolean isDialogShown = false;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -99,7 +96,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
         instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
         instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
-        instanceState.putBoolean(IS_DIALOG_SHOWN_KEY, isDialogShown);
         instanceState.putLong(QUIZ_GAME_TIMER_KEY, quizGameTimer.getRemainingTime());
     }
 
@@ -113,9 +109,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         if (instanceState.containsKey(TXT_ANSWER_KEY)) {
             txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
         }
-        if (instanceState.containsKey(IS_DIALOG_SHOWN_KEY)) {
-            isDialogShown = instanceState.getBoolean(IS_DIALOG_SHOWN_KEY);
-        }
         if (instanceState.containsKey(QUIZ_GAME_TIMER_KEY)) {
             long timeRemainingInMillis = instanceState.getLong(QUIZ_GAME_TIMER_KEY, QuizGameTimer.DEFAULT_TIME);
             long timeRemainingInSeconds = (int) (timeRemainingInMillis / 1000);
@@ -127,7 +120,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
             }
 
-            if (!isDialogShown) {
+            if (!presenter.isDialogShown()) {
                 startQuizTimerCount();
             }
         }
@@ -191,7 +184,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
 
         QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
         quizResultDialog.show(getSupportFragmentManager(), QuizResultDialog.TAG);
-        isDialogShown = true;
+        presenter.setDialogShown(true);
     }
 
     @Override
@@ -203,7 +196,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     @Override
     public void confirmQuizResultDialogAction() {
         presenter.playNextQuiz();
-        isDialogShown = false;
+        presenter.setDialogShown(false);
         showAndroidKeyboard();
     }
 
@@ -215,14 +208,14 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 .setMessage(localize(gameResultMessage))
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isDialogShown = false;
+                        presenter.setDialogShown(false);
                         quitGame();
                     }
                 })
                 .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
-        isDialogShown = true;
+        presenter.setDialogShown(true);
     }
 
     @Override
@@ -233,14 +226,14 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
                 .setMessage(msgErrorText)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isDialogShown = false;
+                        presenter.setDialogShown(false);
                         presenter.abortGame();
                     }
                 })
                 .setCancelable(false);
         quizAlert = alertDialogBuilder.create();
         quizAlert.show();
-        isDialogShown = true;
+        presenter.setDialogShown(true);
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {
@@ -271,5 +264,11 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideAndroidKeyboard();
+        super.onDestroy();
     }
 }

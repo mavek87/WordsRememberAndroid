@@ -35,6 +35,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     private final Settings settings;
     private final QuizGameModel gameModel;
     private QuizGameView view;
+    private boolean isDialogShown = false;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -63,6 +64,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     public void playNextQuiz() {
         view.resetQuizTimerCount();
         startNewQuizOrShowError();
+    }
+
+    public void setDialogShown(boolean isDialogShown) {
+        this.isDialogShown = isDialogShown;
+    }
+
+    public boolean isDialogShown() {
+        return this.isDialogShown;
     }
 
     @Subscribe

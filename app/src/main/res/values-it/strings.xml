@@ -52,7 +52,7 @@
     <string name="msg_correctAnswer">La risposta è corretta</string>
     <string name="msg_wrongAnswer">La risposta è errata</string>
     <string name="version">Versione</string>
-    <string name="wrongAnswer">RispostaErrata</string>
+    <string name="wrongAnswer">Risposta Errata</string>
     <string name="msg_enable_online_translations_check">Abilita controllo traduzioni online</string>
     <string name="disable">Disabilita</string>
     <string name="enable">Abilita</string>
