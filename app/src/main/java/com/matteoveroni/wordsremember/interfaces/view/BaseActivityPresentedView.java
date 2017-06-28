@@ -112,7 +112,6 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
         return PRESENTER_LOADER_ID;
     }
 
-
     @Override
     public void showMessage(String message) {
         Toast.makeText(getApplicationContext(), localize(message), Toast.LENGTH_SHORT).show();

@@ -4,6 +4,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
+import com.matteoveroni.wordsremember.quizgame.view.dialogs.QuizResultDialog;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -57,17 +58,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         view = null;
     }
 
-    public void abortGame() {
-        gameModel.abortGame();
-    }
-
     public void playNextQuiz() {
         view.resetQuizTimerCount();
         startNewQuizOrShowError();
-    }
-
-    public void setDialogShown(boolean isDialogShown) {
-        this.isDialogShown = isDialogShown;
     }
 
     public boolean isDialogShown() {
@@ -92,8 +85,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
                     gameModel.getNumberOfQuestions(),
                     LocaleKey.POINTS
             );
+            isDialogShown = true;
             view.showGameResultDialog(gameResultMessage);
         } catch (ZeroQuizzesException ex) {
+            isDialogShown = true;
             view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
         }
     }
@@ -102,13 +97,6 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     public void onEventQuizGenerated(EventQuizGenerated event) {
         view.setPojoUsed(event.getQuiz());
         view.startQuizTimerCount();
-    }
-
-    @Override
-    public void onQuizGameTimerFinished() {
-        gameModel.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
-        view.stopQuizTimerCount();
-        view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
     }
 
     public void onQuizAnswerFromView(String answerFromView) {
@@ -121,6 +109,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
             view.stopQuizTimerCount();
             view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
+            isDialogShown = true;
         }
     }
 
@@ -146,5 +135,33 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
                 break;
         }
         return quizResultMessage;
+    }
+
+    @Override
+    public void onQuizGameTimerFinished() {
+        gameModel.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
+        view.stopQuizTimerCount();
+        view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
+        isDialogShown = true;
+    }
+
+    public void onQuizResultDialogConfirmation() {
+        isDialogShown = false;
+        playNextQuiz();
+        view.showKeyboard();
+    }
+
+    public void onGameResultDialogConfirmation() {
+        isDialogShown = false;
+        view.stopQuizTimerCount();
+        view.hideKeyboard();
+        view.quitGame();
+        detachView();
+        gameModel.abortGame();
+    }
+
+    public void onErrorDialogConfirmation() {
+        isDialogShown = false;
+        gameModel.abortGame();
     }
 }

@@ -16,25 +16,25 @@ import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
  * @author Matteo Veroni
  */
 
-public class QuizResultDialog extends DialogFragment {
+public class GameResultDialog extends DialogFragment {
 
-    public static final String TAG = QuizResultDialog.class.getSimpleName();
+    public static final String TAG = GameResultDialog.class.getSimpleName();
 
-    private Quiz.FinalResult result;
-    private static final String DIALOG_RESULT_KEY = "dialog_result";
+    private String title;
+    private static final String DIALOG_TITLE_KEY = "title";
 
     private String message;
-    private static final String DIALOG_MESSAGE_KEY = "dialog_message";
+    private static final String DIALOG_MESSAGE_KEY = "message";
 
-    public interface QuizResultDialogListener {
-        void confirmQuizResultDialogAction();
+    public interface GameResultDialogListener {
+        void confirmGameResultDialogAction();
     }
 
-    public static QuizResultDialog newInstance(Quiz.FinalResult result, String message) {
-        QuizResultDialog dialogFragment = new QuizResultDialog();
+    public static GameResultDialog newInstance(String title, String message) {
+        GameResultDialog dialogFragment = new GameResultDialog();
 
         Bundle args = new Bundle();
-        args.putSerializable(DIALOG_RESULT_KEY, result);
+        args.putString(DIALOG_TITLE_KEY, title);
         args.putString(DIALOG_MESSAGE_KEY, message);
         dialogFragment.setArguments(args);
 
@@ -46,36 +46,20 @@ public class QuizResultDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         // TODO: check if setRetainInstanceIsNeeded
         setRetainInstance(true);
-        result = (Quiz.FinalResult) getArguments().getSerializable(DIALOG_RESULT_KEY);
+        title = getArguments().getString(DIALOG_TITLE_KEY);
         message = getArguments().getString(DIALOG_MESSAGE_KEY);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Drawable img_alertDialog;
-        String title;
-        switch (result) {
-            case CORRECT:
-                title = getString(R.string.correctAnswer);
-                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
-                break;
-            case WRONG:
-                title = getString(R.string.wrongAnswer);
-                img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
-                break;
-            default:
-                throw new RuntimeException("Unknown quiz result");
-        }
-
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(title)
                 .setMessage(message)
-                .setIcon(img_alertDialog)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((QuizResultDialogListener) getActivity()).confirmQuizResultDialogAction();
+                        ((GameResultDialogListener) getActivity()).confirmGameResultDialogAction();
                     }
                 })
                 .create();

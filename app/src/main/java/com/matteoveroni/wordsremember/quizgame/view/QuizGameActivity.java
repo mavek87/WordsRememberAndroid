@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,16 +20,24 @@ import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.quizgame.view.dialogs.ErrorDialog;
+import com.matteoveroni.wordsremember.quizgame.view.dialogs.GameResultDialog;
 import com.matteoveroni.wordsremember.quizgame.view.dialogs.QuizResultDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.matteoveroni.wordsremember.quizgame.view.dialogs.ErrorDialog.ErrorDialogListener;
+import static com.matteoveroni.wordsremember.quizgame.view.dialogs.GameResultDialog.GameResultDialogListener;
+import static com.matteoveroni.wordsremember.quizgame.view.dialogs.QuizResultDialog.QuizResultDialogListener;
+
 /**
  * Created by Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityPresentedView implements QuizGameView, QuizGameTimer.TimerPrinter, QuizResultDialog.QuizResultDialogListener {
+public class QuizGameActivity extends BaseActivityPresentedView implements
+        QuizGameView, QuizGameTimer.TimerPrinter, QuizResultDialogListener,
+        GameResultDialogListener, ErrorDialogListener {
 
     public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
 
@@ -57,6 +65,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     private QuizGamePresenter presenter;
     private Quiz currentQuiz;
     private QuizGameTimer quizGameTimer;
+    private FragmentManager fragmentManager;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -74,6 +83,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.quiz_game));
+        fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             quizGameTimer = new QuizGameTimer(this, QuizGameTimer.DEFAULT_TIME, QuizGameTimer.DEFAULT_TICK);
@@ -127,9 +137,16 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public void printTime(long timeRemaining) {
-        int time = (int) timeRemaining;
-        lbl_remainingTime.setText(getString(R.string.timeRemaining) + ": " + String.valueOf(time));
+    public Quiz getPojoUsed() {
+        return currentQuiz;
+    }
+
+    @Override
+    public void setPojoUsed(Quiz quiz) {
+        currentQuiz = quiz;
+        lbl_question.setText(getString(R.string.translate_vocable) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
+        lbl_question_vocable.setText(currentQuiz.getQuestion());
+        showAllViewFields(true);
     }
 
     @Override
@@ -152,16 +169,19 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
-    public Quiz getPojoUsed() {
-        return currentQuiz;
+    public void printTime(long timeRemaining) {
+        int time = (int) timeRemaining;
+        lbl_remainingTime.setText(getString(R.string.timeRemaining) + ": " + String.valueOf(time));
     }
 
     @Override
-    public void setPojoUsed(Quiz quiz) {
-        currentQuiz = quiz;
-        lbl_question.setText(getString(R.string.translate_vocable) + " " + quiz.getQuizNumber() + "/" + quiz.getTotalNumberOfQuizzes());
-        lbl_question_vocable.setText(currentQuiz.getQuestion());
-        showAllViewFields(true);
+    public void showKeyboard() {
+        showAndroidKeyboard();
+    }
+
+    @Override
+    public void hideKeyboard() {
+        hideAndroidKeyboard();
     }
 
     @Override
@@ -169,22 +189,9 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
         quitGame();
     }
 
-    private void quitGame() {
-        stopQuizTimerCount();
-        presenter.abortGame();
-        presenter.detachView();
-        finish();
-    }
-
     @Override
-    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
-        hideAndroidKeyboard();
-
-        String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
-
-        QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
-        quizResultDialog.show(getSupportFragmentManager(), QuizResultDialog.TAG);
-        presenter.setDialogShown(true);
+    public void quitGame() {
+        finish();
     }
 
     @Override
@@ -194,46 +201,50 @@ public class QuizGameActivity extends BaseActivityPresentedView implements QuizG
     }
 
     @Override
+    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
+        hideAndroidKeyboard();
+
+        String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
+
+        QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
+        quizResultDialog.show(fragmentManager, QuizResultDialog.TAG);
+    }
+
+    @Override
     public void confirmQuizResultDialogAction() {
-        presenter.playNextQuiz();
-        presenter.setDialogShown(false);
-        showAndroidKeyboard();
+        presenter.onQuizResultDialogConfirmation();
     }
 
     @Override
     public void showGameResultDialog(FormattedString gameResultMessage) {
-        alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder
-                .setTitle(getString(R.string.game_result))
-                .setMessage(localize(gameResultMessage))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.setDialogShown(false);
-                        quitGame();
-                    }
-                })
-                .setCancelable(false);
-        quizAlert = alertDialogBuilder.create();
-        quizAlert.show();
-        presenter.setDialogShown(true);
+        hideAndroidKeyboard();
+
+        String title = getString(R.string.game_result);
+        String message = localize(gameResultMessage);
+
+        GameResultDialog dialog = GameResultDialog.newInstance(title, message);
+        dialog.show(fragmentManager, GameResultDialog.TAG);
     }
 
     @Override
-    public void showErrorDialog(String msgErrorText) {
-        alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder
-                .setTitle(getString(R.string.error))
-                .setMessage(msgErrorText)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.setDialogShown(false);
-                        presenter.abortGame();
-                    }
-                })
-                .setCancelable(false);
-        quizAlert = alertDialogBuilder.create();
-        quizAlert.show();
-        presenter.setDialogShown(true);
+    public void confirmGameResultDialogAction() {
+        presenter.onGameResultDialogConfirmation();
+    }
+
+    @Override
+    public void showErrorDialog(String msgError) {
+        hideAndroidKeyboard();
+
+        String title = getString(R.string.game_result);
+        String message = localize(msgError);
+
+        ErrorDialog dialog = ErrorDialog.newInstance(title, message);
+        dialog.show(fragmentManager, ErrorDialog.TAG);
+    }
+
+    @Override
+    public void confirmErrorDialogAction() {
+        presenter.onErrorDialogConfirmation();
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {
