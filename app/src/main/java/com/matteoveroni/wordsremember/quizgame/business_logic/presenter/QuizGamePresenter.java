@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Matteo Veroni
@@ -125,12 +126,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
                         new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS)
                 );
 
-                List<String> correctAnswers = quiz.getRightAnswers();
-                for (int i = 0; i < correctAnswers.size(); i++) {
-                    quizResultMessage = quizResultMessage.concat(new FormattedString(correctAnswers.get(i)));
-                    if (i != correctAnswers.size() - 1) {
+                Set<String> correctAnswers = quiz.getRightAnswers();
+                int index = 0;
+                for(String answer : correctAnswers) {
+                    quizResultMessage = quizResultMessage.concat(new FormattedString(answer));
+                    if (index != correctAnswers.size() - 1) {
                         quizResultMessage = quizResultMessage.concat(new FormattedString(", "));
                     }
+                    index++;
                 }
                 break;
         }

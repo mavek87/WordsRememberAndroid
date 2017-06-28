@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.pojos;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Matteo Veroni
@@ -11,7 +12,7 @@ public class Quiz {
     private final int quizNumber;
     private final int totalNumberOfQuizzes;
     private final String question;
-    private volatile List<String> rightAnswers;
+    private volatile Set<String> rightAnswers;
     private String finalAnswer;
     private FinalResult finalResult;
 
@@ -19,7 +20,7 @@ public class Quiz {
         CORRECT, WRONG;
     }
 
-    public Quiz(int quizNumber, int totalNumberOfQuizzes, String question, List<String> rightAnswers) {
+    public Quiz(int quizNumber, int totalNumberOfQuizzes, String question, Set<String> rightAnswers) {
         if (rightAnswers.isEmpty())
             throw new IllegalArgumentException("Trying to create a quiz without setting right answers");
 
@@ -41,7 +42,7 @@ public class Quiz {
         return question;
     }
 
-    public synchronized List<String> getRightAnswers() {
+    public synchronized Set<String> getRightAnswers() {
         return rightAnswers;
     }
 
@@ -49,7 +50,7 @@ public class Quiz {
         rightAnswers.add(answer);
     }
 
-    public synchronized void addRightAnswers(List<String> newRightAnswers){
+    public synchronized void addRightAnswers(Set<String> newRightAnswers){
         this.rightAnswers.addAll(newRightAnswers);
     }
 

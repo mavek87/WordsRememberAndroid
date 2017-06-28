@@ -25,8 +25,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * @author Matteo Veroni
@@ -45,6 +47,9 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     private int quizNumber;
     private int totalScore;
     private boolean isGameStarted = false;
+
+    private final Set<String> rightAnswersForCurrentQuiz = new HashSet<>();
+    private String quizVocable;
 
     public QuizGameModelFindTranslationForVocable(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -99,6 +104,8 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Override
     public void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
+        rightAnswersForCurrentQuiz.clear();
+
         if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
         quizNumber++;
         try {
@@ -119,31 +126,42 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     public void onEventGetExtractedVocable(EventAsyncSearchVocableCompleted event) {
         Word vocable = event.getVocable();
         dao.asyncSearchVocableTranslations(vocable);
-        WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
     }
 
     @Subscribe
     public void onEventGetTranslationsForVocable(EventAsyncSearchVocableTranslationsCompleted event) {
         Word vocable = event.getVocable();
-        String vocableQuestion = vocable.getName();
+        quizVocable = vocable.getName();
 
-        List<String> rightAnswersForCurrentQuiz = new ArrayList<>();
         for (Word translation : event.getTranslations()) {
             rightAnswersForCurrentQuiz.add(translation.getName());
         }
 
-        currentQuiz = new Quiz(quizNumber, numberOfQuestions, vocableQuestion, rightAnswersForCurrentQuiz);
+        if (settings.getOnlineTranslationsCheckPreference()) {
+            WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
+        } else {
+            currentQuiz = new Quiz(quizNumber, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
+            EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
+        }
+    }
+
+    @Override
+    public void onTranslationCompletedSuccessfully(List<Word> translationsFoundFromTheWeb) {
+        Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), "Translations found from the web: \n" + Json.getInstance().toJson(translationsFoundFromTheWeb));
+
+        for (Word translation : translationsFoundFromTheWeb) {
+            rightAnswersForCurrentQuiz.add(translation.getName());
+        }
+
+        currentQuiz = new Quiz(quizNumber, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
         EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
     }
 
     @Override
-    public void onTranslationCompletedSuccessfully(List<Word> translationsFound) {
-        Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), "Translations found from the web: \n" + Json.getInstance().toJson(translationsFound));
-    }
-
-    @Override
     public void onTranslationCompletedWithError(Throwable t) {
-        Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), t.getMessage());
+        Log.e(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), t.getMessage());
+        currentQuiz = new Quiz(quizNumber, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
+        EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
     }
 
     @Override
@@ -173,6 +191,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     }
 
     private void initGame() {
+        quizVocable = "";
         numberOfVocablesWithTranslations = 0;
         numberOfQuestions = 0;
         quizNumber = 0;
