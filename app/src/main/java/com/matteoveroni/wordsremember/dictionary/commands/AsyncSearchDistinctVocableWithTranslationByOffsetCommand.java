@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
 

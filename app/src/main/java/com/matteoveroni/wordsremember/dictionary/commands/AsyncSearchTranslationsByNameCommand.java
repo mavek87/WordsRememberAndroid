@@ -5,7 +5,7 @@ import android.content.ContentResolver;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
 

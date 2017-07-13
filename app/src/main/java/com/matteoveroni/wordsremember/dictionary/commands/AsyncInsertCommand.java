@@ -7,9 +7,9 @@ import android.net.Uri;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSaveVocableTranslationCompleted;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -1,16 +1,16 @@
-package com.matteoveroni.wordsremember.provider.contracts;
+package com.matteoveroni.wordsremember.persistency.contracts;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.persistency.providers.DictionaryProvider;
 
 /**
- * Contract class for Translations
+ * Contract class for Dictionary
  *
  * @author Matteo Veroni
  */
-public final class TranslationsContract {
+public final class VocablesContract {
 
     public static final String NAME = Schema.TABLE_NAME;
 
@@ -23,18 +23,18 @@ public final class TranslationsContract {
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "translations";
+        public static final String TABLE_NAME = "vocables";
 
         public static final String COL_ID = _ID;
-        public static final String COL_TRANSLATION = "translation";
+        public static final String COL_VOCABLE = "vocable";
 
         public static final String TABLE_DOT_COL_ID = TABLE_NAME + "." + COL_ID;
-        public static final String TABLE_DOT_COL_TRANSLATION = TABLE_NAME + "." + COL_TRANSLATION;
+        public static final String TABLE_DOT_COL_VOCABLE = TABLE_NAME + "." + COL_VOCABLE;
 
         public static final String[] ALL_COLUMNS =
                 {
                         TABLE_DOT_COL_ID,
-                        TABLE_DOT_COL_TRANSLATION
+                        TABLE_DOT_COL_VOCABLE
                 };
     }
 
@@ -43,8 +43,8 @@ public final class TranslationsContract {
                 + Schema.TABLE_NAME
                 + "("
                 + Schema.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COL_TRANSLATION + " TEXT NOT NULL, "
-                + "CONSTRAINT UQ_Translation UNIQUE (" + Schema.COL_TRANSLATION + ")"
+                + Schema.COL_VOCABLE + " TEXT NOT NULL, "
+                + "CONSTRAINT UQ_Vocable UNIQUE (" + Schema.COL_VOCABLE + ")"
                 + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }

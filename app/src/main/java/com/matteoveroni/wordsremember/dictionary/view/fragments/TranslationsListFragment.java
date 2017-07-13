@@ -26,8 +26,8 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.Eve
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.listview.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;

@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.provider.contracts;
+package com.matteoveroni.wordsremember.persistency.contracts;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.provider.UsersProvider;
+import com.matteoveroni.wordsremember.persistency.providers.UsersProvider;
 
 /**
  * @author Matteo Veroni

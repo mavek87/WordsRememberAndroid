@@ -5,7 +5,7 @@ import android.content.ContentResolver;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 

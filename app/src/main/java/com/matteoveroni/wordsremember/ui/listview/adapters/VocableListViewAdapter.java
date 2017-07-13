@@ -6,7 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.ui.listview.items.WordsListViewItem;
 
 /**

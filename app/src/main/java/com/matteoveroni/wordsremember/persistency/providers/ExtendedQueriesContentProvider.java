@@ -1,8 +1,10 @@
-package com.matteoveroni.wordsremember.provider;
+package com.matteoveroni.wordsremember.persistency.providers;
 
 import android.content.ContentProvider;
 import android.net.Uri;
 import android.text.TextUtils;
+
+import com.matteoveroni.wordsremember.persistency.DatabaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +16,19 @@ import java.util.List;
  * @author Matteo Veroni
  */
 
-public abstract class AbstractExtendedQueriesContentProvider extends ContentProvider {
+public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     public static final String SCHEME = "content://";
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
+
+    protected DatabaseManager databaseManager;
+
+    @Override
+    public boolean onCreate() {
+        databaseManager = DatabaseManager.getInstance(getContext());
+        return true;
+    }
 
     /**
      * @return parameter LIMIT value of a SQL Query

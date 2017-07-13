@@ -18,9 +18,9 @@ import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 import java.util.ArrayList;
 import java.util.List;

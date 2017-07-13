@@ -6,9 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 import org.junit.After;
 import org.junit.Before;

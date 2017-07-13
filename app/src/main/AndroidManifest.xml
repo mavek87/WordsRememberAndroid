@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme">
 
         <provider
-            android:name=".provider.DictionaryProvider"
+            android:name=".persistency.providers.DictionaryProvider"
             android:authorities="com.matteoveroni.wordsremember.provider"
             android:exported="false" />
 

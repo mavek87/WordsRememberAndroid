@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.provider.contracts;
+package com.matteoveroni.wordsremember.persistency.contracts;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.persistency.providers.DictionaryProvider;
 
 /**
  * https://en.wikipedia.org/wiki/Associative_entity

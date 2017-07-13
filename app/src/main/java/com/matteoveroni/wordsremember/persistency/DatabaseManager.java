@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.provider;
+package com.matteoveroni.wordsremember.persistency;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,9 +7,9 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.provider.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 /**
  * Singleton helper class that manages SQLiteDatabase creation, init, export and upgrade operations

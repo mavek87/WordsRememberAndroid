@@ -2,11 +2,9 @@ package com.matteoveroni.wordsremember.dictionary.commands;
 
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.util.Log;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
-import com.matteoveroni.wordsremember.provider.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 
