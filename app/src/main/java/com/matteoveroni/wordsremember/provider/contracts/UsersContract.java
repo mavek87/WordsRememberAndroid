@@ -3,19 +3,18 @@ package com.matteoveroni.wordsremember.provider.contracts;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.provider.DictionaryProvider;
+import com.matteoveroni.wordsremember.provider.UsersProvider;
 
 /**
- * Contract class for Translations
- *
  * @author Matteo Veroni
  */
-public final class TranslationsContract {
 
-    public static final String NAME = Schema.TABLE_NAME;
+public class UsersContract {
+
+    public static final String NAME = UsersContract.Schema.TABLE_NAME;
 
     public static final Uri CONTENT_URI = Uri.parse(
-            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
+            UsersProvider.SCHEME + UsersProvider.CONTENT_AUTHORITY + "/" + NAME
     );
 
     // Mime type
@@ -23,18 +22,21 @@ public final class TranslationsContract {
     public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "translations";
+        public static final String TABLE_NAME = "users";
 
         public static final String COL_ID = _ID;
-        public static final String COL_TRANSLATION = "translation";
+        public static final String COL_USERNAME = "username";
+        public static final String COL_EMAIL = "email";
 
         public static final String TABLE_DOT_COL_ID = TABLE_NAME + "." + COL_ID;
-        public static final String TABLE_DOT_COL_TRANSLATION = TABLE_NAME + "." + COL_TRANSLATION;
+        public static final String TABLE_DOT_COL_USERNAME = TABLE_NAME + "." + COL_USERNAME;
+        public static final String TABLE_DOT_COL_EMAIL = TABLE_NAME + "." + COL_EMAIL;
 
         public static final String[] ALL_COLUMNS =
                 {
                         TABLE_DOT_COL_ID,
-                        TABLE_DOT_COL_TRANSLATION
+                        TABLE_DOT_COL_USERNAME,
+                        TABLE_DOT_COL_EMAIL
                 };
     }
 
@@ -43,8 +45,9 @@ public final class TranslationsContract {
                 + Schema.TABLE_NAME
                 + "("
                 + Schema.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Schema.COL_TRANSLATION + " TEXT NOT NULL, "
-                + "CONSTRAINT UQ_Translation UNIQUE (" + Schema.COL_TRANSLATION + ")"
+                + Schema.COL_USERNAME + " TEXT NOT NULL, "
+                + Schema.COL_EMAIL + " TEXT, "
+                + "CONSTRAINT UQ_User UNIQUE (" + Schema.COL_USERNAME + ")"
                 + ");";
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;
     }

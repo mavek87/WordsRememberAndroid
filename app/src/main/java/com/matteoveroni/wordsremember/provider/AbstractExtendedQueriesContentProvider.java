@@ -15,6 +15,8 @@ import java.util.List;
  */
 
 public abstract class AbstractExtendedQueriesContentProvider extends ContentProvider {
+
+    public static final String SCHEME = "content://";
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 

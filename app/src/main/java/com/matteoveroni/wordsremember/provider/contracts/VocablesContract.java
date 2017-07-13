@@ -14,10 +14,9 @@ public final class VocablesContract {
 
     public static final String NAME = Schema.TABLE_NAME;
 
-    public static final Uri CONTENT_URI =
-            Uri.parse(
-                    DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
-            );
+    public static final Uri CONTENT_URI = Uri.parse(
+            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
+    );
 
     // Mime type
     public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";

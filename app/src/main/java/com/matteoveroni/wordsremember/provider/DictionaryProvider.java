@@ -22,9 +22,6 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
 
     public static final String TAG = TagGenerator.tag(DictionaryProvider.class);
 
-    private DatabaseManager databaseManager;
-
-    public static final String SCHEME = "content://";
     public static final String CONTENT_AUTHORITY = DictionaryProvider.class.getPackage().getName();
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -47,9 +44,9 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE + "/#", NOT_TRANSLATIONS_FOR_VOCABLE);
     }
 
-    private static final class Errors {
-        private static final String UNSUPPORTED_URI = "Unsupported URI ";
-    }
+    private static final String ERROR_UNSUPPORTED_URI = "Unsupported URI ";
+
+    private DatabaseManager databaseManager;
 
     @Override
     public String getType(Uri uri) {
@@ -183,7 +180,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
+                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
 
         final SQLiteDatabase db = databaseManager.getWritableDatabase();
@@ -224,7 +221,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
+                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return Uri.parse(contractUri + "/" + id);
@@ -255,7 +252,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
+                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return updatedRowsCounter;
@@ -288,7 +285,7 @@ public class DictionaryProvider extends AbstractExtendedQueriesContentProvider {
                 deletedRowsCounter = db.delete(VocablesTranslationsContract.Schema.TABLE_NAME, whereClause, whereArgs);
                 break;
             default:
-                throw new IllegalArgumentException(Errors.UNSUPPORTED_URI + uri + " for " + OPERATION);
+                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for " + OPERATION);
         }
         notifyChangeToObservers(uri);
         return deletedRowsCounter;
