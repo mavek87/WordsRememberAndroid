@@ -18,7 +18,7 @@
 
         <provider
             android:name=".persistency.providers.DictionaryProvider"
-            android:authorities="com.matteoveroni.wordsremember.provider"
+            android:authorities="com.matteoveroni.wordsremember.persistency.providers"
             android:exported="false" />
 
         <receiver
