@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "157817162133",
+    "project_id": "firebase-wordsremember"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157817162133:android:24b70aaff0209c05",
+        "android_client_info": {
+          "package_name": "com.matteoveroni.wordsremember"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157817162133-kn6vt92h5lpkb1up06easnqbi3sfe9vo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matteoveroni.wordsremember",
+            "certificate_hash": "56315e2b7f60840f03d8e83c67c04eb7915315c0"
+          }
+        },
+        {
+          "client_id": "157817162133-731vu5s16q6fe2gjk2ggc7brgbvco089.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASRH-V0z7enG5EkXjsaxkwJtBC6QSpBOM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
