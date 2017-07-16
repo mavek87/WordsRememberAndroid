@@ -13,7 +13,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.VocableEditorFragment;
 import com.matteoveroni.wordsremember.R;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivityView extends BaseActivityPresentedView implements EditVocable {
+public class EditVocableActivityView extends BaseActivityPresentedView implements EditVocableView {
 
     public static final String TAG = TagGenerator.tag(EditVocableActivityView.class);
 

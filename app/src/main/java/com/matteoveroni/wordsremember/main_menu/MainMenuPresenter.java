@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ *
+ * @author Matteo Veroni
+ *
  * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
  * <p>
  * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.y0b4pwra1

@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.Eve
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
+import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
@@ -26,7 +26,7 @@ public class AddTranslationPresenter implements Presenter {
 
     private final DictionaryDAO dao;
     private final DictionaryModel model;
-    private AddTranslation view;
+    private AddTranslationView view;
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -35,7 +35,7 @@ public class AddTranslationPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (AddTranslation) view;
+        this.view = (AddTranslationView) view;
         this.view.setPojoUsed(model.getLastValidVocableSelected());
         EVENT_BUS.register(this);
     }

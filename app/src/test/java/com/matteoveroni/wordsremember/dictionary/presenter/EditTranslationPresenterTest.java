@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
@@ -35,7 +35,7 @@ public class EditTranslationPresenterTest {
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
-    private EditTranslation view;
+    private EditTranslationView view;
     @Mock
     private DictionaryDAO dao;
     @Mock

@@ -4,7 +4,7 @@ import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSa
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
@@ -23,7 +23,7 @@ public class EditTranslationPresenter implements Presenter {
 
     private final DictionaryModel model;
     private final DictionaryDAO dao;
-    private EditTranslation view;
+    private EditTranslationView view;
 
     protected Word editedTranslationInView = null;
 
@@ -34,7 +34,7 @@ public class EditTranslationPresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (EditTranslation) view;
+        this.view = (EditTranslationView) view;
 
         final Word newEmptyTranslation = new Word("");
         this.view.setPojoUsed(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
