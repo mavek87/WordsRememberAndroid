@@ -20,6 +20,8 @@ import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
  * Login Activity
  *
  * @author Matteo Veroni
+ *
+ * @links https://developers.google.com/identity/sign-in/android/sign-in
  */
 
 public class LoginActivity extends BaseActivityPresentedView implements LoginView {
