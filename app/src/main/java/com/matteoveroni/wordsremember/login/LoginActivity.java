@@ -2,15 +2,11 @@ package com.matteoveroni.wordsremember.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -19,12 +15,6 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
-
-import java.sql.SQLOutput;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Login Activity
@@ -51,7 +41,7 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
         this.presenter = (LoginPresenter) presenter;
 
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
+//                .requestEmail()
                 .build();
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -65,8 +55,10 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        SignInButton btn_signin = (SignInButton) findViewById(R.id.login_btn_signin);
-        btn_signin.setOnClickListener(new View.OnClickListener() {
+        SignInButton btn_signIn = (SignInButton) findViewById(R.id.login_btn_signin);
+        btn_signIn.setSize(SignInButton.SIZE_STANDARD);
+
+        btn_signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (googleApiClient != null) {
@@ -92,5 +84,16 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     public void doLogin() {
         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
     }
+
+    @Override
+    public void showSuccessfulMessage(String message) {
+        showMessage(getString(R.string.msg_wrong_status) + "\n\n" + message);
+    }
+
+    @Override
+    public void showErrorMessage(String errorMessage) {
+        showMessage(getString(R.string.msg_wrong_status) + "\n\n" + errorMessage);
+    }
+
 }
 

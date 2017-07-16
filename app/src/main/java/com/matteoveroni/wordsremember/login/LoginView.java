@@ -10,4 +10,8 @@ public interface LoginView extends View {
 
     void doLogin();
 
+    void showSuccessfulMessage(String message);
+
+    void showErrorMessage(String errorMessage);
+
 }

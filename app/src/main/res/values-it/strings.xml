@@ -59,4 +59,5 @@
     <string name="question">Domanda</string>
     <string name="questions">Domande</string>
     <string name="timeRemaining">Tempo rimanente</string>
+    <string name="msg_wrong_status">Ops.. qualcosa è andato storto..</string>
 </resources>

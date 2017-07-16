@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -45,8 +46,6 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         URI_MATCHER.addURI(CONTENT_AUTHORITY, VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE + "/#", NOT_TRANSLATIONS_FOR_VOCABLE);
     }
 
-    private static final String ERROR_UNSUPPORTED_URI = "Unsupported URI ";
-
     @Override
     public String getType(Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
@@ -70,7 +69,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
         switch (URI_MATCHER.match(uri)) {
@@ -172,7 +171,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                     cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             default:
-                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for QUERY");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for QUERY");
         }
 
         SQLiteDatabase db = databaseManager.getWritableDatabase();
@@ -193,7 +192,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = databaseManager.getWritableDatabase();
 
         Uri contractUri;
@@ -213,7 +212,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for INSERT");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for INSERT");
         }
         notifyChangeToObservers(uri);
         return Uri.parse(contractUri + "/" + id);
@@ -221,7 +220,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = databaseManager.getWritableDatabase();
         int updatedRowsCounter;
 
@@ -243,7 +242,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for UPDATE");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for UPDATE");
         }
         notifyChangeToObservers(uri);
         return updatedRowsCounter;
@@ -251,7 +250,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
-    public int delete(Uri uri, String whereClause, String[] whereArgs) {
+    public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
         SQLiteDatabase db = databaseManager.getWritableDatabase();
         int deletedRowsCounter;
 
@@ -275,19 +274,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 deletedRowsCounter = db.delete(VocablesTranslationsContract.Schema.TABLE_NAME, whereClause, whereArgs);
                 break;
             default:
-                throw new IllegalArgumentException(ERROR_UNSUPPORTED_URI + uri + " for DELETE");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for DELETE");
         }
         notifyChangeToObservers(uri);
         return deletedRowsCounter;
-    }
-
-    private void notifyChangeToObservers(Uri uri) {
-        if (isContentResolverNotNull())
-            getContext().getContentResolver().notifyChange(uri, null);
-    }
-
-    private boolean isContentResolverNotNull() {
-        Context ctx = getContext();
-        return (ctx != null && ctx.getContentResolver() != null);
     }
 }

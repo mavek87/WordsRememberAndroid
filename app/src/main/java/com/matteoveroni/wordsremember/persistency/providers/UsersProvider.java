@@ -1,13 +1,21 @@
 package com.matteoveroni.wordsremember.persistency.providers;
 
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UsersContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 /**
  * @author Matteo Veroni
@@ -18,6 +26,21 @@ public class UsersProvider extends ExtendedQueriesContentProvider {
     public static final String TAG = TagGenerator.tag(UsersProvider.class);
     public static final String CONTENT_AUTHORITY = UsersProvider.class.getPackage().getName();
 
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+
+    private static final int USERNAME = 1;
+    private static final int EMAIL = 2;
+
+    static {
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, UsersContract.NAME, USERNAME);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, UsersContract.NAME + "/#", EMAIL);
+    }
+
+    @Override
+    public String getType(Uri uri) {
+        return null;
+    }
+
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
@@ -26,19 +49,23 @@ public class UsersProvider extends ExtendedQueriesContentProvider {
 
     @Nullable
     @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
+
+        long id = db.insertOrThrow(UsersContract.Schema.TABLE_NAME, null, values);
+
+        notifyChangeToObservers(uri);
+        return Uri.parse(uri + "/" + id);
     }
 
-    @Nullable
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
-    }
+    public int delete(@NonNull Uri uri, @Nullable String whereClause, @Nullable String[] whereArgs) {
+        SQLiteDatabase db = databaseManager.getWritableDatabase();
 
-    @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        int deletedRowsCount = db.delete(UsersContract.Schema.TABLE_NAME, whereClause, whereArgs);
+
+        notifyChangeToObservers(uri);
+        return deletedRowsCount;
     }
 
     @Override

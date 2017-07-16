@@ -79,4 +79,5 @@ public class Settings {
     public boolean getOnlineTranslationsCheckPreference() {
         return prefs.getBoolean(ONLINE_TRANSLATIONS_CHECK_KEY, false);
     }
+
 }

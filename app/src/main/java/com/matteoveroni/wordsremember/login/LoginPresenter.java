@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -31,25 +32,34 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
         this.view = null;
     }
 
-    public void onSignInAttempt(GoogleSignInResult signInResult) {
-        Status signInStatus = signInResult.getStatus();
+    void onSignInAttempt(GoogleSignInResult result) {
 
-        if (signInResult.isSuccess()) {
-            GoogleSignInAccount account = signInResult.getSignInAccount();
+        int statusCode = result.getStatus().getStatusCode();
+        String statusName = GoogleSignInStatusCodes.getStatusCodeString(statusCode);
+
+        if (result.isSuccess()) {
+
+            GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
-            String img_url = account.getPhotoUrl().toString();
+//            String img_url = account.getPhotoUrl().toString();
 
-            Log.d(TAG, "name: " + name + "\nemail: " + email);
+            // TODO: save this data in the preferences file
+            saveData(name, email);
+
+            view.showSuccessfulMessage(statusName + "\nName: " + name + "\nEmail: " + email);
             view.doLogin();
+
         } else {
-            String errorMessage = signInStatus.getStatusMessage();
-            view.showMessage(errorMessage);
+            view.showErrorMessage(statusName);
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        view.showMessage(connectionResult.getErrorMessage());
+        view.showErrorMessage(connectionResult.getErrorMessage());
+    }
+
+    private void saveData(String name, String email) {
     }
 }
