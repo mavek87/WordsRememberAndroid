@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.persistency.providers;
 
 import android.content.ContentProvider;
+import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -23,6 +24,10 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
     protected DatabaseManager databaseManager;
+
+    public class Error {
+        public static final String UNSUPPORTED_URI = "Unsupported URI";
+    }
 
     @Override
     public boolean onCreate() {
@@ -62,5 +67,15 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     public static boolean isQueryParameterOffsetSet(Uri uri) {
         return (getQueryParameterOffsetValue(uri) != null);
+    }
+
+    protected void notifyChangeToObservers(Uri uri) {
+        if (isContentResolverNotNull())
+            getContext().getContentResolver().notifyChange(uri, null);
+    }
+
+    protected boolean isContentResolverNotNull() {
+        Context ctx = getContext();
+        return (ctx != null && ctx.getContentResolver() != null);
     }
 }

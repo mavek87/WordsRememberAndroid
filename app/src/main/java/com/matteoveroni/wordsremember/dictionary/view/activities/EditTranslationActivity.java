@@ -11,7 +11,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.view.EditTranslation;
+import com.matteoveroni.wordsremember.dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.dictionary.view.fragments.TranslationEditorFragment;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends BaseActivityPresentedView implements EditTranslation {
+public class EditTranslationActivity extends BaseActivityPresentedView implements EditTranslationView {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 

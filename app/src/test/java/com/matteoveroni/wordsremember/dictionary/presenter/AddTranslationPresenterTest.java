@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.Eve
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.dictionary.view.AddTranslation;
+import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,7 +36,7 @@ public class AddTranslationPresenterTest {
     @Mock
     private DictionaryDAO dao;
     @Mock
-    private AddTranslation view;
+    private AddTranslationView view;
     @Mock
     private DictionaryModel model;
 

@@ -35,7 +35,6 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
 
         Loader<P> loader = getSupportLoaderManager().getLoader(loaderId());
         if (loader == null) {
@@ -73,7 +72,6 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart");
         presenter.attachView(getPresenterView());
     }
 
@@ -81,7 +79,6 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     protected void onStop() {
         presenter.detachView();
         super.onStop();
-        Log.d(TAG, "onStop");
     }
 
     /**

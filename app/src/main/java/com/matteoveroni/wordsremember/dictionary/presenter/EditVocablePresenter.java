@@ -4,7 +4,7 @@ import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
@@ -25,7 +25,7 @@ public class EditVocablePresenter implements Presenter {
     private final EventBus EVENT_BUS = EventBus.getDefault();
     private final DictionaryDAO dao;
     private final DictionaryModel model;
-    private EditVocable view;
+    private EditVocableView view;
 
     protected Word editedVocableInView = null;
 
@@ -36,7 +36,7 @@ public class EditVocablePresenter implements Presenter {
 
     @Override
     public void attachView(Object view) {
-        this.view = (EditVocable) view;
+        this.view = (EditVocableView) view;
 
         Word lastValidVocableSelected = model.getLastValidVocableSelected();
         Word lastValidTranslationSelected = model.getLastValidTranslationSelected();

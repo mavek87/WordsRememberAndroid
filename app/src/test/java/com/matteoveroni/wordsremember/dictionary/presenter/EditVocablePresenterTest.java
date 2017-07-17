@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.dictionary.view.EditVocable;
+import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
@@ -44,7 +44,7 @@ public class EditVocablePresenterTest {
     @Mock
     private DictionaryDAO dao;
     @Mock
-    private EditVocable view;
+    private EditVocableView view;
     @Mock
     private DictionaryModel model;
 
@@ -218,7 +218,7 @@ public class EditVocablePresenterTest {
 //        verify(view).goToAddTranslationView();
     }
 
-    private void attachViewToPresenter(EditVocable view) {
+    private void attachViewToPresenter(EditVocableView view) {
         if (presenter != null) {
             presenter.detachView();
         }
