@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
 
     @Override
     public void showSuccessfulMessage(String message) {
-        showMessage(getString(R.string.msg_wrong_status) + "\n\n" + message);
+        showMessage(getString(R.string.msg_complete_status) + "\n\n" + message);
     }
 
     @Override
