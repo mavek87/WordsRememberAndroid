@@ -1,16 +1,16 @@
 package com.matteoveroni.wordsremember.login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 /**
  * @author Matteo Veroni
@@ -32,14 +32,14 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
         this.view = null;
     }
 
-    void onSignInAttempt(GoogleSignInResult result) {
+    public void handleSignInResult(GoogleSignInResult signInResult) {
 
-        int statusCode = result.getStatus().getStatusCode();
+        int statusCode = signInResult.getStatus().getStatusCode();
         String statusName = GoogleSignInStatusCodes.getStatusCodeString(statusCode);
 
-        if (result.isSuccess()) {
+        if (signInResult.isSuccess()) {
 
-            GoogleSignInAccount account = result.getSignInAccount();
+            GoogleSignInAccount account = signInResult.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
 //            String img_url = account.getPhotoUrl().toString();
@@ -48,7 +48,7 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
             saveData(name, email);
 
             view.showSuccessfulMessage(statusName + "\nName: " + name + "\nEmail: " + email);
-            view.doLogin();
+            view.switchView(View.Name.MAIN_MENU);
 
         } else {
             view.showErrorMessage(statusName);

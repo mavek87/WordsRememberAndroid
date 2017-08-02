@@ -20,7 +20,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivityView extends BaseActivityPresentedView implements ManageVocablesView {
+public class ManageVocablesActivity extends BaseActivityPresentedView implements ManageVocablesView {
 
     private ManageVocablesPresenter presenter;
 
@@ -50,7 +50,7 @@ public class ManageVocablesActivityView extends BaseActivityPresentedView implem
 
     @Override
     public void goToEditVocableView() {
-        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivityView.class);
+        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
         startActivity(intent_goToEditVocableView);
     }
 }

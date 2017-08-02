@@ -8,10 +8,7 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 
 public interface LoginView extends View {
 
-    void doLogin();
-
     void showSuccessfulMessage(String message);
 
     void showErrorMessage(String errorMessage);
-
 }

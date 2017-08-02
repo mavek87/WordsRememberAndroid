@@ -28,9 +28,9 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivityView extends BaseActivityPresentedView implements EditVocableView {
+public class EditVocableActivity extends BaseActivityPresentedView implements EditVocableView {
 
-    public static final String TAG = TagGenerator.tag(EditVocableActivityView.class);
+    public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
     private VocableEditorFragment vocableEditorFragment;
     private TranslationsListFragment translationsListFragment;

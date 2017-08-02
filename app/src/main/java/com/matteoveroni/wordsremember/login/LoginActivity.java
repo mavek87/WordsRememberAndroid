@@ -14,14 +14,14 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
-import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 /**
  * Login Activity
  *
  * @author Matteo Veroni
- *
  * @links https://developers.google.com/identity/sign-in/android/sign-in
+ * https://android-developers.googleblog.com/2016/03/registering-oauth-clients-for-google.html
+ * https://stackoverflow.com/questions/36361956/how-to-add-multiple-system-sha-keys-in-google-single-sign-on-gson
  */
 
 public class LoginActivity extends BaseActivityPresentedView implements LoginView {
@@ -42,13 +42,13 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     protected void onPresenterCreatedOrRestored(Presenter presenter) {
         this.presenter = (LoginPresenter) presenter;
 
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestEmail()
                 .build();
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this.presenter)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build();
     }
 
@@ -64,8 +64,7 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
             @Override
             public void onClick(View view) {
                 if (googleApiClient != null) {
-                    Intent intent_signInAttempt = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                    startActivityForResult(intent_signInAttempt, GOOGLE_SIGN_IN_REQUEST_CODE);
+                    signIn();
                 }
             }
         });
@@ -73,18 +72,20 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
         setupAndShowToolbar(getString(R.string.app_name) + " - Login");
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
-            GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            presenter.onSignInAttempt(signInResult);
-        }
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
     }
 
     @Override
-    public void doLogin() {
-        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+            GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            presenter.handleSignInResult(signInResult);
+        }
     }
 
     @Override

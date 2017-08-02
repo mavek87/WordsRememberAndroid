@@ -6,6 +6,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.web.WebTranslator;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
 
@@ -38,15 +39,15 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
     }
 
     void onButtonManageDictionaryClicked() {
-        view.startDictionaryManagement();
+        view.switchView(View.Name.MANAGE_VOCABLES);
     }
 
     void onButtonStartClicked() {
-        view.startNewQuizGame();
+        view.switchView(View.Name.QUIZ_GAME);
     }
 
     void onButtonSettingsClicked() {
-        view.startSettings();
+        view.switchView(View.Name.SETTINGS);
     }
 
     @Override

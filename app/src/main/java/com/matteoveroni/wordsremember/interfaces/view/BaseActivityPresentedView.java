@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -117,6 +118,11 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     @Override
     public void showMessage(FormattedString formattedLocaleMessage) {
         Toast.makeText(getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void switchView(View.Name viewName) {
+        startActivity(new Intent(getApplicationContext(), viewName.getViewClass()));
     }
 
     public String localize(String localeStringKey) {
