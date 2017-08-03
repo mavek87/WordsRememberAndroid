@@ -20,7 +20,9 @@ public interface View {
 
     void showMessage(FormattedString formattedString);
 
-    void switchTo(View.Name viewName);
+    void switchToView(View.Name viewName);
+
+    public void switchToViewForResult(View.Name viewName, int requestCode);
 
     public enum Name {
         LOGIN(LoginActivity.class),

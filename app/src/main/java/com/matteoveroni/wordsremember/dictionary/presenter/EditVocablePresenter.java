@@ -11,6 +11,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncUpdate
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +29,7 @@ public class EditVocablePresenter implements Presenter {
     private EditVocableView view;
 
     protected Word editedVocableInView = null;
+    protected static final int ADD_TRANSLATION_REQUEST_CODE = 0;
 
     public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -72,7 +74,7 @@ public class EditVocablePresenter implements Presenter {
         if (lastVocableSelected == null || Str.isNullOrEmpty(lastVocableSelected.getName())) {
             view.showDialogCannotAddTranslationIfVocableNotSaved();
         } else {
-            view.goToAddTranslationView();
+            view.switchToViewForResult(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
         }
     }
 

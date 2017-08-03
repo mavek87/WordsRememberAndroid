@@ -136,12 +136,6 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     }
 
     @Override
-    public void goToAddTranslationView() {
-        Intent intent_goToAddTranslationActivity = new Intent(getApplicationContext(), AddTranslationActivity.class);
-        startActivityForResult(intent_goToAddTranslationActivity, 0);
-    }
-
-    @Override
     public void returnToPreviousView() {
         onBackPressed();
     }

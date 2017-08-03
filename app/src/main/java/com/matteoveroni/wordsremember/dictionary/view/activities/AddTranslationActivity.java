@@ -26,8 +26,6 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
-    private static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
-
     private TranslationsListFragment translationsListFragment;
     private AddTranslationPresenter presenter;
 
@@ -75,12 +73,6 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
     @Override
     public void createTranslationAction() {
         presenter.onCreateTranslationRequest();
-    }
-
-    @Override
-    public void goToEditTranslationView() {
-        Intent intent_goToEditTranslationView = new Intent(getApplicationContext(), EditTranslationActivity.class);
-        startActivityForResult(intent_goToEditTranslationView, EDIT_TRANSLATION_REQUEST_CODE);
     }
 
     @Override

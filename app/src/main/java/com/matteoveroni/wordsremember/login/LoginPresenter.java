@@ -47,7 +47,7 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
             saveData(name, email);
 
             view.showSuccessfulMessage(statusName + "\nName: " + name + "\nEmail: " + email);
-            view.switchTo(View.Name.MAIN_MENU);
+            view.switchToView(View.Name.MAIN_MENU);
 
         } else {
             view.showErrorMessage(statusName);

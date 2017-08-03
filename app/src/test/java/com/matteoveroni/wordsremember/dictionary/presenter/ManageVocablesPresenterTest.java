@@ -66,7 +66,7 @@ public class ManageVocablesPresenterTest {
     public void onCreateVocableRequest_View_goToEditVocableView() {
         presenter.onCreateVocableRequest();
 
-        verify(view).switchTo(View.Name.EDIT_VOCABLE);
+        verify(view).switchToView(View.Name.EDIT_VOCABLE);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ManageVocablesPresenterTest {
     public void onEventVocableSelected_View_goToEditVocableView() {
         presenter.onEvent(new EventVocableSelected(VOCABLE));
 
-        verify(view).switchTo(View.Name.EDIT_VOCABLE);
+        verify(view).switchToView(View.Name.EDIT_VOCABLE);
     }
 
     @Test
