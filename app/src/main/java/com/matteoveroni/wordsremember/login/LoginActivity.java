@@ -2,6 +2,8 @@ package com.matteoveroni.wordsremember.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.google.android.gms.auth.api.Auth;
@@ -10,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -42,7 +45,7 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
         this.presenter = (LoginPresenter) presenter;
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
+                .requestEmail()
                 .build();
 
         googleApiClient = new GoogleApiClient.Builder(this)
@@ -72,31 +75,40 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        tryToAutoSignIn();
+    }
+
+    @Override
     public void doSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE);
     }
 
-//    private void autoSignIn() {
-//        OptionalPendingResult<GoogleSignInResult> pendingResult =
-//                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-//        if (pendingResult.isDone()) {
-//            // There's immediate result available.
+    private void tryToAutoSignIn() {
+
+        OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+
+        if (pendingResult.isDone()) {
+            // There's immediate result available.
 //            updateButtonsAndStatusFromSignInResult(pendingResult.get());
-//        } else {
-//            // There's no immediate result ready, displays some progress indicator and waits for the
-//            // async callback.
+            presenter.handleSignInResult(pendingResult.get());
+        } else {
+            // There's no immediate result ready, displays some progress indicator and waits for the
+            // async callback.
 //            showProgressIndicator();
-//            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-//                @Override
-//                public void onResult(@NonNull GoogleSignInResult result) {
+            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
 //                    updateButtonsAndStatusFromSignInResult(result);
 //                    hideProgressIndicator();
-//                }
-//            });
-//        }
-//
-//    }
+                    presenter.handleSignInResult(result);
+                }
+            });
+        }
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
