@@ -21,6 +21,8 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
     private LoginView view;
 
+    public static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
+
     @Override
     public void attachView(Object view) {
         this.view = (LoginView) view;
@@ -29,6 +31,10 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
     @Override
     public void detachView() {
         this.view = null;
+    }
+
+    public void onSignInRequest() {
+        view.doSignIn();
     }
 
     public void handleSignInResult(GoogleSignInResult signInResult) {

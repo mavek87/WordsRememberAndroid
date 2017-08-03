@@ -120,6 +120,14 @@ public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> exten
         Toast.makeText(getActivity().getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void switchTo(Name viewName) {
+    }
+
+    @Override
+    public void switchTo(Name viewName, int requestCode) {
+    }
+
     public String localize(String localeStringKey) {
         return getTranslator().localize(localeStringKey);
     }

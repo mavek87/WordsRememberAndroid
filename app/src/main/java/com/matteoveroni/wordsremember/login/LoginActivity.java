@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -27,8 +28,6 @@ import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 public class LoginActivity extends BaseActivityPresentedView implements LoginView {
 
     public static final String TAG = TagGenerator.tag(LoginActivity.class);
-
-    private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 5555;
 
     private LoginPresenter presenter;
     private GoogleApiClient googleApiClient;
@@ -64,7 +63,7 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
             @Override
             public void onClick(View view) {
                 if (googleApiClient != null) {
-                    signIn();
+                    presenter.onSignInRequest();
                 }
             }
         });
@@ -72,17 +71,39 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
         setupAndShowToolbar(getString(R.string.app_name) + " - Login");
     }
 
-    private void signIn() {
+    @Override
+    public void doSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
+        startActivityForResult(signInIntent, LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE);
     }
+
+//    private void autoSignIn() {
+//        OptionalPendingResult<GoogleSignInResult> pendingResult =
+//                Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+//        if (pendingResult.isDone()) {
+//            // There's immediate result available.
+//            updateButtonsAndStatusFromSignInResult(pendingResult.get());
+//        } else {
+//            // There's no immediate result ready, displays some progress indicator and waits for the
+//            // async callback.
+//            showProgressIndicator();
+//            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+//                @Override
+//                public void onResult(@NonNull GoogleSignInResult result) {
+//                    updateButtonsAndStatusFromSignInResult(result);
+//                    hideProgressIndicator();
+//                }
+//            });
+//        }
+//
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
+        if (requestCode == LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE) {
             GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             presenter.handleSignInResult(signInResult);
         }

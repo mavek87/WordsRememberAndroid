@@ -1,10 +1,10 @@
 package com.matteoveroni.wordsremember.dependency_injection.components;
 
-import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
+import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
