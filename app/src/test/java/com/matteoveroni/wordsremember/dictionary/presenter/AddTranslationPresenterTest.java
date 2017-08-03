@@ -68,7 +68,7 @@ public class AddTranslationPresenterTest {
     @Test
     public void onCreateTranslationRequest_View_goToEditTranslationView() {
         presenter.onCreateTranslationRequest();
-        verify(view).switchToViewForResult(View.Name.EDIT_TRANSLATION, AddTranslationPresenter.EDIT_TRANSLATION_REQUEST_CODE);
+        verify(view).switchTo(View.Name.EDIT_TRANSLATION, AddTranslationPresenter.EDIT_TRANSLATION_REQUEST_CODE);
     }
 
     @Test

@@ -39,15 +39,15 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
     }
 
     void onButtonManageDictionaryClicked() {
-        view.switchToView(View.Name.MANAGE_VOCABLES);
+        view.switchTo(View.Name.MANAGE_VOCABLES);
     }
 
     void onButtonStartClicked() {
-        view.switchToView(View.Name.QUIZ_GAME);
+        view.switchTo(View.Name.QUIZ_GAME);
     }
 
     void onButtonSettingsClicked() {
-        view.switchToView(View.Name.SETTINGS);
+        view.switchTo(View.Name.SETTINGS);
     }
 
     @Override

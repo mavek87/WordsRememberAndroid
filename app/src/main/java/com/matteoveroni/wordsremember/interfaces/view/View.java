@@ -20,11 +20,11 @@ public interface View {
 
     void showMessage(FormattedString formattedString);
 
-    void switchToView(View.Name viewName);
+    void switchTo(View.Name viewName);
 
-    public void switchToViewForResult(View.Name viewName, int requestCode);
+    void switchTo(View.Name viewName, int requestCode);
 
-    public enum Name {
+    enum Name {
         LOGIN(LoginActivity.class),
         MAIN_MENU(MainMenuActivity.class),
         QUIZ_GAME(QuizGameActivity.class),

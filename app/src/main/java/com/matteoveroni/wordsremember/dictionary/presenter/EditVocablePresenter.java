@@ -74,7 +74,7 @@ public class EditVocablePresenter implements Presenter {
         if (lastVocableSelected == null || Str.isNullOrEmpty(lastVocableSelected.getName())) {
             view.showDialogCannotAddTranslationIfVocableNotSaved();
         } else {
-            view.switchToViewForResult(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
+            view.switchTo(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
         }
     }
 

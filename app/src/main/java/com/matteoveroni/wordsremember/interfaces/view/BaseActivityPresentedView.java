@@ -121,12 +121,12 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     }
 
     @Override
-    public void switchToView(View.Name viewName) {
+    public void switchTo(View.Name viewName) {
         startActivity(new Intent(getApplicationContext(), viewName.getViewClass()));
     }
 
     @Override
-    public void switchToViewForResult(View.Name viewName, int requestCode) {
+    public void switchTo(View.Name viewName, int requestCode) {
         startActivityForResult(new Intent(getApplicationContext(), viewName.getViewClass()), requestCode);
     }
 
