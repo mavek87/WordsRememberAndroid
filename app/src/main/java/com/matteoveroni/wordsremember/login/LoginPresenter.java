@@ -10,7 +10,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
 
 /**
  * @author Matteo Veroni
@@ -48,7 +47,7 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
             saveData(name, email);
 
             view.showSuccessfulMessage(statusName + "\nName: " + name + "\nEmail: " + email);
-            view.switchView(View.Name.MAIN_MENU);
+            view.switchTo(View.Name.MAIN_MENU);
 
         } else {
             view.showErrorMessage(statusName);

@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
@@ -65,7 +66,7 @@ public class ManageVocablesPresenterTest {
     public void onCreateVocableRequest_View_goToEditVocableView() {
         presenter.onCreateVocableRequest();
 
-        verify(view).goToEditVocableView();
+        verify(view).switchTo(View.Name.EDIT_VOCABLE);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class ManageVocablesPresenterTest {
     public void onEventVocableSelected_View_goToEditVocableView() {
         presenter.onEvent(new EventVocableSelected(VOCABLE));
 
-        verify(view).goToEditVocableView();
+        verify(view).switchTo(View.Name.EDIT_VOCABLE);
     }
 
     @Test

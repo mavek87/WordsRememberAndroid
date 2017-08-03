@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableMani
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,14 +52,14 @@ public class ManageVocablesPresenter implements Presenter {
 
     public void onCreateVocableRequest() {
         model.setLastValidVocableSelected(new Word(""));
-        view.goToEditVocableView();
+        view.switchTo(View.Name.EDIT_VOCABLE);
     }
 
     @Subscribe
     public void onEvent(EventVocableSelected event) {
         Word vocableSelected = event.getSelectedVocable();
         model.setLastValidVocableSelected(vocableSelected);
-        view.goToEditVocableView();
+        view.switchTo(View.Name.EDIT_VOCABLE);
     }
 
     @Subscribe

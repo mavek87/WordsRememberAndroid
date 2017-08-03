@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.view.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.matteoveroni.wordsremember.R;
@@ -46,11 +45,5 @@ public class ManageVocablesActivity extends BaseActivityPresentedView implements
     @Override
     public void createVocableAction() {
         presenter.onCreateVocableRequest();
-    }
-
-    @Override
-    public void goToEditVocableView() {
-        final Intent intent_goToEditVocableView = new Intent(getApplicationContext(), EditVocableActivity.class);
-        startActivity(intent_goToEditVocableView);
     }
 }

@@ -9,6 +9,4 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 public interface ManageVocablesView extends View {
 
     void createVocableAction();
-
-    void goToEditVocableView();
 }

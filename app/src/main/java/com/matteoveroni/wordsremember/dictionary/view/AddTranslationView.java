@@ -12,5 +12,7 @@ public interface AddTranslationView extends View, PojoManipulable<Word> {
 
     void createTranslationAction();
 
+    void goToEditTranslationView();
+
     void returnToPreviousView();
 }

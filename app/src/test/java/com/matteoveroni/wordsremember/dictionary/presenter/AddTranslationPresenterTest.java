@@ -24,6 +24,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -67,8 +68,7 @@ public class AddTranslationPresenterTest {
     @Test
     public void onCreateTranslationRequest_View_goToEditTranslationView() {
         presenter.onCreateTranslationRequest();
-
-        verify(view).switchView(View.Name.EDIT_TRANSLATION);
+        verify(view).goToEditTranslationView();
     }
 
     @Test

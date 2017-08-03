@@ -67,6 +67,6 @@ public class AddTranslationPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.switchView(View.Name.EDIT_TRANSLATION);
+        view.goToEditTranslationView();
     }
 }
