@@ -29,8 +29,6 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
     private TranslationsListFragment translationsListFragment;
     private AddTranslationPresenter presenter;
 
-    private static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
-
     @Override
     protected PresenterFactory getPresenterFactory() {
         return new AddTranslationPresenterFactory();
@@ -75,12 +73,6 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
     @Override
     public void createTranslationAction() {
         presenter.onCreateTranslationRequest();
-    }
-
-    @Override
-    public void goToEditTranslationView() {
-        Intent intent_goToEditTranslationView = new Intent(getApplicationContext(), EditTranslationActivity.class);
-        startActivityForResult(intent_goToEditTranslationView, EDIT_TRANSLATION_REQUEST_CODE);
     }
 
     @Override

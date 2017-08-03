@@ -9,6 +9,7 @@ import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,6 +67,6 @@ public class AddTranslationPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.goToEditTranslationView();
+        view.switchView(View.Name.EDIT_TRANSLATION);
     }
 }
