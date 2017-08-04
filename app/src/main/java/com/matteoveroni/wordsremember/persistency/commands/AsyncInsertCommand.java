@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.commands;
+package com.matteoveroni.wordsremember.persistency.commands;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

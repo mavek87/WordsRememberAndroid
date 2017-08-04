@@ -23,7 +23,7 @@ import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationReques
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;

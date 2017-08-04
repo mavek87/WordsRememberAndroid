@@ -1,9 +1,9 @@
-package com.matteoveroni.wordsremember.dictionary.commands;
+package com.matteoveroni.wordsremember.persistency.commands;
 
 import android.content.ContentResolver;
 
 import com.matteoveroni.wordsremember.dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 

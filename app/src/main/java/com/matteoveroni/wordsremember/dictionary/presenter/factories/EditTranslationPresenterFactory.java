@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dictionary.presenter.factories;
 
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;

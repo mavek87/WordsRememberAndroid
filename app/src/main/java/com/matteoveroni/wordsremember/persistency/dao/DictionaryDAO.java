@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.dictionary.model;
+package com.matteoveroni.wordsremember.persistency.dao;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -7,15 +7,15 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncCountUniqueVocablesWithTranslationCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchTranslationsByNameCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocableTranslationsCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchDistinctVocableWithTranslationByOffsetCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByIdCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncSearchVocablesByNameCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncDeleteCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncInsertCommand;
-import com.matteoveroni.wordsremember.dictionary.commands.AsyncUpdateCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncCountUniqueVocablesWithTranslationCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchTranslationsByNameCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocableTranslationsCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchDistinctVocableWithTranslationByOffsetCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByIdCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByNameCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncDeleteCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncInsertCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncUpdateCommand;
 import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
@@ -74,9 +74,9 @@ public class DictionaryDAO {
         if (!Word.isValid(updatedVocable) || id < 1)
             throw new IllegalArgumentException("Invalid vocable or id");
 
-        final String str_id = String.valueOf(id);
-        final String selection = VocablesContract.Schema.COL_ID + "=?";
-        final String[] selectionArgs = {str_id};
+        String str_id = String.valueOf(id);
+        String selection = VocablesContract.Schema.COL_ID + "=?";
+        String[] selectionArgs = {str_id};
 
         new AsyncUpdateCommand(
                 contentResolver,
@@ -195,7 +195,7 @@ public class DictionaryDAO {
         if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable))
             throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
 
-        final ContentValues vocablesTranslationValue = new ContentValues();
+        ContentValues vocablesTranslationValue = new ContentValues();
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_VOCABLE_ID, vocable.getId());
         vocablesTranslationValue.put(VocablesTranslationsContract.Schema.COL_TRANSLATION_ID, translation.getId());
 
@@ -208,21 +208,23 @@ public class DictionaryDAO {
      **********************************************************************************************/
 
     public long saveVocable(Word vocable) {
-        long id = -1;
-        if (Word.isValid(vocable) && vocable.getId() < 0) {
-            final Uri uri = contentResolver.insert(
-                    VocablesContract.CONTENT_URI,
-                    vocableToContentValues(vocable)
-            );
+        long id = vocable.getId();
 
-            if (uri != null) {
-                final String createdRowId = uri.getLastPathSegment();
+        if (!Word.isValid(vocable) || id < 0) return -1;
 
-                if (!createdRowId.isEmpty()) {
-                    id = Long.valueOf(createdRowId);
-                }
+        Uri uri = contentResolver.insert(
+                VocablesContract.CONTENT_URI,
+                vocableToContentValues(vocable)
+        );
+
+        if (uri != null) {
+            String createdRowId = uri.getLastPathSegment();
+
+            if (!createdRowId.isEmpty()) {
+                id = Long.valueOf(createdRowId);
             }
         }
+
         return id;
     }
 
@@ -231,7 +233,7 @@ public class DictionaryDAO {
      **********************************************************************************************/
 
     public static Word cursorToVocable(Cursor cursor) {
-        final Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COL_VOCABLE)));
+        Word vocable = new Word(cursor.getString(cursor.getColumnIndex(VocablesContract.Schema.COL_VOCABLE)));
         vocable.setId(cursor.getLong(cursor.getColumnIndex(VocablesContract.Schema.COL_ID)));
         return vocable;
     }
@@ -251,8 +253,9 @@ public class DictionaryDAO {
     }
 
     public static Word cursorToTranslation(Cursor cursor) {
-        final Word translation = new Word(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COL_TRANSLATION)));
+        Word translation = new Word(cursor.getString(cursor.getColumnIndex(TranslationsContract.Schema.COL_TRANSLATION)));
         translation.setId(cursor.getLong(cursor.getColumnIndex(TranslationsContract.Schema.COL_ID)));
+
         return translation;
     }
 
@@ -271,14 +274,18 @@ public class DictionaryDAO {
     }
 
     ContentValues vocableToContentValues(Word vocable) {
-        final ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
+
         values.put(VocablesContract.Schema.COL_VOCABLE, vocable.getName());
+
         return values;
     }
 
     ContentValues translationToContentValues(Word translation) {
-        final ContentValues values = new ContentValues();
+        ContentValues values = new ContentValues();
+
         values.put(TranslationsContract.Schema.COL_TRANSLATION, translation.getName());
+
         return values;
     }
 }

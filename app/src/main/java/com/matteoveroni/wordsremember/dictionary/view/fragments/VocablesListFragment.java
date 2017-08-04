@@ -18,7 +18,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.ui.listview.adapters.VocableListViewAdapter;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;

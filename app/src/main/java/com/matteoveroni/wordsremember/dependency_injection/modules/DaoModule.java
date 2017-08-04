@@ -2,8 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryDAO;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 
 import dagger.Module;
 import dagger.Provides;
