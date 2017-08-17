@@ -63,7 +63,7 @@
     <string name="msg_enable_online_translations_check">Enable online translations check</string>
     <string name="timeRemaining">Time remaining</string>
 
-    <string name="msg_wrong_status">Ops.. something is gone wrong..</string>
+    <string name="msg_wrong_status">Ops.. something goes wrong..</string>
     <string name="msg_complete_status">Operation completed successfully</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.login;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -10,7 +11,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.persistency.dao.UsersDAO;
+import com.matteoveroni.wordsremember.settings.model.Settings;
+import com.matteoveroni.wordsremember.users.User;
 
 /**
  * @author Matteo Veroni
@@ -19,10 +21,15 @@ import com.matteoveroni.wordsremember.persistency.dao.UsersDAO;
 public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = TagGenerator.tag(LoginPresenter.class);
+    public static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
 
     private LoginView view;
 
-    public static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
+    private final Settings settings;
+
+    public LoginPresenter(Settings settings) {
+        this.settings = settings;
+    }
 
     @Override
     public void attachView(Object view) {
@@ -45,15 +52,15 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
         if (signInResult.isSuccess()) {
 
-            GoogleSignInAccount account = signInResult.getSignInAccount();
-            String name = account.getDisplayName();
-            String email = account.getEmail();
+            GoogleSignInAccount google_account = signInResult.getSignInAccount();
+            String google_username = google_account.getDisplayName();
+            String google_email = google_account.getEmail();
 //            String img_url = account.getPhotoUrl().toString();
 
-            // TODO: save this data in the preferences file
-            saveData(name, email);
+            settings.saveUser(new User(google_username, google_email));
 
-            view.showSuccessfulMessage(statusName + "\nName: " + name + "\nEmail: " + email);
+            final String status = "Sign in after registering new google user\n\n";
+            view.showSuccessfulMessage(status + statusName + "\nName: " + google_username + "\nEmail: " + google_email);
             view.switchTo(View.Name.MAIN_MENU);
 
         } else {
@@ -61,11 +68,20 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
         }
     }
 
+    public void tryToSignInUsingRegisteredUser() {
+        try {
+            User prefs_user = settings.getUser();
+
+            final String status = "Sign in using registerd user\n\n";
+            view.showSuccessfulMessage(status + "\nName: " + prefs_user.getUsername() + "\nEmail: " + prefs_user.getEmail());
+            view.switchTo(View.Name.MAIN_MENU);
+        } catch (Settings.NoRegisteredUserException e) {
+            Log.d(TAG, "No registered user");
+        }
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         view.showErrorMessage(connectionResult.getErrorMessage());
-    }
-
-    private void saveData(String name, String email) {
     }
 }

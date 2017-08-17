@@ -1,12 +1,19 @@
 package com.matteoveroni.wordsremember.login;
 
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.main_menu.MainMenuPresenter;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 
-class LoginPresenterFactory implements PresenterFactory {
+import javax.inject.Inject;
+
+public class LoginPresenterFactory implements PresenterFactory {
+
+    @Inject
+    Settings settings;
 
     @Override
     public LoginPresenter create() {
-        return new LoginPresenter();
+        WordsRemember.getAppComponent().inject(this);
+        return new LoginPresenter(settings);
     }
 }

@@ -9,6 +9,8 @@ import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocable
 import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
+import com.matteoveroni.wordsremember.login.LoginPresenterFactory;
+
 
 import javax.inject.Singleton;
 
@@ -21,6 +23,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, DaoModule.class, SettingsModule.class})
 public interface AppComponent {
+
+    void inject(LoginPresenterFactory loginPresenterFactory);
 
     void inject(ManageVocablesPresenterFactory vocableManagerPresenterFactory);
 

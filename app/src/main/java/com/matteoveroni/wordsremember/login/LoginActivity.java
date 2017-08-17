@@ -15,6 +15,7 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
@@ -77,37 +78,31 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        presenter.tryToSignInUsingRegisteredUser();
         tryToAutoSignIn();
+    }
+
+    private void tryToAutoSignIn() {
+        OptionalPendingResult<GoogleSignInResult> signInResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+
+        if (signInResult.isDone()) {
+            // There's immediate result available.
+            presenter.handleSignInResult(signInResult.get());
+        } else {
+            // There's no immediate result ready, waits for the async callback.
+            signInResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult result) {
+                    presenter.handleSignInResult(result);
+                }
+            });
+        }
     }
 
     @Override
     public void doSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE);
-    }
-
-    private void tryToAutoSignIn() {
-
-        OptionalPendingResult<GoogleSignInResult> pendingResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-
-        if (pendingResult.isDone()) {
-            // There's immediate result available.
-//            updateButtonsAndStatusFromSignInResult(pendingResult.get());
-            presenter.handleSignInResult(pendingResult.get());
-        } else {
-            // There's no immediate result ready, displays some progress indicator and waits for the
-            // async callback.
-//            showProgressIndicator();
-            pendingResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult result) {
-//                    updateButtonsAndStatusFromSignInResult(result);
-//                    hideProgressIndicator();
-                    presenter.handleSignInResult(result);
-                }
-            });
-        }
-
     }
 
     @Override

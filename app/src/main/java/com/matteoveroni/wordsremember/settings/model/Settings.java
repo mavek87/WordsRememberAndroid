@@ -4,10 +4,12 @@ import android.content.SharedPreferences;
 
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.users.User;
 
 import org.joda.time.DateTime;
 
 import java.util.Date;
+import java.util.concurrent.Exchanger;
 
 /**
  * Created by Matteo Veroni
@@ -17,12 +19,16 @@ public class Settings {
 
     private final SharedPreferences prefs;
 
+    public static final String USER_KEY = "user_key";
     public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
     public static final String GAME_NUMBER_OF_QUESTIONS_KEY = "game_number_of_questions_key";
     public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
     public static final String ONLINE_TRANSLATIONS_CHECK_KEY = "online_translations_check_key";
     public static final QuizGameDifficulty DEFAULT_DIFFICULTY = QuizGameDifficulty.EASY;
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
+
+    public class NoRegisteredUserException extends Exception {
+    }
 
     public Settings(SharedPreferences prefs) {
         this.prefs = prefs;
@@ -34,6 +40,21 @@ public class Settings {
     public Settings(SharedPreferences prefs, QuizGameDifficulty difficulty) {
         this.prefs = prefs;
         setDifficulty(difficulty);
+    }
+
+    public void saveUser(User user) {
+        if (user != null) prefs.edit().putString(USER_KEY, Json.getInstance().toJson(user)).apply();
+    }
+
+    public User getUser() throws NoRegisteredUserException {
+        String json_user = prefs.getString(USER_KEY, "");
+
+        if (json_user.trim().isEmpty()) {
+            throw new NoRegisteredUserException();
+        } else {
+            User user = Json.getInstance().fromJson(json_user, User.class);
+            return user;
+        }
     }
 
     public int getNumberOfQuestions() {
