@@ -61,4 +61,5 @@
     <string name="timeRemaining">Tempo rimanente</string>
     <string name="msg_wrong_status">Ops.. qualcosa è andato storto..</string>
     <string name="msg_complete_status">Operazione completata con successo</string>
+    <string name="username">Nome Utente</string>
 </resources>

@@ -23,6 +23,7 @@
     <string name="hard">Hard</string>
     <string name="main_menu">Main Menu</string>
     <string name="quiz_game">Quiz Game</string>
+    <string name="username">Username</string>
     <string name="version">Version</string>
     <string name="deviceLocale">Device locale</string>
     <string name="game_result">Game Results</string>

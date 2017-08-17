@@ -1,6 +1,8 @@
 package com.matteoveroni.wordsremember.settings.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
@@ -19,6 +22,7 @@ import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameDifficulty
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
+import com.matteoveroni.wordsremember.users.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +33,9 @@ import butterknife.OnClick;
  */
 
 public class SettingsActivity extends BaseActivityPresentedView implements SettingsView {
+
+    @BindView(R.id.lbl_username)
+    TextView lbl_username;
 
     @BindView(R.id.lbl_gameVersion)
     TextView lbl_gameVersion;
@@ -74,6 +81,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
 
         setupAndShowToolbar(getString(R.string.settings));
 
+        printUsername();
         printGameVersion();
         printDeviceLocale();
         setLabelsForRadioButtons();
@@ -129,6 +137,22 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     @Override
     public void setLastGameDate(FormattedString lastGameDate) {
         lbl_last_game_date.setText(localize(lastGameDate));
+    }
+
+    private void printUsername() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String str_usernameToPrint = getString(R.string.username) + ": ";
+
+        String json_username = prefs.getString(Settings.USER_KEY, "");
+        if (json_username.trim().isEmpty()) {
+            str_usernameToPrint += "-";
+        } else {
+            User user = Json.getInstance().fromJson(json_username, User.class);
+            str_usernameToPrint += user.getUsername();
+        }
+
+        lbl_username.setText(str_usernameToPrint);
     }
 
     private void printGameVersion() {

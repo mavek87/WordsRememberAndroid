@@ -19,6 +19,13 @@
     tools:showIn="@layout/activity_settings">
 
     <TextView
+        android:id="@+id/lbl_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.10"
+        android:text="@string/username" />
+
+    <TextView
         android:id="@+id/lbl_gameVersion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
