@@ -90,7 +90,8 @@ public class Settings {
     }
 
     public DateTime getLastGameDate() {
-        return DateTime.parse(prefs.getString(LAST_GAME_DATE_KEY, ""));
+        String str_dateTime = prefs.getString(LAST_GAME_DATE_KEY, "");
+        return (str_dateTime.trim().isEmpty()) ? null : DateTime.parse(str_dateTime);
     }
 
     public void setOnlineTranslationsCheckPreference(boolean preference) {

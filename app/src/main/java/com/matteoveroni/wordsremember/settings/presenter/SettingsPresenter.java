@@ -54,7 +54,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
             String str_time = lastGameDate.getHourOfDay() + ":" + lastGameDate.getMinuteOfHour() + ":" + lastGameDate.getSecondOfMinute();
             view.setLastGameDate(new FormattedString("%s: %s - %s", LocaleKey.LAST_GAME_DATE, str_date, str_time));
         } else {
-            view.setLastGameDate(new FormattedString(" - "));
+            view.setLastGameDate(new FormattedString("%s: - ", LocaleKey.LAST_GAME_DATE));
         }
     }
 
