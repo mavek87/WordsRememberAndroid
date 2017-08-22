@@ -140,7 +140,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     }
 
     private void printUsername() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
 
         String str_usernameToPrint = getString(R.string.username) + ": ";
 

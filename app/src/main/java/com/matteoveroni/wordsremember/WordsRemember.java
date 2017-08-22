@@ -12,11 +12,11 @@ import com.matteoveroni.wordsremember.dependency_injection.components.DaggerAppC
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 
 import java.util.Locale;
 
@@ -24,7 +24,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.2.0
+ * @version 0.2.1
  **/
 
 public class WordsRemember extends Application {
@@ -32,7 +32,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.2.0";
+    public static final String VERSION = "0.2.1";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
@@ -56,8 +56,8 @@ public class WordsRemember extends Application {
 
         if (POPULATE_DB_USING_FAKE_DATA) {
             // (mode "true" broke some test)
-            int NUMBER_OF_VOCABLES_TO_CREATE = 1;
-            populateDatabaseUsingFakeData(getApplicationContext(), NUMBER_OF_VOCABLES_TO_CREATE);
+            int NUMBER_OF_FAKE_VOCABLES_TO_CREATE = 1;
+            populateDatabaseUsingFakeData(getApplicationContext(), NUMBER_OF_FAKE_VOCABLES_TO_CREATE);
         }
     }
 
