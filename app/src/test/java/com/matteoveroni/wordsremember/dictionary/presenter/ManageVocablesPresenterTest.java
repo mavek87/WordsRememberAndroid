@@ -51,7 +51,7 @@ public class ManageVocablesPresenterTest {
 
     @Before
     public void setUp() {
-        presenter = new DictionaryVocablesManagerPresenterFactoryForTests(model, dao).create();
+        presenter = new DictionaryVocablesPresenterFactoryForTests(model, dao).create();
         presenter.attachView(view);
         assertTrue("Presenter should be registered to event bus before each test", EVENT_BUS.isRegistered(presenter));
     }
@@ -70,7 +70,7 @@ public class ManageVocablesPresenterTest {
     }
 
     @Test
-    public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InTheModel() {
+    public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InModel() {
         presenter.onCreateVocableRequest();
 
         verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
@@ -81,8 +81,8 @@ public class ManageVocablesPresenterTest {
     }
 
     @Test
-    public void onEventVocableSelected_Model_saveVocableSelected() {
-        final EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
+    public void onEventVocableSelected_Model_saveIt() {
+        EventVocableSelected eventVocableSelected = new EventVocableSelected(VOCABLE);
 
         presenter.onEvent(eventVocableSelected);
 
@@ -113,11 +113,11 @@ public class ManageVocablesPresenterTest {
         verify(view).showMessage(LocaleKey.VOCABLE_REMOVED);
     }
 
-    private class DictionaryVocablesManagerPresenterFactoryForTests implements PresenterFactory {
+    private class DictionaryVocablesPresenterFactoryForTests implements PresenterFactory {
         private DictionaryDAO dao;
         private DictionaryModel model;
 
-        DictionaryVocablesManagerPresenterFactoryForTests(DictionaryModel model, DictionaryDAO dao) {
+        DictionaryVocablesPresenterFactoryForTests(DictionaryModel model, DictionaryDAO dao) {
             this.model = model;
             this.dao = dao;
         }
