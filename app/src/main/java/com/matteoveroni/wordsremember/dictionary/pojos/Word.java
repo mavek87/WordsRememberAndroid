@@ -73,6 +73,6 @@ public class Word {
     }
 
     public static final boolean isValid(Word word) {
-        return word != null && word.getName() != null;
+        return word != null && word.getName() != null && !word.getName().trim().isEmpty();
     }
 }

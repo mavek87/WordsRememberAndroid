@@ -72,11 +72,10 @@ public class EditVocablePresenter implements Presenter {
 
     public void onAddTranslationRequest() {
         final Word lastVocableSelected = model.getLastVocableSelected();
-        // TODO: try to simplify this code
-        if (lastVocableSelected == null || Str.isNullOrEmpty(lastVocableSelected.getName())) {
-            view.showDialogCannotAddTranslationIfVocableNotSaved();
-        } else {
+        if (Word.isValid(lastVocableSelected)) {
             view.switchTo(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
+        } else {
+            view.showDialogCannotAddTranslationIfVocableNotSaved();
         }
     }
 
