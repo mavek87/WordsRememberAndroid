@@ -39,7 +39,7 @@ public class AddTranslationPresenter implements Presenter {
     @Override
     public void attachView(Object view) {
         this.view = (AddTranslationView) view;
-        this.view.setPojoUsed(model.getLastValidVocableSelected());
+        this.view.setPojoUsed(model.getLastVocableSelected());
         EVENT_BUS.register(this);
     }
 
@@ -52,7 +52,7 @@ public class AddTranslationPresenter implements Presenter {
     @Subscribe
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
-        model.setLastValidTranslationSelected(translation);
+        model.setLastTranslationSelected(translation);
         view.showMessage(new FormattedString("%s (" + translation.getName() + ")", LocaleKey.TRANSLATION_ADDED));
         view.returnToPreviousView();
     }

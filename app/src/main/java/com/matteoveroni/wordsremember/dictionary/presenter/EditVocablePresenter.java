@@ -40,15 +40,16 @@ public class EditVocablePresenter implements Presenter {
     public void attachView(Object view) {
         this.view = (EditVocableView) view;
 
-        Word lastValidVocableSelected = model.getLastValidVocableSelected();
-        Word lastValidTranslationSelected = model.getLastValidTranslationSelected();
+        Word lastVocableSelected = model.getLastVocableSelected();
+        Word lastTranslationSelected = model.getLastTranslationSelected();
 
-        this.view.setPojoUsed(lastValidVocableSelected);
+        this.view.setPojoUsed(lastVocableSelected);
         EVENT_BUS.register(this);
 
-        if (lastValidTranslationSelected != null) {
-            dao.asyncSaveVocableTranslation(new VocableTranslation(lastValidVocableSelected, lastValidTranslationSelected));
-            model.setLastValidTranslationSelected(null);
+        // When a translation for a vocable is selected this code is executed
+        if (lastTranslationSelected != null) {
+            dao.asyncSaveVocableTranslation(new VocableTranslation(lastVocableSelected, lastTranslationSelected));
+            model.setLastTranslationSelected(null);
         }
     }
 
@@ -70,7 +71,8 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onAddTranslationRequest() {
-        final Word lastVocableSelected = model.getLastValidVocableSelected();
+        final Word lastVocableSelected = model.getLastVocableSelected();
+        // TODO: try to simplify this code
         if (lastVocableSelected == null || Str.isNullOrEmpty(lastVocableSelected.getName())) {
             view.showDialogCannotAddTranslationIfVocableNotSaved();
         } else {
@@ -80,7 +82,7 @@ public class EditVocablePresenter implements Presenter {
 
     public void onSaveVocableRequest() {
         editedVocableInView = view.getPojoUsed();
-        if (isVocableValid(editedVocableInView)) {
+        if (Word.isValid(editedVocableInView)) {
             dao.asyncSearchVocableByName(editedVocableInView.getName());
         } else {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
@@ -132,11 +134,7 @@ public class EditVocablePresenter implements Presenter {
     }
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
-        model.setLastValidVocableSelected(editedVocableInView);
+        model.setLastVocableSelected(editedVocableInView);
         view.returnToPreviousView();
-    }
-
-    private boolean isVocableValid(Word vocable) {
-        return (vocable != null) && !vocable.getName().trim().isEmpty();
     }
 }

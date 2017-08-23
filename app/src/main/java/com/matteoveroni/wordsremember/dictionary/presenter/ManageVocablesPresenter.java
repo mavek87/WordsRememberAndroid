@@ -51,14 +51,14 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        model.setLastValidVocableSelected(new Word(""));
+        model.setLastVocableSelected(new Word(""));
         view.switchTo(View.Name.EDIT_VOCABLE);
     }
 
     @Subscribe
     public void onEvent(EventVocableSelected event) {
         Word vocableSelected = event.getSelectedVocable();
-        model.setLastValidVocableSelected(vocableSelected);
+        model.setLastVocableSelected(vocableSelected);
         view.switchTo(View.Name.EDIT_VOCABLE);
     }
 

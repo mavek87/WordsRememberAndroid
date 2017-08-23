@@ -51,7 +51,7 @@ public class AddTranslationPresenterTest {
     public void setUp() {
         presenter = new DictionaryAddTranslationPresenterFactoryForTests(model, dao).create();
 
-        when(model.getLastValidTranslationSelected()).thenReturn(TRANSLATION);
+        when(model.getLastTranslationSelected()).thenReturn(TRANSLATION);
         presenter.attachView(view);
 
         assertTrue("Presenter should be registered to eventbus before each test", EVENT_BUS.isRegistered(presenter));
@@ -82,7 +82,7 @@ public class AddTranslationPresenterTest {
     public void onEventTranslationSelected_Model_setLastValidTranslationSelected() {
         presenter.onEvent(new EventTranslationSelected(FAKE_TRANSLATION_SELECTED));
 
-        verify(model).setLastValidTranslationSelected(FAKE_TRANSLATION_SELECTED);
+        verify(model).setLastTranslationSelected(FAKE_TRANSLATION_SELECTED);
     }
 
     @Test

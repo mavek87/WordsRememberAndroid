@@ -13,28 +13,28 @@ public class DictionaryModel {
 
     public static final String TAG = TagGenerator.tag(DictionaryModel.class);
 
-    private Word lastValidVocableSelected;
-    private Word lastValidTranslationSelected;
+    private Word lastVocableSelected;
+    private Word lastTranslationSelected;
 
-    public Word getLastValidVocableSelected() {
-        return lastValidVocableSelected;
+    public Word getLastVocableSelected() {
+        return lastVocableSelected;
     }
 
-    public void setLastValidVocableSelected(Word lastValidVocableSelected) {
-        this.lastValidVocableSelected = lastValidVocableSelected;
+    public void setLastVocableSelected(Word lastVocableSelected) {
+        this.lastVocableSelected = lastVocableSelected;
     }
 
     public void reset() {
-        lastValidVocableSelected = null;
-        lastValidTranslationSelected = null;
+        lastVocableSelected = null;
+        lastTranslationSelected = null;
         Log.i(TAG, "Model resetted");
     }
 
-    public Word getLastValidTranslationSelected() {
-        return lastValidTranslationSelected;
+    public Word getLastTranslationSelected() {
+        return lastTranslationSelected;
     }
 
-    public void setLastValidTranslationSelected(Word lastValidTranslationSelected) {
-        this.lastValidTranslationSelected = lastValidTranslationSelected;
+    public void setLastTranslationSelected(Word lastTranslationSelected) {
+        this.lastTranslationSelected = lastTranslationSelected;
     }
 }

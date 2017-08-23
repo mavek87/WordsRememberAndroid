@@ -73,7 +73,7 @@ public class ManageVocablesPresenterTest {
     public void onCreateVocableRequest_EmptyVocable_Is_setAsLastValidVocableSelected_InModel() {
         presenter.onCreateVocableRequest();
 
-        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
+        verify(model).setLastVocableSelected(vocablePassedToModelCaptor.capture());
         assertTrue(
                 "last valid vocable selected set in the model should be an empty vocable",
                 vocablePassedToModelCaptor.getValue().equals(EMPTY_VOCABLE)
@@ -86,7 +86,7 @@ public class ManageVocablesPresenterTest {
 
         presenter.onEvent(eventVocableSelected);
 
-        verify(model).setLastValidVocableSelected(vocablePassedToModelCaptor.capture());
+        verify(model).setLastVocableSelected(vocablePassedToModelCaptor.capture());
         assertEquals(eventVocableSelected.getSelectedVocable(), vocablePassedToModelCaptor.getValue());
     }
 

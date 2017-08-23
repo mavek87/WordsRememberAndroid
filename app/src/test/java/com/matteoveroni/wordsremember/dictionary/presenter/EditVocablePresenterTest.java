@@ -82,19 +82,19 @@ public class EditVocablePresenterTest {
 
     @Test
     public void onViewAttached_View_Populated_UsingModelData() {
-        when(model.getLastValidVocableSelected()).thenReturn(VOCABLE);
+        when(model.getLastVocableSelected()).thenReturn(VOCABLE);
 
         attachViewToPresenter(view);
 
-        verify(view).setPojoUsed(model.getLastValidVocableSelected());
+        verify(view).setPojoUsed(model.getLastVocableSelected());
     }
 
     @Test
     public void onViewAttached_IfExistsLastValidTranslationSelected_SaveTranslationForVocable_And_RemoveLastTranslationSelected() {
         final VocableTranslation EXPECTED_VOCABLE_TRANSLATION = new VocableTranslation(VOCABLE, TRANSLATION);
 
-        when(model.getLastValidVocableSelected()).thenReturn(VOCABLE);
-        when(model.getLastValidTranslationSelected()).thenReturn(TRANSLATION);
+        when(model.getLastVocableSelected()).thenReturn(VOCABLE);
+        when(model.getLastTranslationSelected()).thenReturn(TRANSLATION);
 
         attachViewToPresenter(view);
 
@@ -103,13 +103,13 @@ public class EditVocablePresenterTest {
                 "DAO save expected translation for vocable",
                 VOCABLE_TRANSLATION_ARG_CAPTOR.getValue().equals(EXPECTED_VOCABLE_TRANSLATION)
         );
-        verify(model).setLastValidTranslationSelected(null);
+        verify(model).setLastTranslationSelected(null);
     }
 
     @Test
     public void onViewAttached_IfDoesntExistsLastValidTranslationSelected_DontSaveAnyNewTranslationForVocable() {
-        when(model.getLastValidVocableSelected()).thenReturn(VOCABLE);
-        when(model.getLastValidTranslationSelected()).thenReturn(null);
+        when(model.getLastVocableSelected()).thenReturn(VOCABLE);
+        when(model.getLastTranslationSelected()).thenReturn(null);
 
         attachViewToPresenter(view);
 

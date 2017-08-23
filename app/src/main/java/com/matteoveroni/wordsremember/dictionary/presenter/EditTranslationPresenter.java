@@ -37,7 +37,7 @@ public class EditTranslationPresenter implements Presenter {
         this.view = (EditTranslationView) view;
 
         final Word newEmptyTranslation = new Word("");
-        this.view.setPojoUsed(new VocableTranslation(model.getLastValidVocableSelected(), newEmptyTranslation));
+        this.view.setPojoUsed(new VocableTranslation(model.getLastVocableSelected(), newEmptyTranslation));
 
         EVENT_BUS.register(this);
     }
@@ -52,7 +52,7 @@ public class EditTranslationPresenter implements Presenter {
         final VocableTranslation vocableTranslationInView = view.getPojoUsed();
         editedTranslationInView = vocableTranslationInView.getTranslation();
 
-        if (isTranslationValid(editedTranslationInView)) {
+        if (Word.isValid(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
@@ -74,12 +74,8 @@ public class EditTranslationPresenter implements Presenter {
         view.showMessage(LocaleKey.TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
-        model.setLastValidTranslationSelected(editedTranslationInView);
+        model.setLastTranslationSelected(editedTranslationInView);
 
         view.returnToPreviousView();
-    }
-
-    private boolean isTranslationValid(Word translation) {
-        return (translation != null) && !translation.getName().trim().isEmpty();
     }
 }
