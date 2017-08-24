@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -41,14 +43,18 @@ public class AsyncDeleteCommand extends AsyncCommand {
     @Override
     protected void onDeleteComplete(int token, Object cookie, int result) {
         this.rowDeletedResult = result;
-        dispatchCompletionEvent();
         executeCommand((AsyncCommand) nextCommand);
+        dispatchCompletionEvent();
     }
 
     @Override
     public void dispatchCompletionEvent() {
+        EventBus eventbus = EventBus.getDefault();
+
         if (commandTargetUri.equals(VocablesContract.CONTENT_URI)) {
-            EventBus.getDefault().postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));
+            eventbus.postSticky(new EventAsyncDeleteVocableCompleted(rowDeletedResult));
+        } else if (commandTargetUri.equals(VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_URI)) {
+            eventbus.postSticky(new EventAsyncDeleteVocableTranslationCompleted(rowDeletedResult));
         }
     }
 

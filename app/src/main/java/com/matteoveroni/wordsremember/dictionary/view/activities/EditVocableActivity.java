@@ -99,6 +99,11 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     }
 
     @Override
+    public void refresh() {
+        translationsListFragment.onResume();
+    }
+
+    @Override
     public void saveVocableAction() {
         presenter.onSaveVocableRequest();
     }

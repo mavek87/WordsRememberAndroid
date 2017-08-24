@@ -1,7 +1,9 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
+import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.view.EditVocableView;
@@ -68,6 +70,11 @@ public class EditVocablePresenter implements Presenter {
                 dao.asyncDeleteVocableTranslationsByVocableAndTranslationIds(vocableId, translationId);
                 break;
         }
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncDeleteVocableTranslationCompleted event) {
+        view.refresh();
     }
 
     public void onAddTranslationRequest() {
