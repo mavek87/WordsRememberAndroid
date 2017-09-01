@@ -30,7 +30,7 @@ public class MainMenuPresenter implements Presenter, WebTranslatorListener {
     public void attachView(Object view) {
         this.view = (MainMenuView) view;
         // TODO: remove this REST test from production code
-        WebTranslator.getInstance().translate(new Word("atto"), new Locale("it"), new Locale("en"), this);
+//        WebTranslator.getInstance().translate(new Word("atto"), new Locale("it"), new Locale("en"), this);
     }
 
     @Override

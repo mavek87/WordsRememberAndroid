@@ -37,7 +37,7 @@ public class EditTranslationPresenter implements Presenter {
         this.view = (EditTranslationView) view;
 
         final Word newEmptyTranslation = new Word("");
-        this.view.setPojoUsed(new VocableTranslation(model.getLastVocableSelected(), newEmptyTranslation));
+        this.view.setPojoUsed(new VocableTranslation(model.getVocableSelected(), newEmptyTranslation));
 
         EVENT_BUS.register(this);
     }
@@ -74,7 +74,7 @@ public class EditTranslationPresenter implements Presenter {
         view.showMessage(LocaleKey.TRANSLATION_SAVED);
 
         editedTranslationInView.setId(event.getSavedTranslationId());
-        model.setLastTranslationSelected(editedTranslationInView);
+        model.setTranslationSelected(editedTranslationInView);
 
         view.returnToPreviousView();
     }

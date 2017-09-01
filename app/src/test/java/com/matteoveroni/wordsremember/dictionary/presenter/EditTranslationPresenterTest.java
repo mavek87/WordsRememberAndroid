@@ -107,7 +107,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onEvent(new EventAsyncSaveTranslationCompleted(FAKE_NEW_SAVED_TRANSLATION_ID));
 
-        verify(model).setLastTranslationSelected(TRANSLATION);
+        verify(model).setTranslationSelected(TRANSLATION);
     }
 
     @Test

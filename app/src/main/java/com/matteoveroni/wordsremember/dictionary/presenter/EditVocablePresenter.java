@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.dictionary.presenter;
 
-import com.matteoveroni.myutils.Str;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
@@ -42,8 +40,8 @@ public class EditVocablePresenter implements Presenter {
     public void attachView(Object view) {
         this.view = (EditVocableView) view;
 
-        Word lastVocableSelected = model.getLastVocableSelected();
-        Word lastTranslationSelected = model.getLastTranslationSelected();
+        Word lastVocableSelected = model.getVocableSelected();
+        Word lastTranslationSelected = model.getTranslationSelected();
 
         this.view.setPojoUsed(lastVocableSelected);
         EVENT_BUS.register(this);
@@ -51,7 +49,7 @@ public class EditVocablePresenter implements Presenter {
         // When a translation for a vocable is selected this code is executed
         if (lastTranslationSelected != null) {
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastVocableSelected, lastTranslationSelected));
-            model.setLastTranslationSelected(null);
+            model.setTranslationSelected(null);
         }
     }
 
@@ -78,7 +76,7 @@ public class EditVocablePresenter implements Presenter {
     }
 
     public void onAddTranslationRequest() {
-        final Word lastVocableSelected = model.getLastVocableSelected();
+        final Word lastVocableSelected = model.getVocableSelected();
         if (Word.isValid(lastVocableSelected)) {
             view.switchTo(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
         } else {
@@ -140,7 +138,7 @@ public class EditVocablePresenter implements Presenter {
     }
 
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
-        model.setLastVocableSelected(editedVocableInView);
+        model.setVocableSelected(editedVocableInView);
         view.returnToPreviousView();
     }
 }
