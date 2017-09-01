@@ -47,14 +47,6 @@ public class Word {
         return Json.getInstance().fromJson(json, Word.class);
     }
 
-    public void loadFromJson(String json) {
-        Word wordFromJson = Json.getInstance().fromJson(json, getClass());
-        if (wordFromJson != null) {
-            this.setId(wordFromJson.getId());
-            this.setName(wordFromJson.getName());
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
