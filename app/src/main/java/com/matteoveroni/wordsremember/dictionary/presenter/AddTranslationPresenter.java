@@ -57,6 +57,17 @@ public class AddTranslationPresenter implements Presenter {
         view.returnToPreviousView();
     }
 
+    // TODO: check if this method is useful
+    @Subscribe
+    public void onEvent(EventVocableTranslationManipulationRequest event) {
+        final long translationId = event.getTranslationIdToManipulate();
+        switch (event.getTypeOfManipulation()) {
+            case REMOVE:
+                dao.asyncDeleteVocableTranslationsByTranslationId(translationId);
+                break;
+        }
+    }
+
     public void onCreateTranslationRequest() {
         view.switchTo(View.Name.EDIT_TRANSLATION, EDIT_TRANSLATION_REQUEST_CODE);
     }

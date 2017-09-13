@@ -34,7 +34,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         Log.d(TAG, "View Attached");
         showLastGameDate();
         showGameDifficultyInView();
-        if (settings.getOnlineTranslationsCheckPreference()) {
+        if (settings.isOnlineTranslationServiceEnabled()) {
             view.checkOnlineTranslationsCheckPreference(true);
         } else {
             view.checkOnlineTranslationsCheckPreference(false);
@@ -97,6 +97,6 @@ public class SettingsPresenter implements Presenter<SettingsView> {
     }
 
     public void onOnlineTranslationsCheckSelected(boolean value) {
-        settings.setOnlineTranslationsCheckPreference(value);
+        settings.setOnlineTranslationServiceEnabled(value);
     }
 }

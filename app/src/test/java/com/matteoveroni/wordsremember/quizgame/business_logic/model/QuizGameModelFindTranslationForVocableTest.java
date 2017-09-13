@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistin
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
+import com.matteoveroni.wordsremember.quizgame.events.EventGameModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 
@@ -54,7 +54,7 @@ public class QuizGameModelFindTranslationForVocableTest {
                 new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
         );
 
-        EVENT_BUS.hasSubscriberForEvent(EventQuizModelInitialized.class);
+        EVENT_BUS.hasSubscriberForEvent(EventGameModelInitialized.class);
     }
 
     @Test

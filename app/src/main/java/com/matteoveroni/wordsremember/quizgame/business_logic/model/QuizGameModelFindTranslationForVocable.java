@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.quizgame.business_logic.QuizFinalAnswerChecker;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
-import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
+import com.matteoveroni.wordsremember.quizgame.events.EventGameModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.pojos.Quiz;
@@ -64,6 +64,27 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
         registerToEventBus();
     }
 
+    private void initGame() {
+        quizVocable = "";
+        numberOfVocablesWithTranslations = 0;
+        numberOfQuestions = 0;
+        quizNumber = 0;
+        totalScore = 0;
+        dao.countDistinctVocablesWithTranslations();
+    }
+
+    private void registerToEventBus() {
+        if (!EVENT_BUS.isRegistered(this)) {
+            EVENT_BUS.register(this);
+        }
+    }
+
+    private void unregisterToEventBus() {
+        if (EVENT_BUS.isRegistered(this)) {
+            EVENT_BUS.unregister(this);
+        }
+    }
+
     @Override
     public void pauseGame() {
         unregisterToEventBus();
@@ -89,7 +110,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
         int maxNumberOfExtractions = numberOfQuestions;
         uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(minNumber, maxNumber, maxNumberOfExtractions);
 
-        EVENT_BUS.post(new EventQuizModelInitialized());
+        EVENT_BUS.post(new EventGameModelInitialized());
     }
 
     @Override
@@ -136,7 +157,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
             rightAnswersForCurrentQuiz.add(translation.getName());
         }
 
-        if (settings.getOnlineTranslationsCheckPreference()) {
+        if (settings.isOnlineTranslationServiceEnabled()) {
             WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
         } else {
             currentQuiz = new Quiz(quizNumber, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
@@ -187,26 +208,5 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     @Override
     public void setCurrentQuizFinalResult(Quiz.FinalResult result) {
         currentQuiz.setFinalResult(result);
-    }
-
-    private void initGame() {
-        quizVocable = "";
-        numberOfVocablesWithTranslations = 0;
-        numberOfQuestions = 0;
-        quizNumber = 0;
-        totalScore = 0;
-        dao.countDistinctVocablesWithTranslations();
-    }
-
-    private void registerToEventBus() {
-        if (!EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.register(this);
-        }
-    }
-
-    private void unregisterToEventBus() {
-        if (EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.unregister(this);
-        }
     }
 }

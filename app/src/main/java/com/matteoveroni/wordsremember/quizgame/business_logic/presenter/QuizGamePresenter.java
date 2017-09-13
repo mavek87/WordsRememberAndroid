@@ -3,12 +3,12 @@ package com.matteoveroni.wordsremember.quizgame.business_logic.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
-import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameTimer;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizTimer;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
-import com.matteoveroni.wordsremember.quizgame.events.EventQuizModelInitialized;
+import com.matteoveroni.wordsremember.quizgame.events.EventGameModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.quizgame.business_logic.model.QuizGameModelFindTranslationForVocable;
@@ -26,7 +26,7 @@ import java.util.Set;
  * Created by Matteo Veroni
  */
 
-public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer.TimerListener {
+public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.TimerListener {
 
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
@@ -35,11 +35,37 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     private final Settings settings;
     private final QuizGameModel gameModel;
     private QuizGameView view;
-    private boolean isDialogShown = false;
+    private QuizTimer quizTimer;
+    private boolean isDialogShownInView = false;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
         this.gameModel = new QuizGameModelFindTranslationForVocable(settings, dao);
+    }
+
+    private void startQuizTimerCount() {
+        if (quizTimer != null) {
+            quizTimer.setTimerPrinter(view);
+            quizTimer.addTimerListener(this);
+            quizTimer.start();
+        }
+    }
+
+    private void stopQuizTimerCount() {
+        if (quizTimer != null) {
+            quizTimer.cancel();
+        }
+    }
+
+    private void pauseQuizTimerCount() {
+        if (quizTimer != null && !quizTimer.isPaused()) {
+            quizTimer.pause();
+        }
+    }
+
+    private void resetQuizTimerCount() {
+        stopQuizTimerCount();
+        quizTimer = new QuizTimer(view, settings.getQuizGameTimerTotalTime(), settings.getQuizGameTimerTick());
     }
 
     @Override
@@ -47,6 +73,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         this.view = quizGameView;
         EVENT_BUS.register(this);
         gameModel.startGame();
+
+        if (!isDialogShownInView && quizTimer != null && quizTimer.isPaused())
+            startQuizTimerCount();
     }
 
     @Override
@@ -54,48 +83,55 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
         gameModel.pauseGame();
+        pauseQuizTimerCount();
         view = null;
     }
 
-    public void playNextQuiz() {
-        view.resetQuizTimerCount();
-        startNewQuizOrShowError();
-    }
-
-    public boolean isDialogShown() {
-        return this.isDialogShown;
-    }
-
     @Subscribe
-    public void onEventModelInitialized(EventQuizModelInitialized event) {
-        startNewQuizOrShowError();
+    public void onEventGameModelInitialized(EventGameModelInitialized event) {
+        startNewQuizOrShowErrorInView();
     }
 
-    private void startNewQuizOrShowError() {
+    private void playNextQuiz() {
+        resetQuizTimerCount();
+        startNewQuizOrShowErrorInView();
+    }
+
+    private void startNewQuizOrShowErrorInView() {
         view.clearAndHideFields();
         try {
             gameModel.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
-            FormattedString gameResultMessage = new FormattedString(
-                    "%s %s %d/%d %s",
-                    LocaleKey.MSG_GAME_COMPLETED,
-                    LocaleKey.SCORE,
-                    gameModel.getTotalScore(),
-                    gameModel.getNumberOfQuestions(),
-                    LocaleKey.POINTS
-            );
-            isDialogShown = true;
-            view.showGameResultDialog(gameResultMessage);
+            handleNoMoreQuizzesException();
         } catch (ZeroQuizzesException ex) {
-            isDialogShown = true;
-            view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
+            // TODO: possible bug if the view is being cleared before..
+            handleZeroQuizzesException();
         }
     }
 
     @Subscribe
-    public void onEventQuizGenerated(EventQuizGenerated event) {
+    public void onEventNewQuizGenerated(EventQuizGenerated event) {
         view.setPojoUsed(event.getQuiz());
-        view.startQuizTimerCount();
+        quizTimer = new QuizTimer(view, settings.getQuizGameTimerTotalTime(), settings.getQuizGameTimerTick());
+        startQuizTimerCount();
+    }
+
+    private void handleNoMoreQuizzesException() {
+        isDialogShownInView = true;
+        FormattedString gameResultMessage = new FormattedString(
+                "%s %s %d/%d %s",
+                LocaleKey.MSG_GAME_COMPLETED,
+                LocaleKey.SCORE,
+                gameModel.getTotalScore(),
+                gameModel.getNumberOfQuestions(),
+                LocaleKey.POINTS
+        );
+        view.showGameResultDialog(gameResultMessage);
+    }
+
+    private void handleZeroQuizzesException() {
+        isDialogShownInView = true;
+        view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
     }
 
     public void onQuizAnswerFromView(String answerFromView) {
@@ -103,12 +139,14 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
         if (answer.isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
+            stopQuizTimerCount();
+
             gameModel.giveFinalAnswer(answer);
             Quiz quiz = gameModel.getCurrentQuiz();
             Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
-            view.stopQuizTimerCount();
+
+            isDialogShownInView = true;
             view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
-            isDialogShown = true;
         }
     }
 
@@ -126,7 +164,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
 
                 Set<String> correctAnswers = quiz.getRightAnswers();
                 int index = 0;
-                for(String answer : correctAnswers) {
+                for (String answer : correctAnswers) {
                     quizResultMessage = quizResultMessage.concat(new FormattedString(answer));
                     if (index != correctAnswers.size() - 1) {
                         quizResultMessage = quizResultMessage.concat(new FormattedString(", "));
@@ -139,30 +177,47 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizGameTimer
     }
 
     @Override
-    public void onQuizGameTimerFinished() {
+    public void onQuizTimeElapsed() {
+        stopQuizTimerCount();
+
         gameModel.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
-        view.stopQuizTimerCount();
+
+        isDialogShownInView = true;
         view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
-        isDialogShown = true;
     }
 
     public void onQuizResultDialogConfirmation() {
-        isDialogShown = false;
+        isDialogShownInView = false;
         playNextQuiz();
         view.showKeyboard();
     }
 
-    public void onGameResultDialogConfirmation() {
-        isDialogShown = false;
-        view.stopQuizTimerCount();
-        view.hideKeyboard();
-        view.quitGame();
-        detachView();
+    public void onErrorDialogConfirmation() {
+        isDialogShownInView = false;
         gameModel.abortGame();
     }
 
-    public void onErrorDialogConfirmation() {
-        isDialogShown = false;
+    public void onGameResultDialogConfirmation() {
+        isDialogShownInView = false;
+        view.hideKeyboard();
+        view.quitGame();
+        destroyPresenter();
+    }
+
+    private void destroyPresenter() {
+        stopQuizTimerCount();
+        settings.saveLastGameDate();
+        EVENT_BUS.unregister(this);
+        view = null;
         gameModel.abortGame();
+    }
+
+    public long getRemainingTimeForCurrentQuizInMillis() {
+        return quizTimer.getRemainingTime();
+    }
+
+    public long getRemainingTimeForCurrentQuizInSeconds() {
+        // TODO: check if its possible to remove the int casting
+        return (int) (getRemainingTimeForCurrentQuizInMillis() / 1000);
     }
 }
