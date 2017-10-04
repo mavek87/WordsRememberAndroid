@@ -16,8 +16,8 @@ public class ManageVocablesPresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO dao;
-
-    private final DictionaryModel model = WordsRemember.DICTIONARY_MODEL;
+    @Inject
+    DictionaryModel model;
 
     @Override
     public ManageVocablesPresenter create() {

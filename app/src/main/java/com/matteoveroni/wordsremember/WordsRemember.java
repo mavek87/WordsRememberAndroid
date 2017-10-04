@@ -11,8 +11,8 @@ import com.matteoveroni.wordsremember.dependency_injection.components.AppCompone
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerAppComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.persistency.DatabaseManager;
@@ -24,7 +24,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.2.8
+ * @version 0.2.9
  **/
 
 public class WordsRemember extends Application {
@@ -32,10 +32,9 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.2.8";
+    public static final String VERSION = "0.2.9";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
-    public static final DictionaryModel DICTIONARY_MODEL = new DictionaryModel();
     public static Locale CURRENT_LOCALE;
 
     private static final boolean START_WITH_EMPTY_DB = false;
@@ -66,6 +65,7 @@ public class WordsRemember extends Application {
                 .builder()
                 .appModule(new AppModule(this))
                 .daoModule(new DaoModule())
+                .dictionaryModelModule(new DictionaryModelModule())
                 .settingsModule(new SettingsModule())
                 .build();
     }

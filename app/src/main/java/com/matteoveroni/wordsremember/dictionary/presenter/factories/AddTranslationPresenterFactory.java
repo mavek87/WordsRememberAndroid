@@ -16,8 +16,8 @@ public class AddTranslationPresenterFactory implements PresenterFactory {
 
     @Inject
     DictionaryDAO dao;
-
-    private DictionaryModel model = WordsRemember.DICTIONARY_MODEL;
+    @Inject
+    DictionaryModel model;
 
     @Override
     public AddTranslationPresenter create() {
