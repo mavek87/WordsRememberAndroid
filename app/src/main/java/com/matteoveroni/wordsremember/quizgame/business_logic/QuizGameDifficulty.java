@@ -1,12 +1,14 @@
 package com.matteoveroni.wordsremember.quizgame.business_logic;
 
 /**
- * Created by Matteo Veroni
+ * @author Matteo Veroni
  */
 
 public enum QuizGameDifficulty {
 
     EASY(1), MEDIUM(2), HARD(3);
+
+    public final static int COMPLEXITY_MULTIPLIER = 10;
 
     private int id;
 
@@ -18,5 +20,4 @@ public enum QuizGameDifficulty {
         return id;
     }
 
-    public final static int COMPLEXITY_MULTIPLIER = 10;
 }

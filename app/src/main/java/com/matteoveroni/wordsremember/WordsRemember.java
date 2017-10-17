@@ -24,7 +24,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.2.9
+ * @version 0.3.0
  **/
 
 public class WordsRemember extends Application {
@@ -32,12 +32,12 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.2.9";
+    public static final String VERSION = "0.3.0";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
 
-    private static final boolean START_WITH_EMPTY_DB = false;
+    private static final boolean CLEAR_DB_FOR_EACH_LOGIN = false;
     private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
 
     private static AppComponent APP_COMPONENT;
@@ -48,9 +48,9 @@ public class WordsRemember extends Application {
 
         CURRENT_LOCALE = LocaleTranslator.getLocale(getApplicationContext());
         printAppSpecs();
-        buildAppComponent();
+        buildAppComponents();
 
-        if (START_WITH_EMPTY_DB)
+        if (CLEAR_DB_FOR_EACH_LOGIN)
             DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
 
         if (POPULATE_DB_USING_FAKE_DATA) {
@@ -60,7 +60,7 @@ public class WordsRemember extends Application {
         }
     }
 
-    private void buildAppComponent() {
+    private void buildAppComponents() {
         APP_COMPONENT = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))

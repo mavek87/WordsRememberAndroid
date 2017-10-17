@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.dictionary.events.vocable.EventCountDistin
 import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.quizgame.business_logic.QuizFinalAnswerChecker;
+import com.matteoveroni.wordsremember.quizgame.business_logic.QuizAnswerChecker;
 import com.matteoveroni.wordsremember.quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.quizgame.events.EventGameModelInitialized;
 import com.matteoveroni.wordsremember.quizgame.exceptions.NoMoreQuizzesException;
@@ -192,7 +192,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     @Override
     public void giveFinalAnswer(String finalAnswer) {
         currentQuiz.setFinalAnswer(finalAnswer);
-        if (QuizFinalAnswerChecker.isFinalAnswerCorrect(currentQuiz)) {
+        if (QuizAnswerChecker.isCorrect(finalAnswer, currentQuiz.getRightAnswers())) {
             totalScore++;
             currentQuiz.setFinalResult(Quiz.FinalResult.CORRECT);
         } else {

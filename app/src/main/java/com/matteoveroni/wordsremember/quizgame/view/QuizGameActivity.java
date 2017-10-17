@@ -31,7 +31,7 @@ import static com.matteoveroni.wordsremember.quizgame.view.dialogs.GameResultDia
 import static com.matteoveroni.wordsremember.quizgame.view.dialogs.QuizResultDialog.QuizResultDialogListener;
 
 /**
- * Created by Matteo Veroni
+ * @author Matteo Veroni
  */
 
 public class QuizGameActivity extends BaseActivityPresentedView implements

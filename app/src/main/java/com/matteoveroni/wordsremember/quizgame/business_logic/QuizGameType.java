@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.quizgame.business_logic;
 
 /**
- * Created by Matteo Veroni
+ * @author Matteo Veroni
  */
 
 public enum QuizGameType {
