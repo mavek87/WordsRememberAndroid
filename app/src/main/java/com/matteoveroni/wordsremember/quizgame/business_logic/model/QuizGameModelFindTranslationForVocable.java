@@ -40,6 +40,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     private final Settings settings;
     private final DictionaryDAO dao;
     private Quiz currentQuiz;
+    private final QuizAnswerChecker quizAnswerChecker = new QuizAnswerChecker();
     private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
     private int numberOfVocablesWithTranslations;
     private int numberOfQuestions;
@@ -65,6 +66,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     }
 
     private void initGame() {
+        quizAnswerChecker.reset();
         quizVocable = "";
         numberOfVocablesWithTranslations = 0;
         numberOfQuestions = 0;
@@ -191,11 +193,12 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Override
     public void giveFinalAnswer(String finalAnswer) {
-        currentQuiz.setFinalAnswer(finalAnswer);
-        if (QuizAnswerChecker.isCorrect(finalAnswer, currentQuiz.getRightAnswers())) {
+        if (quizAnswerChecker.isCorrect(finalAnswer, rightAnswersForCurrentQuiz)) {
             totalScore++;
+            currentQuiz.setFinalAnswer(quizAnswerChecker.getRightAnswer());
             currentQuiz.setFinalResult(Quiz.FinalResult.CORRECT);
         } else {
+            currentQuiz.setFinalAnswer(finalAnswer);
             currentQuiz.setFinalResult(Quiz.FinalResult.WRONG);
         }
     }
