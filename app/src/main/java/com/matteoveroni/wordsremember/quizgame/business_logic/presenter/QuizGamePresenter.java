@@ -23,7 +23,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Set;
 
 /**
- * Created by Matteo Veroni
+ * @author Matteo Veroni
  */
 
 public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.TimerListener {
@@ -151,16 +151,11 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
     }
 
     private FormattedString buildQuizResultMessage(Quiz quiz) {
-        FormattedString quizResultMessage = new FormattedString();
         switch (quiz.getFinalResult()) {
             case CORRECT:
-                quizResultMessage.setFormattedString("%s\n" + quiz.getFinalAnswer());
-                quizResultMessage.setArgs(LocaleKey.MSG_CORRECT_ANSWER);
-                break;
+                return new FormattedString("%s\n" + quiz.getFinalAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
             case WRONG:
-                quizResultMessage = quizResultMessage.concat(
-                        new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS)
-                );
+                FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
 
                 Set<String> correctAnswers = quiz.getRightAnswers();
                 int index = 0;
@@ -171,9 +166,10 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
                     }
                     index++;
                 }
-                break;
+                return quizResultMessage;
+            default:
+                throw new RuntimeException("Impossible to build quiz result message. Quiz final result not correct nor wrong");
         }
-        return quizResultMessage;
     }
 
     @Override

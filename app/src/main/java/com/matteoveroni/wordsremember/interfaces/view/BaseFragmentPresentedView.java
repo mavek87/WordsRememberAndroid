@@ -121,11 +121,11 @@ public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> exten
     }
 
     @Override
-    public void switchTo(Name viewName) {
+    public void switchToView(Name viewName) {
     }
 
     @Override
-    public void switchTo(Name viewName, int requestCode) {
+    public void switchToView(Name viewName, int requestCode) {
     }
 
     public String localize(String localeStringKey) {

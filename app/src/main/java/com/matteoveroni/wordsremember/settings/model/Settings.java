@@ -49,12 +49,10 @@ public class Settings {
 
     public User getUser() throws NoRegisteredUserException {
         String json_user = prefs.getString(USER_KEY, "");
-
         if (json_user.trim().isEmpty()) {
             throw new NoRegisteredUserException();
         } else {
-            User user = Json.getInstance().fromJson(json_user, User.class);
-            return user;
+            return Json.getInstance().fromJson(json_user, User.class);
         }
     }
 

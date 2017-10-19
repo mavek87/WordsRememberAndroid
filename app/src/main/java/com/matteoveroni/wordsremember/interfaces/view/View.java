@@ -20,9 +20,9 @@ public interface View {
 
     void showMessage(FormattedString formattedString);
 
-    void switchTo(View.Name viewName);
+    void switchToView(View.Name viewName);
 
-    void switchTo(View.Name viewName, int requestCode);
+    void switchToView(View.Name viewName, int requestCode);
 
     enum Name {
         LOGIN(LoginActivity.class),

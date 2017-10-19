@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.login;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -21,11 +20,11 @@ import com.matteoveroni.wordsremember.users.User;
 public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = TagGenerator.tag(LoginPresenter.class);
-    public static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
 
-    private LoginView view;
+    static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
 
     private final Settings settings;
+    private LoginView view;
 
     public LoginPresenter(Settings settings) {
         this.settings = settings;
@@ -41,12 +40,11 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
         this.view = null;
     }
 
-    public void onSignInRequest() {
-        view.doSignIn();
+    public void onGoogleSignInRequest() {
+        view.doGoogleSignIn();
     }
 
-    public void handleSignInResult(GoogleSignInResult signInResult) {
-
+    public void handleGoogleSignInResult(GoogleSignInResult signInResult) {
         int statusCode = signInResult.getStatus().getStatusCode();
         String statusName = GoogleSignInStatusCodes.getStatusCodeString(statusCode);
 
@@ -59,29 +57,44 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
             settings.saveUser(new User(google_username, google_email));
 
-            final String status = "Sign in after registering new google user\n\n";
-            view.showSuccessfulMessage(status + statusName + "\nName: " + google_username + "\nEmail: " + google_email);
-            view.switchTo(View.Name.MAIN_MENU);
+            // TODO: localize this text
+            final String message = "Google Sign in successful. New user created.\n\n"
+                    + statusName
+                    + "\nName: " + google_username + "\nEmail: " + google_email;
+
+            doLoginAndShowMessage(message);
 
         } else {
-            view.showErrorMessage(statusName);
+            view.showSignInErrorPopup(statusName);
         }
     }
 
-    public void tryToSignInUsingRegisteredUser() {
+    public void doAutoLogin() {
         try {
-            User prefs_user = settings.getUser();
-
-            final String status = "Sign in using registerd user\n\n";
-            view.showSuccessfulMessage(status + "\nName: " + prefs_user.getUsername() + "\nEmail: " + prefs_user.getEmail());
-            view.switchTo(View.Name.MAIN_MENU);
+            doOfflineLoginIfUserAlreadyRegistered();
         } catch (Settings.NoRegisteredUserException e) {
-            Log.d(TAG, "No registered user");
+            view.doGoogleSignIn();
         }
+    }
+
+    private void doOfflineLoginIfUserAlreadyRegistered() throws Settings.NoRegisteredUserException {
+        User prefs_user = settings.getUser();
+
+        // TODO: localize this text
+        final String message = "Sign in successful\n\n"
+                + "\nName: " + prefs_user.getUsername() + "\nEmail: " + prefs_user.getEmail();
+
+        doLoginAndShowMessage(message);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        view.showErrorMessage(connectionResult.getErrorMessage());
+        view.showSignInErrorPopup(connectionResult.getErrorMessage());
+    }
+
+    private void doLoginAndShowMessage(String message) {
+        view.showSuccessfulSignInPopup(message);
+        view.switchToView(View.Name.MAIN_MENU);
+        view.destroy();
     }
 }

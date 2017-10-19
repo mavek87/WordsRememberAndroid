@@ -2,23 +2,21 @@ package com.matteoveroni.wordsremember.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Login Activity
@@ -59,18 +57,10 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         SignInButton btn_signIn = (SignInButton) findViewById(R.id.login_btn_signin);
         btn_signIn.setSize(SignInButton.SIZE_STANDARD);
-
-        btn_signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (googleApiClient != null) {
-                    presenter.onSignInRequest();
-                }
-            }
-        });
 
         setupAndShowToolbar(getString(R.string.app_name) + " - Login");
     }
@@ -78,29 +68,18 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        presenter.tryToSignInUsingRegisteredUser();
-        tryToAutoSignIn();
+        presenter.doAutoLogin();
     }
 
-    private void tryToAutoSignIn() {
-        OptionalPendingResult<GoogleSignInResult> signInResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-
-        if (signInResult.isDone()) {
-            // There's immediate result available.
-            presenter.handleSignInResult(signInResult.get());
-        } else {
-            // There's no immediate result ready, waits for the async callback.
-            signInResult.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult result) {
-                    presenter.handleSignInResult(result);
-                }
-            });
+    @OnClick(R.id.login_btn_signin)
+    public void onSignInButtonPressed() {
+        if (googleApiClient != null) {
+            presenter.onGoogleSignInRequest();
         }
     }
 
     @Override
-    public void doSignIn() {
+    public void doGoogleSignIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE);
     }
@@ -108,23 +87,28 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(googleApiClient);
         if (requestCode == LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE) {
             GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            presenter.handleSignInResult(signInResult);
+            presenter.handleGoogleSignInResult(signInResult);
         }
     }
 
     @Override
-    public void showSuccessfulMessage(String message) {
+    public void showSuccessfulSignInPopup(String message) {
         showMessage(getString(R.string.msg_complete_status) + "\n\n" + message);
     }
 
     @Override
-    public void showErrorMessage(String errorMessage) {
+    public void showSignInErrorPopup(String errorMessage) {
         showMessage(getString(R.string.msg_wrong_status) + "\n\n" + errorMessage);
     }
 
+    @Override
+    public void destroy(){
+        finish();
+    }
 }
+
+
 

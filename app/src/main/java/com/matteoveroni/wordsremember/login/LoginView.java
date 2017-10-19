@@ -8,9 +8,11 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 
 public interface LoginView extends View {
 
-    void doSignIn();
+    void doGoogleSignIn();
 
-    void showSuccessfulMessage(String message);
+    void showSuccessfulSignInPopup(String message);
 
-    void showErrorMessage(String errorMessage);
+    void showSignInErrorPopup(String errorMessage);
+
+    void destroy();
 }

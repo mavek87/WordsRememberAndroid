@@ -42,7 +42,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     private Quiz currentQuiz;
     private final QuizAnswerChecker quizAnswerChecker = new QuizAnswerChecker();
     private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
-    private int numberOfVocablesWithTranslations;
+    private int nmbOfVocablesWithTranslations;
     private int numberOfQuestions;
     private int quizNumber;
     private int totalScore;
@@ -68,7 +68,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     private void initGame() {
         quizAnswerChecker.reset();
         quizVocable = "";
-        numberOfVocablesWithTranslations = 0;
+        nmbOfVocablesWithTranslations = 0;
         numberOfQuestions = 0;
         quizNumber = 0;
         totalScore = 0;
@@ -100,15 +100,15 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Subscribe
     public void onEventCountDistinctVocablesWithTranslations(EventCountDistinctVocablesWithTranslationsCompleted event) {
-        numberOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
-        if (numberOfVocablesWithTranslations > settings.getNumberOfQuestions()) {
+        nmbOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
+        if (nmbOfVocablesWithTranslations > settings.getNumberOfQuestions()) {
             numberOfQuestions = settings.getNumberOfQuestions();
         } else {
-            numberOfQuestions = numberOfVocablesWithTranslations;
+            numberOfQuestions = nmbOfVocablesWithTranslations;
         }
 
         int minNumber = 0;
-        int maxNumber = numberOfVocablesWithTranslations - 1;
+        int maxNumber = nmbOfVocablesWithTranslations - 1;
         int maxNumberOfExtractions = numberOfQuestions;
         uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(minNumber, maxNumber, maxNumberOfExtractions);
 

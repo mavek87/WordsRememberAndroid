@@ -22,6 +22,8 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
+import butterknife.ButterKnife;
+
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
@@ -121,12 +123,12 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     }
 
     @Override
-    public void switchTo(View.Name viewName) {
+    public void switchToView(View.Name viewName) {
         startActivity(new Intent(getApplicationContext(), viewName.getViewClass()));
     }
 
     @Override
-    public void switchTo(View.Name viewName, int requestCode) {
+    public void switchToView(View.Name viewName, int requestCode) {
         startActivityForResult(new Intent(getApplicationContext(), viewName.getViewClass()), requestCode);
     }
 

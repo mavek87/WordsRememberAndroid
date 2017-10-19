@@ -69,6 +69,6 @@ public class AddTranslationPresenter implements Presenter {
     }
 
     public void onCreateTranslationRequest() {
-        view.switchTo(View.Name.EDIT_TRANSLATION, EDIT_TRANSLATION_REQUEST_CODE);
+        view.switchToView(View.Name.EDIT_TRANSLATION, EDIT_TRANSLATION_REQUEST_CODE);
     }
 }
