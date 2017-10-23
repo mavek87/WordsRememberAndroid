@@ -6,16 +6,17 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.ui.listview.items.ListViewItem;
 
 /**
  * @author Matteo Veroni
  */
 
-public class TranslationsListViewAdapter extends CursorAdapter {
+public class UserProfilesListViewAdapter extends CursorAdapter {
 
-    public TranslationsListViewAdapter(Context context, Cursor cursor) {
+    public UserProfilesListViewAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 
@@ -26,6 +27,6 @@ public class TranslationsListViewAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View itemView, Context context, Cursor cursor) {
-        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(TranslationsContract.Schema.COL_TRANSLATION)));
+        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COL_VOCABLE)));
     }
 }

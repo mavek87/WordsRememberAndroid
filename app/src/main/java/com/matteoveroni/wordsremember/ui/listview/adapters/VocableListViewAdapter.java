@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.ui.listview.items.WordsListViewItem;
+import com.matteoveroni.wordsremember.ui.listview.items.ListViewItem;
 
 /**
  * @author Matteo Veroni
@@ -23,7 +23,7 @@ public class VocableListViewAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return new WordsListViewItem(context);
+        return new ListViewItem(context);
     }
 
 //    /**
@@ -52,6 +52,6 @@ public class VocableListViewAdapter extends CursorAdapter {
 //        }
 
         // Draw the cursor into the item view
-        ((WordsListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COL_VOCABLE)));
+        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COL_VOCABLE)));
     }
 }

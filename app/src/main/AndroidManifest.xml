@@ -45,6 +45,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".user_profile.UserProfileActivity"
+            android:label="@string/user_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".quizgame.view.QuizGameActivity"
             android:label="@string/quiz_game"
             android:theme="@style/AppTheme.NoActionBar" />

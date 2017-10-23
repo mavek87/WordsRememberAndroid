@@ -7,6 +7,7 @@ import com.matteoveroni.wordsremember.dictionary.view.activities.EditVocableActi
 import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
 import com.matteoveroni.wordsremember.login.LoginActivity;
 import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
+import com.matteoveroni.wordsremember.user_profile.UserProfileActivity;
 import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
 
@@ -26,6 +27,7 @@ public interface View {
 
     enum Name {
         LOGIN(LoginActivity.class),
+        USER_PROFILES(UserProfileActivity.class),
         MAIN_MENU(MainMenuActivity.class),
         QUIZ_GAME(QuizGameActivity.class),
         SETTINGS(SettingsActivity.class),

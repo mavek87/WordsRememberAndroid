@@ -8,23 +8,23 @@ import android.widget.TextView;
 
 import com.matteoveroni.wordsremember.R;
 
-public class WordsListViewItem extends RelativeLayout {
+public class ListViewItem extends RelativeLayout {
 
     private final TextView lbl_wordName;
 
-    public WordsListViewItem(Context context) {
+    public ListViewItem(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.item_word_list_view, this, true);
         lbl_wordName = (TextView) findViewById(R.id.lbl_wordName);
     }
 
-    public WordsListViewItem(Context context, AttributeSet attrs) {
+    public ListViewItem(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.item_word_list_view, this, true);
         lbl_wordName = (TextView) findViewById(R.id.lbl_wordName);
     }
 
-    public WordsListViewItem(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ListViewItem(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.item_word_list_view, this, true);
         lbl_wordName = (TextView) findViewById(R.id.lbl_wordName);
