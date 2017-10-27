@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.google.gms.google-services'
 
 configurations.all {
@@ -9,7 +8,7 @@ configurations.all {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.2'
     dexOptions {
         maxProcessCount 2
         javaMaxHeapSize "2048m"
@@ -67,7 +66,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     // Gson
-    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.google.code.gson:gson:2.8.1'
 
     // GreenRobot EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -81,11 +80,11 @@ dependencies {
 
     // Butter knife
     compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     // Dagger 2
-    apt 'com.google.dagger:dagger-compiler:2.9'
     compile 'com.google.dagger:dagger:2.9'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Mockito
