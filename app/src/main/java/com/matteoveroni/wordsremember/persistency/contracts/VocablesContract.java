@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.persistency.contracts;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.persistency.providers.DictionaryProvider;
+import com.matteoveroni.wordsremember.persistency.providers.dictionary.DictionaryProvider;
 
 /**
  * Contract class for Dictionary

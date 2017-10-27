@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.google.gms.google-services'
 
 configurations.all {
-    // Check for updates every build
+    // IMPORTANT: Check for updates everytime
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
@@ -48,9 +48,10 @@ dependencies {
     /*************** Dependencies taken from git by jitpack.io ******************/
 
     // Example using Tag:
-    // compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
-
-    compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'
+//     compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
+    //TODO: use the master version. In mc problems
+    compile 'com.github.mavek87:MyUtils:8ddbb426fde1296fdc84ef34907ad1e1c2db472a'
+//    compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'
     compile 'com.github.mavek87:AndroidTagGenerator:master-SNAPSHOT'
 
     /** *************************************************************************/

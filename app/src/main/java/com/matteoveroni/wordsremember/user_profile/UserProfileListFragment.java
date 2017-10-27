@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,12 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.dictionary.events.vocable.EventVocableSelected;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.ui.listview.adapters.UserProfilesListViewAdapter;
@@ -26,11 +30,12 @@ import com.matteoveroni.wordsremember.ui.listview.adapters.UserProfilesListViewA
 import org.greenrobot.eventbus.EventBus;
 
 /**
- *
  * @author Matteo Veroni
  */
 
 public class UserProfileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String TAG = TagGenerator.tag(UserProfileListFragment.class);
 
     private final EventBus EVENT_BUS = EventBus.getDefault();
 
@@ -70,8 +75,9 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-//        Cursor cursor = profilesListAdapter.getCursor();
+        Cursor cursor = profilesListAdapter.getCursor();
 //        EVENT_BUS.post(new EventVocableSelected(getSelectedVocable(cursor, position)));
+        Toast.makeText(getActivity(), cursor.getString(1), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -107,14 +113,14 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        final String[] columns = new String[]{VocablesContract.Schema.COL_ID, VocablesContract.Schema.COL_VOCABLE};
+        final String[] columns = new String[]{ProfilesContract.Schema.COL_ID, ProfilesContract.Schema.COL_PROFILE_NAME};
         return new CursorLoader(
                 getActivity(),
-                VocablesContract.CONTENT_URI,
-                columns,
+                ProfilesContract.CONTENT_URI,
                 null,
                 null,
-                VocablesContract.Schema.COL_VOCABLE + " ASC"
+                null,
+                ProfilesContract.Schema.COL_PROFILE_NAME + " ASC"
         );
     }
 

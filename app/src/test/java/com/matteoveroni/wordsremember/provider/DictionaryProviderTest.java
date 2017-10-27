@@ -6,8 +6,8 @@ import android.net.Uri;
 
 import com.matteoveroni.myutils.Singleton;
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
-import com.matteoveroni.wordsremember.persistency.providers.DictionaryProvider;
+import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
+import com.matteoveroni.wordsremember.persistency.providers.dictionary.DictionaryProvider;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 
@@ -51,7 +51,7 @@ public class DictionaryProviderTest {
     @After
     public void tearDown() {
         // Reset DatabaseManager Singleton using reflections (second parameter must match DatabaseManager instance name)
-        Singleton.resetAttribute(DatabaseManager.class, "DB_UNIQUE_INSTANCE");
+        Singleton.resetAttribute(DatabaseHelper.class, "DB_UNIQUE_INSTANCE");
         values.clear();
         if (cursor != null) {
             cursor.close();

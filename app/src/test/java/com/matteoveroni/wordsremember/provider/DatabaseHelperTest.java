@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
@@ -41,14 +41,14 @@ import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class DatabaseManagerTest {
+public class DatabaseHelperTest {
 
     private ShadowApplication app = Shadows.shadowOf(RuntimeEnvironment.application);
-    private DatabaseManager dbManager;
+    private DatabaseHelper dbManager;
     private Cursor queryResults;
     private ContentValues values = new ContentValues();
 
-    private static final String DATABASE_NAME = DatabaseManager.DB_NAME;
+    private static final String DATABASE_NAME = DatabaseHelper.DB_NAME;
 
     private final Table TABLE_VOCABLES = new Table(VocablesContract.Schema.TABLE_NAME, VocablesContract.Schema.ALL_COLUMNS);
     private final Table TABLE_TRANSLATIONS = new Table(TranslationsContract.Schema.TABLE_NAME, TranslationsContract.Schema.ALL_COLUMNS);
@@ -62,7 +62,7 @@ public class DatabaseManagerTest {
 
     @Before
     public void setUp() {
-        dbManager = DatabaseManager.getInstance(app.getApplicationContext());
+        dbManager = DatabaseHelper.getInstance(app.getApplicationContext());
         assertNotNull("DbManager should be created before each test", dbManager);
 
         final SQLiteDatabase database = dbManager.getReadableDatabase();

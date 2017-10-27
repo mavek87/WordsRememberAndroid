@@ -27,6 +27,6 @@ public class UserProfilesListViewAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View itemView, Context context, Cursor cursor) {
-        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(VocablesContract.Schema.COL_VOCABLE)));
+        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(ProfilesContract.Schema.COL_PROFILE_NAME)));
     }
 }

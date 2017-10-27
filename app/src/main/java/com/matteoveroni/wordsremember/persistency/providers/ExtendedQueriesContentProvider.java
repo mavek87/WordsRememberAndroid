@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-    protected DatabaseManager databaseManager;
+    protected DatabaseHelper databaseHelper;
 
     public class Error {
         public static final String UNSUPPORTED_URI = "Unsupported URI";
@@ -31,7 +31,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        databaseManager = DatabaseManager.getInstance(getContext());
+        databaseHelper = DatabaseHelper.getInstance(getContext());
         return true;
     }
 
@@ -69,7 +69,11 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
         return (getQueryParameterOffsetValue(uri) != null);
     }
 
-    protected void notifyChangeToObservers(Uri uri) {
+    /**
+     * https://stackoverflow.com/questions/40481035/diference-between-cursor-setnotificationuri-and-getcontentresolver-notifycha
+     */
+
+    protected void notifyChangeToObservingCursors(Uri uri) {
         if (isContentResolverNotNull())
             getContext().getContentResolver().notifyChange(uri, null);
     }

@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.persistency.contracts;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.persistency.providers.DictionaryProvider;
+import com.matteoveroni.wordsremember.persistency.providers.profile.ProfilesProvider;
 
 /**
  * @author Matteo Veroni
@@ -14,7 +14,7 @@ public class ProfilesContract {
     public static final String NAME = ProfilesContract.Schema.TABLE_NAME;
 
     public static final Uri CONTENT_URI = Uri.parse(
-            DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
+            ProfilesProvider.SCHEME + ProfilesProvider.CONTENT_AUTHORITY + "/" + NAME
     );
 
     // Mime type
@@ -45,6 +45,10 @@ public class ProfilesContract {
                 + ProfilesContract.Schema.COL_PROFILE_NAME + " TEXT NOT NULL, "
                 + "CONSTRAINT UQ_ProfileName UNIQUE (" + ProfilesContract.Schema.COL_PROFILE_NAME + ")"
                 + ");";
+
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + ProfilesContract.Schema.TABLE_NAME;
+
+        public static final String INSERT_DEFAULT_PROFILE = "INSERT INTO " + ProfilesContract.Schema.TABLE_NAME
+                + " (" + Schema.COL_PROFILE_NAME + ") VALUES ('Profile1');";
     }
 }

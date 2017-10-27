@@ -1,7 +1,6 @@
-package com.matteoveroni.wordsremember.persistency.providers;
+package com.matteoveroni.wordsremember.persistency.providers.dictionary;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,13 +10,14 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 
 /**
  * @author Matteo Veroni
+ *         https://stackoverflow.com/questions/40481035/diference-between-cursor-setnotificationuri-and-getcontentresolver-notifycha
  */
 
 public class DictionaryProvider extends ExtendedQueriesContentProvider {
@@ -93,10 +93,10 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 queryBuilder.setTables(VocablesTranslationsContract.Schema.TABLE_NAME);
                 break;
             case TRANSLATIONS_FOR_VOCABLE:
-                // SELECT translations._id, translations.translation
-                // FROM translations LEFT JOIN vocables_translations
-                // ON (translations._id=vocables_translations.translation_id)
-                // WHERE vocables_translations.vocable_id=?;
+                 /* SELECT translations._id, translations.translation
+                 FROM translations LEFT JOIN vocables_translations
+                 ON (translations._id=vocables_translations.translation_id)
+                 WHERE vocables_translations.vocable_id=?; */
 
                 projection = TranslationsContract.Schema.ALL_COLUMNS;
 
@@ -114,21 +114,21 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 break;
             case NOT_TRANSLATIONS_FOR_VOCABLE:
 
-                //   SELECT translations._id AS _id, translations.translation AS translation FROM translations
-                //   WHERE NOT EXISTS (
-                //      SELECT vocables_translations.translation_id FROM vocables_translations
-                //      WHERE translations._id=vocables_translations.translation_id
-                //   )
-                //   UNION
-                //   SELECT translations._id AS _id,translations.translation AS translation FROM translations
-                //   INNER JOIN
-                //   (
-                //      SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
-                //      NOT IN (
-                //          SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=3
-                //	    )
-                //   ) not_mine_translations
-                //   ON (translations._id=not_mine_translations.translation_id)
+                   /* SELECT translations._id AS _id, translations.translation AS translation FROM translations
+                   WHERE NOT EXISTS (
+                      SELECT vocables_translations.translation_id FROM vocables_translations
+                      WHERE translations._id=vocables_translations.translation_id
+                   )
+                   UNION
+                   SELECT translations._id AS _id,translations.translation AS translation FROM translations
+                   INNER JOIN
+                   (
+                      SELECT * FROM vocables_translations WHERE vocables_translations.translation_id
+                      NOT IN (
+                          SELECT vocables_translations.translation_id FROM vocables_translations WHERE vocables_translations.vocable_id=3
+                	    )
+                   ) not_mine_translations
+                   ON (translations._id=not_mine_translations.translation_id) */
 
                 String Voc_Tra = VocablesTranslationsContract.Schema.TABLE_NAME;
 
@@ -166,15 +166,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
                 whereArgs = new String[]{uri.getLastPathSegment()};
 
-                Cursor cursor = databaseManager.getReadableDatabase().rawQuery(SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID, whereArgs);
-                if (isContentResolverNotNull())
-                    cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                Cursor cursor = databaseHelper.getReadableDatabase().rawQuery(SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID, whereArgs);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for QUERY");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
 
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         Cursor cursor = queryBuilder.query(
                 db,
@@ -186,14 +185,13 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 sortOrder,
                 getQueryParametersValuesForLimitAndOffset(uri)
         );
-        if (isContentResolverNotNull())
-            cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         Uri contractUri;
         long id;
@@ -212,16 +210,16 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 id = db.insertOrThrow(VocablesTranslationsContract.Schema.TABLE_NAME, null, values);
                 break;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for INSERT");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for INSERT");
         }
-        notifyChangeToObservers(uri);
+        getContext().getContentResolver().notifyChange(uri, null);
         return Uri.parse(contractUri + "/" + id);
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -242,16 +240,16 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for UPDATE");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for UPDATE");
         }
-        notifyChangeToObservers(uri);
+        getContext().getContentResolver().notifyChange(uri, null);
         return updatedRowsCounter;
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -274,9 +272,9 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
                 deletedRowsCounter = db.delete(VocablesTranslationsContract.Schema.TABLE_NAME, whereClause, whereArgs);
                 break;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for DELETE");
+                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for DELETE");
         }
-        notifyChangeToObservers(uri);
+        getContext().getContentResolver().notifyChange(uri, null);
         return deletedRowsCounter;
     }
 }

@@ -3,19 +3,13 @@ package com.matteoveroni.wordsremember.persistency.providers;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
-import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UsersContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 
 /**
  * @author Matteo Veroni
@@ -50,21 +44,21 @@ public class UsersProvider extends ExtendedQueriesContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         long id = db.insertOrThrow(UsersContract.Schema.TABLE_NAME, null, values);
 
-        notifyChangeToObservers(uri);
+        notifyChangeToObservingCursors(uri);
         return Uri.parse(uri + "/" + id);
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String whereClause, @Nullable String[] whereArgs) {
-        SQLiteDatabase db = databaseManager.getWritableDatabase();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
         int deletedRowsCount = db.delete(UsersContract.Schema.TABLE_NAME, whereClause, whereArgs);
 
-        notifyChangeToObservers(uri);
+        notifyChangeToObservingCursors(uri);
         return deletedRowsCount;
     }
 

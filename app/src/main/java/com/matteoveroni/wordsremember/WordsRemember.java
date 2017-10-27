@@ -15,7 +15,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryMod
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
 import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 
 import java.util.Locale;
@@ -24,7 +24,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.4.0
+ * @version 0.4.1
  **/
 
 public class WordsRemember extends Application {
@@ -32,7 +32,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.4.0";
+    public static final String VERSION = "0.4.1";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
@@ -51,7 +51,7 @@ public class WordsRemember extends Application {
         buildAppComponents();
 
         if (CLEAR_DB_FOR_EACH_LOGIN)
-            DatabaseManager.getInstance(getApplicationContext()).deleteDatabase();
+            DatabaseHelper.getInstance(getApplicationContext()).deleteDatabase();
 
         if (POPULATE_DB_USING_FAKE_DATA) {
             // (mode "true" broke some test)

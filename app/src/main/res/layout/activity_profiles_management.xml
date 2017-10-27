@@ -22,6 +22,7 @@
         android:id="@+id/profiles_management_fragment"
         android:name="com.matteoveroni.wordsremember.user_profile.UserProfileListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/large_vertical_margin"/>
 
 </android.support.design.widget.CoordinatorLayout>
