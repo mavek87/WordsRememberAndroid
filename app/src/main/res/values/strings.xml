@@ -49,6 +49,7 @@
     <string name="correctAnswer">Correct answer</string>
     <string name="correctAnswers">Correct answers</string>
     <string name="wrongAnswer">Wrong answer</string>
+    <string name="selectProfile">Select a profile</string>
     <string name="msg_correctAnswer">The answer is correct</string>
     <string name="msg_wrongAnswer">The answer is wrong</string>
     <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>

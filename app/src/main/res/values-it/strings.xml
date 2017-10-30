@@ -63,4 +63,5 @@
     <string name="msg_complete_status">Operazione completata con successo</string>
     <string name="username">Nome Utente</string>
     <string name="user_profile">Profilo Utente</string>
+    <string name="selectProfile">Seleziona un profilo</string>
 </resources>
