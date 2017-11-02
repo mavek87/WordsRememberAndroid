@@ -44,7 +44,7 @@ public class UsersProvider extends ExtendedQueriesContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         long id = db.insertOrThrow(UsersContract.Schema.TABLE_NAME, null, values);
 
@@ -54,7 +54,7 @@ public class UsersProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String whereClause, @Nullable String[] whereArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         int deletedRowsCount = db.delete(UsersContract.Schema.TABLE_NAME, whereClause, whereArgs);
 

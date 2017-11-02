@@ -62,7 +62,7 @@ public class ProfilesProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
 
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        SQLiteDatabase db = dbManager.getReadableDatabase();
 
         Cursor cursor = queryBuilder.query(
                 db,
@@ -80,7 +80,7 @@ public class ProfilesProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         switch (URI_MATCHER.match(uri)) {
             case PROFILES:
@@ -99,7 +99,7 @@ public class ProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -129,7 +129,7 @@ public class ProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {

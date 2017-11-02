@@ -4,19 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.matteoveroni.myutils.IntRange;
 import com.matteoveroni.myutils.MyUtilsVersion;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.dependency_injection.components.AppComponent;
 import com.matteoveroni.wordsremember.dependency_injection.components.DaggerAppComponent;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 
 import java.util.Locale;
 
@@ -24,7 +19,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.4.3
+ * @version 0.4.4
  **/
 
 public class WordsRemember extends Application {
@@ -32,13 +27,13 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.4.3";
+    public static final String VERSION = "0.4.4";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
 
-    private static final boolean CLEAR_DB_BEFORE_EACH_LOGIN = false;
-    private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
+//    private static final boolean CLEAR_DB_BEFORE_EACH_LOGIN = false;
+//    private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
 
     private static AppComponent APP_COMPONENT;
 
@@ -50,14 +45,14 @@ public class WordsRemember extends Application {
         printAppSpecs();
         buildAppComponents();
 
-        if (CLEAR_DB_BEFORE_EACH_LOGIN)
-            DatabaseHelper.getInstance(getApplicationContext()).deleteDatabase();
-
-        if (POPULATE_DB_USING_FAKE_DATA) {
-            // (mode "true" broke some test)
-            int NUMBER_OF_FAKE_VOCABLES_TO_CREATE = 1;
-            populateDatabaseUsingFakeData(getApplicationContext(), NUMBER_OF_FAKE_VOCABLES_TO_CREATE);
-        }
+//        if (CLEAR_DB_BEFORE_EACH_LOGIN)
+//            DatabaseHelper.getInstance(getApplicationContext()).deleteDatabase();
+//
+//        if (POPULATE_DB_USING_FAKE_DATA) {
+//            // (mode "true" broke some test)
+//            int NUMBER_OF_FAKE_VOCABLES_TO_CREATE = 1;
+//            populateDatabaseUsingFakeData(getApplicationContext(), NUMBER_OF_FAKE_VOCABLES_TO_CREATE);
+//        }
     }
 
     private void buildAppComponents() {
@@ -84,20 +79,20 @@ public class WordsRemember extends Application {
     }
 
     private void printAppSpecs() {
-        Log.i(APP_NAME, Str.concat("APP_NAME: ", APP_NAME));
-        Log.d(APP_NAME, Str.concat("LOWERCASE_APP_NAME: ", LOWERCASE_APP_NAME));
-        Log.i(APP_NAME, Str.concat("VERSION: ", VERSION));
-        Log.d(APP_NAME, Str.concat("AUTHOR: ", AUTHOR));
-        Log.d(APP_NAME, Str.concat("AUTHORITY: ", AUTHORITY));
-        Log.d(APP_NAME, Str.concat("MYUTILS VERSION: ", MyUtilsVersion.NUMBER));
-        Log.i(APP_NAME, Str.concat("CURRENT LOCALE: ", CURRENT_LOCALE.toString()));
+        Log.i(APP_NAME, "APP_NAME: ".concat(APP_NAME));
+        Log.d(APP_NAME, "LOWERCASE_APP_NAME: ".concat(LOWERCASE_APP_NAME));
+        Log.i(APP_NAME, "VERSION: ".concat(VERSION));
+        Log.d(APP_NAME, "AUTHOR: ".concat(AUTHOR));
+        Log.d(APP_NAME, "AUTHORITY: ".concat(AUTHORITY));
+        Log.d(APP_NAME, "MYUTILS VERSION: ".concat(MyUtilsVersion.NUMBER));
+        Log.i(APP_NAME, "CURRENT LOCALE: ".concat(CURRENT_LOCALE.toString()));
     }
 
-    private void populateDatabaseUsingFakeData(Context context, int numberOfVocablesToCreate) {
-        for (int i = 0; i < numberOfVocablesToCreate; i++) {
-            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new IntRange(3, 20)));
-            DictionaryDAO dao = new DictionaryDAO(context);
-            dao.saveVocable(vocableToSave);
-        }
-    }
+//    private void populateDatabaseUsingFakeData(Context context, int numberOfVocablesToCreate) {
+//        for (int i = 0; i < numberOfVocablesToCreate; i++) {
+//            Word vocableToSave = new Word(Str.generateUniqueRndLowercaseString(new IntRange(3, 20)));
+//            DictionaryDAO dao = new DictionaryDAO(context);
+//            dao.saveVocable(vocableToSave);
+//        }
+//    }
 }

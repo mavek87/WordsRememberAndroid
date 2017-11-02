@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
+import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.user_profile.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,9 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-    protected DatabaseHelper databaseHelper;
+//    protected DatabaseHelper databaseHelper;
+
+    protected DatabaseManager dbManager;
 
     public class Error {
         public static final String UNSUPPORTED_URI = "Unsupported URI";
@@ -31,7 +35,8 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        databaseHelper = DatabaseHelper.getInstance(getContext());
+//        databaseHelper = DatabaseHelper.getInstance(getContext());
+        dbManager = new DatabaseManager(getContext(), UserProfile.SYSTEM_PROFILE);
         return true;
     }
 
@@ -74,8 +79,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
      */
 
     protected void notifyChangeToObservingCursors(Uri uri) {
-        if (isContentResolverNotNull())
-            getContext().getContentResolver().notifyChange(uri, null);
+        if (isContentResolverNotNull()) getContext().getContentResolver().notifyChange(uri, null);
     }
 
     protected boolean isContentResolverNotNull() {
