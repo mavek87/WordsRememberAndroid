@@ -118,13 +118,13 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (type) {
             case TRANSLATIONS:
-                lbl_title.setText("Translations");
+                lbl_title.setText(getString(R.string.translations));
                 return getCursorForAllTheTranslations();
             case TRANSLATIONS_FOR_VOCABLE:
-                lbl_title.setText("Translations for vocable");
+                lbl_title.setText(getString(R.string.translations_for_vocable));
                 return getCursorForAllTheTranslationsForVocable();
             case TRANSLATIONS_NOT_FOR_VOCABLE:
-                lbl_title.setText("Other translations available");
+                lbl_title.setText(getString(R.string.other_translations_available));
                 return getCursorForAllTheTranslationsExceptThoseForVocable();
             default:
                 final String error = "Error during onCreateLoader. Unknown type of fragment set.";

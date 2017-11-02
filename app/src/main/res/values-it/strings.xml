@@ -64,4 +64,9 @@
     <string name="username">Nome Utente</string>
     <string name="user_profile">Profilo Utente</string>
     <string name="selectProfile">Seleziona un profilo</string>
+    <string name="name">Nome</string>
+    <string name="email">Email</string>
+    <string name="translations_for_vocable">Traduzioni del vocabolo</string>
+    <string name="other_translations_available">Altre traduzioni disponibili</string>
+    <string name="sign_in_successful">Accesso eseguito</string>
 </resources>

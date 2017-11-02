@@ -25,6 +25,8 @@
     <string name="user_profile">User profile</string>
     <string name="quiz_game">Quiz Game</string>
     <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
     <string name="version">Version</string>
     <string name="deviceLocale">Device locale</string>
     <string name="game_result">Game Results</string>
@@ -39,6 +41,8 @@
     <string name="vocable_not_saved">Vocable not saved</string>
     <string name="vocable_removed">Vocable removed</string>
     <string name="translations">Translations</string>
+    <string name="translations_for_vocable">Translations for vocable</string>
+    <string name="other_translations_available">Other translations avaible</string>
     <string name="translations_editor">Translation editor</string>
     <string name="add_translation">Add Translation</string>
     <string name="edit_translation">Edit translation</string>
@@ -50,6 +54,8 @@
     <string name="correctAnswers">Correct answers</string>
     <string name="wrongAnswer">Wrong answer</string>
     <string name="selectProfile">Select a profile</string>
+    <string name="user_registered">User registered</string>
+    <string name="sign_in_successful">Sign in successful</string>
     <string name="msg_correctAnswer">The answer is correct</string>
     <string name="msg_wrongAnswer">The answer is wrong</string>
     <string name="msg_vocable_not_saved">Cannot add translations if vocable isn\'t already saved. Do you want to save it and proceed?</string>
@@ -65,7 +71,6 @@
     <string name="msg_select_game_difficulty">Select game difficulty</string>
     <string name="msg_enable_online_translations_check">Enable online translations check</string>
     <string name="timeRemaining">Time remaining</string>
-
     <string name="msg_wrong_status">Ops.. something goes wrong..</string>
     <string name="msg_complete_status">Operation completed successfully</string>
 

@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
@@ -95,8 +96,8 @@ public class LoginActivity extends BaseActivityPresentedView implements LoginVie
     }
 
     @Override
-    public void showSuccessfulSignInPopup(String message) {
-        showMessage(getString(R.string.msg_complete_status) + "\n\n" + message);
+    public void showSuccessfulSignInPopup(FormattedString message) {
+        showMessage(getString(R.string.msg_complete_status) + "\n\n" + localize(message));
     }
 
     @Override

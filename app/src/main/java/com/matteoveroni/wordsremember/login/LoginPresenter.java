@@ -8,10 +8,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.users.User;
+
+import java.util.Locale;
 
 /**
  * @author Matteo Veroni
@@ -57,10 +61,14 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
             settings.saveUser(new User(google_username, google_email));
 
-            // TODO: localize this text
-            final String message = "Google Sign in successful. New user created.\n\n"
-                    + statusName
-                    + "\nName: " + google_username + "\nEmail: " + google_email;
+            FormattedString message = new FormattedString(
+                    "%s, %s\n\n%s: %s\n%s: %s",
+                    LocaleKey.USER_REGISTERED,
+                    LocaleKey.SIGN_IN_SUCCESSFUL,
+                    LocaleKey.NAME,
+                    google_username,
+                    LocaleKey.EMAIL,
+                    google_email);
 
             doLoginAndShowMessage(message);
 
@@ -80,9 +88,13 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
     private void doOfflineLoginIfUserAlreadyRegistered() throws Settings.NoRegisteredUserException {
         User prefs_user = settings.getUser();
 
-        // TODO: localize this text
-        final String message = "Sign in successful\n\n"
-                + "\nName: " + prefs_user.getUsername() + "\nEmail: " + prefs_user.getEmail();
+        FormattedString message = new FormattedString(
+                "%s\n\n%s: %s\n%s: %s",
+                LocaleKey.SIGN_IN_SUCCESSFUL,
+                LocaleKey.NAME,
+                prefs_user.getUsername(),
+                LocaleKey.EMAIL,
+                prefs_user.getEmail());
 
         doLoginAndShowMessage(message);
     }
@@ -92,7 +104,7 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
         view.showSignInErrorPopup(connectionResult.getErrorMessage());
     }
 
-    private void doLoginAndShowMessage(String message) {
+    private void doLoginAndShowMessage(FormattedString message) {
         view.showSuccessfulSignInPopup(message);
         view.switchToView(View.Name.USER_PROFILES);
         view.destroy();
