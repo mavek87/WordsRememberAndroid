@@ -20,17 +20,33 @@ public class DatabaseManager {
     private final Context context;
     private UserProfile currentUserProfile;
 
-    public DatabaseManager(Context context, UserProfile userProfile) {
+    private volatile static DatabaseManager DB_MANAGER_UNIQUE_INSTANCE;
+
+    private DatabaseManager(Context context) {
         this.context = context;
-        this.currentUserProfile = userProfile;
-        dbHelpers.put(userProfile, new DatabaseHelper(context, userProfile, DB_VERSION));
+        setCurrentUserProfile(UserProfile.SYSTEM_PROFILE);
     }
 
-    public void setUserProfile(UserProfile userProfile) {
+    public static DatabaseManager getInstance(Context appContext) {
+        if (DB_MANAGER_UNIQUE_INSTANCE == null) {
+            synchronized (DatabaseHelper.class) {
+                if (DB_MANAGER_UNIQUE_INSTANCE == null) {
+                    DB_MANAGER_UNIQUE_INSTANCE = new DatabaseManager(appContext);
+                }
+            }
+        }
+        return DB_MANAGER_UNIQUE_INSTANCE;
+    }
+
+    public void setCurrentUserProfile(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
             dbHelpers.put(userProfile, new DatabaseHelper(context, userProfile, DB_VERSION));
         }
         this.currentUserProfile = userProfile;
+    }
+
+    public UserProfile getCurrentUserProfile() {
+        return this.currentUserProfile;
     }
 
     public SQLiteDatabase getReadableDatabase() {

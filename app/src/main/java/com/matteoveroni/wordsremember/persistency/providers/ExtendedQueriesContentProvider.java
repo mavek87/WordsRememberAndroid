@@ -25,8 +25,6 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-//    protected DatabaseHelper databaseHelper;
-
     protected DatabaseManager dbManager;
 
     public class Error {
@@ -35,8 +33,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-//        databaseHelper = DatabaseHelper.getInstance(getContext());
-        dbManager = new DatabaseManager(getContext(), UserProfile.SYSTEM_PROFILE);
+        dbManager = DatabaseManager.getInstance(getContext());
         return true;
     }
 

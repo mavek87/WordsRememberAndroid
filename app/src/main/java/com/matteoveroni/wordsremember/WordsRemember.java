@@ -19,7 +19,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.4.4
+ * @version 0.4.5
  **/
 
 public class WordsRemember extends Application {
@@ -27,7 +27,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.4.4";
+    public static final String VERSION = "0.4.5";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
