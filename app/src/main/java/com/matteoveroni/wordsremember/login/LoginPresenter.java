@@ -13,6 +13,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.settings.model.Settings;
+import com.matteoveroni.wordsremember.user_profile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
 import java.util.Locale;
@@ -32,6 +33,7 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
     public LoginPresenter(Settings settings) {
         this.settings = settings;
+        this.settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
     }
 
     @Override

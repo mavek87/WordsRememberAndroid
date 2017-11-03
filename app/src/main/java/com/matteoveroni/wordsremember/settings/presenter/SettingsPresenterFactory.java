@@ -14,13 +14,11 @@ import javax.inject.Inject;
 public class SettingsPresenterFactory implements PresenterFactory {
 
     @Inject
-    DictionaryDAO dao;
-    @Inject
     Settings settings;
 
     @Override
     public SettingsPresenter create() {
         WordsRemember.getAppComponent().inject(this);
-        return new SettingsPresenter(settings, dao);
+        return new SettingsPresenter(settings);
     }
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -12,12 +14,13 @@ import dagger.Provides;
  */
 
 @Module
-public class DaoModule {
+public class DictionaryDaoModule {
 
-    public DaoModule() {
+    public DictionaryDaoModule() {
     }
 
     @Provides
+    @Singleton
     public DictionaryDAO providesDictionaryDAO(Context context) {
         return new DictionaryDAO(context);
     }

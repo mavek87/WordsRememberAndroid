@@ -76,6 +76,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         Cursor cursor = profilesListAdapter.getCursor();
+        EVENT_BUS.postSticky(new EventUserProfileSelected(getSelectedUserProfile(cursor, position)));
 //        EVENT_BUS.post(new EventVocableSelected(getSelectedVocable(cursor, position)));
         Toast.makeText(getActivity(), cursor.getString(1), Toast.LENGTH_SHORT).show();
     }
@@ -96,20 +97,29 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         switch (item.getItemId()) {
 
             case R.id.menu_dictionary_list_long_press_remove:
-                Word selectedVocable = getSelectedVocable(cursor, position);
-                EVENT_BUS.post(
-                        new EventVocableManipulationRequest(selectedVocable, TypeOfManipulationRequest.REMOVE)
-                );
+//                Word selectedVocable = getSelectedVocable(cursor, position);
+//                EVENT_BUS.post(
+//                        new EventVocableManipulationRequest(selectedVocable, TypeOfManipulationRequest.REMOVE)
+//                );
                 return true;
 
         }
         return super.onContextItemSelected(item);
     }
 
-    private Word getSelectedVocable(Cursor cursor, int position) {
+    private UserProfile getSelectedUserProfile(Cursor cursor, int position) {
         cursor.moveToPosition(position);
-        return DictionaryDAO.cursorToVocable(cursor);
+
+        return new UserProfile(
+                cursor.getLong(cursor.getColumnIndex(ProfilesContract.Schema.COL_ID)),
+                cursor.getString(cursor.getColumnIndex(ProfilesContract.Schema.COL_PROFILE_NAME))
+        );
     }
+
+//    private Word getSelectedVocable(Cursor cursor, int position) {
+//        cursor.moveToPosition(position);
+//        return DictionaryDAO.cursorToVocable(cursor);
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

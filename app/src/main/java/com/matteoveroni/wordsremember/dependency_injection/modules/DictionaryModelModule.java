@@ -14,11 +14,12 @@ import dagger.Provides;
 @Module
 public class DictionaryModelModule {
 
-    private final DictionaryModel dictionaryModel = new DictionaryModel();
+    public DictionaryModelModule() {
+    }
 
     @Provides
     @Singleton
     DictionaryModel provideDictionaryModel() {
-        return dictionaryModel;
+        return new DictionaryModel();
     }
 }

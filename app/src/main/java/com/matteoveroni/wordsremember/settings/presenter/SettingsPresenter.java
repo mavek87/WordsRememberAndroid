@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.persistency.DatabaseManager;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
@@ -24,7 +25,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
     private final Settings settings;
     private SettingsView view;
 
-    public SettingsPresenter(Settings settings, DictionaryDAO dao) {
+    public SettingsPresenter(Settings settings) {
         this.settings = settings;
     }
 

@@ -24,32 +24,17 @@ import com.matteoveroni.wordsremember.user_profile.UserProfile;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TAG = TagGenerator.tag(DatabaseHelper.class);
-//    public static final String DB_NAME = WordsRemember.LOWERCASE_APP_NAME + ".db";
-
-//    private volatile static DatabaseHelper DB_UNIQUE_INSTANCE;
 
     private final Context context;
     private final UserProfile userProfile;
     private final String dbName;
 
     public DatabaseHelper(Context context, UserProfile userProfile, int version) {
-//        super(context, DatabaseHelper.DB_NAME, null, DatabaseHelper.VERSION);
         super(context, userProfile.getProfileName().concat(".db"), null, version);
         this.context = context;
         this.userProfile = userProfile;
         this.dbName = userProfile.getProfileName().concat(".db");
     }
-
-//    public static DatabaseHelper getInstance(Context appContext) {
-//        if (DB_UNIQUE_INSTANCE == null) {
-//            synchronized (DatabaseHelper.class) {
-//                if (DB_UNIQUE_INSTANCE == null) {
-//                    DB_UNIQUE_INSTANCE = new DatabaseHelper(appContext);
-//                }
-//            }
-//        }
-//        return DB_UNIQUE_INSTANCE;
-//    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

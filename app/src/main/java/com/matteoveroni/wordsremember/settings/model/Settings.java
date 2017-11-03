@@ -1,14 +1,21 @@
 package com.matteoveroni.wordsremember.settings.model;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
+import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.persistency.DatabaseManager;
 import com.matteoveroni.wordsremember.quizgame.business_logic.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.user_profile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
 import org.joda.time.DateTime;
 
 import java.util.Date;
+
+import javax.inject.Inject;
 
 /**
  * Created by Matteo Veroni
@@ -16,9 +23,15 @@ import java.util.Date;
 
 public class Settings {
 
+    public static final String TAG = TagGenerator.tag(Settings.class);
+
+    @Inject
+    DatabaseManager dbManager;
+
     private final SharedPreferences prefs;
 
     public static final String USER_KEY = "user_key";
+    public static final String USER_PROFILE_KEY = "user_profile_key";
     public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
     public static final String QUIZ_GAME_TIMER_TOTAL_TIME_KEY = "quiz_game_timer_total_time_key";
     public static final String QUIZ_GAME_TIMER_TICK_KEY = "quiz_game_timer_tick_key";
@@ -35,12 +48,14 @@ public class Settings {
     }
 
     public Settings(SharedPreferences prefs) {
+        WordsRemember.getAppComponent().inject(this);
         this.prefs = prefs;
     }
 
     public Settings(SharedPreferences prefs, QuizGameDifficulty difficulty) {
-        this.prefs = prefs;
+        this(prefs);
         setDifficulty(difficulty);
+        setUserProfile(UserProfile.SYSTEM_PROFILE);
     }
 
     public void saveUser(User user) {
@@ -53,6 +68,21 @@ public class Settings {
             throw new NoRegisteredUserException();
         } else {
             return Json.getInstance().fromJson(json_user, User.class);
+        }
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, UserProfile.class)).apply();
+        dbManager.setCurrentUserProfileAndCreateDbHelper(userProfile);
+        Log.d(TAG, "Switch to user profile => " + userProfile.getProfileName());
+    }
+
+    public UserProfile getUserProfile() {
+        String json_userProfile = prefs.getString(USER_PROFILE_KEY, "");
+        if (json_userProfile.trim().isEmpty()) {
+            return UserProfile.SYSTEM_PROFILE;
+        } else {
+            return Json.getInstance().fromJson(json_userProfile, UserProfile.class);
         }
     }
 
@@ -116,5 +146,4 @@ public class Settings {
     public boolean isOnlineTranslationServiceEnabled() {
         return prefs.getBoolean(ONLINE_TRANSLATION_SERVICE_KEY, false);
     }
-
 }

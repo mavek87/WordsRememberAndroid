@@ -1,12 +1,20 @@
 package com.matteoveroni.wordsremember.persistency;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
+import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.settings.model.Settings;
 import com.matteoveroni.wordsremember.user_profile.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author Matteo Veroni
@@ -14,6 +22,7 @@ import java.util.Map;
 
 public class DatabaseManager {
 
+    public static final String TAG = TagGenerator.tag(DatabaseManager.class);
     private static final int DB_VERSION = 1;
 
     private final Map<UserProfile, DatabaseHelper> dbHelpers = new HashMap<>();
@@ -24,7 +33,7 @@ public class DatabaseManager {
 
     private DatabaseManager(Context context) {
         this.context = context;
-        setCurrentUserProfile(UserProfile.SYSTEM_PROFILE);
+        setCurrentUserProfileAndCreateDbHelper(UserProfile.SYSTEM_PROFILE);
     }
 
     public static DatabaseManager getInstance(Context appContext) {
@@ -35,18 +44,16 @@ public class DatabaseManager {
                 }
             }
         }
+
         return DB_MANAGER_UNIQUE_INSTANCE;
     }
 
-    public void setCurrentUserProfile(UserProfile userProfile) {
+    public void setCurrentUserProfileAndCreateDbHelper(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
+            Log.d(TAG, "Created dbHelper for profile => " + userProfile.getProfileName());
             dbHelpers.put(userProfile, new DatabaseHelper(context, userProfile, DB_VERSION));
         }
         this.currentUserProfile = userProfile;
-    }
-
-    public UserProfile getCurrentUserProfile() {
-        return this.currentUserProfile;
     }
 
     public SQLiteDatabase getReadableDatabase() {
