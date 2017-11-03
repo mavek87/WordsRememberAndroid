@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.ContentType;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.GlosbePojo;
 import com.matteoveroni.wordsremember.web.glosbe_dictionary_api.Phrase;

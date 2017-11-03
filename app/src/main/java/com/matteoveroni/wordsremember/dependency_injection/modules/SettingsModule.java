@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.SharedPreferences;
 
-import com.matteoveroni.wordsremember.settings.model.Settings;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import javax.inject.Singleton;
 

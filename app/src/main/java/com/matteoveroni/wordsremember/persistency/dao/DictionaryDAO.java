@@ -16,8 +16,8 @@ import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesBy
 import com.matteoveroni.wordsremember.persistency.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncInsertCommand;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncUpdateCommand;
-import com.matteoveroni.wordsremember.dictionary.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;

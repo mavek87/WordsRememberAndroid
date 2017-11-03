@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;

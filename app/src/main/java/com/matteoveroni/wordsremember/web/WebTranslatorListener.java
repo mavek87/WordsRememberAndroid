@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.web;
 
-import com.matteoveroni.wordsremember.dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 
 import java.util.List;
 

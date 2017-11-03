@@ -35,7 +35,7 @@
         </receiver>
 
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".scene_login.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -45,42 +45,42 @@
         </activity>
 
         <activity
-            android:name=".main_menu.MainMenuActivity"
+            android:name=".scene_mainmenu.MainMenuActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".user_profile.UserProfileActivity"
+            android:name=".scene_userprofile.management.UserProfileActivity"
             android:label="@string/user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".quizgame.view.QuizGameActivity"
+            android:name=".scene_quizgame.view.QuizGameActivity"
             android:label="@string/quiz_game"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".settings.view.SettingsActivity"
+            android:name=".scene_settings.view.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.ManageVocablesActivity"
+            android:name=".scene_dictionary.view.activities.ManageVocablesActivity"
             android:label="@string/vocables_manager"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.EditVocableActivity"
+            android:name=".scene_dictionary.view.activities.EditVocableActivity"
             android:label="@string/vocable_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.AddTranslationActivity"
+            android:name=".scene_dictionary.view.activities.AddTranslationActivity"
             android:label="@string/add_translation"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".dictionary.view.activities.EditTranslationActivity"
+            android:name=".scene_dictionary.view.activities.EditTranslationActivity"
             android:label="@string/edit_translation"
             android:theme="@style/AppTheme.NoActionBar" />
 

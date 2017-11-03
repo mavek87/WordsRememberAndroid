@@ -6,8 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".user_profile.UserProfileActivity">
+    tools:context=".scene_userprofile.management.UserProfileActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -31,14 +32,22 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".user_profile.UserProfileActivity">
+        tools:context=".scene_userprofile.management.UserProfileActivity">
 
         <fragment
             android:id="@+id/profiles_management_fragment"
-            android:name="com.matteoveroni.wordsremember.user_profile.UserProfileListFragment"
+            android:name="com.matteoveroni.wordsremember.scene_userprofile.management.UserProfileListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_profile_floating_action_button"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin" />
 
 </android.support.design.widget.CoordinatorLayout>

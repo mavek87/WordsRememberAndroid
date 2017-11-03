@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.dependency_injection.modules;
 
-import com.matteoveroni.wordsremember.dictionary.model.DictionaryModel;
+import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 
 import javax.inject.Singleton;
 

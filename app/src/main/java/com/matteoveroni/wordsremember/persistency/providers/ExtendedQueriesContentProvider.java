@@ -5,10 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
 import com.matteoveroni.wordsremember.persistency.DatabaseManager;
-import com.matteoveroni.wordsremember.settings.model.Settings;
-import com.matteoveroni.wordsremember.user_profile.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;

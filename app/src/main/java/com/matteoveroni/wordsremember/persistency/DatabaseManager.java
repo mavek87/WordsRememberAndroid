@@ -1,20 +1,14 @@
 package com.matteoveroni.wordsremember.persistency;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.settings.model.Settings;
-import com.matteoveroni.wordsremember.user_profile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author Matteo Veroni

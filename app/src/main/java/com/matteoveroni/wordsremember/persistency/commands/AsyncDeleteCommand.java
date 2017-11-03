@@ -3,8 +3,8 @@ package com.matteoveroni.wordsremember.persistency.commands;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
-import com.matteoveroni.wordsremember.dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 

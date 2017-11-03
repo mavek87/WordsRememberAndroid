@@ -5,15 +5,15 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.DatabaseManag
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryDaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.AddTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditTranslationPresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.EditVocablePresenterFactory;
-import com.matteoveroni.wordsremember.dictionary.presenter.factories.ManageVocablesPresenterFactory;
-import com.matteoveroni.wordsremember.login.LoginPresenterFactory;
-import com.matteoveroni.wordsremember.quizgame.business_logic.presenter.QuizGamePresenterFactory;
-import com.matteoveroni.wordsremember.settings.model.Settings;
-import com.matteoveroni.wordsremember.settings.presenter.SettingsPresenterFactory;
-import com.matteoveroni.wordsremember.user_profile.UserProfilePresenterFactory;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.AddTranslationPresenterFactory;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditTranslationPresenterFactory;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.ManageVocablesPresenterFactory;
+import com.matteoveroni.wordsremember.scene_login.LoginPresenterFactory;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfilePresenterFactory;
 
 import javax.inject.Singleton;
 

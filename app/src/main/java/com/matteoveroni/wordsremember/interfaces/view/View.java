@@ -1,15 +1,16 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
 import com.matteoveroni.myutils.FormattedString;
-import com.matteoveroni.wordsremember.dictionary.view.activities.AddTranslationActivity;
-import com.matteoveroni.wordsremember.dictionary.view.activities.EditTranslationActivity;
-import com.matteoveroni.wordsremember.dictionary.view.activities.EditVocableActivity;
-import com.matteoveroni.wordsremember.dictionary.view.activities.ManageVocablesActivity;
-import com.matteoveroni.wordsremember.login.LoginActivity;
-import com.matteoveroni.wordsremember.main_menu.MainMenuActivity;
-import com.matteoveroni.wordsremember.user_profile.UserProfileActivity;
-import com.matteoveroni.wordsremember.quizgame.view.QuizGameActivity;
-import com.matteoveroni.wordsremember.settings.view.SettingsActivity;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.AddTranslationActivity;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditTranslationActivity;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditVocableActivity;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.ManageVocablesActivity;
+import com.matteoveroni.wordsremember.scene_login.LoginActivity;
+import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.EditUserProfileActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfileActivity;
+import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameActivity;
+import com.matteoveroni.wordsremember.scene_settings.view.SettingsActivity;
 
 /**
  * @author Matteo Veroni
@@ -28,6 +29,7 @@ public interface View {
     enum Name {
         LOGIN(LoginActivity.class),
         USER_PROFILES(UserProfileActivity.class),
+        EDIT_USER_PROFILE(EditUserProfileActivity.class),
         MAIN_MENU(MainMenuActivity.class),
         QUIZ_GAME(QuizGameActivity.class),
         SETTINGS(SettingsActivity.class),

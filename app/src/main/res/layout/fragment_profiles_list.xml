@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".user_profile.UserProfileActivity">
+    tools:context=".scene_userprofile.management.UserProfileActivity">
 
     <TextView
         android:layout_width="match_parent"
