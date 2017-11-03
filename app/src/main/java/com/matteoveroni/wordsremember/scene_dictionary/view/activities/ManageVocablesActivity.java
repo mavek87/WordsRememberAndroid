@@ -41,7 +41,7 @@ public class ManageVocablesActivity extends BaseActivityPresentedView implements
         setupAndShowToolbar(getString(R.string.vocables_manager));
     }
 
-    @OnClick(R.id.add_vocable_floating_action_button)
+    @OnClick(R.id.create_vocable_floating_action_button)
     @Override
     public void createVocableAction() {
         presenter.onCreateVocableRequest();

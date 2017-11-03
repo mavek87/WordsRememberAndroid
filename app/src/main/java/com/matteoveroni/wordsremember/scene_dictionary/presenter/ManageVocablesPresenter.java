@@ -29,18 +29,18 @@ public class ManageVocablesPresenter implements Presenter {
     private final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
-    private final DictionaryModel model;
+    private final DictionaryModel dictionaryModel;
     private ManageVocablesView view;
 
-    public ManageVocablesPresenter(DictionaryModel model, DictionaryDAO dao) {
-        this.model = model;
+    public ManageVocablesPresenter(DictionaryModel dictionaryModel, DictionaryDAO dao) {
+        this.dictionaryModel = dictionaryModel;
         this.dao = dao;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (ManageVocablesView) view;
-        model.reset();
+        dictionaryModel.reset();
         EVENT_BUS.register(this);
     }
 
@@ -51,14 +51,14 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     public void onCreateVocableRequest() {
-        model.setVocableSelected(new Word(""));
+        dictionaryModel.setVocableSelected(new Word(""));
         view.switchToView(View.Name.EDIT_VOCABLE);
     }
 
     @Subscribe
     public void onEvent(EventVocableSelected event) {
         Word vocableSelected = event.getSelectedVocable();
-        model.setVocableSelected(vocableSelected);
+        dictionaryModel.setVocableSelected(vocableSelected);
         view.switchToView(View.Name.EDIT_VOCABLE);
     }
 

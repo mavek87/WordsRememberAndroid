@@ -38,16 +38,19 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     private static final int ID_CURSOR_LOADER = 1;
 
+    private LoaderManager loaderManager;
     private VocableListViewAdapter vocableListAdapter;
+    private ListView vocableListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocables_list, container, false);
 
+        loaderManager = getLoaderManager();
+        loaderManager.initLoader(ID_CURSOR_LOADER, null, this);
+
         vocableListAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(vocableListAdapter);
-
-        getLoaderManager().initLoader(ID_CURSOR_LOADER, null, this);
 
         return view;
     }
@@ -55,18 +58,13 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        registerForContextMenu(getListView());
+        vocableListView = getListView();
+        vocableListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     @Override
     public void onResume() {
-        getLoaderManager().restartLoader(ID_CURSOR_LOADER, null, this);
+        loaderManager.restartLoader(ID_CURSOR_LOADER, null, this);
         super.onResume();
     }
 
@@ -80,6 +78,12 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         getActivity().getMenuInflater().inflate(R.menu.menu_dictionary_list_long_press, menu);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        registerForContextMenu(vocableListView);
     }
 
     @Override
