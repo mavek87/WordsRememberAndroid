@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.scene_dictionary.view.activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -53,14 +52,18 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
 
+        buildAndShowInnerFragments();
+
+        setupAndShowToolbar(getString(R.string.vocable_editor));
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void buildAndShowInnerFragments() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
         vocableTranslationsFragment = buildVocableTranslationsFragment();
         fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, vocableTranslationsFragment).commit();
         fragmentManager.executePendingTransactions();
-
-        setupAndShowToolbar(getString(R.string.vocable_editor));
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private TranslationsListFragment buildVocableTranslationsFragment() {
@@ -117,18 +120,15 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
 
     @Override
     public void showErrorDialogVocableNotSaved() {
-        errorDialog = buildErrorDialog(
-                getString(R.string.vocable_not_saved),
-                getString(R.string.msg_vocable_not_saved),
-                presenter
-        );
+        if (errorDialog == null) {
+            errorDialog = buildErrorDialog(getString(R.string.vocable_not_saved), getString(R.string.msg_vocable_not_saved), presenter);
+        }
         errorDialog.show();
     }
 
     @Override
     public void dismissErrorDialog() {
         if (errorDialog == null) errorDialog.dismiss();
-
     }
 
     @Override
