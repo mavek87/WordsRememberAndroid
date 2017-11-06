@@ -35,6 +35,7 @@
     <string name="manage_dictionary">Manage dictionary</string>
     <string name="add_word">Add Word</string>
     <string name="create_vocable">Create vocable</string>
+    <string name="edit_vocable">Edit vocable</string>
     <string name="vocable_editor">Vocable editor</string>
     <string name="vocables_manager">Vocables manager</string>
     <string name="vocable_saved">Vocable saved</string>

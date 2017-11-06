@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.R;
@@ -26,7 +27,7 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 
-    private TranslationsListFragment translationsListFragment;
+    private TranslationsListFragment notVocableTranslationsFragment;
     private AddTranslationPresenter presenter;
 
     @Override
@@ -45,18 +46,21 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
         setContentView(R.layout.activity_dictionary_add_translation);
         ButterKnife.bind(this);
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        translationsListFragment = createTranslationListFragmentNotForVocable();
-        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        notVocableTranslationsFragment = buildNotVocableTranslationsFragment();
+        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, notVocableTranslationsFragment).commit();
         fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar(getString(R.string.add_translation));
     }
 
-    private TranslationsListFragment createTranslationListFragmentNotForVocable() {
-        final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
-        fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_NOT_FOR_VOCABLE;
-        return fragmentToBuild;
+    private TranslationsListFragment buildNotVocableTranslationsFragment() {
+        TranslationsListFragment fragment = new TranslationsListFragment();
+        final Bundle fragmentArgs = new Bundle();
+        final String json_fragmentType = Json.getInstance().toJson(TranslationsListFragment.Type.TRANSLATIONS_NOT_FOR_VOCABLE);
+        fragmentArgs.putString(TranslationsListFragment.FRAGMENT_TYPE_KEY, json_fragmentType);
+        fragment.setArguments(fragmentArgs);
+        return fragment;
     }
 
     @Override
@@ -66,7 +70,7 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
 
     @Override
     public void setPojoUsed(Word vocable) {
-        translationsListFragment.setPojoUsed(vocable);
+        notVocableTranslationsFragment.setPojoUsed(vocable);
     }
 
     @OnClick(R.id.add_translation_floating_action_button)

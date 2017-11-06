@@ -69,4 +69,6 @@
     <string name="translations_for_vocable">Traduzioni del vocabolo</string>
     <string name="other_translations_available">Altre traduzioni disponibili</string>
     <string name="sign_in_successful">Accesso eseguito</string>
+    <string name="user_registered">Utente registrato</string>
+    <string name="edit_vocable">Edita vocabolo</string>
 </resources>

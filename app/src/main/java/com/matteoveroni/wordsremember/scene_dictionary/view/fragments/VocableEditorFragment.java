@@ -28,11 +28,11 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
     private final static String VIEW_TITLE_CONTENT_KEY = "VIEW_TITLE_CONTENT_KEY";
-    private final static String VOCABLE_CONTENT_KEY = "VOCABLE_CONTENT_KEY";
-    private final static String VIEW_VOCABLE_NAME_CONTENT_KEY = "VIEW_VOCABLE_NAME_CONTENT_KEY";
+    private final static String VIEW_VOCABLE_TEXTVIEW_CONTENT_KEY = "VIEW_VOCABLE_TEXTVIEW_CONTENT_KEY";
+    private final static String VOCABLE_EDITED_CONTENT_KEY = "VOCABLE_EDITED_CONTENT_KEY";
 
-    private Unbinder viewInjector;
-    private Word vocableUsedByView;
+    private Unbinder butterknifeUnbinder;
+    private Word vocableToEdit;
 
     @BindView(R.id.fragment_vocable_editor_title)
     TextView lbl_title;
@@ -43,63 +43,55 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocable_editor, container, false);
-        viewInjector = ButterKnife.bind(this, view);
+        butterknifeUnbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        viewInjector.unbind();
+        butterknifeUnbinder.unbind();
         super.onDestroyView();
     }
 
     @Override
     public Word getPojoUsed() {
-        return new Word(vocableUsedByView.getId(), txt_vocableName.getText().toString());
+        return new Word(vocableToEdit.getId(), txt_vocableName.getText().toString());
     }
 
     @Override
     public void setPojoUsed(Word vocable) {
         if (vocable.getId() <= 0) {
-            lbl_title.setText("Create vocable");
+            lbl_title.setText(getString(R.string.create_vocable));
         } else {
-            lbl_title.setText("Edit vocable");
+            lbl_title.setText(getString(R.string.edit_vocable));
             if (txt_vocableName.getText().toString().trim().isEmpty()) {
                 txt_vocableName.setText(vocable.getName());
             }
         }
-        vocableUsedByView = vocable;
+        vocableToEdit = vocable;
     }
 
     @Override
     public void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
-        saveViewData(instanceState);
-    }
-
-    private void saveViewData(Bundle instanceState) {
         instanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
-        instanceState.putString(VOCABLE_CONTENT_KEY, vocableUsedByView.toJson());
-        instanceState.putString(VIEW_VOCABLE_NAME_CONTENT_KEY, txt_vocableName.getText().toString());
+        instanceState.putString(VOCABLE_EDITED_CONTENT_KEY, vocableToEdit.toJson());
+        instanceState.putString(VIEW_VOCABLE_TEXTVIEW_CONTENT_KEY, txt_vocableName.getText().toString());
     }
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            restoreViewData(savedInstanceState);
-        }
-    }
-
-    private void restoreViewData(Bundle instanceState) {
-        if (instanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
-            lbl_title.setText(instanceState.getString(VIEW_TITLE_CONTENT_KEY));
-        }
-        if (instanceState.containsKey(VOCABLE_CONTENT_KEY)) {
-            vocableUsedByView = Word.fromJson(instanceState.getString(VOCABLE_CONTENT_KEY));
-        }
-        if (instanceState.containsKey(VIEW_VOCABLE_NAME_CONTENT_KEY)) {
-            txt_vocableName.setText(instanceState.getString(VIEW_VOCABLE_NAME_CONTENT_KEY));
+            if (savedInstanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
+                lbl_title.setText(savedInstanceState.getString(VIEW_TITLE_CONTENT_KEY));
+            }
+            if (savedInstanceState.containsKey(VOCABLE_EDITED_CONTENT_KEY)) {
+                vocableToEdit = Word.fromJson(savedInstanceState.getString(VOCABLE_EDITED_CONTENT_KEY));
+            }
+            if (savedInstanceState.containsKey(VIEW_VOCABLE_TEXTVIEW_CONTENT_KEY)) {
+                txt_vocableName.setText(savedInstanceState.getString(VIEW_VOCABLE_TEXTVIEW_CONTENT_KEY));
+            }
         }
     }
 }

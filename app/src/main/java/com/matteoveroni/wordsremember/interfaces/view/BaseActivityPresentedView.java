@@ -1,11 +1,13 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,8 +23,6 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-
-import butterknife.ButterKnife;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
@@ -162,5 +162,29 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
             toolbar.setTitle(Str.concat(WordsRemember.ABBREVIATED_NAME, " - ", title));
         }
         setSupportActionBar(toolbar);
+    }
+
+    public interface ErrorDialogListener {
+        void errorDialogPositiveButtonPressed();
+
+        void errorDialogNegativeButtonPressed();
+    }
+
+    public AlertDialog buildErrorDialog(String title, String message, final ErrorDialogListener dialogListener) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialogListener.errorDialogPositiveButtonPressed();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialogListener.errorDialogNegativeButtonPressed();
+                    }
+                });
+        return alertDialogBuilder.create();
     }
 }

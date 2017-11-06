@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
@@ -21,7 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class EditVocablePresenter implements Presenter {
+public class EditVocablePresenter implements Presenter, BaseActivityPresentedView.ErrorDialogListener {
 
     private final EventBus EVENT_BUS = EventBus.getDefault();
     private final DictionaryDAO dao;
@@ -80,7 +81,7 @@ public class EditVocablePresenter implements Presenter {
         if (Word.isValid(lastVocableSelected)) {
             view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
         } else {
-            view.showDialogCannotAddTranslationIfVocableNotSaved();
+            view.showErrorDialogVocableNotSaved();
         }
     }
 
@@ -140,5 +141,17 @@ public class EditVocablePresenter implements Presenter {
     private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
         model.setVocableSelected(editedVocableInView);
         view.returnToPreviousView();
+    }
+
+    @Override
+    public void errorDialogPositiveButtonPressed() {
+        // Error dialog: vocable not saved. do u want to save? if you response yes...
+        onSaveVocableRequest();
+    }
+
+    @Override
+    public void errorDialogNegativeButtonPressed() {
+        // Error dialog: vocable not saved. do u want to save? if you response no...
+        view.dismissErrorDialog();
     }
 }

@@ -24,17 +24,17 @@ public class DictionaryModel {
         this.vocableSelected = lastVocableSelected;
     }
 
-    public void reset() {
-        vocableSelected = null;
-        translationSelected = null;
-        Log.i(TAG, "Model resetted");
-    }
-
     public Word getTranslationSelected() {
         return translationSelected;
     }
 
     public void setTranslationSelected(Word translationSelected) {
         this.translationSelected = translationSelected;
+    }
+
+    public void reset() {
+        vocableSelected = null;
+        translationSelected = null;
+        Log.i(TAG, "Model reset");
     }
 }

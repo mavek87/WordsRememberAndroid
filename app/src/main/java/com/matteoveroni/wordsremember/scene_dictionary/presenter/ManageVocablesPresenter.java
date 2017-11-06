@@ -57,8 +57,7 @@ public class ManageVocablesPresenter implements Presenter {
 
     @Subscribe
     public void onEvent(EventVocableSelected event) {
-        Word vocableSelected = event.getSelectedVocable();
-        dictionaryModel.setVocableSelected(vocableSelected);
+        dictionaryModel.setVocableSelected(event.getSelectedVocable());
         view.switchToView(View.Name.EDIT_VOCABLE);
     }
 

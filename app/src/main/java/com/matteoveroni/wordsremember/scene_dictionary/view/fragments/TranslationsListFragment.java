@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.scene_dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventTranslationManipulationRequest;
@@ -42,16 +43,16 @@ import butterknife.Unbinder;
 
 public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulable<Word> {
 
-    public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
-
     private static final EventBus EVENT_BUS = EventBus.getDefault();
+
+    public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
+    public static final String FRAGMENT_TYPE_KEY = "fragment_type_key";
 
     public enum Type {
         TRANSLATIONS, TRANSLATIONS_FOR_VOCABLE, TRANSLATIONS_NOT_FOR_VOCABLE;
     }
 
-    public Type type = Type.TRANSLATIONS;
-
+    private Type fragmentType = Type.TRANSLATIONS;
     private Unbinder viewInjector;
     private TranslationsListViewAdapter adapter_translationsList;
     private Word vocableAssociatedToView;
@@ -63,8 +64,13 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_translations_list, container, false);
         viewInjector = ButterKnife.bind(this, view);
+
+        Bundle args = getArguments();
+        fragmentType = Json.getInstance().fromJson(args.getString(FRAGMENT_TYPE_KEY), Type.class);
+
         adapter_translationsList = new TranslationsListViewAdapter(getContext(), null);
         setListAdapter(adapter_translationsList);
+
         return view;
     }
 
@@ -116,7 +122,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (type) {
+        switch (fragmentType) {
             case TRANSLATIONS:
                 lbl_title.setText(getString(R.string.translations));
                 return getCursorForAllTheTranslations();
@@ -127,7 +133,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 lbl_title.setText(getString(R.string.other_translations_available));
                 return getCursorForAllTheTranslationsExceptThoseForVocable();
             default:
-                final String error = "Error during onCreateLoader. Unknown type of fragment set.";
+                final String error = "Error during onCreateLoader. Unknown fragmentType of fragment set.";
                 Log.e(TAG, error);
                 throw new RuntimeException(error);
         }
@@ -180,7 +186,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (type != Type.TRANSLATIONS_NOT_FOR_VOCABLE) {
+        if (fragmentType != Type.TRANSLATIONS_NOT_FOR_VOCABLE) {
             allowOperationsMenu(menu);
         }
     }
@@ -209,7 +215,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     }
 
     private void removeTranslationRequest(Word translation) {
-        switch (type) {
+        switch (fragmentType) {
             case TRANSLATIONS:
                 EVENT_BUS.post(new EventTranslationManipulationRequest(translation, TypeOfManipulationRequest.REMOVE));
                 break;
@@ -217,7 +223,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
                 EVENT_BUS.post(new EventVocableTranslationManipulationRequest(vocableAssociatedToView.getId(), translation.getId(), TypeOfManipulationRequest.REMOVE));
                 break;
             default:
-                throw new RuntimeException("Unexpected type");
+                throw new RuntimeException("Unexpected fragmentType");
         }
     }
 }

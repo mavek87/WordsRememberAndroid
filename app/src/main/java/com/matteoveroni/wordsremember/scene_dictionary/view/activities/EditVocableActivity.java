@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
@@ -32,11 +33,9 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 
     private VocableEditorFragment vocableEditorFragment;
-    private TranslationsListFragment translationsListFragment;
-
+    private TranslationsListFragment vocableTranslationsFragment;
     private EditVocablePresenter presenter;
-
-    private AlertDialog dialogCannotAddTranslation;
+    private AlertDialog errorDialog;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -56,18 +55,21 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         vocableEditorFragment = (VocableEditorFragment) fragmentManager.findFragmentById(R.id.dictionary_vocable_editor_fragment);
-        translationsListFragment = createTranslationListFragmentForVocable();
-        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, translationsListFragment).commit();
+        vocableTranslationsFragment = buildVocableTranslationsFragment();
+        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, vocableTranslationsFragment).commit();
         fragmentManager.executePendingTransactions();
 
         setupAndShowToolbar(getString(R.string.vocable_editor));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
-    private TranslationsListFragment createTranslationListFragmentForVocable() {
-        final TranslationsListFragment fragmentToBuild = new TranslationsListFragment();
-        fragmentToBuild.type = TranslationsListFragment.Type.TRANSLATIONS_FOR_VOCABLE;
-        return fragmentToBuild;
+    private TranslationsListFragment buildVocableTranslationsFragment() {
+        TranslationsListFragment fragment = new TranslationsListFragment();
+        final Bundle fragmentArgs = new Bundle();
+        final String json_fragmentType = Json.getInstance().toJson(TranslationsListFragment.Type.TRANSLATIONS_FOR_VOCABLE);
+        fragmentArgs.putString(TranslationsListFragment.FRAGMENT_TYPE_KEY, json_fragmentType);
+        fragment.setArguments(fragmentArgs);
+        return fragment;
     }
 
     @Override
@@ -94,12 +96,12 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     @Override
     public void setPojoUsed(Word vocable) {
         vocableEditorFragment.setPojoUsed(vocable);
-        translationsListFragment.setPojoUsed(vocable);
+        vocableTranslationsFragment.setPojoUsed(vocable);
     }
 
     @Override
     public void refresh() {
-        translationsListFragment.onResume();
+        vocableTranslationsFragment.onResume();
     }
 
     @Override
@@ -114,29 +116,19 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     }
 
     @Override
-    public void showDialogCannotAddTranslationIfVocableNotSaved() {
-        if (dialogCannotAddTranslation == null) {
-            buildDialogCannotAddTranslationIfVocableNotSaved();
-        }
-        dialogCannotAddTranslation.show();
+    public void showErrorDialogVocableNotSaved() {
+        errorDialog = buildErrorDialog(
+                getString(R.string.vocable_not_saved),
+                getString(R.string.msg_vocable_not_saved),
+                presenter
+        );
+        errorDialog.show();
     }
 
-    private void buildDialogCannotAddTranslationIfVocableNotSaved() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder
-                .setTitle(R.string.vocable_not_saved)
-                .setMessage(R.string.msg_vocable_not_saved)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        presenter.onSaveVocableRequest();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-        dialogCannotAddTranslation = alertDialogBuilder.create();
+    @Override
+    public void dismissErrorDialog() {
+        if (errorDialog == null) errorDialog.dismiss();
+
     }
 
     @Override
