@@ -47,7 +47,8 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
         this.view.setPojoUsed(lastVocableSelected);
         EVENT_BUS.register(this);
 
-        // When a translation for a vocable is selected this code is executed
+        // When a translation for a vocable is selected, attach view is called again so
+        // here I save the translation for the vocable and clear the dictionary model
         if (lastTranslationSelected != null) {
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastVocableSelected, lastTranslationSelected));
             model.setTranslationSelected(null);
@@ -58,6 +59,68 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
     public void detachView() {
         EVENT_BUS.unregister(this);
         view = null;
+    }
+
+    public void onAddTranslationRequest() {
+        final Word lastVocableSelected = model.getVocableSelected();
+        if (Word.isNotNullNorEmpty(lastVocableSelected)) {
+            view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
+        } else {
+            view.showErrorDialogVocableNotSaved();
+        }
+    }
+
+    @Override
+    public void errorDialogPositiveButtonPressed() {
+        // Error dialog: vocable not saved. do u want to save? if you response yes...
+        onSaveVocableRequest();
+    }
+
+    @Override
+    public void errorDialogNegativeButtonPressed() {
+        // Error dialog: vocable not saved. do u want to save? if you response no...
+        view.dismissErrorDialog();
+    }
+
+    public void onSaveVocableRequest() {
+        editedVocableInView = view.getPojoUsed();
+        if (Word.isNotNullNorEmpty(editedVocableInView)) {
+            dao.asyncSearchVocableByName(editedVocableInView.getName());
+        } else {
+            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        }
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSearchVocableCompleted event) {
+        Word otherStoredVocableWithSameName = event.getVocable();
+        boolean isVocableBeenStored = false;
+        if (otherStoredVocableWithSameName == null) {
+            if (editedVocableInView.getId() <= 0) {
+                dao.asyncSaveVocable(editedVocableInView);
+                isVocableBeenStored = true;
+            } else {
+                dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
+                isVocableBeenStored = true;
+            }
+        }
+        if (isVocableBeenStored) {
+            view.showMessage(LocaleKey.VOCABLE_SAVED);
+        } else {
+            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        }
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncSaveVocableCompleted event) {
+        model.setVocableSelected(editedVocableInView);
+        view.returnToPreviousView();
+    }
+
+    @Subscribe
+    public void onEvent(EventAsyncUpdateVocableCompleted event) {
+        model.setVocableSelected(editedVocableInView);
+        view.returnToPreviousView();
     }
 
     @Subscribe
@@ -74,84 +137,5 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableTranslationCompleted event) {
         view.refresh();
-    }
-
-    public void onAddTranslationRequest() {
-        final Word lastVocableSelected = model.getVocableSelected();
-        if (Word.isValid(lastVocableSelected)) {
-            view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
-        } else {
-            view.showErrorDialogVocableNotSaved();
-        }
-    }
-
-    public void onSaveVocableRequest() {
-        editedVocableInView = view.getPojoUsed();
-        if (Word.isValid(editedVocableInView)) {
-            dao.asyncSearchVocableByName(editedVocableInView.getName());
-        } else {
-            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
-        }
-    }
-
-    @Subscribe
-    public void onEvent(EventAsyncSearchVocableCompleted event) {
-        final Word persistentVocableWithSameName = event.getVocable();
-        if (storeViewVocableIfHasUniqueName(persistentVocableWithSameName)) {
-            view.showMessage(LocaleKey.VOCABLE_SAVED);
-        } else {
-            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
-        }
-    }
-
-    private boolean storeViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
-        if (editedVocableInView.getId() <= 0) {
-            return saveViewVocableIfHasUniqueName(persistentVocableWithSameName);
-        } else {
-            return updateViewVocableIfHasUniqueName(persistentVocableWithSameName);
-        }
-    }
-
-    private boolean saveViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
-        if (persistentVocableWithSameName == null) {
-            dao.asyncSaveVocable(editedVocableInView);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean updateViewVocableIfHasUniqueName(Word persistentVocableWithSameName) {
-        if (persistentVocableWithSameName == null || editedVocableInView.getId() == persistentVocableWithSameName.getId()) {
-            dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
-            return true;
-        }
-        return false;
-    }
-
-    @Subscribe
-    public void onEvent(EventAsyncSaveVocableCompleted event) {
-        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView();
-    }
-
-    @Subscribe
-    public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView();
-    }
-
-    private void handleEventAsyncVocableStoreSuccessfulAndGoToPreviousView() {
-        model.setVocableSelected(editedVocableInView);
-        view.returnToPreviousView();
-    }
-
-    @Override
-    public void errorDialogPositiveButtonPressed() {
-        // Error dialog: vocable not saved. do u want to save? if you response yes...
-        onSaveVocableRequest();
-    }
-
-    @Override
-    public void errorDialogNegativeButtonPressed() {
-        // Error dialog: vocable not saved. do u want to save? if you response no...
-        view.dismissErrorDialog();
     }
 }

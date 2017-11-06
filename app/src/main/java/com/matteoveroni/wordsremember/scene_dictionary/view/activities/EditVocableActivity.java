@@ -69,7 +69,7 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     private TranslationsListFragment buildVocableTranslationsFragment() {
         TranslationsListFragment fragment = new TranslationsListFragment();
         final Bundle fragmentArgs = new Bundle();
-        final String json_fragmentType = Json.getInstance().toJson(TranslationsListFragment.Type.TRANSLATIONS_FOR_VOCABLE);
+        final String json_fragmentType = Json.getInstance().toJson(TranslationsListFragment.TranslationsType.TRANSLATIONS_FOR_VOCABLE);
         fragmentArgs.putString(TranslationsListFragment.FRAGMENT_TYPE_KEY, json_fragmentType);
         fragment.setArguments(fragmentArgs);
         return fragment;

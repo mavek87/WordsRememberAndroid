@@ -52,7 +52,7 @@ public class EditTranslationPresenter implements Presenter {
         final VocableTranslation vocableTranslationInView = view.getPojoUsed();
         editedTranslationInView = vocableTranslationInView.getTranslation();
 
-        if (Word.isValid(editedTranslationInView)) {
+        if (Word.isNotNullNorEmpty(editedTranslationInView)) {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());
         } else {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);

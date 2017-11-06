@@ -45,7 +45,7 @@ public class DictionaryDAO {
      **********************************************************************************************/
 
     public void asyncSaveVocable(Word vocable) {
-        if (!Word.isValid(vocable) || vocable.getId() > 0)
+        if (!Word.isNotNullNorEmpty(vocable) || vocable.getId() > 0)
             throw new IllegalArgumentException("Invalid vocable");
 
         ContentValues values = new ContentValues();
@@ -71,7 +71,7 @@ public class DictionaryDAO {
     }
 
     public void asyncUpdateVocable(long id, Word updatedVocable) {
-        if (!Word.isValid(updatedVocable) || id < 1)
+        if (!Word.isNotNullNorEmpty(updatedVocable) || id < 1)
             throw new IllegalArgumentException("Invalid vocable or id");
 
         String str_id = String.valueOf(id);
@@ -105,7 +105,7 @@ public class DictionaryDAO {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void asyncSaveTranslation(Word translation) {
-        if (!Word.isValid(translation) || translation.getId() > 0)
+        if (!Word.isNotNullNorEmpty(translation) || translation.getId() > 0)
             throw new IllegalArgumentException("Invalid translation");
 
         new AsyncInsertCommand(
@@ -192,7 +192,7 @@ public class DictionaryDAO {
         Word translation = vocableTranslation.getTranslation();
         Word vocable = vocableTranslation.getVocable();
 
-        if (!Word.isValid(translation) || translation.getId() < 1 || !Word.isValid(vocable))
+        if (!Word.isNotNullNorEmpty(translation) || translation.getId() < 1 || !Word.isNotNullNorEmpty(vocable))
             throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
 
         ContentValues vocablesTranslationValue = new ContentValues();
@@ -210,7 +210,7 @@ public class DictionaryDAO {
     public long saveVocable(Word vocable) {
         long id = vocable.getId();
 
-        if (!Word.isValid(vocable) || id < 0) return -1;
+        if (!Word.isNotNullNorEmpty(vocable) || id < 0) return -1;
 
         Uri uri = contentResolver.insert(
                 VocablesContract.CONTENT_URI,

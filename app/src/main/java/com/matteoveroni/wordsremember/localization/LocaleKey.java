@@ -12,10 +12,10 @@ public class LocaleKey {
     public static final String TRANSLATION_SAVED = "translation_saved";
     public static final String USER_REGISTERED = "user_registered";
     public static final String SIGN_IN_SUCCESSFUL = "sign_in_successful";
-    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "error_trying_to_store_invalid_vocable";
-    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "error_trying_to_store_duplicate_vocable_name";
-    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "error_trying_to_store_invalid_translation";
-    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "error_trying_to_store_duplicate_translation_name";
+    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE = "msg_error_trying_to_store_invalid_vocable";
+    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME = "msg_error_trying_to_store_duplicate_vocable_name";
+    public static final String MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION = "msg_error_trying_to_store_invalid_translation";
+    public static final String MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME = "msg_error_trying_to_store_duplicate_translation_name";
 
     public static final String NAME = "name";
     public static final String EMAIL = "email";
@@ -38,5 +38,4 @@ public class LocaleKey {
     public static final String WRONG_ANSWER = "wrongAnswer";
     public static final String MSG_CORRECT_ANSWER = "msg_correctAnswer";
     public static final String MSG_WRONG_ANSWER = "msg_wrongAnswer";
-
 }
