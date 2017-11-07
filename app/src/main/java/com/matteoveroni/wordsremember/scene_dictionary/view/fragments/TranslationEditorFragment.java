@@ -27,7 +27,7 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
     public static final String TAG = TagGenerator.tag(TranslationEditorFragment.class);
 
     private Unbinder viewInjector;
-    private VocableTranslation lastValidVocableTranslationInView;
+    private VocableTranslation vocableTranslationInView;
 
     @BindView(R.id.fragment_translation_editor_title)
     TextView lbl_title;
@@ -50,24 +50,24 @@ public class TranslationEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public VocableTranslation getPojoUsed() {
-        lastValidVocableTranslationInView.setTranslation(getTranslationInView());
-        return lastValidVocableTranslationInView;
-    }
-
-    private Word getTranslationInView(){
-        final long translationId = lastValidVocableTranslationInView.getTranslation().getId();
-        final String translationNameFromView = txt_translationName.getText().toString();
-        return new Word(translationId, translationNameFromView);
+        vocableTranslationInView.setTranslation(getVocableTranslationInView());
+        return vocableTranslationInView;
     }
 
     @Override
-    public void setPojoUsed(VocableTranslation pojo) {
-        if (pojo.getTranslation().getName().trim().isEmpty()) {
-            lbl_title.setText(String.format("Create translation for %s", pojo.getVocable().getName()));
+    public void setPojoUsed(VocableTranslation vocableTranslation) {
+        if (vocableTranslation.getTranslation().getName().trim().isEmpty()) {
+            lbl_title.setText(String.format("Create translation for %s", vocableTranslation.getVocable().getName()));
         } else {
-            lbl_title.setText(String.format("Edit translation %s", pojo.getTranslation().getName()));
+            lbl_title.setText(String.format("Edit translation %s", vocableTranslation.getTranslation().getName()));
         }
-        txt_translationName.setText(pojo.getTranslation().getName());
-        this.lastValidVocableTranslationInView = pojo;
+        txt_translationName.setText(vocableTranslation.getTranslation().getName());
+        vocableTranslationInView = vocableTranslation;
+    }
+
+    private Word getVocableTranslationInView() {
+        final long translationId = vocableTranslationInView.getTranslation().getId();
+        final String translationNameFromView = txt_translationName.getText().toString();
+        return new Word(translationId, translationNameFromView);
     }
 }

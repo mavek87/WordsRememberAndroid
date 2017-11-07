@@ -46,11 +46,8 @@ dependencies {
 
     /*************** Dependencies taken from git by jitpack.io ******************/
 
-    // Example using Tag:
-//     compile 'com.github.mavek87:MyUtils:6f65b81a2e773ab3ffdb3b60ecd86cb306933088'
-    //TODO: use the master version. In mc problems
-    compile 'com.github.mavek87:MyUtils:8ddbb426fde1296fdc84ef34907ad1e1c2db472a'
-//    compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'
+//    compile 'com.github.mavek87:MyUtils:8ddbb426fde1296fdc84ef34907ad1e1c2db472a'
+    compile 'com.github.mavek87:MyUtils:master-SNAPSHOT'
     compile 'com.github.mavek87:AndroidTagGenerator:master-SNAPSHOT'
 
     /** *************************************************************************/
@@ -66,7 +63,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     // Gson
-    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.google.code.gson:gson:2.8.2'
 
     // GreenRobot EventBus
     compile 'org.greenrobot:eventbus:3.0.0'

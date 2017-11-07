@@ -30,6 +30,16 @@ public class EditTranslationActivity extends BaseActivityPresentedView implement
     private EditTranslationPresenter presenter;
 
     @Override
+    public VocableTranslation getPojoUsed() {
+        return translationEditorFragment.getPojoUsed();
+    }
+
+    @Override
+    public void setPojoUsed(VocableTranslation vocableTranslation) {
+        this.translationEditorFragment.setPojoUsed(vocableTranslation);
+    }
+
+    @Override
     protected PresenterFactory getPresenterFactory() {
         return new EditTranslationPresenterFactory();
     }
@@ -45,9 +55,7 @@ public class EditTranslationActivity extends BaseActivityPresentedView implement
         setContentView(R.layout.activity_dictionary_edit_translation);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.edit_translation));
-
         translationEditorFragment = (TranslationEditorFragment) getSupportFragmentManager().findFragmentById(R.id.dictionary_translation_editor_fragment);
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
@@ -82,15 +90,5 @@ public class EditTranslationActivity extends BaseActivityPresentedView implement
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         super.onBackPressed();
-    }
-
-    @Override
-    public VocableTranslation getPojoUsed() {
-        return translationEditorFragment.getPojoUsed();
-    }
-
-    @Override
-    public void setPojoUsed(VocableTranslation vocableTranslation) {
-        this.translationEditorFragment.setPojoUsed(vocableTranslation);
     }
 }

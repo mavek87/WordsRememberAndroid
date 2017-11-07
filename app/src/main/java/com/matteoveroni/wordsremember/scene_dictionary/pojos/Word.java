@@ -64,6 +64,10 @@ public class Word {
         return result;
     }
 
+    public final boolean isNullOrEmpty() {
+        return name.trim().isEmpty();
+    }
+
     public static final boolean isNotNullNorEmpty(Word word) {
         return word != null && word.getName() != null && !word.getName().trim().isEmpty();
     }

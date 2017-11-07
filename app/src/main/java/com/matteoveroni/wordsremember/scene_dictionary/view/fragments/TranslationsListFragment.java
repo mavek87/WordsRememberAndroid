@@ -58,6 +58,16 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     private Unbinder butterknifeBinder;
     private Word currentVocable;
 
+    @Override
+    public Word getPojoUsed() {
+        return currentVocable;
+    }
+
+    @Override
+    public void setPojoUsed(Word vocable) {
+        this.currentVocable = vocable;
+    }
+
     @BindView(R.id.fragment_translations_list_title)
     TextView lbl_title;
 
@@ -98,16 +108,6 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         int CURSOR_LOADER_ID = 1;
         getLoaderManager().restartLoader(CURSOR_LOADER_ID, getArguments(), this);
         super.onResume();
-    }
-
-    @Override
-    public Word getPojoUsed() {
-        return currentVocable;
-    }
-
-    @Override
-    public void setPojoUsed(Word vocable) {
-        this.currentVocable = vocable;
     }
 
     @Override

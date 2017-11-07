@@ -31,6 +31,16 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
     private AddTranslationPresenter presenter;
 
     @Override
+    public Word getPojoUsed() {
+        return notVocableTranslationsFragment.getPojoUsed();
+    }
+
+    @Override
+    public void setPojoUsed(Word vocable) {
+        notVocableTranslationsFragment.setPojoUsed(vocable);
+    }
+
+    @Override
     protected PresenterFactory getPresenterFactory() {
         return new AddTranslationPresenterFactory();
     }
@@ -45,32 +55,20 @@ public class AddTranslationActivity extends BaseActivityPresentedView implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_add_translation);
         ButterKnife.bind(this);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        notVocableTranslationsFragment = buildNotVocableTranslationsFragment();
-        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, notVocableTranslationsFragment).commit();
-        fragmentManager.executePendingTransactions();
-
+        buildAndShowInnerFragment();
         setupAndShowToolbar(getString(R.string.add_translation));
     }
 
-    private TranslationsListFragment buildNotVocableTranslationsFragment() {
-        TranslationsListFragment fragment = new TranslationsListFragment();
+    private void buildAndShowInnerFragment() {
+        notVocableTranslationsFragment = new TranslationsListFragment();
         final Bundle fragmentArgs = new Bundle();
         final String json_fragmentType = Json.getInstance().toJson(TranslationsListFragment.TranslationsType.TRANSLATIONS_NOT_FOR_VOCABLE);
         fragmentArgs.putString(TranslationsListFragment.FRAGMENT_TYPE_KEY, json_fragmentType);
-        fragment.setArguments(fragmentArgs);
-        return fragment;
-    }
+        notVocableTranslationsFragment.setArguments(fragmentArgs);
 
-    @Override
-    public Word getPojoUsed() {
-        throw new UnsupportedOperationException(AddTranslationActivity.class.getSimpleName() + " doesn\'t store any pojo");
-    }
-
-    @Override
-    public void setPojoUsed(Word vocable) {
-        notVocableTranslationsFragment.setPojoUsed(vocable);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.dictionary_translations_list_framelayout, notVocableTranslationsFragment).commit();
+        fragmentManager.executePendingTransactions();
     }
 
     @OnClick(R.id.add_translation_floating_action_button)

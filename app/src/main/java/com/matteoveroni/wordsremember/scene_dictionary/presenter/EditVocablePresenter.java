@@ -62,11 +62,10 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
     }
 
     public void onAddTranslationRequest() {
-        final Word lastVocableSelected = model.getVocableSelected();
-        if (Word.isNotNullNorEmpty(lastVocableSelected)) {
-            view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
-        } else {
+        if (model.getVocableSelected().isNullOrEmpty()) {
             view.showErrorDialogVocableNotSaved();
+        } else {
+            view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
         }
     }
 
@@ -84,10 +83,10 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
 
     public void onSaveVocableRequest() {
         editedVocableInView = view.getPojoUsed();
-        if (Word.isNotNullNorEmpty(editedVocableInView)) {
-            dao.asyncSearchVocableByName(editedVocableInView.getName());
-        } else {
+        if (editedVocableInView.isNullOrEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        } else {
+            dao.asyncSearchVocableByName(editedVocableInView.getName());
         }
     }
 

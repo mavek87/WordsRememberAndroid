@@ -37,6 +37,17 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
     private AlertDialog errorDialog;
 
     @Override
+    public Word getPojoUsed() {
+        return vocableEditorFragment.getPojoUsed();
+    }
+
+    @Override
+    public void setPojoUsed(Word vocable) {
+        vocableEditorFragment.setPojoUsed(vocable);
+        vocableTranslationsFragment.setPojoUsed(vocable);
+    }
+
+    @Override
     protected PresenterFactory getPresenterFactory() {
         return new EditVocablePresenterFactory();
     }
@@ -51,9 +62,7 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary_edit_vocable);
         ButterKnife.bind(this);
-
         buildAndShowInnerFragments();
-
         setupAndShowToolbar(getString(R.string.vocable_editor));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -89,17 +98,6 @@ public class EditVocableActivity extends BaseActivityPresentedView implements Ed
                 return true;
         }
         return false;
-    }
-
-    @Override
-    public Word getPojoUsed() {
-        return vocableEditorFragment.getPojoUsed();
-    }
-
-    @Override
-    public void setPojoUsed(Word vocable) {
-        vocableEditorFragment.setPojoUsed(vocable);
-        vocableTranslationsFragment.setPojoUsed(vocable);
     }
 
     @Override
