@@ -24,7 +24,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class EditVocablePresenter implements Presenter, BaseActivityPresentedView.ErrorDialogListener {
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private final DictionaryDAO dao;
     private final DictionaryModel model;
     private EditVocableView view;

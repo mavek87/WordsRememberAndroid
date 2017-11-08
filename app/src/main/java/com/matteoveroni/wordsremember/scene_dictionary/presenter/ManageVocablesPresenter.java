@@ -25,8 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class ManageVocablesPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
-
-    private final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final DictionaryModel dictionaryModel;

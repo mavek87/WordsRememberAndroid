@@ -37,8 +37,7 @@ public class AsyncUpdateCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
-
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final ContentValues VALUES = new ContentValues();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final int FAKE_NUMBER_OF_ROWS_UPDATED = 1;

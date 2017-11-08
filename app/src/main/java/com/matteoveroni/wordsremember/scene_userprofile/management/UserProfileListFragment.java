@@ -30,21 +30,19 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     public static final String TAG = TagGenerator.tag(UserProfileListFragment.class);
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
-
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final int ID_CURSOR_LOADER = 1;
 
     private UserProfilesListViewAdapter profilesListAdapter;
+    private LoaderManager fragLoaderManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profiles_list, container, false);
-
         profilesListAdapter = new UserProfilesListViewAdapter(getContext(), null);
         setListAdapter(profilesListAdapter);
-
-        getLoaderManager().initLoader(ID_CURSOR_LOADER, null, this);
-
+        fragLoaderManager = getLoaderManager();
+        fragLoaderManager.initLoader(ID_CURSOR_LOADER, null, this);
         return view;
     }
 
@@ -62,7 +60,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     @Override
     public void onResume() {
-        getLoaderManager().restartLoader(ID_CURSOR_LOADER, null, this);
+        fragLoaderManager.restartLoader(ID_CURSOR_LOADER, null, this);
         super.onResume();
     }
 

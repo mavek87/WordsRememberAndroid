@@ -40,8 +40,7 @@ public class AsyncInsertCommandTest {
     private ShadowApplication app;
     private ContentResolver contentResolver;
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
-
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final Uri VOCABLES_URI = VocablesContract.CONTENT_URI;
     private static final Uri TRANSLATIONS_URI = TranslationsContract.CONTENT_URI;
     private static final ContentValues VALUES = new ContentValues();

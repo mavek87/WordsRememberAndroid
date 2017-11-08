@@ -22,10 +22,8 @@ import org.greenrobot.eventbus.Subscribe;
 public class AddTranslationPresenter implements Presenter {
 
     public static final String TAG = TagGenerator.tag(AddTranslationPresenter.class);
-
     protected static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
-
-    private final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final DictionaryModel model;

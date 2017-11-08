@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class EditTranslationPresenter implements Presenter {
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryModel model;
     private final DictionaryDAO dao;

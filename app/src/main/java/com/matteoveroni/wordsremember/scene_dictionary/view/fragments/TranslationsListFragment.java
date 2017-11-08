@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.scene_dictionary.view.fragments;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +44,7 @@ import butterknife.Unbinder;
 public class TranslationsListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, PojoManipulable<Word> {
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
+    private static final int ID_CURSOR_LOADER = 1;
 
     public static final String TAG = TagGenerator.tag(TranslationsListFragment.class);
     public static final String FRAGMENT_TYPE_KEY = "fragment_type_key";
@@ -54,7 +54,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     }
 
     private TranslationsType fragTranslationsType = TranslationsType.TRANSLATIONS;
-    private TranslationsListViewAdapter translationsListViewAdapter;
+    private TranslationsListViewAdapter translationsListAdapter;
     private Unbinder butterknifeBinder;
     private Word currentVocable;
 
@@ -79,9 +79,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         Bundle args = getArguments();
         fragTranslationsType = Json.getInstance().fromJson(args.getString(FRAGMENT_TYPE_KEY), TranslationsType.class);
 
-        translationsListViewAdapter = new TranslationsListViewAdapter(getContext(), null);
-        setListAdapter(translationsListViewAdapter);
-
+        translationsListAdapter = new TranslationsListViewAdapter(getContext(), null);
         return view;
     }
 
@@ -105,8 +103,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public void onResume() {
-        int CURSOR_LOADER_ID = 1;
-        getLoaderManager().restartLoader(CURSOR_LOADER_ID, getArguments(), this);
+        getLoaderManager().restartLoader(ID_CURSOR_LOADER, getArguments(), this);
         super.onResume();
     }
 
@@ -114,7 +111,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        Cursor cursor = translationsListViewAdapter.getCursor();
+        Cursor cursor = translationsListAdapter.getCursor();
         cursor.moveToPosition(position);
 
         Word selectedTranslation = DictionaryDAO.cursorToTranslation(cursor);
@@ -162,12 +159,12 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        translationsListViewAdapter.swapCursor(cursor);
+        translationsListAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        translationsListViewAdapter.swapCursor(null);
+        translationsListAdapter.swapCursor(null);
     }
 
     @Override
@@ -182,7 +179,7 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
     public boolean onContextItemSelected(MenuItem item) {
         final AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final int selectedPosition = contextMenuInfo.position;
-        final Cursor cursor = translationsListViewAdapter.getCursor();
+        final Cursor cursor = translationsListAdapter.getCursor();
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_remove:
                 cursor.moveToPosition(selectedPosition);

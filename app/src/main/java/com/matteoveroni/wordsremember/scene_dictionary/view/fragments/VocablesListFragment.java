@@ -34,11 +34,10 @@ import org.greenrobot.eventbus.EventBus;
 
 public class VocablesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private final EventBus EVENT_BUS = EventBus.getDefault();
-
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final int ID_CURSOR_LOADER = 1;
 
-    private LoaderManager loaderManager;
+    private LoaderManager fragLoaderManager;
     private VocableListViewAdapter vocableListAdapter;
     private ListView vocableListView;
 
@@ -46,8 +45,8 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocables_list, container, false);
 
-        loaderManager = getLoaderManager();
-        loaderManager.initLoader(ID_CURSOR_LOADER, null, this);
+        fragLoaderManager = getLoaderManager();
+        fragLoaderManager.initLoader(ID_CURSOR_LOADER, null, this);
 
         vocableListAdapter = new VocableListViewAdapter(getContext(), null);
         setListAdapter(vocableListAdapter);
@@ -64,7 +63,7 @@ public class VocablesListFragment extends ListFragment implements LoaderManager.
 
     @Override
     public void onResume() {
-        loaderManager.restartLoader(ID_CURSOR_LOADER, null, this);
+        fragLoaderManager.restartLoader(ID_CURSOR_LOADER, null, this);
         super.onResume();
     }
 
