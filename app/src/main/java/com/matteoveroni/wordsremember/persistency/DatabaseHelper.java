@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 /**
  * Singleton helper class which contains db attributes and

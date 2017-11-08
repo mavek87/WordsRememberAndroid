@@ -13,7 +13,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
 /**

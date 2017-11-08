@@ -1,4 +1,6 @@
-package com.matteoveroni.wordsremember.scene_userprofile.management;
+package com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events;
+
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 /**
  * @author Matteo Veroni

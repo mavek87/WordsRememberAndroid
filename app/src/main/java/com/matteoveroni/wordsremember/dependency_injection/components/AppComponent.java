@@ -5,6 +5,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.DatabaseManag
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryDaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.UserProfileModelModule;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
@@ -13,7 +14,7 @@ import com.matteoveroni.wordsremember.scene_login.LoginPresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfilePresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -24,7 +25,14 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {AppModule.class, DictionaryDaoModule.class, DictionaryModelModule.class, SettingsModule.class, DatabaseManagerModule.class})
+@Component(modules = {
+        AppModule.class,
+        DatabaseManagerModule.class,
+        SettingsModule.class,
+        UserProfileModelModule.class,
+        DictionaryDaoModule.class,
+        DictionaryModelModule.class,
+})
 public interface AppComponent {
 
     void inject(LoginPresenterFactory loginPresenterFactory);

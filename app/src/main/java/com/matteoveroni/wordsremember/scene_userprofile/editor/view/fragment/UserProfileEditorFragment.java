@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.editor;
+package com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

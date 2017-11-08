@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +56,10 @@ public class DatabaseManager {
 
     public SQLiteDatabase getWritableDatabase() {
         return dbHelpers.get(currentUserProfile).getWritableDatabase();
+    }
+
+    public DatabaseHelper getDatabaseHelper() {
+        return dbHelpers.get(currentUserProfile);
     }
 
     public String getDatabaseName() {

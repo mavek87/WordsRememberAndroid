@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryDao
 import com.matteoveroni.wordsremember.dependency_injection.modules.DatabaseManagerModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.UserProfileModelModule;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 
 import java.util.Locale;
@@ -62,6 +63,7 @@ public class WordsRemember extends Application {
                 .appModule(new AppModule(this))
                 .databaseManagerModule(new DatabaseManagerModule())
                 .settingsModule(new SettingsModule())
+                .userProfileModelModule(new UserProfileModelModule())
                 .dictionaryDaoModule(new DictionaryDaoModule())
                 .dictionaryModelModule(new DictionaryModelModule())
                 .build();

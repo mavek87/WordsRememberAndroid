@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.management;
+package com.matteoveroni.wordsremember.scene_userprofile;
 
 /**
  * @author Matteo Veroni

@@ -8,7 +8,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.persistency.DatabaseManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizGameDifficulty;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
 import org.joda.time.DateTime;
@@ -28,7 +28,7 @@ public class Settings {
     @Inject
     DatabaseManager dbManager;
 
-    private final SharedPreferences prefs;
+    private SharedPreferences prefs;
 
     public static final String USER_KEY = "user_key";
     public static final String USER_PROFILE_KEY = "user_profile_key";

@@ -7,8 +7,8 @@ import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditVocab
 import com.matteoveroni.wordsremember.scene_dictionary.view.activities.ManageVocablesActivity;
 import com.matteoveroni.wordsremember.scene_login.LoginActivity;
 import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.management.UserProfileActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity.UserProfileEditorActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity.UserProfileActivity;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsActivity;
 

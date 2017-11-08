@@ -50,7 +50,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".scene_userprofile.management.UserProfileActivity"
+            android:name=".scene_userprofile.manager.view.activity.UserProfileActivity"
             android:label="@string/user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
 
