@@ -40,6 +40,6 @@ public class UserProfilePresenter implements Presenter {
     }
 
     public void onAddProfileAction() {
-        view.switchToView(View.Name.EDIT_USER_PROFILE);
+        view.switchToView(View.Name.USER_PROFILE_EDITOR);
     }
 }

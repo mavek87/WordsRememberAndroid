@@ -22,9 +22,9 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class EditorUserProfileFragment extends Fragment implements PojoManipulable<VocableTranslation> {
+public class UserProfileEditorFragment extends Fragment implements PojoManipulable<VocableTranslation> {
 
-    public static final String TAG = TagGenerator.tag(EditorUserProfileFragment.class);
+    public static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
 
     private Unbinder viewInjector;
     private VocableTranslation lastValidVocableTranslationInView;

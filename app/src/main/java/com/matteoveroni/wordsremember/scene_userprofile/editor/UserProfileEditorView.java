@@ -6,6 +6,6 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
  * @author Matteo Veroni
  */
 
-public interface EditUserProfileView extends View {
+public interface UserProfileEditorView extends View {
     void saveProfileAction();
 }

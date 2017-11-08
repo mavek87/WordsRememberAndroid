@@ -9,7 +9,7 @@ import org.greenrobot.eventbus.EventBus;
  * @author Matteo Veroni
  */
 
-public class EditUserProfilePresenter implements Presenter {
+public class UserProfileEditorPresenter implements Presenter {
 
     private UserProfileView view;
     private final EventBus EVENTBUS = EventBus.getDefault();
@@ -27,6 +27,6 @@ public class EditUserProfilePresenter implements Presenter {
     }
 
     public void onSaveProfileAction() {
-//        view.switchToView(View.Name.EDIT_USER_PROFILE);
+//        view.switchToView(View.Name.USER_PROFILE_EDITOR);
     }
 }

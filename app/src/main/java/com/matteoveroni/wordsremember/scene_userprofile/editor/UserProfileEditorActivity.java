@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditUserProfileActivity extends BaseActivityPresentedView implements UserProfileView {
+public class UserProfileEditorActivity extends BaseActivityPresentedView implements UserProfileView {
 
     private UserProfilePresenter presenter;
 
