@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,52 +22,50 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorFragment extends Fragment implements PojoManipulable<VocableTranslation> {
+public class UserProfileEditorFragment extends Fragment implements PojoManipulable<UserProfile> {
 
     public static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
 
-    private Unbinder viewInjector;
-    private VocableTranslation lastValidVocableTranslationInView;
+    private Unbinder butterknifeBinder;
+    private UserProfile persistingUserProfile;
 
-    @BindView(R.id.fragment_translation_editor_title)
+    @BindView(R.id.fragment_user_profile_editor_title)
     TextView lbl_title;
 
-    @BindView(R.id.fragment_translation_editor_txt_vocable_name)
-    EditText txt_translationName;
+    @BindView(R.id.fragment_user_profile_editor_txt_profile_name)
+    EditText txt_userProfileName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_translation_editor, container, false);
-        viewInjector = ButterKnife.bind(this, view);
+        View view = inflater.inflate(R.layout.fragment_user_profile_editor, container, false);
+        butterknifeBinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onDestroyView() {
-        viewInjector.unbind();
+        butterknifeBinder.unbind();
         super.onDestroyView();
     }
 
     @Override
-    public VocableTranslation getPojoUsed() {
-        lastValidVocableTranslationInView.setTranslation(getTranslationInView());
-        return lastValidVocableTranslationInView;
+    public UserProfile getPojoUsed() {
+        persistingUserProfile = getUserProfileInView();
+        return persistingUserProfile;
     }
 
-    private Word getTranslationInView(){
-        final long translationId = lastValidVocableTranslationInView.getTranslation().getId();
-        final String translationNameFromView = txt_translationName.getText().toString();
-        return new Word(translationId, translationNameFromView);
+    private UserProfile getUserProfileInView() {
+        return new UserProfile(persistingUserProfile.getId(), txt_userProfileName.getText().toString());
     }
 
     @Override
-    public void setPojoUsed(VocableTranslation pojo) {
-        if (pojo.getTranslation().getName().trim().isEmpty()) {
-            lbl_title.setText(String.format("Create translation for %s", pojo.getVocable().getName()));
+    public void setPojoUsed(UserProfile userProfile) {
+        if (userProfile.getProfileName().trim().isEmpty()) {
+            lbl_title.setText(R.string.create_user_profile);
         } else {
-            lbl_title.setText(String.format("Edit translation %s", pojo.getTranslation().getName()));
+            lbl_title.setText(R.string.edit_user_profile);
         }
-        txt_translationName.setText(pojo.getTranslation().getName());
-        this.lastValidVocableTranslationInView = pojo;
+        txt_userProfileName.setText(userProfile.getProfileName());
+        this.persistingUserProfile = userProfile;
     }
 }

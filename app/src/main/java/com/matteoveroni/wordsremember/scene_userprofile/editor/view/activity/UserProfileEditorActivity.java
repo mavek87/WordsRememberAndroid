@@ -1,23 +1,19 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventEditUserProfile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventUserProfileSelected;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenter;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * User Profile Management Activity
@@ -25,58 +21,57 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorActivity extends BaseActivityPresentedView implements UserProfileView {
+public class UserProfileEditorActivity extends BaseActivityPresentedView implements UserProfileEditorView {
 
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
-    private UserProfilePresenter presenter;
+    private UserProfileEditorPresenter presenter;
+    private UserProfileEditorFragment userProfileEditorFragment;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new UserProfilePresenterFactory();
+        return new UserProfileEditorPresenterFactory();
     }
 
     @Override
     protected void onPresenterCreatedOrRestored(Presenter presenter) {
-        this.presenter = (UserProfilePresenter) presenter;
+        this.presenter = (UserProfileEditorPresenter) presenter;
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        EVENT_BUS.register(this);
+    public UserProfile getPojoUsed() {
+        return userProfileEditorFragment.getPojoUsed();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        EVENT_BUS.unregister(this);
+    public void setPojoUsed(UserProfile pojo) {
+        userProfileEditorFragment.setPojoUsed(pojo);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profiles_management);
+        setContentView(R.layout.activity_user_profile_editor);
         ButterKnife.bind(this);
+        userProfileEditorFragment = (UserProfileEditorFragment) getSupportFragmentManager().findFragmentById(R.id.user_profile_editor_fragment);
         setupAndShowToolbar(getString(R.string.user_profile));
     }
 
-    @OnClick(R.id.add_profile_floating_action_button)
+
+
     @Override
-    public void addUserProfileAction() {
-        presenter.onAddProfileAction();
+    public void saveProfileAction() {
+        presenter.onSaveProfileAction(getPojoUsed());
     }
 
-    @Subscribe
     @Override
-    public void editUserProfileAction(EventEditUserProfile event) {
-        UserProfile userProfileToedit = event.getUserProfile();
-        presenter.onEditProfileAction(userProfileToedit);
+    public void returnToPreviousView() {
+        setResult(RESULT_OK);
+        finish();
     }
 
-    @Subscribe
     @Override
-    public void selectUserProfileAction(EventUserProfileSelected event) {
-        presenter.onUserProfileSelectedAction(event.getUserProfile());
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 }
 

@@ -12,19 +12,31 @@ public class UserProfile {
      */
     public static final UserProfile SYSTEM_PROFILE = new UserProfile(1, "system_profile");
 
-    private final long id;
-    private final String profileName;
+    private long id;
+    private String profileName;
+
+    public UserProfile(String profileName) {
+        this.profileName = profileName;
+    }
 
     public UserProfile(long id, String profileName) {
+        this(profileName);
         this.id = id;
-        this.profileName = profileName;
     }
 
     public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getProfileName() {
         return profileName;
+    }
+
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
     }
 }

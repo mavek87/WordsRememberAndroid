@@ -40,6 +40,7 @@ public class UserProfilePresenter implements Presenter {
     }
 
     public void onAddProfileAction() {
+        model.setUserProfile(new UserProfile(""));
         view.switchToView(View.Name.USER_PROFILE_EDITOR, EDIT_USER_PROFILE_REQUEST_CODE);
     }
 

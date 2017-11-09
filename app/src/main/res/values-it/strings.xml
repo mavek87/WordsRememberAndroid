@@ -71,4 +71,7 @@
     <string name="sign_in_successful">Accesso eseguito</string>
     <string name="user_registered">Utente registrato</string>
     <string name="edit_vocable">Edita vocabolo</string>
+    <string name="user_profile_editor">Editor profilo utente</string>
+    <string name="create_user_profile">Crea profilo utente</string>
+    <string name="edit_user_profile">Modifica profilo utente</string>
 </resources>

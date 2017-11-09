@@ -54,7 +54,7 @@ public class UserProfileActivity extends BaseActivityPresentedView implements Us
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profiles_management);
+        setContentView(R.layout.activity_user_profiles_management);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.user_profile));
     }

@@ -31,6 +31,9 @@
     <string name="deviceLocale">Device locale</string>
     <string name="game_result">Game Results</string>
     <string name="start_training">Start training</string>
+    <string name="user_profile_editor">User profile editor</string>
+    <string name="create_user_profile">Create user profile</string>
+    <string name="edit_user_profile">Edit user profile</string>
     <string name="dictionary">Dictionary</string>
     <string name="manage_dictionary">Manage dictionary</string>
     <string name="add_word">Add Word</string>
@@ -74,5 +77,4 @@
     <string name="timeRemaining">Time remaining</string>
     <string name="msg_wrong_status">Ops.. something goes wrong..</string>
     <string name="msg_complete_status">Operation completed successfully</string>
-
 </resources>

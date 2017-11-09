@@ -70,9 +70,11 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profiles_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profiles_list, container, false);
+
         profilesListAdapter = new UserProfilesListViewAdapter(getContext(), null);
         setListAdapter(profilesListAdapter);
+
         fragLoaderManager = getLoaderManager();
         fragLoaderManager.initLoader(ID_CURSOR_LOADER, null, this);
         return view;
@@ -115,6 +117,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_edit:
                 EVENT_BUS.postSticky(new EventEditUserProfile(selectedUserProfile));
+                Toast.makeText(getContext(), selectedUserProfile.getProfileName(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_dictionary_list_long_press_remove:
 //                Word selectedVocable = getSelectedVocable(cursor, position);

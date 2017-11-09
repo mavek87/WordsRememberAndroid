@@ -16,13 +16,12 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <include layout="@layout/toolbar" />
-
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/content_profiles_management"
+        android:id="@+id/content_user_profiles_management"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -35,7 +34,7 @@
         tools:context=".scene_userprofile.manager.view.activity.UserProfileActivity">
 
         <fragment
-            android:id="@+id/profiles_management_fragment"
+            android:id="@+id/user_profiles_management_fragment"
             android:name="com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.UserProfileListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

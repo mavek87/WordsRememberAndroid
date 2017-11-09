@@ -55,6 +55,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".scene_userprofile.editor.view.activity.UserProfileEditorActivity"
+            android:label="@string/user_profile_editor"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".scene_quizgame.view.QuizGameActivity"
             android:label="@string/quiz_game"
             android:theme="@style/AppTheme.NoActionBar" />
