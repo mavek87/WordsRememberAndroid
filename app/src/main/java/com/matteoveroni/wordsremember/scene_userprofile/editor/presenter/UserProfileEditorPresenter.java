@@ -11,7 +11,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileE
  */
 
 public class UserProfileEditorPresenter implements Presenter {
-    private static boolean FIRST_TIME_CREATED = true;
+    private boolean firstTimeCreated;
 
     private final UserProfileModel model;
     private final UserProfilesDAO dao;
@@ -21,14 +21,15 @@ public class UserProfileEditorPresenter implements Presenter {
     public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao) {
         this.model = model;
         this.dao = dao;
+        this.firstTimeCreated = true;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (UserProfileEditorView) view;
-        if (FIRST_TIME_CREATED) {
+        if (firstTimeCreated) {
             this.view.setPojoUsed(model.getUserProfile());
-            FIRST_TIME_CREATED = false;
+            firstTimeCreated = false;
         }
     }
 
@@ -41,7 +42,7 @@ public class UserProfileEditorPresenter implements Presenter {
         final UserProfile editedUserProfile = view.getPojoUsed();
         if (editedUserProfile.hasNullOrEmptyName()) {
             // TODO: use a formatted string
-            view.showMessage("User profile name can\'t be empty. Type a valid name");
+            view.showMessage("User profile name can\'t be empty, type a valid name");
             return;
         }
 
