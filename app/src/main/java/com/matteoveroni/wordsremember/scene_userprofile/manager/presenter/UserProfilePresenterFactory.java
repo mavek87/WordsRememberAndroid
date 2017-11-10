@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.scene_userprofile.manager.presenter;
 
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 

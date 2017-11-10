@@ -1,35 +1,34 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author Matteo Veroni
  */
 
 public class UserProfileEditorPresenter implements Presenter {
+    private static boolean FIRST_TIME_CREATED = true;
+
     private final UserProfileModel model;
+    private final UserProfilesDAO dao;
+
     private UserProfileEditorView view;
 
-    private static boolean VIEW_ATTACHED_FOR_THE_FIRST_TIME = true;
-
-    public UserProfileEditorPresenter(UserProfileModel model) {
+    public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao) {
         this.model = model;
+        this.dao = dao;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (UserProfileEditorView) view;
-        if(VIEW_ATTACHED_FOR_THE_FIRST_TIME) {
-            UserProfile userProfile = model.getUserProfile();
-            this.view.setPojoUsed(userProfile);
-            VIEW_ATTACHED_FOR_THE_FIRST_TIME = false;
+        if (FIRST_TIME_CREATED) {
+            this.view.setPojoUsed(model.getUserProfile());
+            FIRST_TIME_CREATED = false;
         }
     }
 
@@ -38,13 +37,22 @@ public class UserProfileEditorPresenter implements Presenter {
         this.view = null;
     }
 
-    public void onSaveProfileAction(UserProfile userProfile) {
-        if (Str.isNullOrEmpty(userProfile.getProfileName())) {
+    public void onSaveProfileAction() {
+        final UserProfile editedUserProfile = view.getPojoUsed();
+        if (editedUserProfile.hasNullOrEmptyName()) {
             // TODO: use a formatted string
             view.showMessage("User profile name can\'t be empty. Type a valid name");
-        } else {
-            model.setUserProfile(userProfile);
-            view.returnToPreviousView();
+            return;
         }
+
+        final UserProfile persistingUserProfileToEdit = model.getUserProfile();
+        if (persistingUserProfileToEdit.hasNullOrEmptyName() || persistingUserProfileToEdit.getId() <= 0) {
+            dao.saveUserProfile(editedUserProfile);
+        } else {
+            dao.updateUserProfile(persistingUserProfileToEdit.getId(), editedUserProfile);
+            editedUserProfile.setId(persistingUserProfileToEdit.getId());
+        }
+        model.setUserProfile(editedUserProfile);
+        view.returnToPreviousView();
     }
 }

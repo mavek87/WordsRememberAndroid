@@ -6,8 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.ui.listview.items.ListViewItem;
 
 /**
@@ -27,6 +26,6 @@ public class UserProfilesListViewAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View itemView, Context context, Cursor cursor) {
-        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(ProfilesContract.Schema.COL_PROFILE_NAME)));
+        ((ListViewItem) itemView).draw(cursor.getString(cursor.getColumnIndexOrThrow(UserProfilesContract.Schema.COL_PROFILE_NAME)));
     }
 }

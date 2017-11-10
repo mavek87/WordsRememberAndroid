@@ -22,8 +22,8 @@
             android:exported="false" />
 
         <provider
-            android:name=".persistency.providers.profile.ProfilesProvider"
-            android:authorities="com.matteoveroni.wordsremember.persistency.providers.profile"
+            android:name=".persistency.providers.user_profiles.UserProfilesProvider"
+            android:authorities="com.matteoveroni.wordsremember.persistency.providers.user_profiles"
             android:exported="false" />
 
         <receiver

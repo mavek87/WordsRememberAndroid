@@ -26,6 +26,10 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
 
     public static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
 
+    private static final String VIEW_TITLE_CONTENT_KEY = "view_title_content_key";
+    //    private static final String PERSISTING_USER_PROFILE_CONTENT_KEY = "persisting_user_profile_content_key";
+    private static final String VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY = "view_user_profile_name_textview_content_key";
+
     private Unbinder butterknifeBinder;
     private UserProfile persistingUserProfile;
 
@@ -60,12 +64,32 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public void setPojoUsed(UserProfile userProfile) {
-        if (userProfile.getProfileName().trim().isEmpty()) {
+        if (userProfile.hasNullOrEmptyName()) {
             lbl_title.setText(R.string.create_user_profile);
         } else {
             lbl_title.setText(R.string.edit_user_profile);
         }
         txt_userProfileName.setText(userProfile.getProfileName());
         this.persistingUserProfile = userProfile;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle instanceState) {
+        super.onSaveInstanceState(instanceState);
+        instanceState.putString(VIEW_TITLE_CONTENT_KEY, lbl_title.getText().toString());
+        instanceState.putString(VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY, txt_userProfileName.getText().toString());
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(VIEW_TITLE_CONTENT_KEY)) {
+                lbl_title.setText(savedInstanceState.getString(VIEW_TITLE_CONTENT_KEY));
+            }
+            if (savedInstanceState.containsKey(VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY)) {
+                txt_userProfileName.setText(savedInstanceState.getString(VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY));
+            }
+        }
     }
 }

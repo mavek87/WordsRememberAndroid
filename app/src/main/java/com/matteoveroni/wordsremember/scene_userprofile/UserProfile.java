@@ -1,5 +1,8 @@
 package com.matteoveroni.wordsremember.scene_userprofile;
 
+import com.matteoveroni.myutils.Json;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
+
 /**
  * @author Matteo Veroni
  */
@@ -12,7 +15,7 @@ public class UserProfile {
      */
     public static final UserProfile SYSTEM_PROFILE = new UserProfile(1, "system_profile");
 
-    private long id;
+    private long id = -1;
     private String profileName;
 
     public UserProfile(String profileName) {
@@ -38,5 +41,17 @@ public class UserProfile {
 
     public void setProfileName(String profileName) {
         this.profileName = profileName;
+    }
+
+    public boolean hasNullOrEmptyName() {
+        return profileName == null || profileName.trim().isEmpty();
+    }
+
+    public static UserProfile fromJson(String json) {
+        return Json.getInstance().fromJson(json, UserProfile.class);
+    }
+
+    public String toJson() {
+        return Json.getInstance().toJson(this);
     }
 }

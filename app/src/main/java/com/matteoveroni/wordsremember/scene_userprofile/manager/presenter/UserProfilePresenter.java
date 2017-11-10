@@ -13,7 +13,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfile
 
 public class UserProfilePresenter implements Presenter {
 
-    protected static final int EDIT_USER_PROFILE_REQUEST_CODE = 0;
+    protected static final int USER_PROFILE_EDITOR_REQUEST_CODE = 0;
 
     private UserProfileView view;
     private final Settings settings;
@@ -41,11 +41,11 @@ public class UserProfilePresenter implements Presenter {
 
     public void onAddProfileAction() {
         model.setUserProfile(new UserProfile(""));
-        view.switchToView(View.Name.USER_PROFILE_EDITOR, EDIT_USER_PROFILE_REQUEST_CODE);
+        view.switchToView(View.Name.USER_PROFILE_EDITOR, USER_PROFILE_EDITOR_REQUEST_CODE);
     }
 
     public void onEditProfileAction(UserProfile userProfileToEdit) {
         model.setUserProfile(userProfileToEdit);
-        view.switchToView(View.Name.USER_PROFILE_EDITOR, EDIT_USER_PROFILE_REQUEST_CODE);
+        view.switchToView(View.Name.USER_PROFILE_EDITOR, USER_PROFILE_EDITOR_REQUEST_CODE);
     }
 }

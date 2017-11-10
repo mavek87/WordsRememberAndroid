@@ -3,18 +3,18 @@ package com.matteoveroni.wordsremember.persistency.contracts;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.matteoveroni.wordsremember.persistency.providers.profile.ProfilesProvider;
+import com.matteoveroni.wordsremember.persistency.providers.user_profiles.UserProfilesProvider;
 
 /**
  * @author Matteo Veroni
  */
 
-public class ProfilesContract {
+public class UserProfilesContract {
 
-    public static final String NAME = ProfilesContract.Schema.TABLE_NAME;
+    public static final String NAME = UserProfilesContract.Schema.TABLE_NAME;
 
     public static final Uri CONTENT_URI = Uri.parse(
-            ProfilesProvider.SCHEME + ProfilesProvider.CONTENT_AUTHORITY + "/" + NAME
+            UserProfilesProvider.SCHEME + UserProfilesProvider.CONTENT_AUTHORITY + "/" + NAME
     );
 
     // Mime type
@@ -39,16 +39,16 @@ public class ProfilesContract {
 
     public static final class Query {
         public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
-                + ProfilesContract.Schema.TABLE_NAME
+                + UserProfilesContract.Schema.TABLE_NAME
                 + "("
-                + ProfilesContract.Schema.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ProfilesContract.Schema.COL_PROFILE_NAME + " TEXT NOT NULL, "
-                + "CONSTRAINT UQ_ProfileName UNIQUE (" + ProfilesContract.Schema.COL_PROFILE_NAME + ")"
+                + UserProfilesContract.Schema.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + UserProfilesContract.Schema.COL_PROFILE_NAME + " TEXT NOT NULL, "
+                + "CONSTRAINT UQ_ProfileName UNIQUE (" + UserProfilesContract.Schema.COL_PROFILE_NAME + ")"
                 + ");";
 
-        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + ProfilesContract.Schema.TABLE_NAME;
+        public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + UserProfilesContract.Schema.TABLE_NAME;
 
-        public static final String INSERT_DEFAULT_PROFILE = "INSERT INTO " + ProfilesContract.Schema.TABLE_NAME
+        public static final String INSERT_DEFAULT_PROFILE = "INSERT INTO " + UserProfilesContract.Schema.TABLE_NAME
                 + " (" + Schema.COL_PROFILE_NAME + ") VALUES ('Profile1');";
     }
 }

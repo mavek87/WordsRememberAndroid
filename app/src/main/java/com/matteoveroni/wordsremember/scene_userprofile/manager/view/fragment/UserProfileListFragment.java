@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventUserProfileSelected;
@@ -41,14 +41,14 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        final String[] columns = new String[]{ProfilesContract.Schema.COL_ID, ProfilesContract.Schema.COL_PROFILE_NAME};
+        final String[] columns = new String[]{UserProfilesContract.Schema.COL_ID, UserProfilesContract.Schema.COL_PROFILE_NAME};
         return new CursorLoader(
                 getActivity(),
-                ProfilesContract.CONTENT_URI,
+                UserProfilesContract.CONTENT_URI,
                 null,
                 null,
                 null,
-                ProfilesContract.Schema.COL_PROFILE_NAME + " ASC"
+                UserProfilesContract.Schema.COL_PROFILE_NAME + " ASC"
         );
     }
 
@@ -134,8 +134,8 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         cursor.moveToPosition(position);
 
         return new UserProfile(
-                cursor.getLong(cursor.getColumnIndex(ProfilesContract.Schema.COL_ID)),
-                cursor.getString(cursor.getColumnIndex(ProfilesContract.Schema.COL_PROFILE_NAME))
+                cursor.getLong(cursor.getColumnIndex(UserProfilesContract.Schema.COL_ID)),
+                cursor.getString(cursor.getColumnIndex(UserProfilesContract.Schema.COL_PROFILE_NAME))
         );
     }
 }

@@ -1,6 +1,8 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
@@ -16,7 +18,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.Use
 import butterknife.ButterKnife;
 
 /**
- * User Profile Management Activity
+ * User Profile Editor Activity
  *
  * @author Matteo Veroni
  */
@@ -52,14 +54,28 @@ public class UserProfileEditorActivity extends BaseActivityPresentedView impleme
         setContentView(R.layout.activity_user_profile_editor);
         ButterKnife.bind(this);
         userProfileEditorFragment = (UserProfileEditorFragment) getSupportFragmentManager().findFragmentById(R.id.user_profile_editor_fragment);
-        setupAndShowToolbar(getString(R.string.user_profile));
+        setupAndShowToolbar(getString(R.string.user_profile_editor));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dictionary_top_bar, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_action_done:
+                saveProfileAction();
+                return true;
+        }
+        return false;
+    }
 
     @Override
     public void saveProfileAction() {
-        presenter.onSaveProfileAction(getPojoUsed());
+        presenter.onSaveProfileAction();
     }
 
     @Override

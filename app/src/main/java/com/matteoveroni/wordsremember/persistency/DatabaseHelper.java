@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.persistency.contracts.ProfilesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
@@ -62,11 +62,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createAllTables(SQLiteDatabase db) {
         if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {
 
-            Log.d(TAG, ProfilesContract.Query.CREATE_TABLE);
-            db.execSQL(ProfilesContract.Query.CREATE_TABLE);
+            Log.d(TAG, UserProfilesContract.Query.CREATE_TABLE);
+            db.execSQL(UserProfilesContract.Query.CREATE_TABLE);
 
-            Log.d(TAG, ProfilesContract.Query.INSERT_DEFAULT_PROFILE);
-            db.execSQL(ProfilesContract.Query.INSERT_DEFAULT_PROFILE);
+            Log.d(TAG, UserProfilesContract.Query.INSERT_DEFAULT_PROFILE);
+            db.execSQL(UserProfilesContract.Query.INSERT_DEFAULT_PROFILE);
 
         } else {
             Log.d(TAG, VocablesContract.Query.CREATE_TABLE);
@@ -84,8 +84,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {
 
-            Log.d(TAG, ProfilesContract.Query.DROP_TABLE);
-            db.execSQL(ProfilesContract.Query.DROP_TABLE);
+            Log.d(TAG, UserProfilesContract.Query.DROP_TABLE);
+            db.execSQL(UserProfilesContract.Query.DROP_TABLE);
 
         } else {
 
