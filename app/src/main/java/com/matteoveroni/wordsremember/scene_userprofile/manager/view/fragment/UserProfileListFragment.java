@@ -117,7 +117,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_edit:
                 EVENT_BUS.postSticky(new EventEditUserProfile(selectedUserProfile));
-                Toast.makeText(getContext(), selectedUserProfile.getProfileName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_dictionary_list_long_press_remove:
 //                Word selectedVocable = getSelectedVocable(cursor, position);

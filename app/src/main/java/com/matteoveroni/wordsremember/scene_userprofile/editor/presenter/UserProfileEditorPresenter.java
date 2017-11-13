@@ -11,7 +11,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileE
  */
 
 public class UserProfileEditorPresenter implements Presenter {
-    private boolean firstTimeCreated;
+    private boolean isPresenterCreatedForTheFirstTime;
 
     private final UserProfileModel model;
     private final UserProfilesDAO dao;
@@ -21,15 +21,15 @@ public class UserProfileEditorPresenter implements Presenter {
     public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao) {
         this.model = model;
         this.dao = dao;
-        this.firstTimeCreated = true;
+        isPresenterCreatedForTheFirstTime = true;
     }
 
     @Override
     public void attachView(Object view) {
         this.view = (UserProfileEditorView) view;
-        if (firstTimeCreated) {
+        if (isPresenterCreatedForTheFirstTime) {
             this.view.setPojoUsed(model.getUserProfile());
-            firstTimeCreated = false;
+            isPresenterCreatedForTheFirstTime = false;
         }
     }
 
@@ -39,21 +39,19 @@ public class UserProfileEditorPresenter implements Presenter {
     }
 
     public void onSaveProfileAction() {
-        final UserProfile editedUserProfile = view.getPojoUsed();
-        if (editedUserProfile.hasNullOrEmptyName()) {
+        final UserProfile view_userProfile = view.getPojoUsed();
+        if (view_userProfile.getName().trim().isEmpty()) {
             // TODO: use a formatted string
             view.showMessage("User profile name can\'t be empty, type a valid name");
             return;
         }
 
-        final UserProfile persistingUserProfileToEdit = model.getUserProfile();
-        if (persistingUserProfileToEdit.hasNullOrEmptyName() || persistingUserProfileToEdit.getId() <= 0) {
-            dao.saveUserProfile(editedUserProfile);
+        final UserProfile model_userProfile = model.getUserProfile();
+        if (model_userProfile.getId() <= 0) {
+            dao.saveUserProfile(view_userProfile);
         } else {
-            dao.updateUserProfile(persistingUserProfileToEdit.getId(), editedUserProfile);
-            editedUserProfile.setId(persistingUserProfileToEdit.getId());
+            dao.updateUserProfile(model_userProfile, view_userProfile);
         }
-        model.setUserProfile(editedUserProfile);
         view.returnToPreviousView();
     }
 }

@@ -1,8 +1,5 @@
 package com.matteoveroni.wordsremember.scene_userprofile;
 
-import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-
 /**
  * @author Matteo Veroni
  */
@@ -15,43 +12,30 @@ public class UserProfile {
      */
     public static final UserProfile SYSTEM_PROFILE = new UserProfile(1, "system_profile");
 
-    private long id = -1;
-    private String profileName;
+    public static final long NO_ID = -1;
+    public static final String NO_PROFILE_NAME = "";
 
-    public UserProfile(String profileName) {
-        this.profileName = profileName;
-    }
+    private final long id;
+    private final String name;
 
-    public UserProfile(long id, String profileName) {
-        this(profileName);
+    public UserProfile(long id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public String getProfileName() {
-        return profileName;
+    public static UserProfile createEmptyProfile() {
+        return new UserProfile(NO_ID, NO_PROFILE_NAME);
     }
 
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
-    }
-
-    public boolean hasNullOrEmptyName() {
-        return profileName == null || profileName.trim().isEmpty();
-    }
-
-    public static UserProfile fromJson(String json) {
-        return Json.getInstance().fromJson(json, UserProfile.class);
-    }
-
-    public String toJson() {
-        return Json.getInstance().toJson(this);
+    public boolean isInvalidProfile() {
+        return (id <= 0) || (name.trim().isEmpty());
     }
 }

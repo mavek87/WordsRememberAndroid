@@ -63,7 +63,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Before
 //    public void setUp() {
-//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getDatabaseHelper();
+//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getDatabaseHelperForCurrentProfile();
 //        assertNotNull("dbHelper should be created before each test", dbHelper);
 //
 //        final SQLiteDatabase database = dbHelper.getReadableDatabase();

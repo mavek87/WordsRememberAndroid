@@ -3,8 +3,8 @@ package com.matteoveroni.wordsremember.scene_userprofile.manager.presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
 
 /**
@@ -40,7 +40,7 @@ public class UserProfilePresenter implements Presenter {
     }
 
     public void onAddProfileAction() {
-        model.setUserProfile(new UserProfile(""));
+        model.setUserProfile(UserProfile.createEmptyProfile());
         view.switchToView(View.Name.USER_PROFILE_EDITOR, USER_PROFILE_EDITOR_REQUEST_CODE);
     }
 

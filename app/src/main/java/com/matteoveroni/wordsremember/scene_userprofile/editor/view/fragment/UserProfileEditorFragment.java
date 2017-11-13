@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
@@ -23,15 +21,11 @@ import butterknife.Unbinder;
  */
 
 public class UserProfileEditorFragment extends Fragment implements PojoManipulable<UserProfile> {
-
-    public static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
-
     private static final String VIEW_TITLE_CONTENT_KEY = "view_title_content_key";
-    //    private static final String PERSISTING_USER_PROFILE_CONTENT_KEY = "persisting_user_profile_content_key";
     private static final String VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY = "view_user_profile_name_textview_content_key";
 
     private Unbinder butterknifeBinder;
-    private UserProfile persistingUserProfile;
+    private long id_userProfileToEdit;
 
     @BindView(R.id.fragment_user_profile_editor_title)
     TextView lbl_title;
@@ -54,23 +48,22 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public UserProfile getPojoUsed() {
-        persistingUserProfile = getUserProfileInView();
-        return persistingUserProfile;
+        return getUserProfileFromView();
     }
 
-    private UserProfile getUserProfileInView() {
-        return new UserProfile(persistingUserProfile.getId(), txt_userProfileName.getText().toString());
+    private UserProfile getUserProfileFromView() {
+        return new UserProfile(id_userProfileToEdit, txt_userProfileName.getText().toString());
     }
 
     @Override
     public void setPojoUsed(UserProfile userProfile) {
-        if (userProfile.hasNullOrEmptyName()) {
+        id_userProfileToEdit = userProfile.getId();
+        if (id_userProfileToEdit <= 0) {
             lbl_title.setText(R.string.create_user_profile);
         } else {
             lbl_title.setText(R.string.edit_user_profile);
         }
-        txt_userProfileName.setText(userProfile.getProfileName());
-        this.persistingUserProfile = userProfile;
+        txt_userProfileName.setText(userProfile.getName());
     }
 
     @Override

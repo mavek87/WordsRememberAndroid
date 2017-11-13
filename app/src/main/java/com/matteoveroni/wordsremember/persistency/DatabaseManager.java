@@ -38,16 +38,19 @@ public class DatabaseManager {
                 }
             }
         }
-
         return DB_MANAGER_UNIQUE_INSTANCE;
     }
 
     public void setCurrentUserProfileAndCreateDbHelper(UserProfile userProfile) {
+        createDbHelperForUserProfileIfNotPresent(userProfile);
+        this.currentUserProfile = userProfile;
+    }
+
+    private void createDbHelperForUserProfileIfNotPresent(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
-            Log.d(TAG, "Created dbHelper for profile => " + userProfile.getProfileName());
+            Log.d(TAG, "Created dbHelper for profile => " + userProfile.getName());
             dbHelpers.put(userProfile, new DatabaseHelper(context, userProfile, DB_VERSION));
         }
-        this.currentUserProfile = userProfile;
     }
 
     public SQLiteDatabase getReadableDatabase() {
@@ -58,7 +61,22 @@ public class DatabaseManager {
         return dbHelpers.get(currentUserProfile).getWritableDatabase();
     }
 
-    public DatabaseHelper getDatabaseHelper() {
+    public boolean updateDatabaseForNewUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) {
+        createDbHelperForUserProfileIfNotPresent(oldUserProfile);
+        DatabaseHelper dbHelper = dbHelpers.get(oldUserProfile);
+        boolean wasDbRenamed = dbHelper.renameDatabaseForNewProfile(newUserProfile);
+        if (wasDbRenamed) {
+            if (oldUserProfile == currentUserProfile) {
+                currentUserProfile = newUserProfile;
+            }
+            dbHelpers.remove(oldUserProfile);
+            dbHelpers.put(newUserProfile, dbHelper);
+            return true;
+        }
+        return false;
+    }
+
+    public DatabaseHelper getDatabaseHelperForCurrentProfile() {
         return dbHelpers.get(currentUserProfile);
     }
 
