@@ -91,7 +91,6 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
     public void onListItemClick(ListView listView, View view, int position, long id) {
         Cursor cursor = profilesListAdapter.getCursor();
         EVENT_BUS.postSticky(new EventUserProfileSelected(getSelectedUserProfile(cursor, position)));
-//        EVENT_BUS.post(new EventVocableSelected(getSelectedVocable(cursor, position)));
         Toast.makeText(getActivity(), cursor.getString(1), Toast.LENGTH_SHORT).show();
     }
 
@@ -118,11 +117,11 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_edit:
                 EVENT_BUS.postSticky(new EventEditUserProfile(selectedUserProfile));
-                Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
+                // TODO: remove this comment
+//                Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_dictionary_list_long_press_remove:
                 EVENT_BUS.postSticky(new EventDeleteUserProfile(selectedUserProfile));
-                Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onContextItemSelected(item);
