@@ -24,8 +24,8 @@ public class UserProfilesDAO {
     }
 
     public long saveUserProfile(UserProfile userProfile) {
-        Long id = userProfile.getId();
-        if (userProfile.isInvalidProfile() || id == null || id < 0) return -1;
+        long id = userProfile.getId();
+        if (userProfile.getId() > 0) return -1;
 
         Uri uri = contentResolver.insert(
                 UserProfilesContract.CONTENT_URI,
@@ -42,33 +42,42 @@ public class UserProfilesDAO {
     }
 
     public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) {
-        if (newUserProfile.isInvalidProfile()) return 0;
+        if (newUserProfile.isInvalidProfile()) return -1;
 
         if (oldUserProfile.isInvalidProfile())
-            return (saveUserProfile(newUserProfile) > 0) ? 1 : 0;
+            return (saveUserProfile(newUserProfile) > 0) ? 1 : -1;
 
-        boolean wasDbRenamedForNewUserProfile = DatabaseManager.getInstance(context).updateDatabaseForNewUserProfile(oldUserProfile, newUserProfile);
-        if (wasDbRenamedForNewUserProfile) {
+        boolean isDbRenamed = DatabaseManager.getInstance(context).updateDatabaseForNewUserProfile(oldUserProfile, newUserProfile);
+        if (isDbRenamed) {
+
             return contentResolver.update(
                     UserProfilesContract.CONTENT_URI,
                     userProfileToContentValues(newUserProfile),
                     UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
                     new String[]{Long.toString(oldUserProfile.getId())}
             );
+
         } else {
             throw new RuntimeException("Impossible to rename db from old user profile: " + oldUserProfile + " to new user profile: " + newUserProfile);
         }
     }
 
-    public int removeUserProfile(UserProfile userProfile) {
+    public int deleteUserProfile(UserProfile userProfile) {
         Long id = userProfile.getId();
-        if (userProfile.isInvalidProfile() || id == null || id < 0) return -1;
+        if (userProfile.isInvalidProfile()) return -1;
 
-        return contentResolver.delete(
-                UserProfilesContract.CONTENT_URI,
-                UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
-                new String[]{Long.toString(id)}
-        );
+        boolean isDbRemoved = DatabaseManager.getInstance(context).deleteDatabaseForUserProfile(userProfile);
+        if (isDbRemoved) {
+
+            return contentResolver.delete(
+                    UserProfilesContract.CONTENT_URI,
+                    UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
+                    new String[]{Long.toString(id)}
+            );
+
+        } else {
+            throw new RuntimeException("Impossible to delete db for profile: " + userProfile);
+        }
     }
 
     private ContentValues userProfileToContentValues(UserProfile userProfile) {

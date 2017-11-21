@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.scene_userprofile.manager.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
@@ -18,10 +19,12 @@ public class UserProfilePresenter implements Presenter {
     private UserProfileView view;
     private final Settings settings;
     private final UserProfileModel model;
+    private final UserProfilesDAO dao;
 
-    public UserProfilePresenter(Settings settings, UserProfileModel model) {
+    public UserProfilePresenter(Settings settings, UserProfileModel model, UserProfilesDAO dao) {
         this.settings = settings;
         this.model = model;
+        this.dao = dao;
     }
 
     @Override
@@ -47,5 +50,9 @@ public class UserProfilePresenter implements Presenter {
     public void onEditProfileAction(UserProfile userProfileToEdit) {
         model.setUserProfile(userProfileToEdit);
         view.switchToView(View.Name.USER_PROFILE_EDITOR, USER_PROFILE_EDITOR_REQUEST_CODE);
+    }
+
+    public void onDeleteProfileAction(UserProfile userProfileToRemove) {
+        dao.deleteUserProfile(userProfileToRemove);
     }
 }

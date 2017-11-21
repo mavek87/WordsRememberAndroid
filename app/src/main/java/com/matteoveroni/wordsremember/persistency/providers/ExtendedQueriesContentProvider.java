@@ -69,9 +69,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
         return (getQueryParameterOffsetValue(uri) != null);
     }
 
-    /**
-     * https://stackoverflow.com/questions/40481035/diference-between-cursor-setnotificationuri-and-getcontentresolver-notifycha
-     */
+    // https://stackoverflow.com/questions/40481035/diference-between-cursor-setnotificationuri-and-getcontentresolver-notifycha
 
     protected void notifyChangeToObservingCursors(Uri uri) {
         if (isContentResolverNotNull()) getContext().getContentResolver().notifyChange(uri, null);

@@ -6,11 +6,12 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventEditUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenter;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventUserProfileSelected;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,6 +76,12 @@ public class UserProfileActivity extends BaseActivityPresentedView implements Us
     @Subscribe
     public void editUserProfileAction(EventEditUserProfile event) {
         presenter.onEditProfileAction(event.getUserProfile());
+    }
+
+    @Override
+    @Subscribe
+    public void deleteUserProfileAction(EventDeleteUserProfile event) {
+        presenter.onDeleteProfileAction(event.getUserProfile());
     }
 }
 

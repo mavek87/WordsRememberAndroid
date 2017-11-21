@@ -48,7 +48,7 @@ public class DatabaseManager {
 
     private void createDbHelperForUserProfileIfNotPresent(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
-            Log.d(TAG, "Created dbHelper for profile => " + userProfile.getName());
+            Log.d(TAG, "dbHelper for profile => " + userProfile.getName() + " created!");
             dbHelpers.put(userProfile, new DatabaseHelper(context, userProfile, DB_VERSION));
         }
     }
@@ -64,7 +64,7 @@ public class DatabaseManager {
     public boolean updateDatabaseForNewUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) {
         createDbHelperForUserProfileIfNotPresent(oldUserProfile);
         DatabaseHelper dbHelper = dbHelpers.get(oldUserProfile);
-        boolean wasDbRenamed = dbHelper.renameDatabaseForNewProfile(newUserProfile);
+        boolean wasDbRenamed = dbHelper.renameDbForNewProfile(newUserProfile);
         if (wasDbRenamed) {
             if (oldUserProfile == currentUserProfile) {
                 currentUserProfile = newUserProfile;
@@ -74,6 +74,13 @@ public class DatabaseManager {
             return true;
         }
         return false;
+    }
+
+    public boolean deleteDatabaseForUserProfile(UserProfile userProfile) {
+        if (userProfile.isInvalidProfile()) return false;
+        createDbHelperForUserProfileIfNotPresent(userProfile);
+        if (!dbHelpers.containsKey(userProfile)) return false;
+        return dbHelpers.get(userProfile).deleteDatabase();
     }
 
     public DatabaseHelper getDatabaseHelperForCurrentProfile() {

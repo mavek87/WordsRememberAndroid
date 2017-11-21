@@ -55,8 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
-    public void deleteDatabase() {
-        context.deleteDatabase(dbName);
+    public boolean deleteDatabase() {
+        return context.deleteDatabase(dbName);
     }
 
     public void resetDatabase() {
@@ -66,17 +66,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean renameDatabaseForNewProfile(UserProfile newUserProfile) {
+    public boolean renameDbForNewProfile(UserProfile newUserProfile) {
         if (newUserProfile.isInvalidProfile() || dbName.equals(getDbNameForUserProfile(newUserProfile)))
             return false;
 
         close();
 
-        renameJournalDbFile(newUserProfile);
-        return renameDbFile(newUserProfile);
+        renameJournalDbFileForNewProfile(newUserProfile);
+        return renameDbFileForNewProfile(newUserProfile);
     }
 
-    private void renameJournalDbFile(UserProfile newUserProfile) {
+    private void renameJournalDbFileForNewProfile(UserProfile newUserProfile) {
         final File oldJournalFile = new File(dbPath.concat(File.separator + userProfile.getName() + JOURNAL_EXTENSION));
         final File newJournalFile = new File(dbPath.concat(File.separator + newUserProfile.getName() + JOURNAL_EXTENSION));
         try {
@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private boolean renameDbFile(UserProfile newUserProfile) {
+    private boolean renameDbFileForNewProfile(UserProfile newUserProfile) {
         final String newDbName = getDbNameForUserProfile(newUserProfile);
 
         final File oldDbFile = context.getDatabasePath(dbName);

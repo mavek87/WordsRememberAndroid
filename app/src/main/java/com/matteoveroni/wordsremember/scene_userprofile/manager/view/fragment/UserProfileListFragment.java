@@ -18,9 +18,10 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventEditUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment.events.EventUserProfileSelected;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
 import com.matteoveroni.wordsremember.ui.listview.adapters.UserProfilesListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,12 +121,9 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
                 Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_dictionary_list_long_press_remove:
-//                Word selectedVocable = getSelectedVocable(cursor, position);
-//                EVENT_BUS.post(
-//                        new EventVocableManipulationRequest(selectedVocable, TypeOfManipulationRequest.REMOVE)
-//                );
+                EVENT_BUS.postSticky(new EventDeleteUserProfile(selectedUserProfile));
+                Toast.makeText(getContext(), selectedUserProfile.getName(), Toast.LENGTH_SHORT).show();
                 return true;
-
         }
         return super.onContextItemSelected(item);
     }

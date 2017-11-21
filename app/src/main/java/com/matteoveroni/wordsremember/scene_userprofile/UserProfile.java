@@ -15,7 +15,7 @@ public class UserProfile {
     public static final long NO_ID = -1;
     public static final String NO_PROFILE_NAME = "";
 
-    private final long id;
+    private final Long id;
     private final String name;
 
     public UserProfile(long id, String name) {

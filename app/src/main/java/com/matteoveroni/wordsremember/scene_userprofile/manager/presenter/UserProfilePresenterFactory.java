@@ -16,9 +16,12 @@ public class UserProfilePresenterFactory implements PresenterFactory {
     @Inject
     UserProfileModel model;
 
+    @Inject
+    UserProfilesDAO dao;
+
     @Override
     public UserProfilePresenter create() {
         WordsRemember.getAppComponent().inject(this);
-        return new UserProfilePresenter(settings, model);
+        return new UserProfilePresenter(settings, model, dao);
     }
 }

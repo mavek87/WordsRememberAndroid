@@ -39,19 +39,25 @@ public class UserProfileEditorPresenter implements Presenter {
     }
 
     public void onSaveProfileAction() {
+        final UserProfile model_userProfile = model.getUserProfile();
         final UserProfile view_userProfile = view.getPojoUsed();
         if (view_userProfile.getName().trim().isEmpty()) {
             // TODO: use a formatted string
-            view.showMessage("User profile name can\'t be empty, type a valid name");
+            view.showMessage("The User profile name can\'t be empty, type a valid name");
             return;
         }
 
-        final UserProfile model_userProfile = model.getUserProfile();
+        long editProfileResult;
         if (model_userProfile.getId() <= 0) {
-            dao.saveUserProfile(view_userProfile);
+            editProfileResult = dao.saveUserProfile(view_userProfile);
         } else {
-            dao.updateUserProfile(model_userProfile, view_userProfile);
+            editProfileResult = dao.updateUserProfile(model_userProfile, view_userProfile);
         }
-        view.returnToPreviousView();
+
+        if (editProfileResult > -1) {
+            // TODO: use a formatted string
+            view.showMessage("User profile " + view_userProfile.getName() + " saved!");
+            view.returnToPreviousView();
+        }
     }
 }
