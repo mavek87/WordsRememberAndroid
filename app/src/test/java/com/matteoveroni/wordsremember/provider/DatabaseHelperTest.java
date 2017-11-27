@@ -1,27 +1,5 @@
 package com.matteoveroni.wordsremember.provider;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-
-import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
-import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
-import org.robolectric.Shadows;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowApplication;
-
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -63,10 +41,10 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Before
 //    public void setUp() {
-//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getDatabaseHelperForCurrentProfile();
+//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getDBHelperForCurrentProfile();
 //        assertNotNull("dbHelper should be created before each test", dbHelper);
 //
-//        final SQLiteDatabase database = dbHelper.getReadableDatabase();
+//        final SQLiteDatabase database = dbHelper.getReadableDB();
 //        assertNotNull("Database should be created before each test", database);
 //        database.close();
 //
@@ -86,7 +64,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Test
 //    public void test_AfterDbHelperIsCreated_DbNameShouldBeSet() {
-//        assertEquals("DbHelper name should be equal to expected name", DATABASE_NAME, dbHelper.getDatabaseName());
+//        assertEquals("DbHelper name should be equal to expected name", DATABASE_NAME, dbHelper.getDBName());
 //    }
 //
 //    @Test
@@ -111,7 +89,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Test(expected = SQLiteException.class)
 //    public void test_WhenQueryExecutedUsingInvalidTable_SQliteExceptionShouldBeThrown() {
-//        queryResults = dbHelper.getReadableDatabase().query(
+//        queryResults = dbHelper.getReadableDB().query(
 //                INVALID_TABLE,
 //                VocablesContract.Schema.ALL_COLUMNS,
 //                null, null, null, null, null, null
@@ -120,7 +98,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Test(expected = SQLiteException.class)
 //    public void test_WhenQueryExecutedUsingInvalidColumn_SQliteExceptionShouldBeThrown() {
-//        queryResults = dbHelper.getReadableDatabase().query(
+//        queryResults = dbHelper.getReadableDB().query(
 //                VocablesContract.Schema.TABLE_NAME,
 //                INVALID_COLUMN,
 //                null, null, null, null, null, null
@@ -147,7 +125,7 @@ import static junit.framework.Assert.assertTrue;
 //    public void test_DeleteExistingVocableSucceed() {
 //        final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
 //
-//        final int rowDeleted = dbHelper.getWritableDatabase().delete(
+//        final int rowDeleted = dbHelper.getWritableDB().delete(
 //                VocablesContract.Schema.TABLE_NAME,
 //                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted,
 //                null
@@ -164,7 +142,7 @@ import static junit.framework.Assert.assertTrue;
 //        final String UPDATED_VOCABLE_NAME = "UpdatedVocableName";
 //        values.put(VocablesContract.Schema.COL_VOCABLE, UPDATED_VOCABLE_NAME);
 //
-//        final int rowsUpdated = dbHelper.getWritableDatabase().update(
+//        final int rowsUpdated = dbHelper.getWritableDB().update(
 //                VocablesContract.Schema.TABLE_NAME,
 //                values,
 //                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted, null);
@@ -186,7 +164,7 @@ import static junit.framework.Assert.assertTrue;
 //        insertValidRecordInTable(TABLE_TRANSLATIONS);
 //        insertValidRecordInTable(TABLE_VOCABLESTRANSLATIONS);
 //
-//        dbHelper.resetDatabase();
+//        dbHelper.resetDB();
 //
 //        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
 //        checkIfTableIsCreatedAndEmpty(TABLE_TRANSLATIONS);
@@ -194,7 +172,7 @@ import static junit.framework.Assert.assertTrue;
 //    }
 //
 //    private Cursor getQueryResultsFromTable(Table table) {
-//        return dbHelper.getReadableDatabase().query(table.getName(), table.getColumns(), null, null, null, null, null, null);
+//        return dbHelper.getReadableDB().query(table.getName(), table.getColumns(), null, null, null, null, null, null);
 //    }
 //
 //    private long insertValidRecordInTable(Table table) {
@@ -212,7 +190,7 @@ import static junit.framework.Assert.assertTrue;
 //            default:
 //                throw new RuntimeException("Error trying to insert new record in table. Table " + table.getName() + " unknown");
 //        }
-//        long idOfDataInserted = dbHelper.getWritableDatabase().insert(table.getName(), null, values);
+//        long idOfDataInserted = dbHelper.getWritableDB().insert(table.getName(), null, values);
 //        dbHelper.close();
 //        return idOfDataInserted;
 //    }

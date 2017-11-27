@@ -1,24 +1,5 @@
 package com.matteoveroni.wordsremember.provider;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
-
-import com.matteoveroni.myutils.Singleton;
-import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.persistency.DatabaseHelper;
-import com.matteoveroni.wordsremember.persistency.providers.dictionary.DictionaryProvider;
-import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.MatcherAssert.assertThat;
