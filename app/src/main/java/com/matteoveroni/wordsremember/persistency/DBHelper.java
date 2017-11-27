@@ -24,8 +24,8 @@ import java.io.File;
  * @author Matteo Veroni
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String TAG = TagGenerator.tag(DatabaseHelper.class);
+public class DBHelper extends SQLiteOpenHelper {
+    public static final String TAG = TagGenerator.tag(DBHelper.class);
 
     private static final String DB_EXTENSION = ".db";
     private static final String JOURNAL_EXTENSION = "-journal";
@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String dbName;
     private String dbPath;
 
-    public DatabaseHelper(Context context, UserProfile userProfile, int version) {
+    public DBHelper(Context context, UserProfile userProfile, int version) {
         super(context, getDbNameForUserProfile(userProfile), null, version);
         this.context = context;
         this.userProfile = userProfile;
@@ -56,7 +56,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean deleteDatabase() {
-        return context.deleteDatabase(dbName);
+        boolean isDbDeleted = context.deleteDatabase(dbName);
+        return isDbDeleted;
     }
 
     public void resetDatabase() {
@@ -66,17 +67,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean renameDbForNewProfile(UserProfile newUserProfile) {
+    public boolean renameDbForProfile(UserProfile newUserProfile) {
         if (newUserProfile.isInvalidProfile() || dbName.equals(getDbNameForUserProfile(newUserProfile)))
             return false;
 
         close();
 
-        renameJournalDbFileForNewProfile(newUserProfile);
-        return renameDbFileForNewProfile(newUserProfile);
+        renameJournalDbFileForProfile(newUserProfile);
+        return renameDbFileForProfile(newUserProfile);
     }
 
-    private void renameJournalDbFileForNewProfile(UserProfile newUserProfile) {
+    private void renameJournalDbFileForProfile(UserProfile newUserProfile) {
         final File oldJournalFile = new File(dbPath.concat(File.separator + userProfile.getName() + JOURNAL_EXTENSION));
         final File newJournalFile = new File(dbPath.concat(File.separator + newUserProfile.getName() + JOURNAL_EXTENSION));
         try {
@@ -86,7 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private boolean renameDbFileForNewProfile(UserProfile newUserProfile) {
+    private boolean renameDbFileForProfile(UserProfile newUserProfile) {
         final String newDbName = getDbNameForUserProfile(newUserProfile);
 
         final File oldDbFile = context.getDatabasePath(dbName);

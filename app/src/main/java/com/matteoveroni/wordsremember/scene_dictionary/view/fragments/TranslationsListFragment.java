@@ -20,15 +20,15 @@ import android.widget.TextView;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
+import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.ui.listview.adapters.TranslationsListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +80,8 @@ public class TranslationsListFragment extends ListFragment implements LoaderMana
         fragTranslationsType = Json.getInstance().fromJson(args.getString(FRAGMENT_TYPE_KEY), TranslationsType.class);
 
         translationsListAdapter = new TranslationsListViewAdapter(getContext(), null);
+        setListAdapter(translationsListAdapter);
+
         return view;
     }
 

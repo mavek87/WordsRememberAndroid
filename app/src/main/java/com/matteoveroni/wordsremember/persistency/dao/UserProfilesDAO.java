@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
+import com.matteoveroni.wordsremember.persistency.DBUserManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
@@ -47,7 +47,7 @@ public class UserProfilesDAO {
         if (oldUserProfile.isInvalidProfile())
             return (saveUserProfile(newUserProfile) > 0) ? 1 : -1;
 
-        boolean isDbRenamed = DatabaseManager.getInstance(context).updateDatabaseForNewUserProfile(oldUserProfile, newUserProfile);
+        boolean isDbRenamed = DBUserManager.getInstance(context).updateDBForNewUserProfile(oldUserProfile, newUserProfile);
         if (isDbRenamed) {
 
             return contentResolver.update(
@@ -58,7 +58,7 @@ public class UserProfilesDAO {
             );
 
         } else {
-            throw new RuntimeException("Impossible to rename db from old user profile: " + oldUserProfile + " to new user profile: " + newUserProfile);
+            throw new RuntimeException("Impossible to rename db from old user profile: " + oldUserProfile.getName() + " to new user profile: " + newUserProfile.getName());
         }
     }
 
@@ -66,7 +66,7 @@ public class UserProfilesDAO {
         Long id = userProfile.getId();
         if (userProfile.isInvalidProfile()) return -1;
 
-        boolean isDbRemoved = DatabaseManager.getInstance(context).deleteDatabaseForUserProfile(userProfile);
+        boolean isDbRemoved = DBUserManager.getInstance(context).deleteUserProfileDB(userProfile);
         if (isDbRemoved) {
 
             return contentResolver.delete(
@@ -76,7 +76,7 @@ public class UserProfilesDAO {
             );
 
         } else {
-            throw new RuntimeException("Impossible to delete db for profile: " + userProfile);
+            throw new RuntimeException("Impossible to delete db for profile: " + userProfile.getName());
         }
     }
 

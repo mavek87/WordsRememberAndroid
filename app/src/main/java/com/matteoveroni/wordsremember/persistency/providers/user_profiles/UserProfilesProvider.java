@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
@@ -35,7 +34,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case PROFILES:
                 return UserProfilesContract.CONTENT_DIR_TYPE;
@@ -62,7 +61,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
 
-        SQLiteDatabase db = dbManager.getReadableDatabase();
+        SQLiteDatabase db = dbUserManager.getReadableDB();
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
@@ -79,7 +78,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = dbManager.getWritableDatabase();
+        SQLiteDatabase db = dbUserManager.getWritableDB();
 
         switch (URI_MATCHER.match(uri)) {
             case PROFILES:
@@ -97,7 +96,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = dbManager.getWritableDatabase();
+        SQLiteDatabase db = dbUserManager.getWritableDB();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -127,7 +126,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = dbManager.getWritableDatabase();
+        SQLiteDatabase db = dbUserManager.getWritableDB();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {

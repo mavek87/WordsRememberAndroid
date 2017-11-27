@@ -2,8 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.persistency.DatabaseManager;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.DBUserManager;
 
 import javax.inject.Singleton;
 
@@ -22,7 +21,7 @@ public class DatabaseManagerModule {
 
     @Provides
     @Singleton
-    public DatabaseManager providesDatabaseManager(Context context) {
-        return DatabaseManager.getInstance(context);
+    public DBUserManager providesDatabaseManager(Context context) {
+        return DBUserManager.getInstance(context);
     }
 }
