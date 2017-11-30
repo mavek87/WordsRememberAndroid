@@ -41,12 +41,12 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Before
 //    public void setUp() {
-//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getDBHelperForCurrentProfile();
+//        dbHelper = DatabaseManager.getInstance(app.getApplicationContext()).getCurrentProfileDBHelper();
 //        assertNotNull("dbHelper should be created before each test", dbHelper);
 //
-//        final SQLiteDatabase database = dbHelper.getReadableDB();
+//        final SQLiteDatabase database = dbHelper.getReadableDBForCurrentProfile();
 //        assertNotNull("Database should be created before each test", database);
-//        database.close();
+//        database.closeCurrentProfileDB();
 //
 //        queryResults = null;
 //    }
@@ -54,17 +54,17 @@ import static junit.framework.Assert.assertTrue;
 //    @After
 //    public void tearDown() {
 //        if (dbHelper != null) {
-//            dbHelper.close();
+//            dbHelper.closeCurrentProfileDB();
 //        }
 //        if (queryResults != null) {
-//            queryResults.close();
+//            queryResults.closeCurrentProfileDB();
 //        }
 //        values.clear();
 //    }
 //
 //    @Test
 //    public void test_AfterDbHelperIsCreated_DbNameShouldBeSet() {
-//        assertEquals("DbHelper name should be equal to expected name", DATABASE_NAME, dbHelper.getDBName());
+//        assertEquals("DbHelper name should be equal to expected name", DATABASE_NAME, dbHelper.getCurrentProfileDBName());
 //    }
 //
 //    @Test
@@ -89,7 +89,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Test(expected = SQLiteException.class)
 //    public void test_WhenQueryExecutedUsingInvalidTable_SQliteExceptionShouldBeThrown() {
-//        queryResults = dbHelper.getReadableDB().query(
+//        queryResults = dbHelper.getReadableDBForCurrentProfile().query(
 //                INVALID_TABLE,
 //                VocablesContract.Schema.ALL_COLUMNS,
 //                null, null, null, null, null, null
@@ -98,7 +98,7 @@ import static junit.framework.Assert.assertTrue;
 //
 //    @Test(expected = SQLiteException.class)
 //    public void test_WhenQueryExecutedUsingInvalidColumn_SQliteExceptionShouldBeThrown() {
-//        queryResults = dbHelper.getReadableDB().query(
+//        queryResults = dbHelper.getReadableDBForCurrentProfile().query(
 //                VocablesContract.Schema.TABLE_NAME,
 //                INVALID_COLUMN,
 //                null, null, null, null, null, null
@@ -125,7 +125,7 @@ import static junit.framework.Assert.assertTrue;
 //    public void test_DeleteExistingVocableSucceed() {
 //        final long idOfDataInserted = insertValidRecordInTable(TABLE_VOCABLES);
 //
-//        final int rowDeleted = dbHelper.getWritableDB().delete(
+//        final int rowDeleted = dbHelper.getWritableDBForCurrentProfile().delete(
 //                VocablesContract.Schema.TABLE_NAME,
 //                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted,
 //                null
@@ -142,7 +142,7 @@ import static junit.framework.Assert.assertTrue;
 //        final String UPDATED_VOCABLE_NAME = "UpdatedVocableName";
 //        values.put(VocablesContract.Schema.COL_VOCABLE, UPDATED_VOCABLE_NAME);
 //
-//        final int rowsUpdated = dbHelper.getWritableDB().update(
+//        final int rowsUpdated = dbHelper.getWritableDBForCurrentProfile().update(
 //                VocablesContract.Schema.TABLE_NAME,
 //                values,
 //                VocablesContract.Schema.COL_ID + "=" + idOfDataInserted, null);
@@ -164,7 +164,7 @@ import static junit.framework.Assert.assertTrue;
 //        insertValidRecordInTable(TABLE_TRANSLATIONS);
 //        insertValidRecordInTable(TABLE_VOCABLESTRANSLATIONS);
 //
-//        dbHelper.resetDB();
+//        dbHelper.resetCurrentProfileDB();
 //
 //        checkIfTableIsCreatedAndEmpty(TABLE_VOCABLES);
 //        checkIfTableIsCreatedAndEmpty(TABLE_TRANSLATIONS);
@@ -172,7 +172,7 @@ import static junit.framework.Assert.assertTrue;
 //    }
 //
 //    private Cursor getQueryResultsFromTable(Table table) {
-//        return dbHelper.getReadableDB().query(table.getName(), table.getColumns(), null, null, null, null, null, null);
+//        return dbHelper.getReadableDBForCurrentProfile().query(table.getName(), table.getColumns(), null, null, null, null, null, null);
 //    }
 //
 //    private long insertValidRecordInTable(Table table) {
@@ -190,8 +190,8 @@ import static junit.framework.Assert.assertTrue;
 //            default:
 //                throw new RuntimeException("Error trying to insert new record in table. Table " + table.getName() + " unknown");
 //        }
-//        long idOfDataInserted = dbHelper.getWritableDB().insert(table.getName(), null, values);
-//        dbHelper.close();
+//        long idOfDataInserted = dbHelper.getWritableDBForCurrentProfile().insert(table.getName(), null, values);
+//        dbHelper.closeCurrentProfileDB();
 //        return idOfDataInserted;
 //    }
 //

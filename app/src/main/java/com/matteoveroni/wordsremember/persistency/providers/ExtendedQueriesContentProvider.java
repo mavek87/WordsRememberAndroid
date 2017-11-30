@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.persistency.DBUserManager;
+import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-    protected DBUserManager dbUserManager;
+    protected ProfilesDBManager dbUserManager;
 
     public class Error {
         public static final String UNSUPPORTED_URI = "Unsupported URI";
@@ -31,7 +31,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        dbUserManager = DBUserManager.getInstance(getContext());
+        dbUserManager = ProfilesDBManager.getInstance(getContext());
         return true;
     }
 

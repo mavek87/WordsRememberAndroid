@@ -50,14 +50,18 @@ public class UserProfileEditorPresenter implements Presenter {
         long editProfileResult;
         if (model_userProfile.getId() <= 0) {
             editProfileResult = dao.saveUserProfile(view_userProfile);
+            showSavedUserMessageToView(view_userProfile.getName());
         } else {
-            editProfileResult = dao.updateUserProfile(model_userProfile, view_userProfile);
+            try {
+                dao.updateUserProfile(model_userProfile, view_userProfile);
+                showSavedUserMessageToView(view_userProfile.getName());
+            } catch (Exception ex) {
+            }
         }
+    }
 
-        if (editProfileResult > -1) {
-            // TODO: use a formatted string
-            view.showMessage("User profile " + view_userProfile.getName() + " saved!");
-            view.returnToPreviousView();
-        }
+    private void showSavedUserMessageToView(String view_userProfile) {
+        view.showMessage("User profile " + view_userProfile + " saved!");
+        view.returnToPreviousView();
     }
 }

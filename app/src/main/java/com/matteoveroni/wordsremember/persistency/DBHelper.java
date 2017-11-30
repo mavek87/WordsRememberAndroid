@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.persistency;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.nfc.Tag;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -34,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private UserProfile userProfile;
     private String dbName;
     private String dbPath;
+    private String dbPathAndName;
 
     public DBHelper(Context context, UserProfile userProfile, int version) {
         super(context, getDbNameForUserProfile(userProfile), null, version);
@@ -41,6 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
         this.userProfile = userProfile;
         this.dbName = getDbNameForUserProfile(userProfile);
         this.dbPath = context.getDatabasePath(dbName).getParent();
+        this.dbPathAndName = dbPath.concat(File.separator + dbName);
     }
 
     @Override
@@ -55,9 +58,10 @@ public class DBHelper extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
-    public boolean deleteDatabase() {
-        boolean isDbDeleted = context.deleteDatabase(dbName);
-        return isDbDeleted;
+    public boolean isDatabaseCreated() {
+        final boolean isDatabaseCreated = context.getDatabasePath(dbName).exists();
+        Log.d(TAG, "isDatabaseCreated = " + isDatabaseCreated);
+        return isDatabaseCreated;
     }
 
     public void resetDatabase() {
@@ -67,42 +71,44 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean renameDbForProfile(UserProfile newUserProfile) {
-        if (newUserProfile.isInvalidProfile() || dbName.equals(getDbNameForUserProfile(newUserProfile)))
-            return false;
+    public void deleteDatabase() throws Exception {
+        boolean isDbDeleted = context.deleteDatabase(dbName);
+        if (!isDbDeleted) {
+            throw new Exception(TAG + " - Impossible to remove db for \'" + this.userProfile.getName() + "\' userProfile.");
+        }
+    }
+
+    public void renameDbForProfile(UserProfile newUserProfile) throws Exception {
+        String newDbName = getDbNameForUserProfile(newUserProfile);
+
+        if (dbName.equals(newDbName)) return;
 
         close();
 
-        renameJournalDbFileForProfile(newUserProfile);
-        return renameDbFileForProfile(newUserProfile);
+        renameJournalDbFile(newDbName);
+        renameDbFileForProfile(newUserProfile, newDbName);
     }
 
-    private void renameJournalDbFileForProfile(UserProfile newUserProfile) {
-        final File oldJournalFile = new File(dbPath.concat(File.separator + userProfile.getName() + JOURNAL_EXTENSION));
-        final File newJournalFile = new File(dbPath.concat(File.separator + newUserProfile.getName() + JOURNAL_EXTENSION));
+    private void renameJournalDbFile(String dbNameNewUserProfile) {
+        final File oldJournalFile = new File(dbPathAndName + JOURNAL_EXTENSION);
+        final File newJournalFile = new File(dbPath.concat(File.separator + dbNameNewUserProfile + JOURNAL_EXTENSION));
         try {
             oldJournalFile.renameTo(newJournalFile);
         } catch (Exception ex) {
             Log.e(TAG, ex.getMessage());
+            oldJournalFile.delete();
         }
     }
 
-    private boolean renameDbFileForProfile(UserProfile newUserProfile) {
-        final String newDbName = getDbNameForUserProfile(newUserProfile);
-
+    private void renameDbFileForProfile(UserProfile newUserProfile, String newDbName) throws Exception {
         final File oldDbFile = context.getDatabasePath(dbName);
-        final File newDbFile = new File(oldDbFile.getParent(), newDbName);
-        try {
-            boolean isDbRenamed = oldDbFile.renameTo(newDbFile);
-            if (isDbRenamed) {
-                dbName = newDbName;
-                userProfile = newUserProfile;
-                dbPath = context.getDatabasePath(dbName).getParent();
-            }
-            return isDbRenamed;
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage());
-            return false;
+        final File newDbFile = new File(dbPath, newDbName);
+
+        final boolean isDbRenamed = oldDbFile.renameTo(newDbFile);
+        if (isDbRenamed) {
+            dbName = newDbName;
+            userProfile = newUserProfile;
+            dbPathAndName = dbPath.concat(File.separator + dbName);
         }
     }
 

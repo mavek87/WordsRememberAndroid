@@ -53,6 +53,10 @@ public class UserProfilePresenter implements Presenter {
     }
 
     public void onDeleteProfileAction(UserProfile userProfileToRemove) {
-        dao.deleteUserProfile(userProfileToRemove);
+        try {
+            dao.deleteUserProfile(userProfileToRemove);
+        } catch (Exception ex) {
+            view.showMessage(ex.getMessage());
+        }
     }
 }

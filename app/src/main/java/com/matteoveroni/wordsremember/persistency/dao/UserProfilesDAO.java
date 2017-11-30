@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.persistency.DBUserManager;
+import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
@@ -41,43 +41,42 @@ public class UserProfilesDAO {
         return id;
     }
 
-    public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) {
-        if (newUserProfile.isInvalidProfile()) return -1;
+    public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
+        if (newUserProfile.isInvalidProfile())
+            throw new IllegalArgumentException("Invalid new user profile to use for the update");
 
-        if (oldUserProfile.isInvalidProfile())
-            return (saveUserProfile(newUserProfile) > 0) ? 1 : -1;
-
-        boolean isDbRenamed = DBUserManager.getInstance(context).updateDBForNewUserProfile(oldUserProfile, newUserProfile);
-        if (isDbRenamed) {
-
-            return contentResolver.update(
-                    UserProfilesContract.CONTENT_URI,
-                    userProfileToContentValues(newUserProfile),
-                    UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
-                    new String[]{Long.toString(oldUserProfile.getId())}
-            );
-
-        } else {
-            throw new RuntimeException("Impossible to rename db from old user profile: " + oldUserProfile.getName() + " to new user profile: " + newUserProfile.getName());
+        if (oldUserProfile.isInvalidProfile()) {
+            long userProfileId = saveUserProfile(newUserProfile);
+            if (userProfileId > 0)
+                return 1;
+            else
+                throw new Exception("Invalid old user profile to update and Impossible to save new user profile");
         }
+
+        if (newUserProfile.equals(oldUserProfile)) return 0;
+
+        ProfilesDBManager.getInstance(context).updateDBForNewUserProfile(oldUserProfile, newUserProfile);
+
+        return contentResolver.update(
+                UserProfilesContract.CONTENT_URI,
+                userProfileToContentValues(newUserProfile),
+                UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
+                new String[]{Long.toString(oldUserProfile.getId())}
+        );
     }
 
-    public int deleteUserProfile(UserProfile userProfile) {
-        Long id = userProfile.getId();
-        if (userProfile.isInvalidProfile()) return -1;
+    public void deleteUserProfile(UserProfile userProfile) throws Exception {
+        final Long userId = userProfile.getId();
 
-        boolean isDbRemoved = DBUserManager.getInstance(context).deleteUserProfileDB(userProfile);
-        if (isDbRemoved) {
+        if (userProfile.isInvalidProfile()) throw new Exception();
 
-            return contentResolver.delete(
-                    UserProfilesContract.CONTENT_URI,
-                    UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
-                    new String[]{Long.toString(id)}
-            );
+        ProfilesDBManager.getInstance(context).deleteUserProfileDB(userProfile);
 
-        } else {
-            throw new RuntimeException("Impossible to delete db for profile: " + userProfile.getName());
-        }
+        contentResolver.delete(
+                UserProfilesContract.CONTENT_URI,
+                UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
+                new String[]{Long.toString(userId)}
+        );
     }
 
     private ContentValues userProfileToContentValues(UserProfile userProfile) {

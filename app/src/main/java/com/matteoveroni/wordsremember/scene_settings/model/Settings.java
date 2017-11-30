@@ -6,7 +6,7 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.persistency.DBUserManager;
+import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizGameDifficulty;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
@@ -26,7 +26,7 @@ public class Settings {
     public static final String TAG = TagGenerator.tag(Settings.class);
 
     @Inject
-    DBUserManager dbManager;
+    ProfilesDBManager dbManager;
 
     private SharedPreferences prefs;
 
@@ -73,7 +73,7 @@ public class Settings {
 
     public void setUserProfile(UserProfile userProfile) {
         prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, UserProfile.class)).apply();
-        dbManager.setCurrentUserProfileAndLoadDBHelper(userProfile);
+        dbManager.setCurrentUserProfile(userProfile);
         Log.d(TAG, "Switch to user profile => " + userProfile.getName());
     }
 
