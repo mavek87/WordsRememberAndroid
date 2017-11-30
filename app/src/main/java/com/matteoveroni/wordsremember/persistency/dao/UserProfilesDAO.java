@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.provider.ContactsContract;
 
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
@@ -26,6 +27,8 @@ public class UserProfilesDAO {
     public long saveUserProfile(UserProfile userProfile) {
         long id = userProfile.getId();
         if (userProfile.getId() > 0) return -1;
+
+        ProfilesDBManager.getInstance(context).loadUserProfileDBHelper(userProfile);
 
         Uri uri = contentResolver.insert(
                 UserProfilesContract.CONTENT_URI,

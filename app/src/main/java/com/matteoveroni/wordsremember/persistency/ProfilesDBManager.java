@@ -27,7 +27,7 @@ public class ProfilesDBManager {
 
     private ProfilesDBManager(Context context) {
         this.context = context;
-        setCurrentUserProfile(UserProfile.SYSTEM_PROFILE);
+        setUserProfileInUse(UserProfile.SYSTEM_PROFILE);
     }
 
     public static ProfilesDBManager getInstance(Context appContext) {
@@ -41,14 +41,20 @@ public class ProfilesDBManager {
         return DB_MANAGER_UNIQUE_INSTANCE;
     }
 
-    public void setCurrentUserProfile(UserProfile userProfile) {
+    public void setUserProfileInUse(UserProfile userProfile) {
         userProfileInUse = userProfile;
         loadUserProfileDBHelper(userProfileInUse);
     }
 
-    private DBHelper loadUserProfileDBHelper(UserProfile userProfile) {
+    public DBHelper loadUserProfileDBHelper(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
-            dbHelpers.put(userProfile, new DBHelper(context, userProfile, DB_VERSION));
+            final DBHelper dbHelper = new DBHelper(context, userProfile, DB_VERSION);
+
+            // create the db on disk if it doesn't exist
+//            dbHelper.getReadableDatabase();
+//            dbHelper.close();
+
+            dbHelpers.put(userProfile, dbHelper);
             Log.d(TAG, "loaded dbHelper for user profile => " + userProfile.getName());
         }
         return dbHelpers.get(userProfile);
