@@ -43,16 +43,16 @@ public class ProfilesDBManager {
 
     public void setUserProfileInUse(UserProfile userProfile) {
         userProfileInUse = userProfile;
-        loadUserProfileDBHelper(userProfileInUse);
+        createDBIfDoesntExist(loadUserProfileDBHelper(userProfileInUse));
+    }
+
+    private void createDBIfDoesntExist(DBHelper dbHelper) {
+        dbHelper.getReadableDatabase().close();
     }
 
     public DBHelper loadUserProfileDBHelper(UserProfile userProfile) {
         if (!dbHelpers.containsKey(userProfile)) {
             final DBHelper dbHelper = new DBHelper(context, userProfile, DB_VERSION);
-
-            // create the db on disk if it doesn't exist
-//            dbHelper.getReadableDatabase();
-//            dbHelper.close();
 
             dbHelpers.put(userProfile, dbHelper);
             Log.d(TAG, "loaded dbHelper for user profile => " + userProfile.getName());
@@ -61,15 +61,16 @@ public class ProfilesDBManager {
     }
 
     public void updateDBForNewUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
-        final DBHelper dbHelper = loadUserProfileDBHelper(oldUserProfile);
-        if (dbHelper.isDatabaseCreated())
-            dbHelper.renameDbForProfile(newUserProfile);
+        final DBHelper oldDbHelper = loadUserProfileDBHelper(oldUserProfile);
+        oldDbHelper.renameDbForProfile(newUserProfile);
+
+        loadUserProfileDBHelper(newUserProfile);
+
+        dbHelpers.remove(oldUserProfile);
 
         if (userProfileInUse == oldUserProfile) {
             userProfileInUse = newUserProfile;
         }
-        dbHelpers.remove(oldUserProfile);
-        dbHelpers.put(newUserProfile, dbHelper);
     }
 
     public void deleteUserProfileDB(UserProfile userProfile) throws Exception {
@@ -77,8 +78,7 @@ public class ProfilesDBManager {
             throw new IllegalArgumentException("Invalid user profile passed to deleteUserProfileDB");
 
         final DBHelper dbHelper = loadUserProfileDBHelper(userProfile);
-        if (dbHelper.isDatabaseCreated())
-            dbHelper.deleteDatabase();
+        dbHelper.deleteDatabase();
 
         dbHelpers.remove(userProfile);
     }

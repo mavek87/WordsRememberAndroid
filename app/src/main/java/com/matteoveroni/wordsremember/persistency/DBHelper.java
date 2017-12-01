@@ -3,12 +3,11 @@ package com.matteoveroni.wordsremember.persistency;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.nfc.Tag;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
@@ -16,7 +15,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import java.io.File;
 
 /**
- * Singleton helper class which contains db attributes and
+ * Helper class which contains db attributes and
  * manages SQLiteDatabase creation, init, export and upgrade operations
  * <p>
  * How to see database in android from terminal:
@@ -44,6 +43,11 @@ public class DBHelper extends SQLiteOpenHelper {
         this.dbName = getDbNameForUserProfile(userProfile);
         this.dbPath = context.getDatabasePath(dbName).getParent();
         this.dbPathAndName = dbPath.concat(File.separator + dbName);
+//        if (!isDatabaseCreated()) {
+//            SQLiteDatabase db = getReadableDatabase();
+//            createAllTables(db);
+//            db.close();
+//        }
     }
 
     @Override
@@ -72,9 +76,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void deleteDatabase() throws Exception {
-        boolean isDbDeleted = context.deleteDatabase(dbName);
-        if (!isDbDeleted) {
-            throw new Exception(TAG + " - Impossible to remove db for \'" + this.userProfile.getName() + "\' userProfile.");
+        if (isDatabaseCreated()) {
+            boolean isDbDeleted = context.deleteDatabase(dbName);
+            if (!isDbDeleted) {
+                throw new Exception(TAG + " - Impossible to remove db for \'" + this.userProfile.getName() + "\' userProfile.");
+            }
         }
     }
 
@@ -86,7 +92,14 @@ public class DBHelper extends SQLiteOpenHelper {
         close();
 
         renameJournalDbFile(newDbName);
-        renameDbFileForProfile(newUserProfile, newDbName);
+
+//        renameDbFileForProfile(newUserProfile, newDbName);
+
+        if (isDatabaseCreated()) {
+            final File oldDbFile = context.getDatabasePath(dbName);
+            final File newDbFile = new File(dbPath, newDbName);
+            oldDbFile.renameTo(newDbFile);
+        }
     }
 
     private void renameJournalDbFile(String dbNameNewUserProfile) {
@@ -100,17 +113,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private void renameDbFileForProfile(UserProfile newUserProfile, String newDbName) throws Exception {
-        final File oldDbFile = context.getDatabasePath(dbName);
-        final File newDbFile = new File(dbPath, newDbName);
-
-        final boolean isDbRenamed = oldDbFile.renameTo(newDbFile);
-        if (isDbRenamed) {
-            dbName = newDbName;
-            userProfile = newUserProfile;
-            dbPathAndName = dbPath.concat(File.separator + dbName);
-        }
-    }
+//    private void renameDbFileForProfile(UserProfile newUserProfile, String newDbName) throws Exception {
+//        dbName = newDbName;
+//        userProfile = newUserProfile;
+//        dbPathAndName = dbPath.concat(File.separator + newDbName);
+//        Log.i(TAG, "super.dbName() = " + super.getDatabaseName());
+//    }
 
     private void createAllTables(SQLiteDatabase db) {
         if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {

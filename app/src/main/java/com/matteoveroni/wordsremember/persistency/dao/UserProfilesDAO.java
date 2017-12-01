@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
-import android.provider.ContactsContract;
 
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
@@ -24,11 +23,13 @@ public class UserProfilesDAO {
         this.context = context;
     }
 
-    public long saveUserProfile(UserProfile userProfile) {
-        long id = userProfile.getId();
-        if (userProfile.getId() > 0) return -1;
+    public long saveUserProfile(UserProfile userProfile) throws Exception {
+        if (userProfile.getId() > 0)
+            throw new Exception("Impossible to save on a already saved user profile. Use the updateUserProfile method.");
 
-        ProfilesDBManager.getInstance(context).loadUserProfileDBHelper(userProfile);
+        long id = userProfile.getId();
+
+//        ProfilesDBManager.getInstance(context).loadUserProfileDBHelper(userProfile);
 
         Uri uri = contentResolver.insert(
                 UserProfilesContract.CONTENT_URI,
@@ -45,15 +46,15 @@ public class UserProfilesDAO {
     }
 
     public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
-        if (newUserProfile.isInvalidProfile())
-            throw new IllegalArgumentException("Invalid new user profile to use for the update");
+        checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to use for the update"));
 
         if (oldUserProfile.isInvalidProfile()) {
-            long userProfileId = saveUserProfile(newUserProfile);
-            if (userProfileId > 0)
+            try {
+                saveUserProfile(newUserProfile);
                 return 1;
-            else
-                throw new Exception("Invalid old user profile to update and Impossible to save new user profile");
+            } catch (Exception ex) {
+                throw new IllegalArgumentException("Invalid old user profile to update and impossible to save new user profile");
+            }
         }
 
         if (newUserProfile.equals(oldUserProfile)) return 0;
@@ -69,17 +70,20 @@ public class UserProfilesDAO {
     }
 
     public void deleteUserProfile(UserProfile userProfile) throws Exception {
-        final Long userId = userProfile.getId();
-
-        if (userProfile.isInvalidProfile()) throw new Exception();
+        checkIfUserProfileIsValidOrThrowException(userProfile, new IllegalArgumentException("Invalid user profile to delete"));
 
         ProfilesDBManager.getInstance(context).deleteUserProfileDB(userProfile);
 
         contentResolver.delete(
                 UserProfilesContract.CONTENT_URI,
                 UserProfilesContract.Schema.TABLE_DOT_COL_ID + "=?",
-                new String[]{Long.toString(userId)}
+                new String[]{Long.toString(userProfile.getId())}
         );
+    }
+
+    private void checkIfUserProfileIsValidOrThrowException(UserProfile userProfile, Exception ex) throws Exception {
+        if (userProfile.isInvalidProfile())
+            throw ex;
     }
 
     private ContentValues userProfileToContentValues(UserProfile userProfile) {
