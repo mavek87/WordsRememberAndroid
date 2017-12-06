@@ -1,7 +1,9 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
@@ -15,12 +17,14 @@ public class UserProfileEditorPresenter implements Presenter {
 
     private final UserProfileModel model;
     private final UserProfilesDAO dao;
+    private final Settings settings;
 
     private UserProfileEditorView view;
 
-    public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao) {
+    public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao, Settings settings) {
         this.model = model;
         this.dao = dao;
+        this.settings = settings;
         isPresenterCreatedForTheFirstTime = true;
     }
 
@@ -39,32 +43,35 @@ public class UserProfileEditorPresenter implements Presenter {
     }
 
     public void onSaveProfileAction() {
-        final UserProfile model_userProfile = model.getUserProfile();
-        final UserProfile view_userProfile = view.getPojoUsed();
-        if (view_userProfile.getName().trim().isEmpty()) {
-            // TODO: use a formatted string
-            view.showMessage("The User profile name can\'t be empty, type a valid name");
+        final UserProfile modelUserProfile = model.getUserProfile();
+        final UserProfile viewUserProfile = view.getPojoUsed();
+        if (viewUserProfile.getName().trim().isEmpty()) {
+            // TODO: use storeViewUserProfileInTheModel formatted string
+            view.showMessage("The User profile name can\'t be empty, type storeViewUserProfileInTheModel valid name");
             return;
         }
 
-        if (model_userProfile.getId() <= 0) {
-            try {
-                dao.saveUserProfile(view_userProfile);
-            } catch (Exception ex) {
-                showSavedUserMessageAndGoToPreviousView(view_userProfile);
+        try {
+            storeViewUserProfileInTheModel(modelUserProfile, viewUserProfile);
+            if (settings.isAppStartedForTheFirstTime()) {
+                settings.setUserProfile(viewUserProfile);
+                settings.setAppStartedForTheFirstTime(false);
+                view.finish();
+                view.switchToView(View.Name.MAIN_MENU);
+            } else {
+                view.showMessage("User profile " + viewUserProfile.getName() + " saved!");
+                view.returnToPreviousView();
             }
-        } else {
-            try {
-                dao.updateUserProfile(model_userProfile, view_userProfile);
-                showSavedUserMessageAndGoToPreviousView(view_userProfile);
-            } catch (Exception ex) {
-                view.showMessage(ex.getMessage());
-            }
+        } catch (Exception ex) {
+            view.showMessage(ex.getMessage());
         }
     }
 
-    private void showSavedUserMessageAndGoToPreviousView(UserProfile userProfile) {
-        view.showMessage("User profile " + userProfile.getName() + " saved!");
-        view.returnToPreviousView();
+    private void storeViewUserProfileInTheModel(UserProfile modelUserProfile, UserProfile viewUserProfile) throws Exception {
+        if (modelUserProfile.getId() <= 0) {
+            dao.saveUserProfile(viewUserProfile);
+        } else {
+            dao.updateUserProfile(modelUserProfile, viewUserProfile);
+        }
     }
 }

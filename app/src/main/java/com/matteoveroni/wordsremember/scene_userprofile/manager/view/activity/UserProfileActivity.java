@@ -1,6 +1,8 @@
 package com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.view.ActionMode;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;

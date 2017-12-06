@@ -30,6 +30,9 @@ public class Settings {
 
     private SharedPreferences prefs;
 
+    public static final String IS_STARTED_FOR_THE_FIRST_TIME_KEY = "is_started_for_the_first_time_key";
+    public static boolean isAppStartedForTheFirstTime = true;
+
     public static final String USER_KEY = "user_key";
     public static final String USER_PROFILE_KEY = "user_profile_key";
     public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
@@ -56,6 +59,15 @@ public class Settings {
         this(prefs);
         setDifficulty(difficulty);
         setUserProfile(UserProfile.SYSTEM_PROFILE);
+    }
+
+    public boolean isAppStartedForTheFirstTime() {
+        return prefs.getBoolean(IS_STARTED_FOR_THE_FIRST_TIME_KEY, isAppStartedForTheFirstTime);
+    }
+
+    public void setAppStartedForTheFirstTime(boolean value) {
+        isAppStartedForTheFirstTime = value;
+        prefs.edit().putBoolean(IS_STARTED_FOR_THE_FIRST_TIME_KEY, value).apply();
     }
 
     public void saveUser(User user) {

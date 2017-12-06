@@ -106,7 +106,11 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
     private void doLoginAndShowMessage(FormattedString message) {
         view.showSuccessfulSignInPopup(message);
-        view.switchToView(View.Name.USER_PROFILES);
+        if (settings.isAppStartedForTheFirstTime()) {
+            view.switchToView(View.Name.USER_PROFILE_FIRST_CREATION);
+        } else {
+            view.switchToView(View.Name.USER_PROFILES_MANAGEMENT);
+        }
         view.destroy();
     }
 }

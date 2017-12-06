@@ -14,4 +14,6 @@ public interface UserProfileEditorView extends View, PojoManipulable<UserProfile
     void returnToPreviousView();
 
     void onBackPressed();
+
+    void finish();
 }

@@ -43,11 +43,6 @@ public class DBHelper extends SQLiteOpenHelper {
         this.dbName = getDbNameForUserProfile(userProfile);
         this.dbPath = context.getDatabasePath(dbName).getParent();
         this.dbPathAndName = dbPath.concat(File.separator + dbName);
-//        if (!isDatabaseCreated()) {
-//            SQLiteDatabase db = getReadableDatabase();
-//            createAllTables(db);
-//            db.close();
-//        }
     }
 
     @Override
@@ -93,8 +88,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         renameJournalDbFile(newDbName);
 
-//        renameDbFileForProfile(newUserProfile, newDbName);
-
         if (isDatabaseCreated()) {
             final File oldDbFile = context.getDatabasePath(dbName);
             final File newDbFile = new File(dbPath, newDbName);
@@ -113,20 +106,10 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-//    private void renameDbFileForProfile(UserProfile newUserProfile, String newDbName) throws Exception {
-//        dbName = newDbName;
-//        userProfile = newUserProfile;
-//        dbPathAndName = dbPath.concat(File.separator + newDbName);
-//        Log.i(TAG, "super.dbName() = " + super.getDatabaseName());
-//    }
-
     private void createAllTables(SQLiteDatabase db) {
         if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {
             Log.d(TAG, UserProfilesContract.Query.CREATE_TABLE);
             db.execSQL(UserProfilesContract.Query.CREATE_TABLE);
-
-            Log.d(TAG, UserProfilesContract.Query.INSERT_DEFAULT_PROFILE);
-            db.execSQL(UserProfilesContract.Query.INSERT_DEFAULT_PROFILE);
         } else {
             Log.d(TAG, VocablesContract.Query.CREATE_TABLE);
             db.execSQL(VocablesContract.Query.CREATE_TABLE);

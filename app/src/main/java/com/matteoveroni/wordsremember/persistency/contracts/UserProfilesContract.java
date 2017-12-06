@@ -47,8 +47,5 @@ public class UserProfilesContract {
                 + ");";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + UserProfilesContract.Schema.TABLE_NAME;
-
-        public static final String INSERT_DEFAULT_PROFILE = "INSERT INTO " + UserProfilesContract.Schema.TABLE_NAME
-                + " (" + Schema.COL_PROFILE_NAME + ") VALUES ('Profile1');";
     }
 }

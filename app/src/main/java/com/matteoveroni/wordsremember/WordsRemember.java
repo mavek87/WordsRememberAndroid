@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.matteoveroni.myutils.MyUtilsVersion;
@@ -15,6 +16,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModul
 import com.matteoveroni.wordsremember.dependency_injection.modules.UserProfileDaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.UserProfileModelModule;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import java.util.Locale;
 
@@ -22,7 +24,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.5.6
+ * @version 0.5.7
  **/
 
 public class WordsRemember extends Application {
@@ -30,13 +32,14 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.5.6";
+    public static final String VERSION = "0.5.7";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
 
-//    private static final boolean CLEAR_DB_BEFORE_EACH_LOGIN = false;
+    //    private static final boolean CLEAR_DB_BEFORE_EACH_LOGIN = false;
 //    private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
+    private static final boolean CLEAR_PREFERENCES_EACH_TIME = false;
 
     private static AppComponent APP_COMPONENT;
 
@@ -46,7 +49,10 @@ public class WordsRemember extends Application {
 
         CURRENT_LOCALE = LocaleTranslator.getLocale(getApplicationContext());
         printAppSpecs();
-        buildAppComponents();
+        buildAppModules();
+
+        if (CLEAR_PREFERENCES_EACH_TIME)
+            getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit().clear().apply();
 
 //        if (CLEAR_DB_BEFORE_EACH_LOGIN)
 //            DatabaseHelper.getInstance(getApplicationContext()).deleteCurrentUserDB();
@@ -58,7 +64,7 @@ public class WordsRemember extends Application {
 //        }
     }
 
-    private void buildAppComponents() {
+    private void buildAppModules() {
         APP_COMPONENT = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))

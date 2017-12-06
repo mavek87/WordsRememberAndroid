@@ -29,8 +29,6 @@ public class UserProfilesDAO {
 
         long id = userProfile.getId();
 
-//        ProfilesDBManager.getInstance(context).loadUserProfileDBHelper(userProfile);
-
         Uri uri = contentResolver.insert(
                 UserProfilesContract.CONTENT_URI,
                 userProfileToContentValues(userProfile)

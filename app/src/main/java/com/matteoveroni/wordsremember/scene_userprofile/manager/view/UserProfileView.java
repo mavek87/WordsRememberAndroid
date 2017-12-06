@@ -17,4 +17,6 @@ public interface UserProfileView extends View {
     void editUserProfileAction(EventEditUserProfile event);
 
     void deleteUserProfileAction(EventDeleteUserProfile event);
+
+    void finish();
 }

@@ -5,7 +5,7 @@ package com.matteoveroni.wordsremember.scene_userprofile;
  */
 
 public class UserProfileModel {
-    private UserProfile userProfile = null;
+    private UserProfile userProfile = UserProfile.createEmptyProfile();
 
     public UserProfile getUserProfile() {
         return userProfile;

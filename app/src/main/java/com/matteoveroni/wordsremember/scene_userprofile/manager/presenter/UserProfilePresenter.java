@@ -39,6 +39,7 @@ public class UserProfilePresenter implements Presenter {
 
     public void onUserProfileSelectedAction(UserProfile selectedUserProfile) {
         settings.setUserProfile(selectedUserProfile);
+        view.finish();
         view.switchToView(View.Name.MAIN_MENU);
     }
 
