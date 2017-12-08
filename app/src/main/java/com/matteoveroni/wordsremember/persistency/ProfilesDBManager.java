@@ -19,7 +19,8 @@ public class ProfilesDBManager {
     public static final String TAG = TagGenerator.tag(ProfilesDBManager.class);
     private static final int DB_VERSION = 1;
 
-    private final Map<UserProfile, DBHelper> dbHelpers = new HashMap<>();
+    private final Map<UserProfile, DBHelper> dbHelpersMap = new HashMap<>();
+    //todo: try to inject context
     private final Context context;
     private UserProfile userProfileInUse;
 
@@ -27,7 +28,7 @@ public class ProfilesDBManager {
 
     private ProfilesDBManager(Context context) {
         this.context = context;
-        setUserProfileInUse(UserProfile.SYSTEM_PROFILE);
+        this.userProfileInUse = UserProfile.SYSTEM_PROFILE;
     }
 
     public static ProfilesDBManager getInstance(Context appContext) {
@@ -43,71 +44,63 @@ public class ProfilesDBManager {
 
     public void setUserProfileInUse(UserProfile userProfile) {
         userProfileInUse = userProfile;
-        createDBIfDoesntExist(loadUserProfileDBHelper(userProfileInUse));
+        createDBIfDoesntExist(loadUserProfileInDBHelpersMap(userProfileInUse));
+        //TODO: remove this log and TAG if not used
+        Log.e(TAG, "=============> user profile : " + userProfile.getName() + " id: " + userProfile.getId());
     }
 
     private void createDBIfDoesntExist(DBHelper dbHelper) {
         dbHelper.getReadableDatabase().close();
     }
 
-    public DBHelper loadUserProfileDBHelper(UserProfile userProfile) {
-        if (!dbHelpers.containsKey(userProfile)) {
-            final DBHelper dbHelper = new DBHelper(context, userProfile, DB_VERSION);
-
-            dbHelpers.put(userProfile, dbHelper);
-            Log.d(TAG, "loaded dbHelper for user profile => " + userProfile.getName());
+    private DBHelper loadUserProfileInDBHelpersMap(UserProfile userProfile) {
+        if (!dbHelpersMap.containsKey(userProfile)) {
+            final String dbName = (userProfile.equals(UserProfile.SYSTEM_PROFILE)) ? userProfile.getName() : "" + userProfile.getId();
+            dbHelpersMap.put(userProfile, new DBHelper(context, dbName, DB_VERSION));
         }
-        return dbHelpers.get(userProfile);
+
+        return dbHelpersMap.get(userProfile);
     }
 
     public void updateDBForNewUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
-        final DBHelper oldDbHelper = loadUserProfileDBHelper(oldUserProfile);
-        oldDbHelper.renameDbForProfile(newUserProfile);
-
-        loadUserProfileDBHelper(newUserProfile);
-
-        dbHelpers.remove(oldUserProfile);
-
-        if (userProfileInUse == oldUserProfile) {
-            userProfileInUse = newUserProfile;
-        }
+        loadUserProfileInDBHelpersMap(newUserProfile);
+        dbHelpersMap.remove(oldUserProfile);
+        if (userProfileInUse == oldUserProfile) userProfileInUse = newUserProfile;
     }
 
     public void deleteUserProfileDB(UserProfile userProfile) throws Exception {
         if (userProfile.isInvalidProfile())
             throw new IllegalArgumentException("Invalid user profile passed to deleteUserProfileDB");
 
-        final DBHelper dbHelper = loadUserProfileDBHelper(userProfile);
-        dbHelper.deleteDatabase();
-
-        dbHelpers.remove(userProfile);
+        loadUserProfileInDBHelpersMap(userProfile).deleteDatabase();
+        dbHelpersMap.remove(userProfile);
     }
 
     public SQLiteDatabase getReadableDBForCurrentProfile() {
-        return dbHelpers.get(userProfileInUse).getReadableDatabase();
+        return dbHelpersMap.get(userProfileInUse).getReadableDatabase();
     }
 
     public SQLiteDatabase getWritableDBForCurrentProfile() {
-        return dbHelpers.get(userProfileInUse).getWritableDatabase();
+        return dbHelpersMap.get(userProfileInUse).getWritableDatabase();
     }
 
     public DBHelper getCurrentProfileDBHelper() {
-        return dbHelpers.get(userProfileInUse);
+        return dbHelpersMap.get(userProfileInUse);
     }
 
     public String getCurrentProfileDBName() {
-        return dbHelpers.get(userProfileInUse).getDatabaseName();
+        return dbHelpersMap.get(userProfileInUse).getDatabaseName();
     }
 
     public void deleteCurrentUserDB() throws Exception {
-        dbHelpers.get(userProfileInUse).deleteDatabase();
+        dbHelpersMap.get(userProfileInUse).deleteDatabase();
     }
 
     public void resetCurrentProfileDB() {
-        dbHelpers.get(userProfileInUse).resetDatabase();
+        dbHelpersMap.get(userProfileInUse).resetDatabase();
     }
 
     public void closeCurrentProfileDB() {
-        dbHelpers.get(userProfileInUse).close();
+        dbHelpersMap.get(userProfileInUse).close();
     }
 }

@@ -58,7 +58,6 @@ public class Settings {
     public Settings(SharedPreferences prefs, QuizGameDifficulty difficulty) {
         this(prefs);
         setDifficulty(difficulty);
-        setUserProfile(UserProfile.SYSTEM_PROFILE);
     }
 
     public boolean isAppStartedForTheFirstTime() {

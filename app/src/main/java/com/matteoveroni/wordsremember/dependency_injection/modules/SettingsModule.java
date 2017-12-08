@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 import android.content.SharedPreferences;
 
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 import javax.inject.Singleton;
 
@@ -31,6 +32,7 @@ public class SettingsModule {
                     Settings.DEFAULT_DIFFICULTY
             );
         }
+        settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
         return settings;
     }
 }

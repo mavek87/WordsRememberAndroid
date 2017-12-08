@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.dependency_injection.components;
 
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
-import com.matteoveroni.wordsremember.dependency_injection.modules.DatabaseManagerModule;
+import com.matteoveroni.wordsremember.dependency_injection.modules.ProfilesDBManagerModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryDaoModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.DictionaryModelModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
@@ -29,7 +29,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         AppModule.class,
-        DatabaseManagerModule.class,
+        ProfilesDBManagerModule.class,
         SettingsModule.class,
         UserProfileModelModule.class,
         UserProfileDaoModule.class,

@@ -31,7 +31,8 @@ public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFa
 
     public LoginPresenter(Settings settings) {
         this.settings = settings;
-        this.settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
+        //TODO remove
+//        this.settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
     }
 
     @Override

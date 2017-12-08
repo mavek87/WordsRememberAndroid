@@ -14,14 +14,14 @@ import dagger.Provides;
  */
 
 @Module
-public class DatabaseManagerModule {
+public class ProfilesDBManagerModule {
 
-    public DatabaseManagerModule() {
+    public ProfilesDBManagerModule() {
     }
 
     @Provides
     @Singleton
-    public ProfilesDBManager providesDatabaseManager(Context context) {
+    public ProfilesDBManager providesProfilesDBManager(Context context) {
         return ProfilesDBManager.getInstance(context);
     }
 }

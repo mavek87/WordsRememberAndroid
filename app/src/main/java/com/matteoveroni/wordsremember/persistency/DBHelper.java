@@ -31,18 +31,18 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String JOURNAL_EXTENSION = "-journal";
 
     private final Context context;
-    private UserProfile userProfile;
+    //    private UserProfile userProfile;
     private String dbName;
-    private String dbPath;
-    private String dbPathAndName;
+//    private String dbPath;
+//    private String dbPathAndName;
 
-    public DBHelper(Context context, UserProfile userProfile, int version) {
-        super(context, getDbNameForUserProfile(userProfile), null, version);
+    public DBHelper(Context context, String dbName, int version) {
+        super(context, getDbNameWithExtension(dbName), null, version);
         this.context = context;
-        this.userProfile = userProfile;
-        this.dbName = getDbNameForUserProfile(userProfile);
-        this.dbPath = context.getDatabasePath(dbName).getParent();
-        this.dbPathAndName = dbPath.concat(File.separator + dbName);
+//        this.userProfile = userProfile;
+        this.dbName = dbName;
+//        this.dbPath = context.getDatabasePath(this.dbName).getParent();
+//        this.dbPathAndName = dbPath.concat(File.separator + dbName);
     }
 
     @Override
@@ -74,71 +74,40 @@ public class DBHelper extends SQLiteOpenHelper {
         if (isDatabaseCreated()) {
             boolean isDbDeleted = context.deleteDatabase(dbName);
             if (!isDbDeleted) {
-                throw new Exception(TAG + " - Impossible to remove db for \'" + this.userProfile.getName() + "\' userProfile.");
+                throw new Exception(TAG + " - Impossible to remove db \'" + dbName + "\'.");
             }
         }
     }
 
-    public void renameDbForProfile(UserProfile newUserProfile) throws Exception {
-        String newDbName = getDbNameForUserProfile(newUserProfile);
-
-        if (dbName.equals(newDbName)) return;
-
-        close();
-
-        renameJournalDbFile(newDbName);
-
-        if (isDatabaseCreated()) {
-            final File oldDbFile = context.getDatabasePath(dbName);
-            final File newDbFile = new File(dbPath, newDbName);
-            oldDbFile.renameTo(newDbFile);
-        }
-    }
-
-    private void renameJournalDbFile(String dbNameNewUserProfile) {
-        final File oldJournalFile = new File(dbPathAndName + JOURNAL_EXTENSION);
-        final File newJournalFile = new File(dbPath.concat(File.separator + dbNameNewUserProfile + JOURNAL_EXTENSION));
-        try {
-            oldJournalFile.renameTo(newJournalFile);
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage());
-            oldJournalFile.delete();
-        }
+    private static String getDbNameWithExtension(String dbName) {
+        return dbName + DB_EXTENSION;
     }
 
     private void createAllTables(SQLiteDatabase db) {
-        if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {
-            Log.d(TAG, UserProfilesContract.Query.CREATE_TABLE);
-            db.execSQL(UserProfilesContract.Query.CREATE_TABLE);
-        } else {
-            Log.d(TAG, VocablesContract.Query.CREATE_TABLE);
-            db.execSQL(VocablesContract.Query.CREATE_TABLE);
+        Log.d(TAG, UserProfilesContract.Query.CREATE_TABLE);
+        db.execSQL(UserProfilesContract.Query.CREATE_TABLE);
 
-            Log.d(TAG, TranslationsContract.Query.CREATE_TABLE);
-            db.execSQL(TranslationsContract.Query.CREATE_TABLE);
+        Log.d(TAG, VocablesContract.Query.CREATE_TABLE);
+        db.execSQL(VocablesContract.Query.CREATE_TABLE);
 
-            Log.d(TAG, VocablesTranslationsContract.Query.CREATE_TABLE);
-            db.execSQL(VocablesTranslationsContract.Query.CREATE_TABLE);
-        }
+        Log.d(TAG, TranslationsContract.Query.CREATE_TABLE);
+        db.execSQL(TranslationsContract.Query.CREATE_TABLE);
+
+        Log.d(TAG, VocablesTranslationsContract.Query.CREATE_TABLE);
+        db.execSQL(VocablesTranslationsContract.Query.CREATE_TABLE);
     }
 
     private void dropAllTables(SQLiteDatabase db) {
-        if (userProfile.equals(UserProfile.SYSTEM_PROFILE)) {
-            Log.d(TAG, UserProfilesContract.Query.DROP_TABLE);
-            db.execSQL(UserProfilesContract.Query.DROP_TABLE);
-        } else {
-            Log.d(TAG, VocablesContract.Query.DROP_TABLE);
-            db.execSQL(VocablesContract.Query.DROP_TABLE);
+        Log.d(TAG, UserProfilesContract.Query.DROP_TABLE);
+        db.execSQL(UserProfilesContract.Query.DROP_TABLE);
 
-            Log.d(TAG, TranslationsContract.Query.DROP_TABLE);
-            db.execSQL(TranslationsContract.Query.DROP_TABLE);
+        Log.d(TAG, VocablesContract.Query.DROP_TABLE);
+        db.execSQL(VocablesContract.Query.DROP_TABLE);
 
-            Log.d(TAG, VocablesTranslationsContract.Query.DROP_TABLE);
-            db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
-        }
-    }
+        Log.d(TAG, TranslationsContract.Query.DROP_TABLE);
+        db.execSQL(TranslationsContract.Query.DROP_TABLE);
 
-    private static String getDbNameForUserProfile(UserProfile userProfile) {
-        return userProfile.getName().concat(DB_EXTENSION);
+        Log.d(TAG, VocablesTranslationsContract.Query.DROP_TABLE);
+        db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
     }
 }

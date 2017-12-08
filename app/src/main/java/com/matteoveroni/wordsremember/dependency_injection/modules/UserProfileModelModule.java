@@ -21,7 +21,7 @@ public class UserProfileModelModule {
 
     @Provides
     @Singleton
-    public UserProfileModel providesDictionaryDAO(Context context) {
+    public UserProfileModel providesUserProfileModel() {
         return new UserProfileModel();
     }
 }

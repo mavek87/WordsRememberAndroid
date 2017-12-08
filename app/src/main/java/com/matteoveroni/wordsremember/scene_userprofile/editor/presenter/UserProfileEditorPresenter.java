@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
+import android.util.Log;
+
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
@@ -43,18 +45,18 @@ public class UserProfileEditorPresenter implements Presenter {
     }
 
     public void onSaveProfileAction() {
-        final UserProfile modelUserProfile = model.getUserProfile();
         final UserProfile viewUserProfile = view.getPojoUsed();
         if (viewUserProfile.getName().trim().isEmpty()) {
-            // TODO: use storeViewUserProfileInTheModel formatted string
-            view.showMessage("The User profile name can\'t be empty, type storeViewUserProfileInTheModel valid name");
+            // TODO: use formatted string
+            view.showMessage("The User profile name can\'t be empty, insert a valid name!");
             return;
         }
 
         try {
-            storeViewUserProfileInTheModel(modelUserProfile, viewUserProfile);
+            storeViewUserProfileInTheModel(viewUserProfile);
+
             if (settings.isAppStartedForTheFirstTime()) {
-                settings.setUserProfile(viewUserProfile);
+                settings.setUserProfile(model.getUserProfile());
                 settings.setAppStartedForTheFirstTime(false);
                 view.finish();
                 view.switchToView(View.Name.MAIN_MENU);
@@ -67,11 +69,16 @@ public class UserProfileEditorPresenter implements Presenter {
         }
     }
 
-    private void storeViewUserProfileInTheModel(UserProfile modelUserProfile, UserProfile viewUserProfile) throws Exception {
+
+    private void storeViewUserProfileInTheModel(UserProfile viewUserProfile) throws Exception {
+        final UserProfile modelUserProfile = model.getUserProfile();
+
         if (modelUserProfile.getId() <= 0) {
-            dao.saveUserProfile(viewUserProfile);
+            final long id = dao.saveUserProfile(viewUserProfile);
+            model.setUserProfile(new UserProfile(id, viewUserProfile.getName()));
         } else {
             dao.updateUserProfile(modelUserProfile, viewUserProfile);
+            model.setUserProfile(modelUserProfile);
         }
     }
 }

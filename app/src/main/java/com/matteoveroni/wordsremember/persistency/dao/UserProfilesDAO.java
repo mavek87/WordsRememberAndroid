@@ -9,6 +9,8 @@ import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
+import javax.inject.Inject;
+
 /**
  * @author Matteo Veroni
  */
@@ -16,11 +18,12 @@ import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 public class UserProfilesDAO {
 
     private final ContentResolver contentResolver;
-    private final Context context;
+
+    @Inject
+    ProfilesDBManager profilesDBManager;
 
     public UserProfilesDAO(Context context) {
         this.contentResolver = context.getContentResolver();
-        this.context = context;
     }
 
     public long saveUserProfile(UserProfile userProfile) throws Exception {
@@ -57,7 +60,7 @@ public class UserProfilesDAO {
 
         if (newUserProfile.equals(oldUserProfile)) return 0;
 
-        ProfilesDBManager.getInstance(context).updateDBForNewUserProfile(oldUserProfile, newUserProfile);
+        profilesDBManager.updateDBForNewUserProfile(oldUserProfile, newUserProfile);
 
         return contentResolver.update(
                 UserProfilesContract.CONTENT_URI,
@@ -70,7 +73,7 @@ public class UserProfilesDAO {
     public void deleteUserProfile(UserProfile userProfile) throws Exception {
         checkIfUserProfileIsValidOrThrowException(userProfile, new IllegalArgumentException("Invalid user profile to delete"));
 
-        ProfilesDBManager.getInstance(context).deleteUserProfileDB(userProfile);
+        profilesDBManager.deleteUserProfileDB(userProfile);
 
         contentResolver.delete(
                 UserProfilesContract.CONTENT_URI,

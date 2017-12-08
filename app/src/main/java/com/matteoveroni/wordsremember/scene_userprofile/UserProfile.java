@@ -7,8 +7,8 @@ package com.matteoveroni.wordsremember.scene_userprofile;
 public class UserProfile {
 
     /**
-     * System profile used in the beginning of the app lifecycle for handling system_profile.db which
-     * contains all the user profiles (in the profiles table).
+     * System profile is used in the initial lifecycle of the app for handling system_profile.db which
+     * contains all the user profiles (profiles table).
      */
     public static final UserProfile SYSTEM_PROFILE = new UserProfile(1, "system_profile");
 
