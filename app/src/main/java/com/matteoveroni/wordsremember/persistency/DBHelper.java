@@ -31,18 +31,12 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String JOURNAL_EXTENSION = "-journal";
 
     private final Context context;
-    //    private UserProfile userProfile;
     private String dbName;
-//    private String dbPath;
-//    private String dbPathAndName;
 
     public DBHelper(Context context, String dbName, int version) {
         super(context, getDbNameWithExtension(dbName), null, version);
         this.context = context;
-//        this.userProfile = userProfile;
         this.dbName = dbName;
-//        this.dbPath = context.getDatabasePath(this.dbName).getParent();
-//        this.dbPathAndName = dbPath.concat(File.separator + dbName);
     }
 
     @Override

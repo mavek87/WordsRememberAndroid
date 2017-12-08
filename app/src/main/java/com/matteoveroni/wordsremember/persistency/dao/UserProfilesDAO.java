@@ -18,12 +18,11 @@ import javax.inject.Inject;
 public class UserProfilesDAO {
 
     private final ContentResolver contentResolver;
-
-    @Inject
-    ProfilesDBManager profilesDBManager;
+    private final ProfilesDBManager profilesDBManager;
 
     public UserProfilesDAO(Context context) {
         this.contentResolver = context.getContentResolver();
+        this.profilesDBManager = ProfilesDBManager.getInstance(context);
     }
 
     public long saveUserProfile(UserProfile userProfile) throws Exception {

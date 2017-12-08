@@ -7,6 +7,7 @@ import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
+import com.matteoveroni.wordsremember.users.User;
 
 /**
  * @author Matteo Veroni
@@ -23,6 +24,7 @@ public class UserProfilePresenter implements Presenter {
 
     public UserProfilePresenter(Settings settings, UserProfileModel model, UserProfilesDAO dao) {
         this.settings = settings;
+        this.settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
         this.model = model;
         this.dao = dao;
     }
@@ -39,8 +41,8 @@ public class UserProfilePresenter implements Presenter {
 
     public void onUserProfileSelectedAction(UserProfile selectedUserProfile) {
         settings.setUserProfile(selectedUserProfile);
-        view.finish();
         view.switchToView(View.Name.MAIN_MENU);
+        view.finish();
     }
 
     public void onAddProfileAction() {

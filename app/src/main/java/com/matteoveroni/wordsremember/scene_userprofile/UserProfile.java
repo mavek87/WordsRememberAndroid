@@ -10,7 +10,7 @@ public class UserProfile {
      * System profile is used in the initial lifecycle of the app for handling system_profile.db which
      * contains all the user profiles (profiles table).
      */
-    public static final UserProfile SYSTEM_PROFILE = new UserProfile(1, "system_profile");
+    public static final UserProfile SYSTEM_PROFILE = new UserProfile(0, "system_profile");
 
     public static final long NO_ID = -1;
     public static final String NO_PROFILE_NAME = "";

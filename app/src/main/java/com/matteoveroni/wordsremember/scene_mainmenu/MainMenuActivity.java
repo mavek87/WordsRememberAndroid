@@ -66,5 +66,10 @@ public class MainMenuActivity extends BaseActivityPresentedView implements MainM
     public void onButtonSettingsClicked() {
         presenter.onButtonSettingsClicked();
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        moveTaskToBack(true);
+//    }
 }
 
