@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class ProfilesDBManager {
 
-    public static final String TAG = TagGenerator.tag(ProfilesDBManager.class);
     private static final int DB_VERSION = 1;
 
     private final Map<UserProfile, DBHelper> dbHelpersMap = new HashMap<>();
@@ -45,8 +44,6 @@ public class ProfilesDBManager {
     public void setUserProfileInUse(UserProfile userProfile) {
         userProfileInUse = userProfile;
         createDBIfDoesntExist(loadUserProfileInDBHelpersMap(userProfileInUse));
-        //TODO: remove this log and TAG if not used
-        Log.e(TAG, "=============> user profile : " + userProfile.getName() + " id: " + userProfile.getId());
     }
 
     private void createDBIfDoesntExist(DBHelper dbHelper) {
