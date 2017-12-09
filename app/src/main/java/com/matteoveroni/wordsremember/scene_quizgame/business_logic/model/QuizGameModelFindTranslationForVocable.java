@@ -4,20 +4,20 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
+import com.matteoveroni.myutils.UniqueRandomNumbersGenerator;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizAnswerChecker;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGenerated;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
 import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.myutils.UniqueRandomNumbersGenerator;
 import com.matteoveroni.wordsremember.web.WebTranslator;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
 

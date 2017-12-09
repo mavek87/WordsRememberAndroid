@@ -1,10 +1,10 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter;
 
-import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameView;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import org.junit.Rule;
 import org.junit.Test;

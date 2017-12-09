@@ -1,14 +1,5 @@
 package com.matteoveroni.wordsremember.scene_settings;
 
-import android.content.SharedPreferences;
-
-import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-
-import org.junit.Test;
-import org.mockito.Mock;
-
-import static org.junit.Assert.assertEquals;
-
 /**
  * @author Matteo Veroni
  */

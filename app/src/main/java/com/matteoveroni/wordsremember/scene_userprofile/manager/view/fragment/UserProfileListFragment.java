@@ -18,9 +18,9 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
 import com.matteoveroni.wordsremember.ui.listview.adapters.UserProfilesListViewAdapter;
 

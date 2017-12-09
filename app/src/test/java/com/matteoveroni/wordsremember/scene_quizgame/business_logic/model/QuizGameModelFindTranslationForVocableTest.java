@@ -1,14 +1,14 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
 
-import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
+import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.Before;

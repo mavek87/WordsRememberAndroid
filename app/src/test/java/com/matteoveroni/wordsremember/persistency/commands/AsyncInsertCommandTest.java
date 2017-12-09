@@ -5,10 +5,10 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 import com.matteoveroni.wordsremember.BuildConfig;
-import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSaveTranslationCompleted;
-import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSaveTranslationCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;
@@ -22,12 +22,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 /**
  * Created by Matteo Veroni

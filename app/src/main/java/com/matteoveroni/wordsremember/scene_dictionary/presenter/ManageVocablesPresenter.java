@@ -1,16 +1,16 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventVocableSelected;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

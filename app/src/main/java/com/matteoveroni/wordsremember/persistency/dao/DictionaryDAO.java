@@ -8,19 +8,19 @@ import android.net.Uri;
 
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncCountUniqueVocablesWithTranslationCommand;
-import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchTranslationsByNameCommand;
-import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocableTranslationsCommand;
-import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchDistinctVocableWithTranslationByOffsetCommand;
-import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByIdCommand;
-import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncDeleteCommand;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncInsertCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchDistinctVocableWithTranslationByOffsetCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchTranslationsByNameCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocableTranslationsCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByIdCommand;
+import com.matteoveroni.wordsremember.persistency.commands.AsyncSearchVocablesByNameCommand;
 import com.matteoveroni.wordsremember.persistency.commands.AsyncUpdateCommand;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 
 import java.util.ArrayList;
 import java.util.List;

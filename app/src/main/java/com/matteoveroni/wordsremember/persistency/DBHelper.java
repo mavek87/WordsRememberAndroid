@@ -10,9 +10,6 @@ import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
-
-import java.io.File;
 
 /**
  * Helper class which contains db attributes and

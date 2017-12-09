@@ -3,7 +3,6 @@ package com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;

@@ -1,9 +1,5 @@
 package com.matteoveroni.wordsremember.provider;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 /**
  * @author Matteo Veroni
  */

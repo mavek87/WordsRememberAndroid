@@ -28,7 +28,7 @@ public class Settings {
     @Inject
     ProfilesDBManager dbManager;
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     public static final String IS_STARTED_FOR_THE_FIRST_TIME_KEY = "is_started_for_the_first_time_key";
     public static boolean isAppStartedForTheFirstTime = true;

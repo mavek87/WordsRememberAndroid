@@ -2,10 +2,10 @@ package com.matteoveroni.wordsremember.persistency.commands;
 
 import android.content.ContentResolver;
 
-import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSearchVocableTranslationsCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 
 import org.greenrobot.eventbus.EventBus;
 

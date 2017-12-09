@@ -2,8 +2,8 @@ package com.matteoveroni.wordsremember.persistency.commands;
 
 import android.content.ContentResolver;
 
-import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 
 import org.greenrobot.eventbus.EventBus;
 

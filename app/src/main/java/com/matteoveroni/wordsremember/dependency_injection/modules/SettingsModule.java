@@ -22,7 +22,7 @@ public class SettingsModule {
 
     @Provides
     @Singleton
-    public Settings providesSettings(SharedPreferences preferences) {
+    public Settings provideSettings(SharedPreferences preferences) {
         Settings settings;
         if (preferences.contains(Settings.GAME_DIFFICULTY_KEY)) {
             settings = new Settings(preferences);

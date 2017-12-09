@@ -15,13 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventVocableManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventVocableSelected;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.ui.listview.adapters.VocableListViewAdapter;
-import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 
 import org.greenrobot.eventbus.EventBus;
 

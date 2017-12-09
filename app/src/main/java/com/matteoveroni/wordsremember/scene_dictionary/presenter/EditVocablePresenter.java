@@ -1,19 +1,19 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
+import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncDeleteVocableTranslationCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
-import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
-import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
-import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncUpdateVocableCompleted;
-import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

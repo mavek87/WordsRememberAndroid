@@ -3,12 +3,12 @@ package com.matteoveroni.wordsremember.scene_dictionary.view.activities;
 import android.os.Bundle;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.ManageVocablesPresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.ManageVocablesPresenterFactory;
-import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.ManageVocablesPresenter;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.ManageVocablesPresenterFactory;
+import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

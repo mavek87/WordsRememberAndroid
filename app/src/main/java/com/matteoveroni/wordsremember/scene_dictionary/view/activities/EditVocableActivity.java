@@ -9,16 +9,16 @@ import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
+import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.VocableEditorFragment;
-import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

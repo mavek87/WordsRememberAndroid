@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
-import android.util.Log;
-
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;

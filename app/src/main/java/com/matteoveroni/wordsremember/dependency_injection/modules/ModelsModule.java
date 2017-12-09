@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.dependency_injection.modules;
 
-import android.content.Context;
-
+import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 
 import javax.inject.Singleton;
@@ -14,14 +13,19 @@ import dagger.Provides;
  */
 
 @Module
-public class UserProfileModelModule {
-
-    public UserProfileModelModule() {
+public class ModelsModule {
+    public ModelsModule() {
     }
 
     @Provides
     @Singleton
-    public UserProfileModel providesUserProfileModel() {
+    DictionaryModel provideDictionaryModel() {
+        return new DictionaryModel();
+    }
+
+    @Provides
+    @Singleton
+    UserProfileModel provideUserProfileModel() {
         return new UserProfileModel();
     }
 }

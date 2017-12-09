@@ -7,7 +7,6 @@ import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfileView;
-import com.matteoveroni.wordsremember.users.User;
 
 /**
  * @author Matteo Veroni

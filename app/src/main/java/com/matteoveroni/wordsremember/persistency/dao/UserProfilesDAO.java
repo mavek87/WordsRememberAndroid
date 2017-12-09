@@ -9,8 +9,6 @@ import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
-import javax.inject.Inject;
-
 /**
  * @author Matteo Veroni
  */
@@ -20,9 +18,9 @@ public class UserProfilesDAO {
     private final ContentResolver contentResolver;
     private final ProfilesDBManager profilesDBManager;
 
-    public UserProfilesDAO(Context context) {
+    public UserProfilesDAO(Context context, ProfilesDBManager profilesDBManager) {
         this.contentResolver = context.getContentResolver();
-        this.profilesDBManager = ProfilesDBManager.getInstance(context);
+        this.profilesDBManager = profilesDBManager;
     }
 
     public long saveUserProfile(UserProfile userProfile) throws Exception {
