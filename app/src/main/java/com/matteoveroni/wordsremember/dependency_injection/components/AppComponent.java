@@ -4,6 +4,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelsModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.PersistencyModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
+import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;

@@ -42,7 +42,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.4.2'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'junit:junit:4.12'
 
     /*************** Dependencies taken from git by jitpack.io ******************/
 

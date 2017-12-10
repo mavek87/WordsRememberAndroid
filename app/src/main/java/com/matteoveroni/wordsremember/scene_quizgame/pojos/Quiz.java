@@ -29,11 +29,11 @@ public class Quiz {
         this.rightAnswers = rightAnswers;
     }
 
-    public int getQuizNumber() {
+    public int getQuizQuestionNumber() {
         return quizNumber;
     }
 
-    public int getTotalNumberOfQuizzes() {
+    public int getTotalNumberOfQuestions() {
         return totalNumberOfQuizzes;
     }
 

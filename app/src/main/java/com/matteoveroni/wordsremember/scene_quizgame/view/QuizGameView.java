@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 
 public interface QuizGameView extends View, PojoManipulable<Quiz>, QuizTimer.TimerPrinter {
 
-    void confirmQuizAnswerAction();
+    void giveQuizAnswerAction();
 
     void showErrorDialog(String msgErrorText);
 
