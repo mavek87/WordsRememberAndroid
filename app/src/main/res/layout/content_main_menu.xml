@@ -18,54 +18,48 @@
     tools:context=".scene_mainmenu.MainMenuActivity"
     tools:showIn="@layout/activity_main_menu">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5" />
+        android:gravity="center">
 
         <Button
             android:id="@+id/main_menu_btn_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
+            android:layout_width="200sp"
+            android:layout_height="80sp"
+            android:layout_marginTop="50sp"
+            android:minHeight="80sp"
             android:minWidth="200dp"
-            android:text="@string/start_training" />
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:text="@string/start_training"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/main_menu_btn_manage_dictionary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:minWidth="200dp"
-            android:text="@string/manage_dictionary" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_width="200sp"
+            android:layout_height="80sp"
+            android:minHeight="80sp"
+            android:minWidth="200sp"
+            android:text="@string/manage_dictionary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/main_menu_btn_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:minWidth="200dp"
-            android:text="@string/settings" />
+            android:layout_width="200sp"
+            android:layout_height="80sp"
+            android:layout_marginBottom="50sp"
+            android:minHeight="80sp"
+            android:minWidth="200sp"
+            android:text="@string/settings"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </ScrollView>
