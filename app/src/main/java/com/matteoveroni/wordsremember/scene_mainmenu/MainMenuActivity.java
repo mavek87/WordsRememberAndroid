@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.scene_mainmenu;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -50,6 +51,13 @@ public class MainMenuActivity extends BaseActivityPresentedView implements MainM
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.main_menu));
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        hideAndroidKeyboard();
     }
 
     @OnClick(R.id.main_menu_btn_start)

@@ -24,6 +24,19 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:id="@+id/quiz_game_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="30sp" />
+
+        <TextView
+            android:id="@+id/quiz_game_question"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:textAlignment="center"
+            android:textSize="@dimen/activity_horizontal_margin" />
+
         <TextView
             android:id="@+id/quiz_game_question_vocable"
             android:layout_width="match_parent"
@@ -38,29 +51,16 @@
             android:textAlignment="center"
             android:textSize="@dimen/activity_horizontal_margin" />
 
-        <EditText
-            android:id="@+id/quiz_game_answer_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="50sp"
-            android:inputType="text" />
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="0sp"
             android:layout_weight="1" />
 
-        <ProgressBar
-            android:id="@+id/quiz_game_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="30sp" />
-
-        <TextView
-            android:id="@+id/quiz_game_question"
+        <EditText
+            android:id="@+id/quiz_game_answer_edit_text"
             android:layout_width="match_parent"
             android:layout_height="50sp"
-            android:textAlignment="center"
-            android:textSize="@dimen/activity_horizontal_margin" />
+            android:inputType="text" />
 
     </LinearLayout>
 

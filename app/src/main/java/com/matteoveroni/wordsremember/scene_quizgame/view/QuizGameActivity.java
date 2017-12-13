@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_quizgame.view;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
@@ -87,6 +88,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
         setContentView(R.layout.activity_quiz_game);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.quiz_game));
+
         fragmentManager = getSupportFragmentManager();
         progressBar.setProgress(0);
 
@@ -95,6 +97,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
         }
 
         setSoftkeyActionButtonToConfirmQuizAnswer();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
@@ -193,7 +196,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
     @Override
     public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
-//        updateQuizProgressBar();
         progressBar.setProgress(currentQuiz.getQuizQuestionNumber());
 
         hideAndroidKeyboard();
@@ -202,11 +204,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
         QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
         quizResultDialog.show(fragmentManager, QuizResultDialog.TAG);
-    }
-
-    private void updateQuizProgressBar() {
-        progressBar.setMax(currentQuiz.getTotalNumberOfQuestions());
-        progressBar.setProgress(currentQuiz.getQuizQuestionNumber());
     }
 
     @Override
@@ -274,11 +271,5 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
-    }
-
-    @Override
-    protected void onDestroy() {
-        hideAndroidKeyboard();
-        super.onDestroy();
     }
 }

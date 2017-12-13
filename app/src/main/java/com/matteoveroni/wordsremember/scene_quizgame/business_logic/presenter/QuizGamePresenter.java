@@ -103,6 +103,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
             quizModel.generateQuiz();
         } catch (NoMoreQuizzesException ex) {
             handleNoMoreQuizzesException();
+            view.hideKeyboard();
         } catch (ZeroQuizzesException ex) {
             // TODO: possible bug if the view is being cleared before..
             handleZeroQuizzesException();
@@ -117,16 +118,20 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
     }
 
     private void handleNoMoreQuizzesException() {
-        isDialogShownInView = true;
-        FormattedString gameResultMessage = new FormattedString(
-                "%s %s %d/%d %s",
-                LocaleKey.MSG_GAME_COMPLETED,
-                LocaleKey.SCORE,
-                quizModel.getTotalScore(),
-                quizModel.getNumberOfQuestions(),
-                LocaleKey.POINTS
-        );
-        view.showGameResultDialog(gameResultMessage);
+        try {
+            FormattedString gameResultMessage = new FormattedString(
+                    "%s %s %d/%d %s",
+                    LocaleKey.MSG_GAME_COMPLETED,
+                    LocaleKey.SCORE,
+                    quizModel.getFinalTotalScore(),
+                    quizModel.getNumberOfQuestions(),
+                    LocaleKey.POINTS
+            );
+            view.showGameResultDialog(gameResultMessage);
+            isDialogShownInView = true;
+        } catch (QuizGameModel.GameNotEndedYetException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private void handleZeroQuizzesException() {

@@ -47,13 +47,13 @@
         <activity
             android:name=".scene_mainmenu.MainMenuActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".scene_userprofile.creation.view.activity.UserProfileFirstCreation"
             android:label="@string/user_profile_editor"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:noHistory="true"/>
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".scene_userprofile.manager.view.activity.UserProfileActivity"

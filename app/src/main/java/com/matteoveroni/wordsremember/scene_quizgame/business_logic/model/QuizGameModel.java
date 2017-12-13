@@ -10,21 +10,26 @@ import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 
 public interface QuizGameModel {
 
+    public class GameNotEndedYetException extends Exception {
+    }
+
     void startGame();
 
     void pauseGame();
 
     void abortGame();
 
+    boolean isGameEnded();
+
     int getNumberOfQuestions();
 
     void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException;
 
-    void giveFinalAnswer(String finalAnswer);
-
     Quiz getCurrentQuiz();
 
-    int getTotalScore();
+    void giveFinalAnswer(String finalAnswer);
+
+    int getFinalTotalScore() throws GameNotEndedYetException;
 
     void setCurrentQuizFinalResult(Quiz.FinalResult result);
 }
