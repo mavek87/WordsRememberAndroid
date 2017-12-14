@@ -45,7 +45,7 @@ public class UserProfileEditorPresenter implements Presenter {
     public void onSaveProfileAction() {
         final UserProfile viewUserProfile = view.getPojoUsed();
         if (viewUserProfile.getName().trim().isEmpty()) {
-            // TODO: use formatted string
+            // TODO: castAndGet formatted string
             view.showMessage("The User profile name can\'t be empty, insert a valid name!");
             return;
         }

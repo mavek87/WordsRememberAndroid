@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
@@ -75,6 +76,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void createAllTables(SQLiteDatabase db) {
+        Log.d(TAG, "creating all db tables");
+
         Log.d(TAG, UserProfilesContract.Query.CREATE_TABLE);
         db.execSQL(UserProfilesContract.Query.CREATE_TABLE);
 
@@ -86,9 +89,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, VocablesTranslationsContract.Query.CREATE_TABLE);
         db.execSQL(VocablesTranslationsContract.Query.CREATE_TABLE);
+
+        Log.d(TAG, DatesContract.Query.CREATE_TABLE);
+        db.execSQL(DatesContract.Query.CREATE_TABLE);
+
+        Log.d(TAG, "*********************");
     }
 
     private void dropAllTables(SQLiteDatabase db) {
+        Log.d(TAG, "removing all db tables");
+
         Log.d(TAG, UserProfilesContract.Query.DROP_TABLE);
         db.execSQL(UserProfilesContract.Query.DROP_TABLE);
 
@@ -100,5 +110,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, VocablesTranslationsContract.Query.DROP_TABLE);
         db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
+
+        Log.d(TAG, DatesContract.Query.DROP_TABLE);
+        db.execSQL(DatesContract.Query.DROP_TABLE);
+
+        Log.d(TAG, "*********************");
     }
 }

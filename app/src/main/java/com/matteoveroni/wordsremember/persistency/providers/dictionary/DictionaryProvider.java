@@ -216,7 +216,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return Uri.parse(contractUri + "/" + id);
     }
 
-    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = profileDBManager.getWritableDBForCurrentProfile();
@@ -246,7 +246,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
         return updatedRowsCounter;
     }
 
-    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
         SQLiteDatabase db = profileDBManager.getWritableDBForCurrentProfile();

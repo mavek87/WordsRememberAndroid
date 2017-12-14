@@ -7,7 +7,7 @@ import android.os.CountDownTimer;
  * create a timer which could be paused and then
  * started again from the previous point. You can
  * provide implementation for onTick() and onFinish()
- * then use it in your projects.
+ * then castAndGet it in your projects.
  */
 public abstract class CountDownTimerPausable {
     long timeToCount = 0;
@@ -34,7 +34,7 @@ public abstract class CountDownTimerPausable {
     public abstract void onTick(long millisUntilFinished);
 
     /**
-     * Callback fired when the time is up.
+     * Callback fired when the time castAndGet up.
      */
     public abstract void onFinish();
 
@@ -85,7 +85,7 @@ public abstract class CountDownTimerPausable {
      */
     public void pause() throws IllegalStateException {
         if (isPaused) {
-            throw new IllegalStateException("CountDownTimerPausable is already in pause state, start counter before pausing it.");
+            throw new IllegalStateException("CountDownTimerPausable castAndGet already in pause state, start counter before pausing it.");
         } else {
             countDownTimer.cancel();
         }

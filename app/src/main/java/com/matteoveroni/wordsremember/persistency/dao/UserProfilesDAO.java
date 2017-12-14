@@ -44,7 +44,7 @@ public class UserProfilesDAO {
     }
 
     public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
-        checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to use for the update"));
+        checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to castAndGet for the update"));
 
         if (oldUserProfile.isInvalidProfile()) {
             try {

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.persistency.providers.user_profiles;
+package com.matteoveroni.wordsremember.persistency.providers.statistics;
 
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -10,36 +10,33 @@ import android.support.annotation.NonNull;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
+import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 
-/**
- * @author Matteo Veroni
- */
+public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
-public class UserProfilesProvider extends ExtendedQueriesContentProvider {
+    public static final String TAG = TagGenerator.tag(StatisticsProvider.class);
 
-    public static final String TAG = TagGenerator.tag(UserProfilesProvider.class);
-
-    public static final String CONTENT_AUTHORITY = UserProfilesProvider.class.getPackage().getName();
+    public static final String CONTENT_AUTHORITY = StatisticsProvider.class.getPackage().getName();
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int PROFILES = 1;
-    private static final int PROFILE_ID = 2;
+    private static final int DATE_ID = 1;
+    private static final int DATE = 2;
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, UserProfilesContract.NAME, PROFILES);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, UserProfilesContract.NAME + "/#", PROFILE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE_ID);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE);
     }
 
     @Override
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
-            case PROFILES:
-                return UserProfilesContract.CONTENT_DIR_TYPE;
-            case PROFILE_ID:
-                return UserProfilesContract.CONTENT_ITEM_TYPE;
+            case DATE_ID:
+                return DatesContract.CONTENT_ITEM_TYPE;
+            case DATE:
+                return DatesContract.CONTENT_ITEM_TYPE;
             default:
                 return null;
         }
@@ -48,18 +45,21 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(UserProfilesContract.Schema.TABLE_NAME);
 
         switch (URI_MATCHER.match(uri)) {
-            case PROFILES:
+            case DATE_ID:
+                queryBuilder.setTables(DatesContract.Schema.TABLE_NAME);
+                whereSelection = DatesContract.Schema.COL_ID + "=?";
                 break;
-            case PROFILE_ID:
-                whereSelection = UserProfilesContract.Schema.COL_ID + "=?";
-                whereArgs = new String[]{uri.getLastPathSegment()};
+            case DATE:
+                queryBuilder.setTables(DatesContract.Schema.TABLE_NAME);
+                whereSelection = DatesContract.Schema.COL_DATE + "=?";
                 break;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
+                throw new IllegalArgumentException(ExtendedQueriesContentProvider.Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
+
+        whereArgs = new String[]{uri.getLastPathSegment()};
 
         SQLiteDatabase db = profileDBManager.getReadableDBForCurrentProfile();
         Cursor cursor = queryBuilder.query(
@@ -80,39 +80,43 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = profileDBManager.getWritableDBForCurrentProfile();
 
+        Uri contractUri;
+        long id;
+
         switch (URI_MATCHER.match(uri)) {
-            case PROFILES:
-                long id = db.insertOrThrow(UserProfilesContract.Schema.TABLE_NAME, null, values);
+            case DATE:
+                contractUri = DatesContract.CONTENT_URI;
+                id = db.insertOrThrow(DatesContract.Schema.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return Uri.parse(UserProfilesContract.CONTENT_URI + "/" + id);
-            case PROFILE_ID:
+                break;
+            case DATE_ID:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for INSERT");
             default:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for INSERT");
         }
+
+        return Uri.parse(contractUri + "/" + id);
     }
 
-    // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
         SQLiteDatabase db = profileDBManager.getWritableDBForCurrentProfile();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
-            case PROFILES:
-                updatedRowsCounter = db.update(UserProfilesContract.Schema.TABLE_NAME, values, whereSelection, whereArgs);
-                break;
-            case PROFILE_ID:
+            case DATE_ID:
                 String id = uri.getLastPathSegment();
-                String where = UserProfilesContract.Schema.COL_ID + "=" + id;
-                if (Str.isNotNullOrEmpty(whereSelection)) {
-                    where += " AND (" + whereSelection + ")";
-                }
                 updatedRowsCounter = db.update(
-                        UserProfilesContract.Schema.TABLE_NAME,
-                        values,
-                        where,
-                        whereArgs
+                        DatesContract.Schema.TABLE_NAME, values,
+                        DatesContract.Schema.COL_ID + "=" + id, whereArgs
+                );
+                break;
+            case DATE:
+                String date = uri.getLastPathSegment();
+                updatedRowsCounter = db.update(
+                        DatesContract.Schema.TABLE_NAME, values,
+                        DatesContract.Schema.COL_DATE + "=" + date, whereArgs
                 );
                 break;
             default:
@@ -122,26 +126,25 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
         return updatedRowsCounter;
     }
 
-    // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
+    // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
         SQLiteDatabase db = profileDBManager.getWritableDBForCurrentProfile();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
-            case PROFILES:
-                deletedRowsCounter = db.delete(UserProfilesContract.Schema.TABLE_NAME, whereSelection, whereArgs);
-                break;
-            case PROFILE_ID:
-                String profileId = uri.getLastPathSegment();
-                String where = UserProfilesContract.Schema.COL_ID + "=" + profileId;
-                if (Str.isNotNullOrEmpty(whereSelection)) {
-                    where += " AND (" + whereSelection + ")";
-                }
+            case DATE_ID:
+                String id = uri.getLastPathSegment();
                 deletedRowsCounter = db.delete(
                         UserProfilesContract.Schema.TABLE_NAME,
-                        where,
-                        whereArgs
+                        DatesContract.Schema.COL_ID + "=" + id, whereArgs
+                );
+                break;
+            case DATE:
+                String date = uri.getLastPathSegment();
+                deletedRowsCounter = db.delete(
+                        UserProfilesContract.Schema.TABLE_NAME,
+                        DatesContract.Schema.COL_DATE + "=" + date, whereArgs
                 );
                 break;
             default:

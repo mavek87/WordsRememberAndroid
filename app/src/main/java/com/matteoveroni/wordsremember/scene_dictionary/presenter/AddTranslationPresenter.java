@@ -55,7 +55,7 @@ public class AddTranslationPresenter implements Presenter {
         view.returnToPreviousView();
     }
 
-    // TODO: check if this method is useful
+    // TODO: check if this method castAndGet useful
     @Subscribe
     public void onEvent(EventVocableTranslationManipulationRequest event) {
         final long translationId = event.getTranslationIdToManipulate();

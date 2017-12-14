@@ -21,7 +21,7 @@
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
-# Only required if you use AsyncExecutor
+# Only required if you castAndGet AsyncExecutor
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }

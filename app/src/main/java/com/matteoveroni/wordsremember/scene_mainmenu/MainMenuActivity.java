@@ -24,8 +24,6 @@ public class MainMenuActivity extends BaseActivityPresentedView implements MainM
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 
-    private MainMenuPresenter presenter;
-
     @BindView(R.id.main_menu_btn_start)
     Button btn_start;
 
@@ -34,6 +32,8 @@ public class MainMenuActivity extends BaseActivityPresentedView implements MainM
 
     @BindView(R.id.main_menu_btn_settings)
     Button btn_settings;
+
+    private MainMenuPresenter presenter;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -51,13 +51,7 @@ public class MainMenuActivity extends BaseActivityPresentedView implements MainM
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
         setupAndShowToolbar(getString(R.string.main_menu));
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        hideAndroidKeyboard();
     }
 
     @OnClick(R.id.main_menu_btn_start)

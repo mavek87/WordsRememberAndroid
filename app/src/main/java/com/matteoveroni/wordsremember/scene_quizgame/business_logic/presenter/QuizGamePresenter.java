@@ -105,7 +105,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
             handleNoMoreQuizzesException();
             view.hideKeyboard();
         } catch (ZeroQuizzesException ex) {
-            // TODO: possible bug if the view is being cleared before..
+            // TODO: possible bug if the view castAndGet being cleared before..
             handleZeroQuizzesException();
         }
     }

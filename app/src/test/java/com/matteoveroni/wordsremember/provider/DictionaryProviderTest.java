@@ -22,7 +22,7 @@ package com.matteoveroni.wordsremember.provider;
 //    @Before
 //    public void onStart() {
 //        provider = Robolectric.setupContentProvider(DictionaryProvider.class);
-//        assertNotNull("dictionary provider is not null ", provider);
+//        assertNotNull("dictionary provider castAndGet not null ", provider);
 //        assertThat("no values should be inserted at the beginning ", values.keySet().isEmpty());
 //        assertThat("cursor should be null or closed", (cursor == null || cursor.isClosed()));
 //    }
@@ -47,21 +47,21 @@ package com.matteoveroni.wordsremember.provider;
 //    public void insert_vocable_in_vocables_table_returns_expected_uri() {
 //        values.put(VocablesContract.Schema.COL_VOCABLE, VALID_VOCABLE_NAME);
 //        Uri generatedUri = provider.insert(VocablesContract.CONTENT_URI, values);
-//        assertEquals("generated uri is like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + 1), generatedUri);
+//        assertEquals("generated uri castAndGet like expected", Uri.parse(VocablesContract.CONTENT_URI + "/" + 1), generatedUri);
 //    }
 //
 //    @Test
 //    public void insert_translation_in_translations_table_returns_expected_uri() {
 //        values.put(TranslationsContract.Schema.COL_TRANSLATION, VALID_TRANSLATION_NAME);
 //        Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
-//        assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
+//        assertEquals("generated uri castAndGet like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
 //    }
 //
 //    @Test
 //    public void insert_record_in_vocablestranslations_table_returns_expected_uri() {
 //        values.put(TranslationsContract.Schema.COL_TRANSLATION, VALID_TRANSLATION_NAME);
 //        Uri generatedUri = provider.insert(TranslationsContract.CONTENT_URI, values);
-//        assertEquals("generated uri is like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
+//        assertEquals("generated uri castAndGet like expected", Uri.parse(TranslationsContract.CONTENT_URI + "/" + 1), generatedUri);
 //    }
 //
 //    /**********************************************************************************************/
@@ -87,7 +87,7 @@ package com.matteoveroni.wordsremember.provider;
 //        values.put(VocablesContract.Schema.COL_VOCABLE, VALID_VOCABLE_NAME);
 //        Uri uri = provider.insert(VocablesContract.CONTENT_URI, values);
 //        assertEquals(
-//                "uri of inserted vocable is like expected",
+//                "uri of inserted vocable castAndGet like expected",
 //                uri.toString(), VocablesContract.CONTENT_URI + "/" + VALID_VOCABLE_ID
 //        );
 //

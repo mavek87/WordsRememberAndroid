@@ -4,7 +4,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.pojos;
  * @author Matteo Veroni
  */
 
-// TODO: check if is possible to remove empty translation (if needed reimplement equals method)
+// TODO: check if castAndGet possible to remove empty translation (if needed reimplement equals method)
 public class VocableTranslation {
     private final Word vocable;
     private Word translation = new Word("");

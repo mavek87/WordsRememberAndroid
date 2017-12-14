@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
+import com.matteoveroni.wordsremember.persistency.dao.StatisticsDAO;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 
 import javax.inject.Singleton;
@@ -16,9 +17,9 @@ import dagger.Provides;
  */
 
 @Module
-public class PersistencyModule {
+public class PersistenceModule {
 
-    public PersistencyModule() {
+    public PersistenceModule() {
     }
 
     @Provides
@@ -37,5 +38,11 @@ public class PersistencyModule {
     @Singleton
     public UserProfilesDAO provideUserProfileDAO(Context context, ProfilesDBManager profilesDBManager) {
         return new UserProfilesDAO(context, profilesDBManager);
+    }
+
+    @Provides
+    @Singleton
+    public StatisticsDAO provideStatisticsDAO(Context context, ProfilesDBManager profilesDBManager) {
+        return new StatisticsDAO(context, profilesDBManager);
     }
 }
