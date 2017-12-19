@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
 
+import com.matteoveroni.wordsremember.utils.CountDownTimerPausable;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,7 +9,7 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizTimer extends CountDownTimerPausable {
+public class QuestionTimer extends CountDownTimerPausable {
 
     private TimerPrinter timerPrinter;
 
@@ -21,7 +23,7 @@ public class QuizTimer extends CountDownTimerPausable {
         void onQuizTimeElapsed();
     }
 
-    public QuizTimer(TimerPrinter timerPrinter, long timeToCount, long countDownInterval) {
+    public QuestionTimer(TimerPrinter timerPrinter, long timeToCount, long countDownInterval) {
         super(timeToCount, countDownInterval);
         this.timerPrinter = timerPrinter;
         this.countDownInterval = countDownInterval;

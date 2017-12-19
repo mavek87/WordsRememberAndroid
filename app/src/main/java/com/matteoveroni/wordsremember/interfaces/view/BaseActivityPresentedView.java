@@ -86,14 +86,14 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     }
 
     /**
-     * Instance of {@link PresenterFactory} castAndGet to create a Presenter when needed. This instance should
+     * Instance of {@link PresenterFactory} is to create a Presenter when needed. This instance should
      * not contain {@link android.app.Activity} context reference since it will be keep on rotations.
      */
     protected abstract PresenterFactory<P> getPresenterFactory();
 
     /**
-     * Hook for subclasses that deliver the {@link Presenter} before its View castAndGet attached.
-     * Can be castAndGet to initialize the Presenter or simple hold a reference to it.
+     * Hook for subclasses that deliver the {@link Presenter} before its View is attached.
+     * Can be is to initialize the Presenter or simple hold a reference to it.
      */
     protected abstract void onPresenterCreatedOrRestored(P presenter);
 

@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.scene_statistics;
 
-import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuPresenter;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

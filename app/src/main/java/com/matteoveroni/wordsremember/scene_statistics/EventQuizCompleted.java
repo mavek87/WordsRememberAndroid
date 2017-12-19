@@ -1,6 +1,6 @@
 package com.matteoveroni.wordsremember.scene_statistics;
 
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 
 /**
  * @author Matteo Veroni

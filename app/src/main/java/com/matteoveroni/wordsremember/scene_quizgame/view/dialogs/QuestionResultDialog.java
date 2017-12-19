@@ -10,17 +10,17 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
 
 /**
  * @author Matteo Veroni
  */
 
-public class QuizResultDialog extends DialogFragment {
+public class QuestionResultDialog extends DialogFragment {
 
-    public static final String TAG = QuizResultDialog.class.getSimpleName();
+    public static final String TAG = QuestionResultDialog.class.getSimpleName();
 
-    private Quiz.FinalResult result;
+    private QuestionAnswerResult result;
     private static final String DIALOG_RESULT_KEY = "dialog_result";
 
     private String message;
@@ -30,8 +30,8 @@ public class QuizResultDialog extends DialogFragment {
         void confirmQuizResultDialogAction();
     }
 
-    public static QuizResultDialog newInstance(Quiz.FinalResult result, String message) {
-        QuizResultDialog dialogFragment = new QuizResultDialog();
+    public static QuestionResultDialog newInstance(QuestionAnswerResult result, String message) {
+        QuestionResultDialog dialogFragment = new QuestionResultDialog();
 
         Bundle args = new Bundle();
         args.putSerializable(DIALOG_RESULT_KEY, result);
@@ -46,7 +46,7 @@ public class QuizResultDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         // TODO: check if setRetainInstanceIsNeeded
         setRetainInstance(true);
-        result = (Quiz.FinalResult) getArguments().getSerializable(DIALOG_RESULT_KEY);
+        result = (QuestionAnswerResult) getArguments().getSerializable(DIALOG_RESULT_KEY);
         message = getArguments().getString(DIALOG_MESSAGE_KEY);
     }
 

@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
@@ -19,27 +18,28 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizTimer;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionTimer;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.ErrorDialog;
 import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.GameResultDialog;
-import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.QuizResultDialog;
+import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.QuestionResultDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.ErrorDialog.ErrorDialogListener;
 import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.GameResultDialog.GameResultDialogListener;
-import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.QuizResultDialog.QuizResultDialogListener;
+import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.QuestionResultDialog.QuizResultDialogListener;
 
 /**
  * @author Matteo Veroni
  */
 
 public class QuizGameActivity extends BaseActivityPresentedView implements
-        QuizGameView, QuizTimer.TimerPrinter, QuizResultDialogListener,
+        QuizGameView, QuestionTimer.TimerPrinter, QuizResultDialogListener,
         GameResultDialogListener, ErrorDialogListener {
 
     public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
@@ -69,7 +69,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
     ProgressBar progressBar;
 
     private QuizGamePresenter presenter;
-    private Quiz currentQuiz;
+    private Quiz quiz;
     private FragmentManager fragmentManager;
 
     @Override
@@ -107,59 +107,79 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
         saveViewData(instanceState);
     }
 
-    private void saveViewData(Bundle instanceState) {
-        instanceState.putString(CURRENT_QUIZ_KEY, Json.getInstance().toJson(currentQuiz));
-        instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
-        instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
-        instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
-        instanceState.putInt(INT_PROGRESS_MAX_KEY, progressBar.getMax());
-        instanceState.putInt(INT_PROGRESS_VALUE_KEY, progressBar.getProgress());
-    }
-
-    private void restoreViewData(Bundle instanceState) {
-        if (instanceState.containsKey(CURRENT_QUIZ_KEY)) {
-            String json_currentQuiz = instanceState.getString(CURRENT_QUIZ_KEY, null);
-            if (json_currentQuiz == null)
-                throw new RuntimeException("Saved invalid \'current quiz\' after device rotation. Impossible to restore old model.");
-
-            currentQuiz = Json.getInstance().fromJson(json_currentQuiz, Quiz.class);
-        }
-        if (instanceState.containsKey(LBL_QUESTION_KEY)) {
-            lbl_question.setText(instanceState.getString(LBL_QUESTION_KEY));
-        }
-        if (instanceState.containsKey(LBL_QUESTION_VOCABLE_KEY)) {
-            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE_KEY));
-        }
-        if (instanceState.containsKey(TXT_ANSWER_KEY)) {
-            txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
-        }
-        if (instanceState.containsKey(INT_PROGRESS_MAX_KEY)) {
-            progressBar.setMax(instanceState.getInt(INT_PROGRESS_MAX_KEY));
-        }
-        if (instanceState.containsKey(INT_PROGRESS_VALUE_KEY)) {
-            progressBar.setProgress(instanceState.getInt(INT_PROGRESS_VALUE_KEY));
-        }
-
-        printTime(presenter.getRemainingTimeForCurrentQuizInSeconds());
-    }
-
     @Override
     public Quiz getPojoUsed() {
-        return currentQuiz;
+        return quiz;
     }
 
     @Override
     public void setPojoUsed(Quiz quiz) {
-        int totNumQuizQuestions = quiz.getTotalNumberOfQuestions();
-        int quizQuestionNumber = quiz.getQuizQuestionNumber();
+        this.quiz = quiz;
+        drawQuizInView();
+    }
 
-        currentQuiz = quiz;
-        lbl_question.setText(String.format("%s %d/%d", getString(R.string.translate_vocable), quizQuestionNumber, totNumQuizQuestions));
+    private void drawQuizInView() {
+        lbl_question.setText(String.format("%s %d/%d", getString(R.string.translate_vocable), quiz.getQuestionIndex(), quiz.getTotalNumberOfQuestions()));
 
-        progressBar.setMax(currentQuiz.getTotalNumberOfQuestions());
+        progressBar.setMax(quiz.getTotalNumberOfQuestions());
 
-        lbl_question_vocable.setText(currentQuiz.getQuestion());
+        lbl_question_vocable.setText(quiz.getCurrentQuestion().getQuestionMsg());
         showAllViewFields(true);
+    }
+
+    @Override
+    public void answerQuestionAction() {
+        String answer = txt_answer.getText().toString();
+        presenter.onQuestionAnswerFromView(answer);
+    }
+
+    @Override
+    public void showQuestionResultDialog(QuestionAnswerResult questionAnswerResult, FormattedString message) {
+        progressBar.setProgress(quiz.getQuestionIndex());
+
+        hideKeyboard();
+
+        String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
+
+        QuestionResultDialog questionResultDialog = QuestionResultDialog.newInstance(questionAnswerResult, quizResultMessage);
+        questionResultDialog.show(fragmentManager, QuestionResultDialog.TAG);
+    }
+
+    @Override
+    public void confirmQuizResultDialogAction() {
+        presenter.onQuizResultDialogConfirmation();
+    }
+
+    @Override
+    public void showGameResultDialog(FormattedString gameResultMessage) {
+        hideKeyboard();
+
+        String title = getString(R.string.game_result);
+        String message = localize(gameResultMessage);
+
+        GameResultDialog dialog = GameResultDialog.newInstance(title, message);
+        dialog.show(fragmentManager, GameResultDialog.TAG);
+    }
+
+    @Override
+    public void confirmGameResultDialogAction() {
+        presenter.onGameResultDialogConfirmation();
+    }
+
+    @Override
+    public void showErrorDialog(String msgError) {
+        hideKeyboard();
+
+        String title = getString(R.string.game_result);
+        String message = localize(msgError);
+
+        ErrorDialog dialog = ErrorDialog.newInstance(title, message);
+        dialog.show(fragmentManager, ErrorDialog.TAG);
+    }
+
+    @Override
+    public void confirmErrorDialogAction() {
+        presenter.onErrorDialogConfirmation();
     }
 
     @Override
@@ -189,75 +209,6 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
     }
 
     @Override
-    public void giveQuizAnswerAction() {
-        String givenAnswer = txt_answer.getText().toString();
-        presenter.onQuizAnswerFromView(givenAnswer);
-    }
-
-    @Override
-    public void showQuizResultDialog(Quiz.FinalResult quizFinalResult, FormattedString message) {
-        progressBar.setProgress(currentQuiz.getQuizQuestionNumber());
-
-        hideAndroidKeyboard();
-
-        String quizResultMessage = localize(message) + "\n\n" + getString(R.string.msg_press_ok_to_continue);
-
-        QuizResultDialog quizResultDialog = QuizResultDialog.newInstance(quizFinalResult, quizResultMessage);
-        quizResultDialog.show(fragmentManager, QuizResultDialog.TAG);
-    }
-
-    @Override
-    public void confirmQuizResultDialogAction() {
-        presenter.onQuizResultDialogConfirmation();
-    }
-
-    @Override
-    public void showGameResultDialog(FormattedString gameResultMessage) {
-        hideAndroidKeyboard();
-
-        String title = getString(R.string.game_result);
-        String message = localize(gameResultMessage);
-
-        GameResultDialog dialog = GameResultDialog.newInstance(title, message);
-        dialog.show(fragmentManager, GameResultDialog.TAG);
-    }
-
-    @Override
-    public void confirmGameResultDialogAction() {
-        presenter.onGameResultDialogConfirmation();
-    }
-
-    @Override
-    public void showErrorDialog(String msgError) {
-        hideAndroidKeyboard();
-
-        String title = getString(R.string.game_result);
-        String message = localize(msgError);
-
-        ErrorDialog dialog = ErrorDialog.newInstance(title, message);
-        dialog.show(fragmentManager, ErrorDialog.TAG);
-    }
-
-    @Override
-    public void confirmErrorDialogAction() {
-        presenter.onErrorDialogConfirmation();
-    }
-
-    private void setSoftkeyActionButtonToConfirmQuizAnswer() {
-        txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    giveQuizAnswerAction();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-    }
-
-    @Override
     public void clearAndHideFields() {
         lbl_remainingTime.setText("");
         lbl_question.setText("");
@@ -271,5 +222,55 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
+    }
+
+    private void setSoftkeyActionButtonToConfirmQuizAnswer() {
+        txt_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    answerQuestionAction();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+
+    private void saveViewData(Bundle instanceState) {
+        instanceState.putString(CURRENT_QUIZ_KEY, Json.getInstance().toJson(quiz));
+        instanceState.putString(LBL_QUESTION_KEY, lbl_question.getText().toString());
+        instanceState.putString(LBL_QUESTION_VOCABLE_KEY, lbl_question_vocable.getText().toString());
+        instanceState.putString(TXT_ANSWER_KEY, txt_answer.getText().toString());
+        instanceState.putInt(INT_PROGRESS_MAX_KEY, progressBar.getMax());
+        instanceState.putInt(INT_PROGRESS_VALUE_KEY, progressBar.getProgress());
+    }
+
+    private void restoreViewData(Bundle instanceState) {
+        if (instanceState.containsKey(CURRENT_QUIZ_KEY)) {
+            String json_currentQuiz = instanceState.getString(CURRENT_QUIZ_KEY, null);
+            if (json_currentQuiz == null) {
+                throw new RuntimeException("Saved invalid \'current quiz\' after device rotation. Impossible to restore old model.");
+            }
+            quiz = Json.getInstance().fromJson(json_currentQuiz, Quiz.class);
+        }
+        if (instanceState.containsKey(LBL_QUESTION_KEY)) {
+            lbl_question.setText(instanceState.getString(LBL_QUESTION_KEY));
+        }
+        if (instanceState.containsKey(LBL_QUESTION_VOCABLE_KEY)) {
+            lbl_question_vocable.setText(instanceState.getString(LBL_QUESTION_VOCABLE_KEY));
+        }
+        if (instanceState.containsKey(TXT_ANSWER_KEY)) {
+            txt_answer.setText(instanceState.getString(TXT_ANSWER_KEY));
+        }
+        if (instanceState.containsKey(INT_PROGRESS_MAX_KEY)) {
+            progressBar.setMax(instanceState.getInt(INT_PROGRESS_MAX_KEY));
+        }
+        if (instanceState.containsKey(INT_PROGRESS_VALUE_KEY)) {
+            progressBar.setProgress(instanceState.getInt(INT_PROGRESS_VALUE_KEY));
+        }
+
+        printTime(presenter.getRemainingTimeForCurrentQuizInSeconds());
     }
 }

@@ -18,15 +18,14 @@ public final class VocablesContract {
             DictionaryProvider.SCHEME + DictionaryProvider.CONTENT_AUTHORITY + "/" + NAME
     );
 
-    // Mime type
-    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
-    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
+    public static final String CONTENT_ITEM_MYME_TYPE = CONTENT_URI + ".item";
+    public static final String CONTENT_DIR_MYME_TYPE = CONTENT_URI + ".dir";
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "vocables";
+        public static final String TABLE_NAME = "Vocables";
 
         public static final String COL_ID = _ID;
-        public static final String COL_VOCABLE = "vocable";
+        public static final String COL_VOCABLE = "Vocable";
 
         public static final String TABLE_DOT_COL_ID = TABLE_NAME + "." + COL_ID;
         public static final String TABLE_DOT_COL_VOCABLE = TABLE_NAME + "." + COL_VOCABLE;

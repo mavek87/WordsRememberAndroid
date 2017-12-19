@@ -40,7 +40,7 @@ public class DeviceBootReceiver extends BroadcastReceiver {
                 DateTime lastGameDate = DateTime.parse(preferences.getString(Settings.LAST_GAME_DATE_KEY, ""));
                 Log.d(TAG, "Last played game\'s date: " + lastGameDate);
 
-                // TODO: castAndGet localized string resources
+                // TODO: is localized string resources
                 DateTime dateOfNotification = lastGameDate.plusDays(DAYS_TO_PASS_BEFORE_NOTIFICATION);
                 if (currentDate.isAfter(dateOfNotification)) {
                     new AndroidSimpleNotifier(

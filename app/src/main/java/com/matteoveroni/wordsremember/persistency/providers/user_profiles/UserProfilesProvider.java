@@ -37,9 +37,9 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case PROFILES:
-                return UserProfilesContract.CONTENT_DIR_TYPE;
+                return UserProfilesContract.CONTENT_DIR_MYME_TYPE;
             case PROFILE_ID:
-                return UserProfilesContract.CONTENT_ITEM_TYPE;
+                return UserProfilesContract.CONTENT_ITEM_MYME_TYPE;
             default:
                 return null;
         }

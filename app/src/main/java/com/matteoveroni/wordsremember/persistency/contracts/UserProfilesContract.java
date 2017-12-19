@@ -17,15 +17,14 @@ public class UserProfilesContract {
             UserProfilesProvider.SCHEME + UserProfilesProvider.CONTENT_AUTHORITY + "/" + NAME
     );
 
-    // Mime type
-    public static final String CONTENT_ITEM_TYPE = CONTENT_URI + ".item";
-    public static final String CONTENT_DIR_TYPE = CONTENT_URI + ".dir";
+    public static final String CONTENT_ITEM_MYME_TYPE = CONTENT_URI + ".item";
+    public static final String CONTENT_DIR_MYME_TYPE = CONTENT_URI + ".dir";
 
     public static final class Schema implements BaseColumns {
-        public static final String TABLE_NAME = "profiles";
+        public static final String TABLE_NAME = "UserProfiles";
 
         public static final String COL_ID = _ID;
-        public static final String COL_PROFILE_NAME = "profile_name";
+        public static final String COL_PROFILE_NAME = "Name";
 
         public static final String TABLE_DOT_COL_ID = TABLE_NAME + "." + COL_ID;
         public static final String TABLE_DOT_COL_PROFILE_NAME = TABLE_NAME + "." + COL_PROFILE_NAME;

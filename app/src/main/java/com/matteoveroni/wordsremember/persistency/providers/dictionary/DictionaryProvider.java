@@ -50,19 +50,19 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
             case VOCABLES:
-                return VocablesContract.CONTENT_DIR_TYPE;
+                return VocablesContract.CONTENT_DIR_MYME_TYPE;
             case VOCABLE_ID:
-                return VocablesContract.CONTENT_ITEM_TYPE;
+                return VocablesContract.CONTENT_ITEM_MYME_TYPE;
             case TRANSLATIONS:
-                return TranslationsContract.CONTENT_DIR_TYPE;
+                return TranslationsContract.CONTENT_DIR_MYME_TYPE;
             case TRANSLATION_ID:
-                return TranslationsContract.CONTENT_ITEM_TYPE;
+                return TranslationsContract.CONTENT_ITEM_MYME_TYPE;
             case VOCABLES_TRANSLATIONS:
-                return VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_DIR_TYPE;
+                return VocablesTranslationsContract.VOCABLES_TRANSLATIONS_CONTENT_DIR_MYME_TYPE;
             case TRANSLATIONS_FOR_VOCABLE:
-                return VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_DIR_TYPE;
+                return VocablesTranslationsContract.TRANSLATIONS_FOR_VOCABLE_CONTENT_DIR_MYME_TYPE;
             case NOT_TRANSLATIONS_FOR_VOCABLE:
-                return VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_TYPE;
+                return VocablesTranslationsContract.NOT_TRANSLATION_FOR_VOCABLE_NAME_CONTENT_ITEM_MYME_TYPE;
             default:
                 return null;
         }

@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.scene_userprofile;
 
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
+
 /**
  * @author Matteo Veroni
  */
@@ -7,10 +9,10 @@ package com.matteoveroni.wordsremember.scene_userprofile;
 public class UserProfile {
 
     /**
-     * System profile castAndGet used in the initial lifecycle of the app for handling system_profile.db which
+     * System profile (user profiles) is used in the initial lifecycle of the app for handling UserProfiles.db which
      * contains all the user profiles (profiles table).
      */
-    public static final UserProfile SYSTEM_PROFILE = new UserProfile(0, "system_profile");
+    public static final UserProfile USER_PROFILES = new UserProfile(0, UserProfilesContract.Schema.TABLE_NAME);
 
     public static final long NO_ID = -1;
     public static final String NO_PROFILE_NAME = "";

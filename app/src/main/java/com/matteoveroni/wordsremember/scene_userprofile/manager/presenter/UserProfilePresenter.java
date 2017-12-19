@@ -23,7 +23,7 @@ public class UserProfilePresenter implements Presenter {
 
     public UserProfilePresenter(Settings settings, UserProfileModel model, UserProfilesDAO dao) {
         this.settings = settings;
-        this.settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
+        this.settings.setUserProfile(UserProfile.USER_PROFILES);
         this.model = model;
         this.dao = dao;
     }

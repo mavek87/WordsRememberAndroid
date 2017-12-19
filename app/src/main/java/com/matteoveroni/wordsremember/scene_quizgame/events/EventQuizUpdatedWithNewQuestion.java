@@ -1,16 +1,16 @@
 package com.matteoveroni.wordsremember.scene_quizgame.events;
 
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 
 /**
  * Created by Matteo Veroni
  */
 
-public class EventQuizGenerated {
+public class EventQuizUpdatedWithNewQuestion {
 
     private final Quiz quiz;
 
-    public EventQuizGenerated(Quiz quiz) {
+    public EventQuizUpdatedWithNewQuestion(Quiz quiz) {
         this.quiz = quiz;
     }
 

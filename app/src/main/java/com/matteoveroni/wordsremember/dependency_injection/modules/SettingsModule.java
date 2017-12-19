@@ -32,7 +32,7 @@ public class SettingsModule {
                     Settings.DEFAULT_DIFFICULTY
             );
         }
-        settings.setUserProfile(UserProfile.SYSTEM_PROFILE);
+        settings.setUserProfile(UserProfile.USER_PROFILES);
         return settings;
     }
 }

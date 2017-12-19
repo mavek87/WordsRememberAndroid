@@ -2,9 +2,7 @@ package com.matteoveroni.wordsremember.persistency;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 import java.util.HashMap;
@@ -27,7 +25,7 @@ public class ProfilesDBManager {
 
     private ProfilesDBManager(Context context) {
         this.context = context;
-        this.userProfileInUse = UserProfile.SYSTEM_PROFILE;
+        this.userProfileInUse = UserProfile.USER_PROFILES;
     }
 
     public static ProfilesDBManager getInstance(Context appContext) {
@@ -52,7 +50,7 @@ public class ProfilesDBManager {
 
     private DBHelper loadUserProfileInDBHelpersMap(UserProfile userProfile) {
         if (!dbHelpersMap.containsKey(userProfile)) {
-            final String dbName = (userProfile.equals(UserProfile.SYSTEM_PROFILE)) ? userProfile.getName() : "" + userProfile.getId();
+            final String dbName = (userProfile.equals(UserProfile.USER_PROFILES)) ? userProfile.getName() : "" + userProfile.getId();
             dbHelpersMap.put(userProfile, new DBHelper(context, dbName, DB_VERSION));
         }
 

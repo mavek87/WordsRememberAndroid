@@ -11,12 +11,12 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizAnswerChecker;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Question;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGenerated;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWithNewQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.web.WebTranslator;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
@@ -39,11 +39,9 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     private final Settings settings;
     private final DictionaryDAO dao;
-    private Quiz currentQuiz;
-    private final QuizAnswerChecker quizAnswerChecker = new QuizAnswerChecker();
+    private Quiz quiz;
     private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
     private int numberOfQuestions;
-    private int quizIndex;
     private int totalScore;
     private boolean isGameStarted = false;
     private boolean isGameEnded = false;
@@ -67,12 +65,11 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     }
 
     private void initGame() {
-        quizAnswerChecker.reset();
         quizVocable = "";
-        quizIndex = 0;
         numberOfQuestions = 0;
         totalScore = 0;
         dao.countDistinctVocablesWithTranslations();
+        quiz = new Quiz();
     }
 
     @Override
@@ -101,6 +98,8 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
             numberOfQuestions = nmbOfVocablesWithTranslations;
         }
 
+        quiz.setTotalNumberOfQuestions(numberOfQuestions);
+
         int minNumber = 0;
         int maxNumber = nmbOfVocablesWithTranslations - 1;
         int maxNumberOfExtractions = numberOfQuestions;
@@ -111,19 +110,18 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Override
     public int getNumberOfQuestions() {
-        return numberOfQuestions;
+        return quiz.getTotalNumberOfQuestions();
     }
 
     void setNumberOfQuestions(int numberOfQuestions) {
-        this.numberOfQuestions = numberOfQuestions;
+        quiz.setTotalNumberOfQuestions(numberOfQuestions);
     }
 
     @Override
-    public void generateQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
-        rightAnswersForCurrentQuiz.clear();
+    public void generateQuestion() throws NoMoreQuizzesException, ZeroQuizzesException {
+//        rightAnswersForCurrentQuiz.clear();
 
         if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
-        quizIndex++;
         try {
             int uniqueRandNumber = uniqueRandIntGenerator.extractNext();
             dao.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandNumber);
@@ -157,44 +155,49 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
         if (settings.isOnlineTranslationServiceEnabled()) {
             WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
         } else {
-            currentQuiz = new Quiz(quizIndex, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
-            EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
+            Question question = new Question(quizVocable, rightAnswersForCurrentQuiz);
+            quiz.addQuestion(question);
+            EVENT_BUS.post(new EventQuizUpdatedWithNewQuestion(quiz));
         }
     }
 
     @Override
     public void onTranslationCompletedSuccessfully(List<Word> translationsFoundFromTheWeb) {
+        //TODO check if online translatsions are broken at the moment
+
         Log.i(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), "Translations found from the web: \n" + Json.getInstance().toJson(translationsFoundFromTheWeb));
 
-        for (Word translation : translationsFoundFromTheWeb) {
-            rightAnswersForCurrentQuiz.add(translation.getName());
+        for (Word webTranslation : translationsFoundFromTheWeb) {
+            quiz.addCorrectAnswerForCurrentQuestion(webTranslation.getName());
         }
 
-        currentQuiz = new Quiz(quizIndex, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
-        EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
+        EVENT_BUS.post(new EventQuizUpdatedWithNewQuestion(quiz));
     }
 
     @Override
     public void onTranslationCompletedWithError(Throwable t) {
+        //TODO check if online translatsions are broken at the moment
         Log.e(TagGenerator.tag(QuizGameModelFindTranslationForVocable.class), t.getMessage());
-        currentQuiz = new Quiz(quizIndex, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
-        EVENT_BUS.post(new EventQuizGenerated(currentQuiz));
+//        currentQuiz = new Quiz(quizIndex, numberOfQuestions, quizVocable, rightAnswersForCurrentQuiz);
+//        EVENT_BUS.post(new EventQuizUpdatedWithNewQuestion(quiz));
     }
 
     @Override
     public Quiz getCurrentQuiz() {
-        return currentQuiz;
+        return quiz;
     }
 
     @Override
-    public void giveFinalAnswer(String finalAnswer) {
-        if (quizAnswerChecker.isCorrect(finalAnswer, rightAnswersForCurrentQuiz)) {
-            totalScore++;
-            currentQuiz.setFinalAnswer(quizAnswerChecker.getRightAnswer());
-            currentQuiz.setFinalResult(Quiz.FinalResult.CORRECT);
-        } else {
-            currentQuiz.setFinalAnswer(finalAnswer);
-            currentQuiz.setFinalResult(Quiz.FinalResult.WRONG);
+    public void answerCurrentQuestion(String answer) {
+        quiz.answerCurrentQuestion(answer);
+        switch (quiz.getCurrentQuestion().getQuestionAnswerResult()) {
+            case CORRECT:
+                totalScore++;
+                break;
+            case WRONG:
+                break;
+            case NOT_ANSWERED_YET:
+                break;
         }
     }
 
@@ -202,11 +205,6 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     public int getFinalTotalScore() throws GameNotEndedYetException {
         if (isGameEnded) return totalScore;
         else throw new GameNotEndedYetException();
-    }
-
-    @Override
-    public void setCurrentQuizFinalResult(Quiz.FinalResult result) {
-        currentQuiz.setFinalResult(result);
     }
 
     private void registerToEventBus() {

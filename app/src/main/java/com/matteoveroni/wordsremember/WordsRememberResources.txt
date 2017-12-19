@@ -1,3 +1,7 @@
+DATE AND TIME:
+https://stackoverflow.com/questions/17227110/what-is-the-best-way-to-save-datetime-type-in-sqlite
+
+
 REST API REQUESTS (RETROFIT):
 
 https://github.com/codepath/android_guides/wiki/Consuming-APIs-with-Retrofit

@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.events.vocable;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 
 /**
- * Event used when a dictionary item castAndGet selected in a fragment, to inform the main activity
+ * Event used when a dictionary item is selected in a fragment, to inform the main activity
  *
  * @author Matteo Veroni
  */

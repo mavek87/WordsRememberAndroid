@@ -36,15 +36,15 @@ public class Settings {
     public static final String USER_KEY = "user_key";
     public static final String USER_PROFILE_KEY = "user_profile_key";
     public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
-    public static final String QUIZ_GAME_TIMER_TOTAL_TIME_KEY = "quiz_game_timer_total_time_key";
-    public static final String QUIZ_GAME_TIMER_TICK_KEY = "quiz_game_timer_tick_key";
+    public static final String QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY = "quiz_game_question_timer_total_time_key";
+    public static final String QUIZ_GAME_QUESTION_TIMER_TICK_KEY = "quiz_game_question_timer_tick_key";
     public static final String GAME_NUMBER_OF_QUESTIONS_KEY = "game_number_of_questions_key";
     public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
     public static final String ONLINE_TRANSLATION_SERVICE_KEY = "online_translation_service_key";
 
     public static final QuizGameDifficulty DEFAULT_DIFFICULTY = QuizGameDifficulty.EASY;
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
-    public static final long DEFAULT_QUIZ_GAME_TIMER_TOTAL_TIME = 10000;
+    public static final long DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = 10000;
     public static final long DEFAULT_QUIZ_GAME_TIMER_TICK = 1000;
 
     public class NoRegisteredUserException extends Exception {
@@ -91,7 +91,7 @@ public class Settings {
     public UserProfile getUserProfile() {
         String json_userProfile = prefs.getString(USER_PROFILE_KEY, "");
         if (json_userProfile.trim().isEmpty()) {
-            return UserProfile.SYSTEM_PROFILE;
+            return UserProfile.USER_PROFILES;
         } else {
             return Json.getInstance().fromJson(json_userProfile, UserProfile.class);
         }
@@ -120,20 +120,20 @@ public class Settings {
                 .apply();
     }
 
-    public long getQuizGameTimerTotalTime() {
-        return prefs.getLong(QUIZ_GAME_TIMER_TOTAL_TIME_KEY, DEFAULT_QUIZ_GAME_TIMER_TOTAL_TIME);
+    public long getQuizGameQuestionTimerTotalTime() {
+        return prefs.getLong(QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY, DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME);
     }
 
-    public void setQuizGameTimerTotalTime(int totalTime) {
-        prefs.edit().putLong(QUIZ_GAME_TIMER_TOTAL_TIME_KEY, totalTime).apply();
+    public void setQuizGameQuestionTimerTotalTime(int totalTime) {
+        prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY, totalTime).apply();
     }
 
-    public long getQuizGameTimerTick() {
-        return prefs.getLong(QUIZ_GAME_TIMER_TICK_KEY, DEFAULT_QUIZ_GAME_TIMER_TICK);
+    public long getQuizGameQuestionTimerTick() {
+        return prefs.getLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, DEFAULT_QUIZ_GAME_TIMER_TICK);
     }
 
-    public void setQuizGameTimerTick(int tick) {
-        prefs.edit().putLong(QUIZ_GAME_TIMER_TICK_KEY, tick).apply();
+    public void setQuizGameQuestionTimerTick(int tick) {
+        prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, tick).apply();
     }
 
     public static int getNumberOfQuestionsForDifficulty(QuizGameDifficulty difficulty) {

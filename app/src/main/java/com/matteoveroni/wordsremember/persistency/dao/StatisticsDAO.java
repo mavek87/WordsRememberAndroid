@@ -3,18 +3,14 @@ package com.matteoveroni.wordsremember.persistency.dao;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
-import com.matteoveroni.wordsremember.DateAndTimeParser;
+import com.matteoveroni.wordsremember.utils.DateAndTimeParser;
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
-
-import java.util.Date;
 
 /**
  * @author Matteo Veroni
@@ -38,7 +34,9 @@ public class StatisticsDAO {
         ContentValues values = new ContentValues();
         values.put(DatesContract.Schema.COL_DATE, DatesContract.CURRENT_DATE_SQLITE);
 
-        Uri uri = contentResolver.insert(DatesContract.CONTENT_URI, values);
+        Uri uri = contentResolver.insert(DatesContract.STATISTICS_CONTENT_URI, values);
+
+        return 0;
     }
 
 //    public long saveUserProfile(UserProfile userProfile) throws Exception {
@@ -62,7 +60,7 @@ public class StatisticsDAO {
 //    }
 //
 //    public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
-//        checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to castAndGet for the update"));
+//        checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to is for the update"));
 //
 //        if (oldUserProfile.isInvalidProfile()) {
 //            try {

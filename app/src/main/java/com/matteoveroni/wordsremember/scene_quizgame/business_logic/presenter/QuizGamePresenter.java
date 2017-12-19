@@ -5,14 +5,16 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizTimer;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.QuizGameModel;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.QuizGameModelFindTranslationForVocable;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Question;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGenerated;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWithNewQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
 import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
-import com.matteoveroni.wordsremember.scene_quizgame.pojos.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameView;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
@@ -26,7 +28,7 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.TimerListener {
+public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer.TimerListener {
 
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
@@ -35,7 +37,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
     private final Settings settings;
     private final QuizGameModel quizModel;
     private QuizGameView view;
-    private QuizTimer quizTimer;
+    private QuestionTimer questionTimer;
     private boolean isDialogShownInView = false;
 
     public QuizGamePresenter(Settings settings, DictionaryDAO dao) {
@@ -43,29 +45,29 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
         this.quizModel = new QuizGameModelFindTranslationForVocable(settings, dao);
     }
 
-    private void startQuizTimerCount() {
-        if (quizTimer != null) {
-            quizTimer.setTimerPrinter(view);
-            quizTimer.addTimerListener(this);
-            quizTimer.start();
+    private void startQuestionTimerCount() {
+        if (questionTimer != null) {
+            questionTimer.setTimerPrinter(view);
+            questionTimer.addTimerListener(this);
+            questionTimer.start();
         }
     }
 
-    private void stopQuizTimerCount() {
-        if (quizTimer != null) {
-            quizTimer.cancel();
+    private void stopQuestionTimerCount() {
+        if (questionTimer != null) {
+            questionTimer.cancel();
         }
     }
 
-    private void pauseQuizTimerCount() {
-        if (quizTimer != null && !quizTimer.isPaused()) {
-            quizTimer.pause();
+    private void pauseQuestionTimerCount() {
+        if (questionTimer != null && !questionTimer.isPaused()) {
+            questionTimer.pause();
         }
     }
 
-    private void resetQuizTimerCount() {
-        stopQuizTimerCount();
-        quizTimer = new QuizTimer(view, settings.getQuizGameTimerTotalTime(), settings.getQuizGameTimerTick());
+    private void resetQuestionTimerCount() {
+        stopQuestionTimerCount();
+        questionTimer = new QuestionTimer(view, settings.getQuizGameQuestionTimerTotalTime(), settings.getQuizGameQuestionTimerTick());
     }
 
     @Override
@@ -74,8 +76,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
         EVENT_BUS.register(this);
         quizModel.startGame();
 
-        if (!isDialogShownInView && quizTimer != null && quizTimer.isPaused())
-            startQuizTimerCount();
+        if (!isDialogShownInView && questionTimer != null && questionTimer.isPaused())
+            startQuestionTimerCount();
     }
 
     @Override
@@ -83,38 +85,38 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
         quizModel.pauseGame();
-        pauseQuizTimerCount();
+        pauseQuestionTimerCount();
         view = null;
     }
 
     @Subscribe
     public void onEventGameModelInitialized(EventGameModelInitialized event) {
-        startNewQuizOrShowErrorInView();
+        makeNewQuestionOrShowErrorInView();
     }
 
-    private void playNextQuiz() {
-        resetQuizTimerCount();
-        startNewQuizOrShowErrorInView();
+    private void playNextQuestion() {
+        resetQuestionTimerCount();
+        makeNewQuestionOrShowErrorInView();
     }
 
-    private void startNewQuizOrShowErrorInView() {
+    private void makeNewQuestionOrShowErrorInView() {
         view.clearAndHideFields();
         try {
-            quizModel.generateQuiz();
+            quizModel.generateQuestion();
         } catch (NoMoreQuizzesException ex) {
             handleNoMoreQuizzesException();
             view.hideKeyboard();
         } catch (ZeroQuizzesException ex) {
-            // TODO: possible bug if the view castAndGet being cleared before..
+            // TODO: possible bug if the view is being cleared before..
             handleZeroQuizzesException();
         }
     }
 
     @Subscribe
-    public void onEventNewQuizGenerated(EventQuizGenerated event) {
+    public void onEventNewQuestionAddToQuiz(EventQuizUpdatedWithNewQuestion event) {
         view.setPojoUsed(event.getQuiz());
-        quizTimer = new QuizTimer(view, settings.getQuizGameTimerTotalTime(), settings.getQuizGameTimerTick());
-        startQuizTimerCount();
+        questionTimer = new QuestionTimer(view, settings.getQuizGameQuestionTimerTotalTime(), settings.getQuizGameQuestionTimerTick());
+        startQuestionTimerCount();
     }
 
     private void handleNoMoreQuizzesException() {
@@ -139,30 +141,32 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
         view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
     }
 
-    public void onQuizAnswerFromView(String answerFromView) {
+    public void onQuestionAnswerFromView(String answerFromView) {
         String answer = StringUtils.strip(answerFromView);
         if (answer.isEmpty()) {
             view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
-            stopQuizTimerCount();
+            stopQuestionTimerCount();
 
-            quizModel.giveFinalAnswer(answer);
-            Quiz quiz = quizModel.getCurrentQuiz();
-            Quiz.FinalResult quizFinalResult = quiz.getFinalResult();
+            quizModel.answerCurrentQuestion(answer);
+
+            Quiz currentQuiz = quizModel.getCurrentQuiz();
+            Question currentQuestion = currentQuiz.getCurrentQuestion();
 
             isDialogShownInView = true;
-            view.showQuizResultDialog(quizFinalResult, buildQuizResultMessage(quiz));
+            view.showQuestionResultDialog(currentQuestion.getQuestionAnswerResult(), buildQuizResultMessage(currentQuiz));
         }
     }
 
     private FormattedString buildQuizResultMessage(Quiz quiz) {
-        switch (quiz.getFinalResult()) {
+        Question currentQuestion = quiz.getCurrentQuestion();
+        switch (currentQuestion.getQuestionAnswerResult()) {
             case CORRECT:
-                return new FormattedString("%s\n" + quiz.getFinalAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
+                return new FormattedString("%s\n" + currentQuestion, LocaleKey.MSG_CORRECT_ANSWER);
             case WRONG:
                 FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
 
-                Set<String> correctAnswers = quiz.getRightAnswers();
+                Set<String> correctAnswers = currentQuestion.getCorrectAnswers();
                 int index = 0;
                 for (String answer : correctAnswers) {
                     quizResultMessage = quizResultMessage.concat(new FormattedString(answer));
@@ -179,17 +183,17 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
 
     @Override
     public void onQuizTimeElapsed() {
-        stopQuizTimerCount();
+        stopQuestionTimerCount();
 
-        quizModel.setCurrentQuizFinalResult(Quiz.FinalResult.WRONG);
+        quizModel.getCurrentQuiz().forceQuestionAnswerResult(QuestionAnswerResult.WRONG);
 
         isDialogShownInView = true;
-        view.showQuizResultDialog(Quiz.FinalResult.WRONG, new FormattedString("Time elapsed"));
+        view.showQuestionResultDialog(QuestionAnswerResult.WRONG, new FormattedString("Time elapsed"));
     }
 
     public void onQuizResultDialogConfirmation() {
         isDialogShownInView = false;
-        playNextQuiz();
+        playNextQuestion();
         view.showKeyboard();
     }
 
@@ -206,7 +210,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
     }
 
     private void destroyPresenter() {
-        stopQuizTimerCount();
+        stopQuestionTimerCount();
         settings.saveLastGameDate();
         EVENT_BUS.unregister(this);
         view = null;
@@ -214,7 +218,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuizTimer.Tim
     }
 
     public long getRemainingTimeForCurrentQuizInMillis() {
-        return quizTimer.getRemainingTime();
+        return questionTimer.getRemainingTime();
     }
 
     public long getRemainingTimeForCurrentQuizInSeconds() {

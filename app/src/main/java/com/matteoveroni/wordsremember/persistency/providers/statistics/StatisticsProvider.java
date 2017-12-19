@@ -9,8 +9,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
-import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.QuizzesStatsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 
@@ -22,10 +22,12 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int DATE_ID = 1;
-    private static final int DATE = 2;
+    private static final int QUIZZES_STATS_ID = 1;
+    private static final int DATE_ID = 10;
+    private static final int DATE = 11;
 
     static {
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, QuizzesStatsContract.NAME + "/#", QUIZZES_STATS_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE);
     }
@@ -33,10 +35,12 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
+            case QUIZZES_STATS_ID:
+                return QuizzesStatsContract.STATISTICS_MYME_TYPE_CONTENT_DIR;
             case DATE_ID:
-                return DatesContract.CONTENT_ITEM_TYPE;
+                return DatesContract.STATISTICS_CONTENT_ITEM_MYME_TYPE;
             case DATE:
-                return DatesContract.CONTENT_ITEM_TYPE;
+                return DatesContract.STATISTICS_CONTENT_ITEM_MYME_TYPE;
             default:
                 return null;
         }
@@ -85,7 +89,7 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case DATE:
-                contractUri = DatesContract.CONTENT_URI;
+                contractUri = DatesContract.STATISTICS_CONTENT_URI;
                 id = db.insertOrThrow(DatesContract.Schema.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 break;

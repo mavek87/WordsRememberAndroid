@@ -7,10 +7,12 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.QuizzesStatsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 /**
  * Helper class which contains db attributes and
@@ -39,7 +41,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+//        if (dbName.equals(UserProfilesContract.Schema.TABLE_NAME)) {
+//            createUserProfilesTable(db);
+//        } else {
         createAllTables(db);
+//        }
     }
 
     @Override
@@ -90,6 +96,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d(TAG, VocablesTranslationsContract.Query.CREATE_TABLE);
         db.execSQL(VocablesTranslationsContract.Query.CREATE_TABLE);
 
+        Log.d(TAG, QuizzesStatsContract.Query.CREATE_TABLE);
+        db.execSQL(QuizzesStatsContract.Query.CREATE_TABLE);
+
         Log.d(TAG, DatesContract.Query.CREATE_TABLE);
         db.execSQL(DatesContract.Query.CREATE_TABLE);
 
@@ -110,6 +119,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Log.d(TAG, VocablesTranslationsContract.Query.DROP_TABLE);
         db.execSQL(VocablesTranslationsContract.Query.DROP_TABLE);
+
+        Log.d(TAG, QuizzesStatsContract.Query.DROP_TABLE);
+        db.execSQL(QuizzesStatsContract.Query.DROP_TABLE);
 
         Log.d(TAG, DatesContract.Query.DROP_TABLE);
         db.execSQL(DatesContract.Query.DROP_TABLE);

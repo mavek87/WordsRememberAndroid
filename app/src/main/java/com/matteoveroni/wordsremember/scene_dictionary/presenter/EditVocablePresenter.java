@@ -47,7 +47,7 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
         this.view.setPojoUsed(lastVocableSelected);
         EVENT_BUS.register(this);
 
-        // When a translation for a vocable castAndGet selected, attach view castAndGet called again so
+        // When a translation for a vocable is selected, attach view is called again so
         // here I save the translation for the vocable and clear the dictionary model
         if (lastTranslationSelected != null) {
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastVocableSelected, lastTranslationSelected));

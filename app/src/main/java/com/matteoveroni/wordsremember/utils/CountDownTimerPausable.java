@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
+package com.matteoveroni.wordsremember.utils;
 
 import android.os.CountDownTimer;
 
@@ -7,11 +7,12 @@ import android.os.CountDownTimer;
  * create a timer which could be paused and then
  * started again from the previous point. You can
  * provide implementation for onTick() and onFinish()
- * then castAndGet it in your projects.
+ * then is it in your projects.
  */
 public abstract class CountDownTimerPausable {
     long timeToCount = 0;
-    long countDownInterval = 0;
+    //TODO avoid to use public attribute
+    public long countDownInterval = 0;
     long millisRemaining = 0;
 
     CountDownTimer countDownTimer = null;
@@ -34,7 +35,7 @@ public abstract class CountDownTimerPausable {
     public abstract void onTick(long millisUntilFinished);
 
     /**
-     * Callback fired when the time castAndGet up.
+     * Callback fired when the time is up.
      */
     public abstract void onFinish();
 
@@ -85,7 +86,7 @@ public abstract class CountDownTimerPausable {
      */
     public void pause() throws IllegalStateException {
         if (isPaused) {
-            throw new IllegalStateException("CountDownTimerPausable castAndGet already in pause state, start counter before pausing it.");
+            throw new IllegalStateException("CountDownTimerPausable is already in pause state, start counter before pausing it.");
         } else {
             countDownTimer.cancel();
         }
