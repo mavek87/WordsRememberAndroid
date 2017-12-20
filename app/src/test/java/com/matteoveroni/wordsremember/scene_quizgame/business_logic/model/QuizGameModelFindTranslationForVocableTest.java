@@ -5,9 +5,9 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInitialized;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,7 +54,7 @@ public class QuizGameModelFindTranslationForVocableTest {
                 new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
         );
 
-        EVENT_BUS.hasSubscriberForEvent(EventGameModelInitialized.class);
+        EVENT_BUS.hasSubscriberForEvent(EventQuizGameModelInitialized.class);
     }
 
     @Test
@@ -85,15 +85,15 @@ public class QuizGameModelFindTranslationForVocableTest {
         );
     }
 
-    @Test(expected = ZeroQuizzesException.class)
-    public void test_onStartQuizGeneration_If_getNumberOfQuizzesFromSettingsIsZero_throwZeroQuizzesException() throws NoMoreQuizzesException, ZeroQuizzesException {
+    @Test(expected = ZeroQuestionsException.class)
+    public void test_onStartQuizGeneration_If_getNumberOfQuizzesFromSettingsIsZero_throwZeroQuizzesException() throws NoMoreQuestionsException, ZeroQuestionsException {
         when(settings.getNumberOfQuestions()).thenReturn(0);
 
         model.generateQuestion();
     }
 
     @Test
-    public void test_onStartQuizGeneration_If_getNumberOfQuizzesGreaterThanZero_extractRandomQuiz() throws NoMoreQuizzesException, ZeroQuizzesException {
+    public void test_onStartQuizGeneration_If_getNumberOfQuizzesGreaterThanZero_extractRandomQuiz() throws NoMoreQuestionsException, ZeroQuestionsException {
         model.setNumberOfQuestions(1);
         when(settings.getNumberOfQuestions()).thenReturn(1);
 

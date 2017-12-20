@@ -13,10 +13,10 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translatio
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Question;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventGameModelInitialized;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInitialized;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWithNewQuestion;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.web.WebTranslator;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
@@ -39,15 +39,11 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     private final Settings settings;
     private final DictionaryDAO dao;
-    private Quiz quiz;
-    private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
-    private int numberOfQuestions;
-    private int totalScore;
-    private boolean isGameStarted = false;
-    private boolean isGameEnded = false;
 
-    private final Set<String> rightAnswersForCurrentQuiz = new HashSet<>();
-    private String quizVocable;
+    private Quiz quiz;
+    private QuizGameRunningState runningState = new QuizGameRunningState();
+    private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
+    private int totalScore;
 
     public QuizGameModelFindTranslationForVocable(Settings settings, DictionaryDAO dao) {
         this.settings = settings;
@@ -56,56 +52,54 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Override
     public void startGame() {
-        if (!isGameStarted) {
-            initGame();
-            isGameStarted = true;
-            isGameEnded = false;
+        if (!runningState.isPaused()) {
+            initQuizGame();
         }
+        runningState.setStarted();
         registerToEventBus();
     }
 
-    private void initGame() {
-        quizVocable = "";
-        numberOfQuestions = 0;
+    private void initQuizGame() {
+        quiz = new Quiz();
+        runningState.reset();
         totalScore = 0;
         dao.countDistinctVocablesWithTranslations();
-        quiz = new Quiz();
     }
 
     @Override
     public void pauseGame() {
+        runningState.setPaused();
         unregisterToEventBus();
     }
 
     @Override
-    public void abortGame() {
-        isGameStarted = false;
-        isGameEnded = true;
+    public void stopGame() {
+        runningState.setStopped();
         unregisterToEventBus();
     }
 
     @Override
-    public boolean isGameEnded() {
-        return isGameEnded;
+    public boolean isGameStopped() {
+        return runningState.isStopped();
     }
 
     @Subscribe
     public void onEventCountDistinctVocablesWithTranslations(EventCountDistinctVocablesWithTranslationsCompleted event) {
+        int maxNumberOfQuizQuestions;
+
         int nmbOfVocablesWithTranslations = event.getNumberOfVocablesWithTranslation();
         if (nmbOfVocablesWithTranslations > settings.getNumberOfQuestions()) {
-            numberOfQuestions = settings.getNumberOfQuestions();
+            maxNumberOfQuizQuestions = settings.getNumberOfQuestions();
         } else {
-            numberOfQuestions = nmbOfVocablesWithTranslations;
+            maxNumberOfQuizQuestions = nmbOfVocablesWithTranslations;
         }
 
-        quiz.setTotalNumberOfQuestions(numberOfQuestions);
+        quiz.setTotalNumberOfQuestions(maxNumberOfQuizQuestions);
 
-        int minNumber = 0;
-        int maxNumber = nmbOfVocablesWithTranslations - 1;
-        int maxNumberOfExtractions = numberOfQuestions;
-        uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(minNumber, maxNumber, maxNumberOfExtractions);
-
-        EVENT_BUS.post(new EventGameModelInitialized());
+        int maxQuestionIndex = nmbOfVocablesWithTranslations - 1;
+        int maxNumberOfExtractions = maxNumberOfQuizQuestions;
+        uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(0, maxQuestionIndex, maxNumberOfExtractions);
+        EVENT_BUS.post(new EventQuizGameModelInitialized());
     }
 
     @Override
@@ -118,16 +112,14 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
     }
 
     @Override
-    public void generateQuestion() throws NoMoreQuizzesException, ZeroQuizzesException {
-//        rightAnswersForCurrentQuiz.clear();
-
-        if (numberOfQuestions <= 0) throw new ZeroQuizzesException();
+    public void generateQuestion() throws NoMoreQuestionsException, ZeroQuestionsException {
+        if (quiz.getTotalNumberOfQuestions() <= 0) throw new ZeroQuestionsException();
         try {
             int uniqueRandNumber = uniqueRandIntGenerator.extractNext();
             dao.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandNumber);
         } catch (UniqueRandomNumbersGenerator.NoMoreUniqueRandNumberExtractableException ex) {
-            isGameEnded = true;
-            throw new NoMoreQuizzesException();
+            runningState.setStopped();
+            throw new NoMoreQuestionsException();
         }
     }
 
@@ -145,17 +137,18 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Subscribe
     public void onEventGetTranslationsForVocable(EventAsyncSearchVocableTranslationsCompleted event) {
-        Word vocable = event.getVocable();
-        quizVocable = vocable.getName();
+        Word quizVocable = event.getVocable();
+        Set<String> rightAnswersForCurrentQuiz = new HashSet<>();
 
         for (Word translation : event.getTranslations()) {
             rightAnswersForCurrentQuiz.add(translation.getName());
         }
 
         if (settings.isOnlineTranslationServiceEnabled()) {
-            WebTranslator.getInstance().translate(vocable, Locale.ENGLISH, Locale.ITALIAN, this);
+            //TODO this code uses hardcoded languages! remove hardcoded translation
+            WebTranslator.getInstance().translate(quizVocable, Locale.ENGLISH, Locale.ITALIAN, this);
         } else {
-            Question question = new Question(quizVocable, rightAnswersForCurrentQuiz);
+            Question question = new Question(quizVocable.getName(), rightAnswersForCurrentQuiz);
             quiz.addQuestion(question);
             EVENT_BUS.post(new EventQuizUpdatedWithNewQuestion(quiz));
         }
@@ -203,7 +196,7 @@ public class QuizGameModelFindTranslationForVocable implements QuizGameModel, We
 
     @Override
     public int getFinalTotalScore() throws GameNotEndedYetException {
-        if (isGameEnded) return totalScore;
+        if (runningState.isStopped()) return totalScore;
         else throw new GameNotEndedYetException();
     }
 

@@ -1,8 +1,8 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
 
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.NoMoreQuizzesException;
-import com.matteoveroni.wordsremember.scene_quizgame.exceptions.ZeroQuizzesException;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 
 /**
  * Created by Matteo Veroni
@@ -17,13 +17,13 @@ public interface QuizGameModel {
 
     void pauseGame();
 
-    void abortGame();
+    void stopGame();
 
-    boolean isGameEnded();
+    boolean isGameStopped();
 
     int getNumberOfQuestions();
 
-    void generateQuestion() throws NoMoreQuizzesException, ZeroQuizzesException;
+    void generateQuestion() throws NoMoreQuestionsException, ZeroQuestionsException;
 
     Quiz getCurrentQuiz();
 

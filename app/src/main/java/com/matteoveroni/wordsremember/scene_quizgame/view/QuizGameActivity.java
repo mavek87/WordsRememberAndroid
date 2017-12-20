@@ -147,7 +147,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
     @Override
     public void confirmQuizResultDialogAction() {
-        presenter.onQuizResultDialogConfirmation();
+        presenter.onConfirmQuizResultDialogAction();
     }
 
     @Override
@@ -163,7 +163,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
     @Override
     public void confirmGameResultDialogAction() {
-        presenter.onGameResultDialogConfirmation();
+        presenter.onConfirmGameResultDialogAction();
     }
 
     @Override
@@ -179,7 +179,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
     @Override
     public void confirmErrorDialogAction() {
-        presenter.onErrorDialogConfirmation();
+        presenter.onConfirmErrorDialogAction();
     }
 
     @Override
