@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 configurations.all {
-    // IMPORTANT: Check for updates everytime
+    // IMPORTANT: Check for new updates everytime
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     dexOptions {
         maxProcessCount 2
         javaMaxHeapSize "2048m"
@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "com.matteoveroni.wordsremember"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -34,11 +34,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:recyclerview-v7:25.4.0'
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:support-v4:27.0.2'
+    compile 'com.android.support:design:27.0.2'
 
+
+//    compile 'com.google.android.gms:play-services:11.6.2'
     compile 'com.google.android.gms:play-services-auth:11.4.2'
 
     testCompile 'junit:junit:4.12'
