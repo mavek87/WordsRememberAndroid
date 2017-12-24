@@ -213,9 +213,9 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer
     private FormattedString buildQuestionResultMessage(Question question) {
         switch (question.getQuestionAnswerResult()) {
             case CORRECT:
-                return new FormattedString("%s\n" + question, LocaleKey.MSG_CORRECT_ANSWER);
+                return new FormattedString("%s\n\n" + question.getGivenAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
             case WRONG:
-                FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
+                FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
 
                 Set<String> correctAnswers = question.getCorrectAnswers();
                 int index = 0;

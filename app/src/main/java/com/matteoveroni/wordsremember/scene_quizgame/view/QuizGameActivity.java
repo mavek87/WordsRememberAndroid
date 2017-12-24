@@ -135,7 +135,7 @@ public class QuizGameActivity extends BaseActivityPresentedView implements
 
     @Override
     public void showQuestionResultDialog(QuestionAnswerResult questionAnswerResult, FormattedString message) {
-        progressBar.setProgress(quiz.getQuestionIndex());
+        progressBar.setProgress(quiz.getQuestionIndex() + 1);
 
         hideKeyboard();
 
