@@ -16,7 +16,7 @@ public class Quiz {
     private int totalNumberOfQuestions;
 
     public Quiz() {
-        this.questionsIndex = 0;
+        this.questionsIndex = -1;
     }
 
     public Quiz(int totalNumberOfQuestions) {
@@ -41,8 +41,8 @@ public class Quiz {
     }
 
     public void addQuestion(Question question) {
-        questions.put(questionsIndex, question);
         questionsIndex++;
+        questions.put(questionsIndex, question);
     }
 
     public void addCorrectAnswerForCurrentQuestion(String answer) {

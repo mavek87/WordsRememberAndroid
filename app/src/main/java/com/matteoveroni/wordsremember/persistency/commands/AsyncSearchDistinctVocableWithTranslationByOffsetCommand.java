@@ -40,7 +40,7 @@ public class AsyncSearchDistinctVocableWithTranslationByOffsetCommand extends As
         long idOfVocableWithTranslationByOffset = Long.valueOf(str_id);
 
         EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted event = new EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted(idOfVocableWithTranslationByOffset);
-        EventBus.getDefault().post(event);
+        EventBus.getDefault().postSticky(event);
 
         queryCompleteCursor.close();
     }

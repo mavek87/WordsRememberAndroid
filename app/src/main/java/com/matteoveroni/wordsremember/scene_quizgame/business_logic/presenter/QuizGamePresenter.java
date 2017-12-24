@@ -92,7 +92,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer
 
     @Subscribe
     public void onEventQuizUpdateWithNewQuestion(EventQuizUpdatedWithNewQuestion event) {
-        view.setPojoUsed(event.getQuiz());
+        Quiz quizUpdated = event.getQuiz();
+        view.setPojoUsed(quizUpdated);
         questionTimer = new QuestionTimer(view, settings.getQuizGameQuestionTimerTotalTime(), settings.getQuizGameQuestionTimerTick());
         startQuestionTimerCount();
     }

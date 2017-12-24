@@ -16,8 +16,6 @@ public interface GameModel {
 
     void stop();
 
-    boolean isStopped();
-
     int getNumberOfQuestions();
 
     void generateQuestion() throws NoMoreQuestionsException, ZeroQuestionsException;
@@ -27,5 +25,4 @@ public interface GameModel {
     void answerCurrentQuestion(String finalAnswer);
 
     int getFinalTotalScore();
-
 }
