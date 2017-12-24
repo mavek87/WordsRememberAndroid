@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel;
 
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
@@ -8,18 +8,15 @@ import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.Z
  * Created by Matteo Veroni
  */
 
-public interface QuizGameModel {
+public interface GameModel {
 
-    public class GameNotEndedYetException extends Exception {
-    }
+    void start();
 
-    void startGame();
+    void pause();
 
-    void pauseGame();
+    void stop();
 
-    void stopGame();
-
-    boolean isGameStopped();
+    boolean isStopped();
 
     int getNumberOfQuestions();
 
@@ -29,6 +26,6 @@ public interface QuizGameModel {
 
     void answerCurrentQuestion(String finalAnswer);
 
-    int getFinalTotalScore() throws GameNotEndedYetException;
+    int getFinalTotalScore();
 
 }

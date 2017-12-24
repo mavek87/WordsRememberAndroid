@@ -1,11 +1,11 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel;
 
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInitialized;
+import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
  * @author Matteo Veroni
  */
 
-public class QuizGameModelFindTranslationForVocableTest {
+public class GameModelFindTranslationForVocableTest {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -39,11 +39,11 @@ public class QuizGameModelFindTranslationForVocableTest {
 
     private static final Word FAKE_VOCABLE_EXTRACTED = new Word(1, "FakeVocable");
 
-    private QuizGameModelFindTranslationForVocable model;
+    private GameModelFindTranslationForVocable model;
 
     @Before
     public void setUp() {
-        model = new QuizGameModelFindTranslationForVocable(settings, dao);
+        model = new GameModelFindTranslationForVocable(settings, dao);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class QuizGameModelFindTranslationForVocableTest {
                 new EventCountDistinctVocablesWithTranslationsCompleted(NUMBER_OF_VOCABLES_WITH_TRANSLATIONS)
         );
 
-        EVENT_BUS.hasSubscriberForEvent(EventQuizGameModelInitialized.class);
+        EVENT_BUS.hasSubscriberForEvent(EventQuizGameModelInit.class);
     }
 
     @Test

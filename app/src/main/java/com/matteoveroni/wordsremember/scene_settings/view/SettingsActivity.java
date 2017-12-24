@@ -17,7 +17,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
@@ -104,20 +104,20 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
     @Override
     @OnClick(R.id.radio_btn_firstGameDifficulty)
     public void easyDifficultySelected() {
-        presenter.onGameDifficultySelected(QuizGameDifficulty.EASY);
+        presenter.onGameDifficultySelected(GameDifficulty.EASY);
         radio_btn_easyGameDifficulty.toggle();
     }
 
     @Override
     @OnClick(R.id.radio_btn_secondGameDifficulty)
     public void mediumDifficultySelected() {
-        presenter.onGameDifficultySelected(QuizGameDifficulty.MEDIUM);
+        presenter.onGameDifficultySelected(GameDifficulty.MEDIUM);
     }
 
     @Override
     @OnClick(R.id.radio_btn_thirdGameDifficulty)
     public void hardDifficultySelected() {
-        presenter.onGameDifficultySelected(QuizGameDifficulty.HARD);
+        presenter.onGameDifficultySelected(GameDifficulty.HARD);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
         String question = getString(R.string.question).toLowerCase();
         String questions = getString(R.string.questions).toLowerCase();
 
-        int numberOfEasyQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.EASY);
+        int numberOfEasyQuestions = Settings.getNumberOfQuestionsForDifficulty(GameDifficulty.EASY);
         String str_btn_EasyGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.easy),
@@ -183,7 +183,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
         );
         radio_btn_easyGameDifficulty.setText(str_btn_EasyGameDifficulty);
 
-        int numberOfMediumQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.MEDIUM);
+        int numberOfMediumQuestions = Settings.getNumberOfQuestionsForDifficulty(GameDifficulty.MEDIUM);
         String str_btn_MediumGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.medium),
@@ -192,7 +192,7 @@ public class SettingsActivity extends BaseActivityPresentedView implements Setti
         );
         radio_btn_mediumGameDifficulty.setText(str_btn_MediumGameDifficulty);
 
-        int numberOfHardQuestions = Settings.getNumberOfQuestionsForDifficulty(QuizGameDifficulty.HARD);
+        int numberOfHardQuestions = Settings.getNumberOfQuestionsForDifficulty(GameDifficulty.HARD);
         String str_btn_HardGameDifficulty = String.format(
                 "%s (%s %s)",
                 getString(R.string.hard),

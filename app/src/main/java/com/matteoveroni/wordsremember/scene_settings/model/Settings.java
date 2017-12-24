@@ -7,7 +7,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
@@ -42,7 +42,7 @@ public class Settings {
     public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
     public static final String ONLINE_TRANSLATION_SERVICE_KEY = "online_translation_service_key";
 
-    public static final QuizGameDifficulty DEFAULT_DIFFICULTY = QuizGameDifficulty.EASY;
+    public static final GameDifficulty DEFAULT_DIFFICULTY = GameDifficulty.EASY;
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
     public static final long DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = 10000;
     public static final long DEFAULT_QUIZ_GAME_TIMER_TICK = 1000;
@@ -55,7 +55,7 @@ public class Settings {
         this.prefs = prefs;
     }
 
-    public Settings(SharedPreferences prefs, QuizGameDifficulty difficulty) {
+    public Settings(SharedPreferences prefs, GameDifficulty difficulty) {
         this(prefs);
         setDifficulty(difficulty);
     }
@@ -108,12 +108,12 @@ public class Settings {
         prefs.edit().putInt(GAME_NUMBER_OF_QUESTIONS_KEY, DEFAULT_NUMBER_OF_QUESTIONS).apply();
     }
 
-    public QuizGameDifficulty getDifficulty() {
+    public GameDifficulty getDifficulty() {
         String json_difficulty = prefs.getString(GAME_DIFFICULTY_KEY, Json.getInstance().toJson(DEFAULT_DIFFICULTY));
-        return Json.getInstance().fromJson(json_difficulty, QuizGameDifficulty.class);
+        return Json.getInstance().fromJson(json_difficulty, GameDifficulty.class);
     }
 
-    public void setDifficulty(QuizGameDifficulty difficulty) {
+    public void setDifficulty(GameDifficulty difficulty) {
         prefs.edit()
                 .putString(GAME_DIFFICULTY_KEY, Json.getInstance().toJson(difficulty))
                 .putInt(GAME_NUMBER_OF_QUESTIONS_KEY, getNumberOfQuestionsForDifficulty(difficulty))
@@ -136,8 +136,8 @@ public class Settings {
         prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, tick).apply();
     }
 
-    public static int getNumberOfQuestionsForDifficulty(QuizGameDifficulty difficulty) {
-        return difficulty.getId() * QuizGameDifficulty.COMPLEXITY_MULTIPLIER;
+    public static int getNumberOfQuestionsForDifficulty(GameDifficulty difficulty) {
+        return difficulty.getId() * GameDifficulty.COMPLEXITY_MULTIPLIER;
     }
 
     public void saveLastGameDate() {

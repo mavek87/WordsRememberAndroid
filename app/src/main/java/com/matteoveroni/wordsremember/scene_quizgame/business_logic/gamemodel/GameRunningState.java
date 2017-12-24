@@ -1,10 +1,10 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel;
 
 /**
  * @author Matteo Veroni
  */
 
-public class QuizGameRunningState {
+public class GameRunningState {
 
     private boolean isStarted = false;
     private boolean isStopped = false;

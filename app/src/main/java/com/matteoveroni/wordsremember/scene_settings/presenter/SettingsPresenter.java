@@ -6,7 +6,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuizGameDifficulty;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsView;
 
@@ -71,7 +71,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         }
     }
 
-    public void onGameDifficultySelected(QuizGameDifficulty difficulty) {
+    public void onGameDifficultySelected(GameDifficulty difficulty) {
         settings.setDifficulty(difficulty);
 
         String difficultyTranslationKey = "";

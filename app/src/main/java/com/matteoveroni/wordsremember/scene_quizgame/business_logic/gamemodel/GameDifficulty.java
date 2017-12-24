@@ -1,10 +1,10 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel;
 
 /**
  * @author Matteo Veroni
  */
 
-public enum QuizGameDifficulty {
+public enum GameDifficulty {
 
     EASY(1), MEDIUM(2), HARD(3);
 
@@ -12,7 +12,7 @@ public enum QuizGameDifficulty {
 
     private int id;
 
-    QuizGameDifficulty(int numberOfQuestions) {
+    GameDifficulty(int numberOfQuestions) {
         this.id = numberOfQuestions;
     }
 
