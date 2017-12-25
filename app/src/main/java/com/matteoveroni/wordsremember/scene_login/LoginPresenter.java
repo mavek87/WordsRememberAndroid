@@ -9,6 +9,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
@@ -19,27 +20,16 @@ import com.matteoveroni.wordsremember.users.User;
  * @author Matteo Veroni
  */
 
-public class LoginPresenter implements Presenter, GoogleApiClient.OnConnectionFailedListener {
+public class LoginPresenter extends BasePresenter<LoginView> implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = TagGenerator.tag(LoginPresenter.class);
 
     static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
 
     private final Settings settings;
-    private LoginView view;
 
     public LoginPresenter(Settings settings) {
         this.settings = settings;
-    }
-
-    @Override
-    public void attachView(Object view) {
-        this.view = (LoginView) view;
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
     }
 
     public void onGoogleSignInRequest() {

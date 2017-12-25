@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
 import com.matteoveroni.wordsremember.interfaces.view.View;
@@ -22,12 +23,10 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class EditVocablePresenter implements Presenter, BaseActivityPresentedView.ErrorDialogListener {
+public class EditVocablePresenter extends BasePresenter<EditVocableView> implements BaseActivityPresentedView.ErrorDialogListener {
 
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private final DictionaryDAO dao;
     private final DictionaryModel model;
-    private EditVocableView view;
 
     protected Word editedVocableInView = null;
     protected static final int ADD_TRANSLATION_REQUEST_CODE = 0;
@@ -38,14 +37,13 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
     }
 
     @Override
-    public void attachView(Object view) {
-        this.view = (EditVocableView) view;
+    public void attachView(EditVocableView view) {
+        super.attachView(view);
 
         Word lastVocableSelected = model.getVocableSelected();
         Word lastTranslationSelected = model.getTranslationSelected();
 
         this.view.setPojoUsed(lastVocableSelected);
-        EVENT_BUS.register(this);
 
         // When a translation for a vocable is selected, attach view is called again so
         // here I save the translation for the vocable and clear the dictionary model
@@ -53,12 +51,6 @@ public class EditVocablePresenter implements Presenter, BaseActivityPresentedVie
             dao.asyncSaveVocableTranslation(new VocableTranslation(lastVocableSelected, lastTranslationSelected));
             model.setTranslationSelected(null);
         }
-    }
-
-    @Override
-    public void detachView() {
-        EVENT_BUS.unregister(this);
-        view = null;
     }
 
     public void onAddTranslationRequest() {

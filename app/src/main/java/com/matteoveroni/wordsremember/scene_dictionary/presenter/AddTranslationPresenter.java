@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
@@ -19,15 +20,13 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class AddTranslationPresenter implements Presenter {
+public class AddTranslationPresenter extends BasePresenter<AddTranslationView> {
 
     public static final String TAG = TagGenerator.tag(AddTranslationPresenter.class);
     protected static final int EDIT_TRANSLATION_REQUEST_CODE = 0;
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final DictionaryModel model;
-    private AddTranslationView view;
 
     public AddTranslationPresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -35,16 +34,9 @@ public class AddTranslationPresenter implements Presenter {
     }
 
     @Override
-    public void attachView(Object view) {
-        this.view = (AddTranslationView) view;
+    public void attachView(AddTranslationView view) {
+        super.attachView(view);
         this.view.setPojoUsed(model.getVocableSelected());
-        EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void detachView() {
-        EVENT_BUS.unregister(this);
-        view = null;
     }
 
     @Subscribe

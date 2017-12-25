@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
@@ -12,14 +13,12 @@ import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileE
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorPresenter implements Presenter {
+public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorView> {
     private boolean isPresenterCreatedForTheFirstTime;
 
     private final UserProfileModel model;
     private final UserProfilesDAO dao;
     private final Settings settings;
-
-    private UserProfileEditorView view;
 
     public UserProfileEditorPresenter(UserProfileModel model, UserProfilesDAO dao, Settings settings) {
         this.model = model;
@@ -29,17 +28,12 @@ public class UserProfileEditorPresenter implements Presenter {
     }
 
     @Override
-    public void attachView(Object view) {
-        this.view = (UserProfileEditorView) view;
+    public void attachView(UserProfileEditorView view) {
+        super.attachView(view);
         if (isPresenterCreatedForTheFirstTime) {
             this.view.setPojoUsed(model.getUserProfile());
             isPresenterCreatedForTheFirstTime = false;
         }
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
     }
 
     public void onSaveProfileAction() {

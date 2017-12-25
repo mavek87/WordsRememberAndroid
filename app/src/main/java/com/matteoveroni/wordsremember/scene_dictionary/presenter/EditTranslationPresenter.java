@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
@@ -17,13 +18,10 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class EditTranslationPresenter implements Presenter {
-
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
+public class EditTranslationPresenter extends BasePresenter<EditTranslationView> {
 
     private final DictionaryModel model;
     private final DictionaryDAO dao;
-    private EditTranslationView view;
 
     protected Word editedTranslationInView = null;
 
@@ -33,19 +31,10 @@ public class EditTranslationPresenter implements Presenter {
     }
 
     @Override
-    public void attachView(Object view) {
-        this.view = (EditTranslationView) view;
-
+    public void attachView(EditTranslationView view) {
+        super.attachView(view);
         final Word newEmptyTranslation = new Word("");
         this.view.setPojoUsed(new VocableTranslation(model.getVocableSelected(), newEmptyTranslation));
-
-        EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void detachView() {
-        EVENT_BUS.unregister(this);
-        view = null;
     }
 
     public void onSaveTranslationRequest() {

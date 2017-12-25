@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionTimer;
@@ -20,7 +20,6 @@ import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameView;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 
 import org.apache.commons.lang3.StringUtils;
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Set;
@@ -29,15 +28,12 @@ import java.util.Set;
  * @author Matteo Veroni
  */
 
-public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer.TimerListener {
+public class QuizGamePresenter extends BasePresenter<QuizGameView> implements QuestionTimer.TimerListener {
 
     public static final String TAG = TagGenerator.tag(QuizGamePresenter.class);
 
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
-
     private final Settings settings;
     private final GameModel gameModel;
-    private QuizGameView view;
     private QuestionTimer questionTimer;
     private boolean isDialogShownInView = false;
 
@@ -48,8 +44,7 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer
 
     @Override
     public void attachView(QuizGameView quizGameView) {
-        this.view = quizGameView;
-        EVENT_BUS.register(this);
+        super.attachView(quizGameView);
 
         gameModel.start();
 
@@ -61,9 +56,8 @@ public class QuizGamePresenter implements Presenter<QuizGameView>, QuestionTimer
     public void detachView() {
         pauseQuestionTimerCount();
         gameModel.pause();
-        EVENT_BUS.unregister(this);
         settings.saveLastGameDate();
-        view = null;
+        super.detachView();
     }
 
     @Subscribe

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
@@ -12,29 +12,17 @@ import com.matteoveroni.wordsremember.web.WebTranslatorListener;
 import java.util.List;
 
 /**
- *
  * @author Matteo Veroni
- *
- * https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
- * <p>
- * https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.y0b4pwra1
+ *         <p>
+ *         https://medium.com/@czyrux/presenter-surviving-orientation-changes-with-loaders-6da6d86ffbbf#.la55rzpm4
+ *         <p>
+ *         https://medium.com/@trionkidnapper/android-mvp-an-end-to-if-view-null-42bb6262a5d1#.y0b4pwra1
  */
 
-public class MainMenuPresenter implements Presenter, WebTranslatorListener {
+public class MainMenuPresenter extends BasePresenter<MainMenuView> implements WebTranslatorListener {
 
-    private MainMenuView view;
-
-    @Override
-    public void attachView(Object view) {
-        this.view = (MainMenuView) view;
-        // TODO: remove this REST test from production code
-//        WebTranslator.getInstance().translate(new Word("atto"), new Locale("it"), new Locale("en"), this);
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
-    }
+    // TODO: remove this REST test from production code
+    //       WebTranslator.getInstance().translate(new Word("atto"), new Locale("it"), new Locale("en"), this);
 
     void onButtonManageDictionaryClicked() {
         view.switchToView(View.Name.MANAGE_VOCABLES);

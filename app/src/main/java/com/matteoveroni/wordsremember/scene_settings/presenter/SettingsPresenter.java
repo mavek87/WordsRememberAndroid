@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
@@ -16,12 +17,11 @@ import org.joda.time.DateTime;
  * @author Matteo Veroni
  */
 
-public class SettingsPresenter implements Presenter<SettingsView> {
+public class SettingsPresenter extends BasePresenter<SettingsView> {
 
     public static final String TAG = TagGenerator.tag(SettingsPresenter.class);
 
     private final Settings settings;
-    private SettingsView view;
 
     public SettingsPresenter(Settings settings) {
         this.settings = settings;
@@ -29,8 +29,7 @@ public class SettingsPresenter implements Presenter<SettingsView> {
 
     @Override
     public void attachView(SettingsView view) {
-        this.view = view;
-        Log.d(TAG, "View Attached");
+        super.attachView(view);
         showLastGameDate();
         showGameDifficultyInView();
         if (settings.isOnlineTranslationServiceEnabled()) {
@@ -38,12 +37,6 @@ public class SettingsPresenter implements Presenter<SettingsView> {
         } else {
             view.checkOnlineTranslationsCheckPreference(false);
         }
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
-        Log.d(TAG, "View Destroyed");
     }
 
     private void showLastGameDate() {

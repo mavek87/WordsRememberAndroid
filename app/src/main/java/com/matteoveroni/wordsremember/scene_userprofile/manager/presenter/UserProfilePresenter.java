@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_userprofile.manager.presenter;
 
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
@@ -12,11 +13,10 @@ import com.matteoveroni.wordsremember.scene_userprofile.manager.view.UserProfile
  * @author Matteo Veroni
  */
 
-public class UserProfilePresenter implements Presenter {
+public class UserProfilePresenter extends BasePresenter<UserProfileView> {
 
     protected static final int USER_PROFILE_EDITOR_REQUEST_CODE = 0;
 
-    private UserProfileView view;
     private final Settings settings;
     private final UserProfileModel model;
     private final UserProfilesDAO dao;
@@ -28,20 +28,10 @@ public class UserProfilePresenter implements Presenter {
         this.dao = dao;
     }
 
-    @Override
-    public void attachView(Object view) {
-        this.view = (UserProfileView) view;
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
-    }
-
     public void onUserProfileSelectedAction(UserProfile selectedUserProfile) {
         settings.setUserProfile(selectedUserProfile);
-        view.switchToView(View.Name.MAIN_MENU);
         view.finish();
+        view.switchToView(View.Name.MAIN_MENU);
     }
 
     public void onAddProfileAction() {

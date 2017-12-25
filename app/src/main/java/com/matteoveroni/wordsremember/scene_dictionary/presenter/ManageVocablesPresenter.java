@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
@@ -22,14 +23,12 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesPresenter implements Presenter {
+public class ManageVocablesPresenter extends BasePresenter<ManageVocablesView> {
 
     public static final String TAG = TagGenerator.tag(ManageVocablesPresenter.class);
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
 
     private final DictionaryDAO dao;
     private final DictionaryModel dictionaryModel;
-    private ManageVocablesView view;
 
     public ManageVocablesPresenter(DictionaryModel dictionaryModel, DictionaryDAO dao) {
         this.dictionaryModel = dictionaryModel;
@@ -37,16 +36,9 @@ public class ManageVocablesPresenter implements Presenter {
     }
 
     @Override
-    public void attachView(Object view) {
-        this.view = (ManageVocablesView) view;
+    public void attachView(ManageVocablesView view) {
+        super.attachView(view);
         dictionaryModel.reset();
-        EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void detachView() {
-        EVENT_BUS.unregister(this);
-        view = null;
     }
 
     public void onCreateVocableRequest() {
