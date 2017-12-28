@@ -3,8 +3,10 @@ package com.matteoveroni.wordsremember.interfaces.presenter;
 import android.util.Log;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
+import com.matteoveroni.wordsremember.utils.BusAttacher;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.EventBusException;
 
 /**
  * @author Matteo Veroni
@@ -17,32 +19,17 @@ public abstract class BasePresenter<V> implements Presenter<V> {
     protected V view;
     protected static final EventBus EVENT_BUS = EventBus.getDefault();
 
+    private final BusAttacher busAttacher = new BusAttacher(EVENT_BUS);
+
     @Override
     public void attachView(V view) {
         this.view = view;
-        registerToEventBus();
+        busAttacher.registerToEventBus(this);
     }
 
     @Override
     public void detachView() {
-        unregisterToEventBus();
+        busAttacher.unregisterToEventBus(this);
         this.view = null;
-    }
-
-    private void registerToEventBus() {
-        if (!EVENT_BUS.isRegistered(this)) {
-            try {
-                EVENT_BUS.register(this);
-            } catch (Exception ex) {
-                String warnMessage = ex.getMessage() + ". Class not attached with the event bus.";
-                Log.w(TAG, warnMessage);
-            }
-        }
-    }
-
-    private void unregisterToEventBus() {
-        if (EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.unregister(this);
-        }
     }
 }

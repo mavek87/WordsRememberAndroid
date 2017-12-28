@@ -12,7 +12,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class EditVocableActivity extends BaseActivityPresentedView implements EditVocableView {
+public class EditVocableActivity extends BasePresentedActivityView implements EditVocableView {
 
     public static final String TAG = TagGenerator.tag(EditVocableActivity.class);
 

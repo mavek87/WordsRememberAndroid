@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
@@ -25,9 +25,8 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class UserProfileActivity extends BaseActivityPresentedView implements UserProfileView {
+public class UserProfileActivity extends BasePresentedActivityView implements UserProfileView {
 
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
     private UserProfilePresenter presenter;
 
     @Override
@@ -38,18 +37,6 @@ public class UserProfileActivity extends BaseActivityPresentedView implements Us
     @Override
     protected void onPresenterCreatedOrRestored(Presenter presenter) {
         this.presenter = (UserProfilePresenter) presenter;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EVENT_BUS.register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EVENT_BUS.unregister(this);
     }
 
     @Override

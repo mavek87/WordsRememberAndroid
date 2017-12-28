@@ -20,9 +20,9 @@ import com.matteoveroni.wordsremember.localization.LocaleTranslator;
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterFragment.java
  */
 
-public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> extends Fragment implements View {
+public abstract class BasePresentedFragmentView<P extends Presenter<V>, V> extends Fragment implements View {
 
-    public static final String TAG = TagGenerator.tag(BaseFragmentPresentedView.class);
+    public static final String TAG = TagGenerator.tag(BasePresentedFragmentView.class);
 
     private static final int PRESENTER_LOADER_ID = 1;
     private P presenter;
@@ -54,14 +54,14 @@ public abstract class BaseFragmentPresentedView<P extends Presenter<V>, V> exten
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.i(TAG, "onLoadFinished");
-                BaseFragmentPresentedView.this.presenter = presenter;
+                BasePresentedFragmentView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.i(TAG, "onLoaderReset");
-                BaseFragmentPresentedView.this.presenter = null;
+                BasePresentedFragmentView.this.presenter = null;
             }
         });
     }

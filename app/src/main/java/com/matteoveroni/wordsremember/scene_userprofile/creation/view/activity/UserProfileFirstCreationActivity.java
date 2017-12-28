@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class UserProfileFirstCreation extends BaseActivityPresentedView implements UserProfileEditorView {
+public class UserProfileFirstCreationActivity extends BasePresentedActivityView implements UserProfileEditorView {
 
     private UserProfileEditorPresenter presenter;
     private UserProfileEditorFragment userProfileEditorFragment;

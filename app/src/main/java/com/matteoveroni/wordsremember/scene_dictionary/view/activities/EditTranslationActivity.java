@@ -9,7 +9,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditTranslationPresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditTranslationPresenterFactory;
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class EditTranslationActivity extends BaseActivityPresentedView implements EditTranslationView {
+public class EditTranslationActivity extends BasePresentedActivityView implements EditTranslationView {
 
     public static final String TAG = TagGenerator.tag(EditTranslationActivity.class);
 

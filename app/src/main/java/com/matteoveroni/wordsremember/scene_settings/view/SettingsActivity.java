@@ -15,7 +15,7 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
@@ -31,7 +31,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class SettingsActivity extends BaseActivityPresentedView implements SettingsView {
+public class SettingsActivity extends BasePresentedActivityView implements SettingsView {
 
     @BindView(R.id.lbl_username)
     TextView lbl_username;

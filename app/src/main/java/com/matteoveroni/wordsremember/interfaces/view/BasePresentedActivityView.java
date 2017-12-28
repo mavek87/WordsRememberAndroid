@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -24,15 +23,20 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
+import com.matteoveroni.wordsremember.utils.BusAttacher;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
 
-public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> extends AppCompatActivity implements View {
+public abstract class BasePresentedActivityView<V, P extends Presenter<V>> extends AppCompatActivity implements View {
 
-    private static final String TAG = TagGenerator.tag(BaseActivityPresentedView.class);
+    private static final String TAG = TagGenerator.tag(BasePresentedActivityView.class);
     private static final int PRESENTER_LOADER_ID = 1;
+    private static final EventBus EVENT_BUS = EventBus.getDefault();
+    private final BusAttacher busAttacher = new BusAttacher(EVENT_BUS);
     private P presenter;
     private LocaleTranslator translator;
 
@@ -55,20 +59,20 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
                 Log.d(TAG, "onCreateLoader");
-                return new PresenterLoader<>(BaseActivityPresentedView.this, getPresenterFactory());
+                return new PresenterLoader<>(BasePresentedActivityView.this, getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
                 Log.d(TAG, "onLoadFinished");
-                BaseActivityPresentedView.this.presenter = presenter;
+                BasePresentedActivityView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
                 Log.d(TAG, "onLoaderReset");
-                BaseActivityPresentedView.this.presenter = null;
+                BasePresentedActivityView.this.presenter = null;
             }
         });
     }
@@ -77,10 +81,12 @@ public abstract class BaseActivityPresentedView<V, P extends Presenter<V>> exten
     protected void onStart() {
         super.onStart();
         presenter.attachView(getPresenterView());
+        busAttacher.registerToEventBus(this);
     }
 
     @Override
     protected void onStop() {
+        busAttacher.unregisterToEventBus(this);
         presenter.detachView();
         super.onStop();
     }

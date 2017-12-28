@@ -9,7 +9,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.AddTranslationPresenterFactory;
@@ -23,7 +23,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class AddTranslationActivity extends BaseActivityPresentedView implements AddTranslationView {
+public class AddTranslationActivity extends BasePresentedActivityView implements AddTranslationView {
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 

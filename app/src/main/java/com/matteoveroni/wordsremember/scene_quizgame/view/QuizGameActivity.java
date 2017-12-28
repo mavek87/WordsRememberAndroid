@@ -17,7 +17,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
@@ -38,7 +38,7 @@ import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.Questio
  * @author Matteo Veroni
  */
 
-public class QuizGameActivity extends BaseActivityPresentedView implements
+public class QuizGameActivity extends BasePresentedActivityView implements
         QuizGameView, QuestionTimer.TimerPrinter, QuizResultDialogListener,
         GameResultDialogListener, ErrorDialogListener {
 

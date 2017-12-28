@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.scene_login.LoginActivity;
 import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuActivity;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity.UserProfileFirstCreation;
+import com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity.UserProfileFirstCreationActivity;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity.UserProfileEditorActivity;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity.UserProfileActivity;
 
@@ -29,7 +29,7 @@ public interface View {
 
     enum Name {
         LOGIN(LoginActivity.class),
-        USER_PROFILE_FIRST_CREATION(UserProfileFirstCreation.class),
+        USER_PROFILE_FIRST_CREATION(UserProfileFirstCreationActivity.class),
         USER_PROFILES_MANAGEMENT(UserProfileActivity.class),
         USER_PROFILE_EDITOR(UserProfileEditorActivity.class),
         MAIN_MENU(MainMenuActivity.class),

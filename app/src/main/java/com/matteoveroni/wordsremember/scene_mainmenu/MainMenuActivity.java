@@ -8,7 +8,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +20,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class MainMenuActivity extends BaseActivityPresentedView implements MainMenuView {
+public class MainMenuActivity extends BasePresentedActivityView implements MainMenuView {
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 

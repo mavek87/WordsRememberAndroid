@@ -14,7 +14,7 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,7 +28,7 @@ import butterknife.OnClick;
  * https://stackoverflow.com/questions/36361956/how-to-add-multiple-system-sha-keys-in-google-single-sign-on-gson
  */
 
-public class LoginActivity extends BaseActivityPresentedView implements LoginView {
+public class LoginActivity extends BasePresentedActivityView implements LoginView {
 
     public static final String TAG = TagGenerator.tag(LoginActivity.class);
 

@@ -50,7 +50,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".scene_userprofile.creation.view.activity.UserProfileFirstCreation"
+            android:name=".scene_userprofile.creation.view.activity.UserProfileFirstCreationActivity"
             android:label="@string/user_profile_editor"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BaseActivityPresentedView;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivity extends BaseActivityPresentedView implements ManageVocablesView {
+public class ManageVocablesActivity extends BasePresentedActivityView implements ManageVocablesView {
 
     private ManageVocablesPresenter presenter;
 
