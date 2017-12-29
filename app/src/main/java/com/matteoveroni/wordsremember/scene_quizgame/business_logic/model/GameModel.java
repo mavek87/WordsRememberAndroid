@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
 
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;

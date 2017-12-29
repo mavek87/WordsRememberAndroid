@@ -17,7 +17,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;

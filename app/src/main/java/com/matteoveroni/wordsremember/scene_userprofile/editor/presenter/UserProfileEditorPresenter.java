@@ -45,6 +45,7 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
         }
 
         try {
+            //TODO: handle the case of dictionary name already used in the db (correct error must be shown in the view!)
             storeViewUserProfileInTheModel(viewUserProfile);
 
             if (settings.isAppStartedForTheFirstTime()) {

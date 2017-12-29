@@ -8,7 +8,12 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * @author Matteo Veroni
@@ -59,5 +64,40 @@ public class LocaleTranslator {
         } else {
             return context.getResources().getConfiguration().locale;
         }
+    }
+
+    public static Locale[] getAvailableLocales() {
+        return Locale.getAvailableLocales();
+    }
+
+    public static Map<String, Locale> getAvailableLocalesStringified() {
+        SortedMap<String, Locale> map = new TreeMap<>();
+        for (Locale locale : getAvailableLocales()) {
+            map.put(stringifyLocale(locale), locale);
+        }
+        return map;
+    }
+
+    public static String stringifyLocale(Locale locale) {
+        String localeToDisplay = locale.getDisplayLanguage(locale);
+        String language = locale.getLanguage();
+        String country = locale.getCountry();
+
+        String languageAndCountry;
+        if (language == null || language.trim().isEmpty()) {
+            if (country == null || country.trim().isEmpty()) {
+                languageAndCountry = "";
+            } else {
+                languageAndCountry = country;
+            }
+        } else {
+            if (country == null || country.trim().isEmpty()) {
+                languageAndCountry = language;
+            } else {
+                languageAndCountry = language + "_" + country;
+            }
+        }
+
+        return "[" + languageAndCountry + "] - " + localeToDisplay + " - " + locale.getDisplayName();
     }
 }

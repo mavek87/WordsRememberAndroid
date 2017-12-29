@@ -7,7 +7,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.gamemodel.GameDifficulty;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 

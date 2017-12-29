@@ -20,7 +20,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.7.2
+ * @version 0.7.3
  **/
 
 public class WordsRemember extends Application {
@@ -28,7 +28,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.7.2";
+    public static final String VERSION = "0.7.3";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
@@ -60,6 +60,10 @@ public class WordsRemember extends Application {
             }
         }
 
+//        for (Locale locale : Locale.getAvailableLocales()) {
+//            Log.d("LOCALES", locale.getLanguage() + "_" + locale.getCountry() + " [" + locale.getDisplayName() + "]");
+//        }
+
 //        if (POPULATE_DB_USING_FAKE_DATA) {
 //            // (mode "true" broke some test)
 //            int NUMBER_OF_FAKE_VOCABLES_TO_CREATE = 1;
@@ -80,7 +84,6 @@ public class WordsRemember extends Application {
         return APP_COMPONENT;
     }
 
-    @Deprecated
     public static LocaleTranslator getLocaleTranslator(Context context) {
         return new LocaleTranslator(context);
     }
