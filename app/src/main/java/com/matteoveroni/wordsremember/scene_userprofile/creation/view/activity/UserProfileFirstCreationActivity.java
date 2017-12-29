@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
@@ -54,6 +55,7 @@ public class UserProfileFirstCreationActivity extends BasePresentedActivityView 
         ButterKnife.bind(this);
         userProfileEditorFragment = (UserProfileEditorFragment) getSupportFragmentManager().findFragmentById(R.id.user_profile_editor_fragment);
         setupAndShowToolbar(getString(R.string.user_profile_editor));
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
