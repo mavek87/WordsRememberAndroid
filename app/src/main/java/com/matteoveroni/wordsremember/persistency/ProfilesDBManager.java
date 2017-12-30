@@ -83,6 +83,10 @@ public class ProfilesDBManager {
         return dbHelpersMap.get(userProfileInUse);
     }
 
+    public UserProfile getCurrentUserProfile() {
+        return userProfileInUse;
+    }
+
     public String getCurrentProfileDBName() {
         return dbHelpersMap.get(userProfileInUse).getDatabaseName();
     }

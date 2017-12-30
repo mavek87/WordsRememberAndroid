@@ -17,11 +17,15 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
+import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenter;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +36,9 @@ import butterknife.OnClick;
  */
 
 public class SettingsActivity extends BasePresentedActivityView implements SettingsView {
+
+    @BindView(R.id.lbl_dictionary)
+    TextView lbl_dictionary;
 
     @BindView(R.id.lbl_username)
     TextView lbl_username;
@@ -80,6 +87,7 @@ public class SettingsActivity extends BasePresentedActivityView implements Setti
 
         setupAndShowToolbar(getString(R.string.settings));
 
+        printDictionary();
         printUsername();
         printGameVersion();
         printDeviceLocale();
@@ -138,6 +146,11 @@ public class SettingsActivity extends BasePresentedActivityView implements Setti
         lbl_last_game_date.setText(localize(lastGameDate));
     }
 
+    private void printDictionary() {
+        UserProfile userProfile = ProfilesDBManager.getInstance(getApplicationContext()).getCurrentUserProfile();
+        lbl_dictionary.setText("Dictionary: " + userProfile.getName());
+    }
+
     private void printUsername() {
         SharedPreferences prefs = getSharedPreferences(getString(R.string.preference_file_key), MODE_PRIVATE);
 
@@ -159,15 +172,9 @@ public class SettingsActivity extends BasePresentedActivityView implements Setti
     }
 
     private void printDeviceLocale() {
-        String text_lbl_deviceLocale = lbl_deviceLocale.getText().toString();
-        if (!text_lbl_deviceLocale.trim().isEmpty()) {
-            String str_deviceLocale = Str.concat(
-                    lbl_deviceLocale.getText().toString(),
-                    ": ",
-                    LocaleTranslator.getLocale(getApplicationContext()).toString()
-            );
-            lbl_deviceLocale.setText(str_deviceLocale);
-        }
+        Locale locale = LocaleTranslator.getLocale(getApplicationContext());
+        String str_localeToDisplay = getString(R.string.deviceLocale) + ": " + LocaleTranslator.stringifyLocale(locale);
+        lbl_deviceLocale.setText(str_localeToDisplay);
     }
 
     private void setLabelsForRadioButtons() {
