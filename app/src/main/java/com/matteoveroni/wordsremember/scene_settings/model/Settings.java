@@ -25,10 +25,8 @@ public class Settings {
 
     public static final String TAG = TagGenerator.tag(Settings.class);
 
-    @Inject
-    ProfilesDBManager dbManager;
-
     private final SharedPreferences prefs;
+    private final ProfilesDBManager dbManager;
 
     public static final String IS_STARTED_FOR_THE_FIRST_TIME_KEY = "is_started_for_the_first_time_key";
     public static boolean isAppStartedForTheFirstTime = true;
@@ -50,13 +48,14 @@ public class Settings {
     public class NoRegisteredUserException extends Exception {
     }
 
-    public Settings(SharedPreferences prefs) {
+    public Settings(SharedPreferences prefs, ProfilesDBManager dbManager) {
         WordsRemember.getAppComponent().inject(this);
         this.prefs = prefs;
+        this.dbManager = dbManager;
     }
 
-    public Settings(SharedPreferences prefs, GameDifficulty difficulty) {
-        this(prefs);
+    public Settings(SharedPreferences prefs, ProfilesDBManager dbManager, GameDifficulty difficulty) {
+        this(prefs, dbManager);
         setDifficulty(difficulty);
     }
 

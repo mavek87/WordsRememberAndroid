@@ -2,6 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.SharedPreferences;
 
+import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
@@ -22,13 +23,14 @@ public class SettingsModule {
 
     @Provides
     @Singleton
-    public Settings provideSettings(SharedPreferences preferences) {
+    public Settings provideSettings(SharedPreferences preferences, ProfilesDBManager dbManager) {
         Settings settings;
         if (preferences.contains(Settings.GAME_DIFFICULTY_KEY)) {
-            settings = new Settings(preferences);
+            settings = new Settings(preferences, dbManager);
         } else {
             settings = new Settings(
                     preferences,
+                    dbManager,
                     Settings.DEFAULT_DIFFICULTY
             );
         }
