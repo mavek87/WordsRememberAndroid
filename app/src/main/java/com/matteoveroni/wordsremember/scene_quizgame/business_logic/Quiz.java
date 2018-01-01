@@ -1,6 +1,8 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,9 +11,11 @@ import java.util.Map;
 
 public class Quiz {
 
+    private final Map<Integer, Question> questions = new HashMap<>();
+    private final List<QuestionCompleted> correctQuestions = new ArrayList<>();
+    private final List<QuestionCompleted> wrongQuestions = new ArrayList<>();
     private final QuizQuestionsChecker quizQuestionsChecker = new QuizQuestionsChecker();
 
-    private Map<Integer, Question> questions = new HashMap<>();
     private int questionsIndex;
     private int totalNumberOfQuestions;
 
@@ -45,27 +49,44 @@ public class Quiz {
         questions.put(questionsIndex, question);
     }
 
-    public void addCorrectAnswerForCurrentQuestion(String answer) {
+    public void addTrueAnswerForCurrentQuestion(String answer) {
         if (!answer.trim().isEmpty()) {
-            questions.get(questionsIndex).addCorrectAnswer(answer);
+            questions.get(questionsIndex).addTrueAnswer(answer);
         }
     }
 
-    public void answerCurrentQuestion(String givenAnswer) {
+    public QuestionCompleted answerCurrentQuestion(String givenAnswer) {
+        return answerQuestion(getCurrentQuestion(), givenAnswer);
+    }
+
+    public QuestionCompleted forceQuestionAnswerResult(QuestionCompleted.AnswerResult result) {
+        return answerQuestion(getCurrentQuestion(), "", result);
+    }
+
+    private QuestionCompleted answerQuestion(Question question, String givenAnswer) {
+        final QuestionCompleted.AnswerResult result = quizQuestionsChecker.checkAnswerResultForQuestion(givenAnswer, question);
+        return answerQuestion(question, givenAnswer, result);
+    }
+
+    private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result) {
         Question currentQuestion = getCurrentQuestion();
-        currentQuestion.answer(givenAnswer);
-        quizQuestionsChecker.checkAnswerResultForQuestion(givenAnswer, currentQuestion);
+        QuestionCompleted questionCompleted = new QuestionCompleted(currentQuestion, givenAnswer, result);
+        switch (result) {
+            case CORRECT:
+                correctQuestions.add(questionCompleted);
+                break;
+            case WRONG:
+                wrongQuestions.add(questionCompleted);
+                break;
+        }
+        return questionCompleted;
     }
 
-    public void forceQuestionAnswerResult(QuestionAnswerResult result) {
-        quizQuestionsChecker.forceAnswerResultForQuestion(result, getCurrentQuestion());
+    public List<QuestionCompleted> getCorrectQuestions() {
+        return correctQuestions;
     }
 
-    public int getNumberOfCorrectQuestions() {
-        return quizQuestionsChecker.getNumberOfCorrectQuestions();
-    }
-
-    public int getNumberOfWrongQuestions() {
-        return quizQuestionsChecker.getNumberOfWrongQuestions();
+    public List<QuestionCompleted> getWrongQuestions() {
+        return wrongQuestions;
     }
 }

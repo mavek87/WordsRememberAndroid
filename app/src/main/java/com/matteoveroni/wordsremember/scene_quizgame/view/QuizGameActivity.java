@@ -18,8 +18,8 @@ import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionTimer;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.GameQuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenter;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
@@ -39,7 +39,7 @@ import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.Questio
  */
 
 public class QuizGameActivity extends BasePresentedActivityView implements
-        QuizGameView, QuestionTimer.TimerPrinter, QuizResultDialogListener,
+        QuizGameView, GameQuestionTimer.TimerPrinter, QuizResultDialogListener,
         GameResultDialogListener, ErrorDialogListener {
 
     public static final String TAG = TagGenerator.tag(QuizGameActivity.class);
@@ -134,7 +134,7 @@ public class QuizGameActivity extends BasePresentedActivityView implements
     }
 
     @Override
-    public void showQuestionResultDialog(QuestionAnswerResult questionAnswerResult, FormattedString message) {
+    public void showQuestionResultDialog(QuestionCompleted.AnswerResult questionAnswerResult, FormattedString message) {
         progressBar.setProgress(quiz.getQuestionIndex() + 1);
 
         hideKeyboard();

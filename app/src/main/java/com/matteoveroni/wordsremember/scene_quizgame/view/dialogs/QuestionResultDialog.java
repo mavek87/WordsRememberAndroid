@@ -10,7 +10,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionAnswerResult;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
 
 /**
  * @author Matteo Veroni
@@ -20,7 +20,7 @@ public class QuestionResultDialog extends DialogFragment {
 
     public static final String TAG = QuestionResultDialog.class.getSimpleName();
 
-    private QuestionAnswerResult result;
+    private QuestionCompleted.AnswerResult result;
     private static final String DIALOG_RESULT_KEY = "dialog_result";
 
     private String message;
@@ -30,7 +30,7 @@ public class QuestionResultDialog extends DialogFragment {
         void confirmQuizResultDialogAction();
     }
 
-    public static QuestionResultDialog newInstance(QuestionAnswerResult result, String message) {
+    public static QuestionResultDialog newInstance(QuestionCompleted.AnswerResult result, String message) {
         QuestionResultDialog dialogFragment = new QuestionResultDialog();
 
         Bundle args = new Bundle();
@@ -46,7 +46,7 @@ public class QuestionResultDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         // TODO: check if setRetainInstanceIsNeeded
         setRetainInstance(true);
-        result = (QuestionAnswerResult) getArguments().getSerializable(DIALOG_RESULT_KEY);
+        result = (QuestionCompleted.AnswerResult) getArguments().getSerializable(DIALOG_RESULT_KEY);
         message = getArguments().getString(DIALOG_MESSAGE_KEY);
     }
 

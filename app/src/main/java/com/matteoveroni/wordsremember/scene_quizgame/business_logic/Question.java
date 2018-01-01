@@ -8,9 +8,7 @@ import java.util.Set;
 
 public class Question {
     private final String questionMsg;
-    private String givenAnswer;
     private Set<String> correctAnswers;
-    private QuestionAnswerResult questionAnswerResult = QuestionAnswerResult.NOT_ANSWERED_YET;
 
     public Question(String questionMsg, Set<String> correctAnswers) {
         this.questionMsg = questionMsg;
@@ -21,31 +19,11 @@ public class Question {
         return questionMsg;
     }
 
-    public Set<String> getCorrectAnswers() {
+    public Set<String> getTrueAnswers() {
         return correctAnswers;
     }
 
-    public void addCorrectAnswer(String answer) {
+    public void addTrueAnswer(String answer) {
         correctAnswers.add(answer);
-    }
-
-    public void setQuestionAnswerResult(QuestionAnswerResult questionAnswerResult) {
-        this.questionAnswerResult = questionAnswerResult;
-    }
-
-    public boolean isQuestionAnswered() {
-        return (questionAnswerResult != QuestionAnswerResult.NOT_ANSWERED_YET);
-    }
-
-    public QuestionAnswerResult getQuestionAnswerResult() {
-        return questionAnswerResult;
-    }
-
-    public String getGivenAnswer() {
-        return givenAnswer;
-    }
-
-    public void answer(String givenAnswer) {
-        this.givenAnswer = givenAnswer;
     }
 }

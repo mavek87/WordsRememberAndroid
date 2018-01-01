@@ -12,6 +12,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Question;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
@@ -162,7 +163,7 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
         Log.i(TagGenerator.tag(GameModelFindTranslationForVocable.class), "Translations found from the web: \n" + Json.getInstance().toJson(translationsFoundFromTheWeb));
 
         for (Word webTranslation : translationsFoundFromTheWeb) {
-            quiz.addCorrectAnswerForCurrentQuestion(webTranslation.getName());
+            quiz.addTrueAnswerForCurrentQuestion(webTranslation.getName());
         }
 
         EVENT_BUS.post(new EventQuizUpdatedWithNewQuestion(quiz));
@@ -182,17 +183,14 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     }
 
     @Override
-    public void answerCurrentQuestion(String answer) {
-        quiz.answerCurrentQuestion(answer);
-        switch (quiz.getCurrentQuestion().getQuestionAnswerResult()) {
+    public QuestionCompleted answerCurrentQuestion(String answer) {
+        QuestionCompleted questionCompleted = quiz.answerCurrentQuestion(answer);
+        switch (questionCompleted.getAnswerResult()) {
             case CORRECT:
                 totalScore++;
                 break;
-            case WRONG:
-                break;
-            case NOT_ANSWERED_YET:
-                break;
         }
+        return questionCompleted;
     }
 
     @Override

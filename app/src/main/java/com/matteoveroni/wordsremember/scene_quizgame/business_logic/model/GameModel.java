@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
 
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
@@ -22,7 +23,7 @@ public interface GameModel {
 
     Quiz getCurrentQuiz();
 
-    void answerCurrentQuestion(String finalAnswer);
+    QuestionCompleted answerCurrentQuestion(String finalAnswer);
 
     int getFinalTotalScore();
 }
