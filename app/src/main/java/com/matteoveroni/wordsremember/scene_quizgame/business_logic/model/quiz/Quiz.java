@@ -1,4 +1,8 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz;
+
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionAnswerChecker;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +18,7 @@ public class Quiz {
     private final Map<Integer, Question> questions = new HashMap<>();
     private final List<QuestionCompleted> correctQuestions = new ArrayList<>();
     private final List<QuestionCompleted> wrongQuestions = new ArrayList<>();
-    private final QuizQuestionsChecker quizQuestionsChecker = new QuizQuestionsChecker();
+    private final QuestionAnswerChecker questionAnswerChecker = new QuestionAnswerChecker();
 
     private int questionsIndex;
     private int totalNumberOfQuestions;
@@ -64,7 +68,7 @@ public class Quiz {
     }
 
     private QuestionCompleted answerQuestion(Question question, String givenAnswer) {
-        final QuestionCompleted.AnswerResult result = quizQuestionsChecker.checkAnswerResultForQuestion(givenAnswer, question);
+        final QuestionCompleted.AnswerResult result = questionAnswerChecker.checkAnswerResultForQuestion(givenAnswer, question);
         return answerQuestion(question, givenAnswer, result);
     }
 

@@ -1,7 +1,7 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game;
 
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 

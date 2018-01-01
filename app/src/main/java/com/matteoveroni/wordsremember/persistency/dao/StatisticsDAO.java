@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.utils.DateAndTimeParser;
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 /**

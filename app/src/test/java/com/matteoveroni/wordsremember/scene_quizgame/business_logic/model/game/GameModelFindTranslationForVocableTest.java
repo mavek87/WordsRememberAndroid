@@ -1,10 +1,11 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game;
 
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;

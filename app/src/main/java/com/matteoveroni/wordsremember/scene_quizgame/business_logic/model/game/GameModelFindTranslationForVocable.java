@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game;
 
 import android.util.Log;
 
@@ -12,9 +12,9 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Question;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.Quiz;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInitException;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWithNewQuestion;

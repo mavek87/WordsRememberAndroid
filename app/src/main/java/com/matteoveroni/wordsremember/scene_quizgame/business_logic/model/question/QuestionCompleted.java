@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_quizgame.business_logic;
+package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question;
 
 /**
  * @author Matteo Veroni

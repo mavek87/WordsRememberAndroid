@@ -10,7 +10,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 
 import com.matteoveroni.wordsremember.R;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
 
 /**
  * @author Matteo Veroni
