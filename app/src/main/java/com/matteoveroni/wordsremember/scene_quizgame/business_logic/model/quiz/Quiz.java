@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz;
 
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionAnswerChecker;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
@@ -19,17 +20,19 @@ public class Quiz {
     private final List<QuestionCompleted> correctQuestions = new ArrayList<>();
     private final List<QuestionCompleted> wrongQuestions = new ArrayList<>();
     private final QuestionAnswerChecker questionAnswerChecker = new QuestionAnswerChecker();
+    private final GameDifficulty gameDifficulty;
 
     private int questionsIndex;
     private int totalNumberOfQuestions;
 
-    public Quiz() {
+    public Quiz(GameDifficulty gameDifficulty) {
         this.questionsIndex = -1;
+        this.gameDifficulty = gameDifficulty;
+        this.totalNumberOfQuestions = gameDifficulty.getId() * gameDifficulty.COMPLEXITY_MULTIPLIER;
     }
 
-    public Quiz(int totalNumberOfQuestions) {
-        this();
-        this.totalNumberOfQuestions = totalNumberOfQuestions;
+    public GameDifficulty getGameDifficulty() {
+        return gameDifficulty;
     }
 
     public int getQuestionIndex() {

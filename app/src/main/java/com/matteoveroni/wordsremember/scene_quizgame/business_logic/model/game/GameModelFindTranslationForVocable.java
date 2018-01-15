@@ -76,7 +76,7 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     }
 
     private void initQuizGame() {
-        quiz = new Quiz();
+        quiz = new Quiz(settings.getDifficulty());
         gameState.reset();
         totalScore = 0;
         dictionary.countDistinctVocablesWithTranslations();
