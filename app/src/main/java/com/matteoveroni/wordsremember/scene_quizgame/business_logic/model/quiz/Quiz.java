@@ -59,22 +59,22 @@ public class Quiz {
         }
     }
 
-    public QuestionCompleted answerCurrentQuestion(String givenAnswer) {
-        return answerQuestion(getCurrentQuestion(), givenAnswer);
+    public QuestionCompleted answerCurrentQuestion(String givenAnswer, long responseTime) {
+        return answerQuestion(getCurrentQuestion(), givenAnswer, responseTime);
     }
 
-    public QuestionCompleted forceQuestionAnswerResult(QuestionCompleted.AnswerResult result) {
-        return answerQuestion(getCurrentQuestion(), "", result);
+    public QuestionCompleted forceQuestionAnswerResult(QuestionCompleted.AnswerResult result, long responseTime) {
+        return answerQuestion(getCurrentQuestion(), "", result, responseTime);
     }
 
-    private QuestionCompleted answerQuestion(Question question, String givenAnswer) {
+    private QuestionCompleted answerQuestion(Question question, String givenAnswer, long responseTime) {
         final QuestionCompleted.AnswerResult result = questionAnswerChecker.checkAnswerResultForQuestion(givenAnswer, question);
-        return answerQuestion(question, givenAnswer, result);
+        return answerQuestion(question, givenAnswer, result, responseTime);
     }
 
-    private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result) {
+    private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result, long responseTime) {
         Question currentQuestion = getCurrentQuestion();
-        QuestionCompleted questionCompleted = new QuestionCompleted(currentQuestion, givenAnswer, result);
+        QuestionCompleted questionCompleted = new QuestionCompleted(currentQuestion, givenAnswer, result, responseTime);
         switch (result) {
             case CORRECT:
                 correctQuestions.add(questionCompleted);

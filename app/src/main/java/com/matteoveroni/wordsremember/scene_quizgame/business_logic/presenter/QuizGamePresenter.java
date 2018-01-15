@@ -1,5 +1,7 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter;
 
+import android.util.Log;
+
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
@@ -98,7 +100,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
         } else {
             stopQuestionTimerCount();
 
-            QuestionCompleted questionCompleted = gameModel.answerCurrentQuestion(answer);
+            QuestionCompleted questionCompleted = gameModel.answerCurrentQuestion(answer, calculateResponseTime());
             FormattedString localizedQuestionResultMessage = buildCompletedQuestionResultMessage(questionCompleted);
 
             isDialogShownInView = true;
@@ -110,7 +112,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     public void onQuizTimeElapsed() {
         stopQuestionTimerCount();
 
-        gameModel.getCurrentQuiz().forceQuestionAnswerResult(QuestionCompleted.AnswerResult.WRONG);
+        gameModel.getCurrentQuiz().forceQuestionAnswerResult(QuestionCompleted.AnswerResult.WRONG, settings.getQuizGameQuestionTimerTotalTime());
 
         isDialogShownInView = true;
         view.showQuestionResultDialog(QuestionCompleted.AnswerResult.WRONG, new FormattedString("Time elapsed"));
@@ -202,7 +204,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     private FormattedString buildCompletedQuestionResultMessage(QuestionCompleted questionCompleted) {
         switch (questionCompleted.getAnswerResult()) {
             case CORRECT:
-                return new FormattedString("%s\n\n" + questionCompleted.getGivenAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
+                return new FormattedString("%s\n\n" + questionCompleted.getAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
             case WRONG:
                 FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
 
@@ -219,5 +221,11 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
             default:
                 throw new RuntimeException("Impossible to build quiz result message. Quiz final result not correct nor wrong");
         }
+    }
+
+    private long calculateResponseTime() {
+        final long remainingTime = gameQuestionTimer.getRemainingTime();
+        final long totalTime = settings.getQuizGameQuestionTimerTotalTime();
+        return totalTime - remainingTime;
     }
 }

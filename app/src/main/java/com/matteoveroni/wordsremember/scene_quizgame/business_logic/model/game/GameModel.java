@@ -23,7 +23,7 @@ public interface GameModel {
 
     Quiz getCurrentQuiz();
 
-    QuestionCompleted answerCurrentQuestion(String finalAnswer);
+    QuestionCompleted answerCurrentQuestion(String finalAnswer, long responseTime);
 
     int getFinalTotalScore();
 }

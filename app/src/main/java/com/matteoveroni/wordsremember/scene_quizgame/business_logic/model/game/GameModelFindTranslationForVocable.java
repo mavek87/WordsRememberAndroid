@@ -183,8 +183,8 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     }
 
     @Override
-    public QuestionCompleted answerCurrentQuestion(String answer) {
-        QuestionCompleted questionCompleted = quiz.answerCurrentQuestion(answer);
+    public QuestionCompleted answerCurrentQuestion(String answer, long responseTime) {
+        QuestionCompleted questionCompleted = quiz.answerCurrentQuestion(answer, responseTime);
         switch (questionCompleted.getAnswerResult()) {
             case CORRECT:
                 totalScore++;
