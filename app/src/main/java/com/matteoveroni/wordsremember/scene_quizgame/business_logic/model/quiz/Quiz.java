@@ -51,6 +51,14 @@ public class Quiz {
         return questions.get(questionsIndex);
     }
 
+    public List<QuestionCompleted> getCorrectQuestions() {
+        return correctQuestions;
+    }
+
+    public List<QuestionCompleted> getWrongQuestions() {
+        return wrongQuestions;
+    }
+
     public void addQuestion(Question question) {
         questionsIndex++;
         questions.put(questionsIndex, question);
@@ -76,8 +84,7 @@ public class Quiz {
     }
 
     private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result, long responseTime) {
-        Question currentQuestion = getCurrentQuestion();
-        QuestionCompleted questionCompleted = new QuestionCompleted(currentQuestion, givenAnswer, result, responseTime);
+        QuestionCompleted questionCompleted = new QuestionCompleted(question, givenAnswer, result, responseTime);
         switch (result) {
             case CORRECT:
                 correctQuestions.add(questionCompleted);
@@ -87,13 +94,5 @@ public class Quiz {
                 break;
         }
         return questionCompleted;
-    }
-
-    public List<QuestionCompleted> getCorrectQuestions() {
-        return correctQuestions;
-    }
-
-    public List<QuestionCompleted> getWrongQuestions() {
-        return wrongQuestions;
     }
 }
