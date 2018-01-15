@@ -10,6 +10,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditV
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.ManageVocablesPresenterFactory;
 import com.matteoveroni.wordsremember.scene_login.LoginPresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
+import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenter;
 import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
@@ -45,6 +46,8 @@ public interface AppComponent {
     void inject(AddTranslationPresenterFactory addTranslationPresenterFactory);
 
     void inject(QuizGamePresenterFactory quizGamePresenterFactory);
+
+    void inject(QuizGameReportPresenter quizGameReportPresenter);
 
     void inject(UserProfilePresenterFactory userProfilePresenterFactory);
 

@@ -7,12 +7,13 @@ import android.view.WindowManager;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditTranslationPresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationEditorFragment;
 
@@ -41,7 +42,7 @@ public class EditTranslationActivity extends BasePresentedActivityView implement
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new EditTranslationPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.EDIT_TRANSLATION_PRESENTER_FACTORY);
     }
 
     @Override

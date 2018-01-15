@@ -6,6 +6,8 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -30,7 +32,7 @@ public class UserProfileFirstCreationActivity extends BasePresentedActivityView 
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new UserProfileEditorPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.USER_PROFILE_EDITOR_PRESENTER);
     }
 
     @Override

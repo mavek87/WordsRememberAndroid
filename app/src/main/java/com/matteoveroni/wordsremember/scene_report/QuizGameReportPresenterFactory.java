@@ -13,6 +13,9 @@ import javax.inject.Inject;
 
 public class QuizGameReportPresenterFactory implements PresenterFactory<QuizGameReportPresenter>{
 
+    @Inject
+
+
     @Override
     public QuizGameReportPresenter create() {
         WordsRemember.getAppComponent().inject(this);

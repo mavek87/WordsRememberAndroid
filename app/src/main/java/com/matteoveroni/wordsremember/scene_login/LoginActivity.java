@@ -12,6 +12,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -37,7 +39,7 @@ public class LoginActivity extends BasePresentedActivityView implements LoginVie
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new LoginPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.LOGIN_PRESENTER_FACTORY);
     }
 
     @Override

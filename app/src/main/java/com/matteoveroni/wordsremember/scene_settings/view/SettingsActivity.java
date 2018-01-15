@@ -13,6 +13,8 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -71,7 +73,7 @@ public class SettingsActivity extends BasePresentedActivityView implements Setti
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new SettingsPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.SETTINGS_PRESENTER_FACTORY);
     }
 
     @Override

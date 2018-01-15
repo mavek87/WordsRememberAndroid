@@ -3,6 +3,8 @@ package com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity;
 import android.os.Bundle;
 
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -31,7 +33,7 @@ public class UserProfileActivity extends BasePresentedActivityView implements Us
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new UserProfilePresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.USER_PROFILE_PRESENTER);
     }
 
     @Override

@@ -15,6 +15,8 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -51,8 +53,6 @@ public class QuizGameActivity extends BasePresentedActivityView implements
     public static final String INT_PROGRESS_MAX_KEY = "int_progress_max_key";
     public static final String INT_PROGRESS_VALUE_KEY = "int_progress_value_key";
 
-    private static final QuizGamePresenterFactory PRESENTER_FACTORY = new QuizGamePresenterFactory();
-
     @BindView(R.id.lbl_remainingTime)
     TextView lbl_remainingTime;
 
@@ -74,7 +74,7 @@ public class QuizGameActivity extends BasePresentedActivityView implements
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return PRESENTER_FACTORY;
+        return PresenterFactories.getFactory(PresenterFactoryName.QUIZ_GAME_PRESENTER_FACTORY);
     }
 
     @Override

@@ -10,12 +10,13 @@ import android.view.WindowManager;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.EditVocablePresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.VocableEditorFragment;
@@ -49,7 +50,7 @@ public class EditVocableActivity extends BasePresentedActivityView implements Ed
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new EditVocablePresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.EDIT_VOCABLE_PRESENTER_FACTORY);
     }
 
     @Override

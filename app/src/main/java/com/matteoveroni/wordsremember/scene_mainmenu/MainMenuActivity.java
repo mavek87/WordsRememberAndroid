@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
@@ -37,7 +39,7 @@ public class MainMenuActivity extends BasePresentedActivityView implements MainM
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new MainMenuPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.MAIN_MENU_PRESENTER_FACTORY);
     }
 
     @Override

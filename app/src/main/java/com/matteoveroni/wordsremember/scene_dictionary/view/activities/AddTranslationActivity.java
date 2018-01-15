@@ -7,12 +7,13 @@ import android.support.v4.app.FragmentManager;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.AddTranslationPresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.AddTranslationPresenterFactory;
 import com.matteoveroni.wordsremember.scene_dictionary.view.AddTranslationView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationsListFragment;
 
@@ -42,7 +43,7 @@ public class AddTranslationActivity extends BasePresentedActivityView implements
 
     @Override
     protected PresenterFactory getPresenterFactory() {
-        return new AddTranslationPresenterFactory();
+        return PresenterFactories.getFactory(PresenterFactoryName.ADD_TRANSLATION_PRESENTER_FACTORY);
     }
 
     @Override
