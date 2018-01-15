@@ -26,6 +26,4 @@ public interface QuizGameView extends View, PojoManipulable<Quiz>, GameQuestionT
     void showKeyboard();
 
     void hideKeyboard();
-
-    void quitGame();
 }

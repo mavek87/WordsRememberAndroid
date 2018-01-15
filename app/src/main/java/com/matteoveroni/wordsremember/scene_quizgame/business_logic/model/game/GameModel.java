@@ -21,7 +21,7 @@ public interface GameModel {
 
     void generateQuestion() throws NoMoreQuestionsException, ZeroQuestionsException;
 
-    Quiz getCurrentQuiz();
+    Quiz getQuiz();
 
     QuestionCompleted answerCurrentQuestion(String finalAnswer, long responseTime);
 

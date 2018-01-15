@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
+import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
@@ -16,7 +17,9 @@ import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWith
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameView;
+import com.matteoveroni.wordsremember.scene_report.EventQuizGameCompleted;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.utils.BusAttacher;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.Subscribe;
@@ -109,7 +112,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     public void onQuizTimeElapsed() {
         stopQuestionTimerCount();
 
-        gameModel.getCurrentQuiz().forceQuestionAnswerResult(QuestionCompleted.AnswerResult.WRONG, settings.getQuizGameQuestionTimerTotalTime());
+        gameModel.getQuiz().forceQuestionAnswerResult(QuestionCompleted.AnswerResult.WRONG, settings.getQuizGameQuestionTimerTotalTime());
 
         isDialogShownInView = true;
         view.showQuestionResultDialog(QuestionCompleted.AnswerResult.WRONG, new FormattedString("Time elapsed"));
@@ -134,7 +137,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     public void onConfirmGameResultDialogAction() {
         isDialogShownInView = false;
         view.hideKeyboard();
-        view.quitGame();
+        quitGame();
         destroyPresenter();
     }
 
@@ -150,7 +153,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     private void destroyPresenter() {
         stopQuestionTimerCount();
         settings.saveLastGameDate();
-        EVENT_BUS.unregister(this);
+        BusAttacher.unregister(this);
         view = null;
         gameModel.stop();
     }
@@ -220,6 +223,11 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
             default:
                 throw new RuntimeException("Impossible to build quiz result message. Quiz final result not correct nor wrong");
         }
+    }
+
+    private void quitGame(){
+        EVENT_BUS.postSticky(new EventQuizGameCompleted(gameModel.getQuiz()));
+        view.switchToView(View.Name.QUIZ_GAME_REPORT);
     }
 
     private long calculateResponseTime() {

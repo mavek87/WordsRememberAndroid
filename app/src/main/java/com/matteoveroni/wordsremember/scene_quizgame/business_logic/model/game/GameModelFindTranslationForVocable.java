@@ -173,7 +173,7 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     }
 
     @Override
-    public Quiz getCurrentQuiz() {
+    public Quiz getQuiz() {
         return quiz;
     }
 

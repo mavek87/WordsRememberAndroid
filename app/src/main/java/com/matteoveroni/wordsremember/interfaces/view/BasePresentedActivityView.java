@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.interfaces.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -19,6 +20,8 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
+import com.matteoveroni.wordsremember.factories.PresenterFactories;
+import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
@@ -56,20 +59,17 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
         getSupportLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
-                Log.d(TAG, "onCreateLoader");
                 return new PresenterLoader<>(BasePresentedActivityView.this, getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
-                Log.d(TAG, "onLoadFinished");
                 BasePresentedActivityView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
-                Log.d(TAG, "onLoaderReset");
                 BasePresentedActivityView.this.presenter = null;
             }
         });
@@ -94,6 +94,7 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
      * not contain {@link android.app.Activity} context reference since it will be keep on rotations.
      */
     protected abstract PresenterFactory<P> getPresenterFactory();
+
 
     /**
      * Hook for subclasses that deliver the {@link Presenter} before its View is attached.

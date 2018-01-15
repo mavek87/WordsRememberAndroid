@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_statistics;
+package com.matteoveroni.wordsremember.scene_report;
 
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 
@@ -6,11 +6,10 @@ import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Q
  * @author Matteo Veroni
  */
 
-public class EventQuizCompleted {
-
+public class EventQuizGameCompleted {
     private final Quiz quiz;
 
-    public EventQuizCompleted(Quiz quiz) {
+    public EventQuizGameCompleted(Quiz quiz) {
         this.quiz = quiz;
     }
 

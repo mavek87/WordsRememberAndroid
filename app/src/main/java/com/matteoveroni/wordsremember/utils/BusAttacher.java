@@ -17,20 +17,20 @@ public class BusAttacher {
 
     private static final String TAG = TagGenerator.tag(BusAttacher.class);
 
-    public static void register(Object object) {
-        if (!EVENT_BUS.isRegistered(object)) {
+    public static void register(Object subscriber) {
+        if (!EVENT_BUS.isRegistered(subscriber)) {
             try {
-                EVENT_BUS.register(object);
+                EVENT_BUS.register(subscriber);
             } catch (EventBusException ex) {
-                String warnMessage = "Object (class " + object.getClass() + ") doesn\'t need to be attached to event bus and so it won\'t";
+                String warnMessage = "Object (class " + subscriber.getClass() + ") doesn\'t need to be attached to event bus and so it won\'t";
                 Log.w(TAG, warnMessage);
             }
         }
     }
 
-    public static void unregister(Object object) {
-        if (EVENT_BUS.isRegistered(object)) {
-            EVENT_BUS.unregister(object);
+    public static void unregister(Object subscriber) {
+        if (EVENT_BUS.isRegistered(subscriber)) {
+            EVENT_BUS.unregister(subscriber);
         }
     }
 }

@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 public abstract class BasePresenter<V> implements Presenter<V> {
 
     protected V view;
-    protected static final EventBus EVENT_BUS = BusAttacher.EVENT_BUS;
+    protected static final EventBus EVENT_BUS = EventBus.getDefault();
 
     @Override
     public void attachView(V view) {

@@ -71,6 +71,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+            android:name=".scene_report.QuizGameReportActivity"
+            android:label="@string/quiz_game"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".scene_settings.view.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/AppTheme.NoActionBar" />

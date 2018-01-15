@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.view.activities.ManageVoc
 import com.matteoveroni.wordsremember.scene_login.LoginActivity;
 import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuActivity;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameActivity;
+import com.matteoveroni.wordsremember.scene_report.QuizGameReportActivity;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsActivity;
 import com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity.UserProfileFirstCreationActivity;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity.UserProfileEditorActivity;
@@ -34,6 +35,7 @@ public interface View {
         USER_PROFILE_EDITOR(UserProfileEditorActivity.class),
         MAIN_MENU(MainMenuActivity.class),
         QUIZ_GAME(QuizGameActivity.class),
+        QUIZ_GAME_REPORT(QuizGameReportActivity.class),
         SETTINGS(SettingsActivity.class),
         ADD_TRANSLATION(AddTranslationActivity.class),
         EDIT_TRANSLATION(EditTranslationActivity.class),

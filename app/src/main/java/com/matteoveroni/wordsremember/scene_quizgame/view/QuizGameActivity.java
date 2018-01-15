@@ -200,11 +200,6 @@ public class QuizGameActivity extends BasePresentedActivityView implements
 
     @Override
     public void onBackPressed() {
-        quitGame();
-    }
-
-    @Override
-    public void quitGame() {
         finish();
     }
 

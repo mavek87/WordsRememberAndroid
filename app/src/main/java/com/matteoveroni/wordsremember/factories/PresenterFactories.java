@@ -8,6 +8,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.presenter.factories.Manag
 import com.matteoveroni.wordsremember.scene_login.LoginPresenterFactory;
 import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuPresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
+import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
@@ -41,7 +42,7 @@ public class PresenterFactories {
             case QUIZ_GAME_PRESENTER_FACTORY:
                 return new QuizGamePresenterFactory();
             case QUIZ_GAME_REPORT_PRESENTER_FACTORY:
-                return new QuizGamePresenterFactory();
+                return new QuizGameReportPresenterFactory();
             default:
                 throw new RuntimeException("Unknown PresenterFactoryName passed");
         }

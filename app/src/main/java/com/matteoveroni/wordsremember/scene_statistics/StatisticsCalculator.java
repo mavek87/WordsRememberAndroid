@@ -19,13 +19,6 @@ public class StatisticsCalculator {
     @Inject
     StatisticsDAO dao;
 
-    @Subscribe
-    public void onEventQuizCompleted(EventQuizCompleted event) {
-        Quiz quiz = event.getQuiz();
-        dao.saveQuizResults(quiz);
-
-
-    }
 
 
 }

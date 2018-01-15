@@ -31,7 +31,6 @@ public abstract class BasePresentedFragmentView<P extends Presenter<V>, V> exten
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.i(TAG, "onActivityCreated");
 
         Loader<P> loader = getLoaderManager().getLoader(loaderId());
         if (loader == null) {
@@ -47,20 +46,17 @@ public abstract class BasePresentedFragmentView<P extends Presenter<V>, V> exten
         getLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
-                Log.i(TAG, "onCreateLoader");
                 return new PresenterLoader<>(getContext(), getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
-                Log.i(TAG, "onLoadFinished");
                 BasePresentedFragmentView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
-                Log.i(TAG, "onLoaderReset");
                 BasePresentedFragmentView.this.presenter = null;
             }
         });
@@ -69,7 +65,6 @@ public abstract class BasePresentedFragmentView<P extends Presenter<V>, V> exten
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart");
         presenter.attachView(getPresenterView());
     }
 
@@ -77,7 +72,6 @@ public abstract class BasePresentedFragmentView<P extends Presenter<V>, V> exten
     public void onStop() {
         presenter.detachView();
         super.onStop();
-        Log.i(TAG, "onStop");
     }
 
     /**
