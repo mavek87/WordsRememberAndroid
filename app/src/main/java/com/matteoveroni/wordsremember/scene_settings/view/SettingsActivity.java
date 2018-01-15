@@ -17,13 +17,12 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenter;
-import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
@@ -37,7 +36,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class SettingsActivity extends BasePresentedActivityView implements SettingsView {
+public class SettingsActivity extends AbstractPresentedActivityView implements SettingsView {
 
     @BindView(R.id.lbl_dictionary)
     TextView lbl_dictionary;

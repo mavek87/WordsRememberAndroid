@@ -11,7 +11,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.AddTranslationPresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.view.AddTranslationView;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class AddTranslationActivity extends BasePresentedActivityView implements AddTranslationView {
+public class AddTranslationActivity extends AbstractPresentedActivityView implements AddTranslationView {
 
     public static final String TAG = TagGenerator.tag(AddTranslationActivity.class);
 

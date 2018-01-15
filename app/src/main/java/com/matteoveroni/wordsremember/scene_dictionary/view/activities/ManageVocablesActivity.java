@@ -7,7 +7,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.ManageVocablesPresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.view.ManageVocablesView;
 
@@ -20,7 +20,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class ManageVocablesActivity extends BasePresentedActivityView implements ManageVocablesView {
+public class ManageVocablesActivity extends AbstractPresentedActivityView implements ManageVocablesView {
 
     private ManageVocablesPresenter presenter;
 

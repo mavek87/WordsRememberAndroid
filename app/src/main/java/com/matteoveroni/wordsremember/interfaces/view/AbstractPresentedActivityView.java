@@ -3,7 +3,6 @@ package com.matteoveroni.wordsremember.interfaces.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -11,7 +10,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -20,23 +18,18 @@ import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.factories.PresenterFactories;
-import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.utils.BusAttacher;
 
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * Useful resources: https://github.com/czyrux/MvpLoaderSample/blob/master/app/src/main/java/de/czyrux/mvploadersample/base/BasePresenterActivity.java
  */
 
-public abstract class BasePresentedActivityView<V, P extends Presenter<V>> extends AppCompatActivity implements View {
+public abstract class AbstractPresentedActivityView<V, P extends Presenter<V>> extends AppCompatActivity implements View {
 
-    private static final String TAG = TagGenerator.tag(BasePresentedActivityView.class);
     private static final int PRESENTER_LOADER_ID = 1;
     private P presenter;
     private LocaleTranslator translator;
@@ -59,18 +52,18 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
         getSupportLoaderManager().initLoader(loaderId(), null, new LoaderManager.LoaderCallbacks<P>() {
             @Override
             public final Loader<P> onCreateLoader(int id, Bundle args) {
-                return new PresenterLoader<>(BasePresentedActivityView.this, getPresenterFactory());
+                return new PresenterLoader<>(AbstractPresentedActivityView.this, getPresenterFactory());
             }
 
             @Override
             public final void onLoadFinished(Loader<P> loader, P presenter) {
-                BasePresentedActivityView.this.presenter = presenter;
+                AbstractPresentedActivityView.this.presenter = presenter;
                 onPresenterCreatedOrRestored(presenter);
             }
 
             @Override
             public final void onLoaderReset(Loader<P> loader) {
-                BasePresentedActivityView.this.presenter = null;
+                AbstractPresentedActivityView.this.presenter = null;
             }
         });
     }
@@ -94,7 +87,6 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
      * not contain {@link android.app.Activity} context reference since it will be keep on rotations.
      */
     protected abstract PresenterFactory<P> getPresenterFactory();
-
 
     /**
      * Hook for subclasses that deliver the {@link Presenter} before its View is attached.

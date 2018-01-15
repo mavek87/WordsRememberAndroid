@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
  * @author Matteo Veroni
  */
 
-public class MainMenuActivity extends BasePresentedActivityView implements MainMenuView {
+public class MainMenuActivity extends AbstractPresentedActivityView implements MainMenuView {
 
     public static final String TAG = TagGenerator.tag(MainMenuActivity.class);
 

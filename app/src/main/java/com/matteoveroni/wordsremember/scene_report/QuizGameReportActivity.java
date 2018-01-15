@@ -1,21 +1,16 @@
 package com.matteoveroni.wordsremember.scene_report;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
-import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenter;
-
-import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,12 +19,27 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class QuizGameReportActivity extends BasePresentedActivityView implements QuizGameReportView {
+public class QuizGameReportActivity extends AbstractPresentedActivityView implements QuizGameReportView {
 
     private QuizGameReportPresenter presenter;
 
-    @BindView(R.id.quiz_game_report_text)
-    TextView text;
+    @BindView(R.id.quiz_game_report_txt_game_difficulty)
+    EditText txt_gameDifficulty;
+
+    @BindView(R.id.quiz_game_report_txt_total_number_of_questions)
+    EditText txt_totNumberOfQuestions;
+
+    @BindView(R.id.quiz_game_report_txt_number_of_correct_answers)
+    EditText txt_numberOfCorrectAnswers;
+
+    @BindView(R.id.quiz_game_report_txt_number_of_wrong_answers)
+    EditText txt_numberOfWrongAnswers;
+
+    @BindView(R.id.quiz_game_report_txt_correctness_percentage)
+    EditText txt_correctnessPercentage;
+
+    @BindView(R.id.quiz_game_report_txt_avg_response_time)
+    EditText txt_avgResponseTime;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -48,21 +58,28 @@ public class QuizGameReportActivity extends BasePresentedActivityView implements
         setContentView(R.layout.activity_quiz_game_report);
         ButterKnife.bind(this);
 
-//        setupAndShowToolbar(getString(R.string.add_translation));
         setupAndShowToolbar("Report");
     }
 
     @Override
     public void showData(Quiz quiz) {
-        String dataToShow = "";
-
         GameDifficulty gameDifficulty = quiz.getGameDifficulty();
-        int numberOfCorrectQuestions = quiz.getCorrectQuestions().size();
-        int numberOfWrongQuestions = quiz.getWrongQuestions().size();
-        int totalNumberOfQuestions = quiz.getTotalNumberOfQuestions();
+        txt_gameDifficulty.setText(gameDifficulty.toString());
 
-        dataToShow = gameDifficulty.toString() + " " + totalNumberOfQuestions + " " + numberOfCorrectQuestions + " " + numberOfWrongQuestions;
-        text.setText(dataToShow);
+        int totalNumberOfQuestions = quiz.getTotalNumberOfQuestions();
+        txt_totNumberOfQuestions.setText(String.format("%d", totalNumberOfQuestions));
+
+        int numberOfCorrectAnswers = quiz.getCorrectQuestions().size();
+        txt_numberOfCorrectAnswers.setText(String.format("%d", numberOfCorrectAnswers));
+
+        int numberOfWrongAnswers = quiz.getWrongQuestions().size();
+        txt_numberOfWrongAnswers.setText(String.format("%d", numberOfWrongAnswers));
+
+        double correctnessPercentage = ((double) numberOfCorrectAnswers / totalNumberOfQuestions) * 100;
+        txt_correctnessPercentage.setText(String.format("%.2f %%", correctnessPercentage));
+
+        long averageResponseTime = quiz.getAverageResponseTime();
+        txt_avgResponseTime.setText(String.format("%.1f sec.", ((double) averageResponseTime / 1000)));
     }
 
     @Override

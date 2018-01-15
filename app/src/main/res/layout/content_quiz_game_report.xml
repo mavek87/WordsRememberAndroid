@@ -18,9 +18,170 @@
     tools:context=".scene_quizgame.view.QuizGameActivity"
     tools:showIn="@layout/activity_quiz_game_report">
 
-    <TextView
-        android:id="@+id/quiz_game_report_text"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".scene_quizgame.view.QuizGameActivity"
+        tools:showIn="@layout/activity_quiz_game_report">
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_game_difficulty"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Game Difficulty"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_game_difficulty"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_game_difficulty"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_total_number_of_questions"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Questions"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_lbl_game_difficulty" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_total_number_of_questions"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_total_number_of_questions"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_game_difficulty" />
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_number_of_correct_answers"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Correct Answers"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_lbl_total_number_of_questions" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_number_of_correct_answers"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_number_of_correct_answers"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_total_number_of_questions" />
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_number_of_wrong_answers"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Wrong Answers"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_lbl_number_of_correct_answers" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_number_of_wrong_answers"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_number_of_correct_answers"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_number_of_correct_answers" />
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_correctness_percentage"
+            android:layout_width="100dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Correctness percentage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_lbl_number_of_wrong_answers" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_correctness_percentage"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_correctness_percentage"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_number_of_wrong_answers" />
+
+        <TextView
+            android:id="@+id/quiz_game_report_lbl_avg_response_time"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Average response time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_lbl_correctness_percentage" />
+
+        <EditText
+            android:id="@+id/quiz_game_report_txt_avg_response_time"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:textColor="@drawable/my_custom_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_avg_response_time"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_correctness_percentage" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
@@ -21,7 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
  * @author Matteo Veroni
  */
 
-public class EditVocablePresenter extends BasePresenter<EditVocableView> implements BasePresentedActivityView.ErrorDialogListener {
+public class EditVocablePresenter extends BasePresenter<EditVocableView> implements AbstractPresentedActivityView.ErrorDialogListener {
 
     private final DictionaryDAO dao;
     private final DictionaryModel model;

@@ -22,13 +22,14 @@ public class Quiz {
     private final QuestionAnswerChecker questionAnswerChecker = new QuestionAnswerChecker();
     private final GameDifficulty gameDifficulty;
 
-    private int questionsIndex;
+    private int questionsIndex = 0;
     private int totalNumberOfQuestions;
+    private long totalResponseTime;
+    private long averageResponseTime;
 
     public Quiz(GameDifficulty gameDifficulty) {
-        this.questionsIndex = -1;
         this.gameDifficulty = gameDifficulty;
-        this.totalNumberOfQuestions = gameDifficulty.getId() * gameDifficulty.COMPLEXITY_MULTIPLIER;
+        this.totalNumberOfQuestions = this.gameDifficulty.getId() * GameDifficulty.COMPLEXITY_MULTIPLIER;
     }
 
     public GameDifficulty getGameDifficulty() {
@@ -59,9 +60,17 @@ public class Quiz {
         return wrongQuestions;
     }
 
+    public long getTotalResponseTime() {
+        return totalResponseTime;
+    }
+
+    public long getAverageResponseTime() {
+        return averageResponseTime;
+    }
+
     public void addQuestion(Question question) {
-        questionsIndex++;
         questions.put(questionsIndex, question);
+        questionsIndex++;
     }
 
     public void addTrueAnswerForCurrentQuestion(String answer) {
@@ -85,6 +94,10 @@ public class Quiz {
 
     private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result, long responseTime) {
         QuestionCompleted questionCompleted = new QuestionCompleted(question, givenAnswer, result, responseTime);
+
+        totalResponseTime += responseTime;
+        averageResponseTime = totalResponseTime / totalNumberOfQuestions;
+
         switch (result) {
             case CORRECT:
                 correctQuestions.add(questionCompleted);

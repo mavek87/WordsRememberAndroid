@@ -19,12 +19,11 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameQuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenter;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.ErrorDialog;
 import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.GameResultDialog;
 import com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.QuestionResultDialog;
@@ -40,7 +39,7 @@ import static com.matteoveroni.wordsremember.scene_quizgame.view.dialogs.Questio
  * @author Matteo Veroni
  */
 
-public class QuizGameActivity extends BasePresentedActivityView implements
+public class QuizGameActivity extends AbstractPresentedActivityView implements
         QuizGameView, GameQuestionTimer.TimerPrinter, QuizResultDialogListener,
         GameResultDialogListener, ErrorDialogListener {
 

@@ -9,10 +9,9 @@ import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.interfaces.view.BasePresentedActivityView;
+import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment;
 
@@ -24,7 +23,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorActivity extends BasePresentedActivityView implements UserProfileEditorView {
+public class UserProfileEditorActivity extends AbstractPresentedActivityView implements UserProfileEditorView {
 
     private UserProfileEditorPresenter presenter;
     private UserProfileEditorFragment userProfileEditorFragment;
