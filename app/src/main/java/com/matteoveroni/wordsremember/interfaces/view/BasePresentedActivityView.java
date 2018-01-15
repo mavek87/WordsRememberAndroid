@@ -35,8 +35,6 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
 
     private static final String TAG = TagGenerator.tag(BasePresentedActivityView.class);
     private static final int PRESENTER_LOADER_ID = 1;
-    private static final EventBus EVENT_BUS = EventBus.getDefault();
-    private final BusAttacher busAttacher = new BusAttacher(EVENT_BUS);
     private P presenter;
     private LocaleTranslator translator;
 
@@ -81,12 +79,12 @@ public abstract class BasePresentedActivityView<V, P extends Presenter<V>> exten
     protected void onStart() {
         super.onStart();
         presenter.attachView(getPresenterView());
-        busAttacher.registerToEventBus(this);
+        BusAttacher.register(this);
     }
 
     @Override
     protected void onStop() {
-        busAttacher.unregisterToEventBus(this);
+        BusAttacher.unregister(this);
         presenter.detachView();
         super.onStop();
     }

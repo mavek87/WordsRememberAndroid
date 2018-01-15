@@ -21,6 +21,7 @@ import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizUpdatedWith
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.utils.BusAttacher;
 import com.matteoveroni.wordsremember.web.WebTranslator;
 import com.matteoveroni.wordsremember.web.WebTranslatorListener;
 
@@ -44,8 +45,8 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     private final DictionaryDAO dictionary;
 
     private Quiz quiz;
-    private GameRunningState runningState = new GameRunningState();
-    private UniqueRandomNumbersGenerator uniqueRandIntGenerator;
+    private GameRunningState gameState = new GameRunningState();
+    private UniqueRandomNumbersGenerator questionIndexGenerator;
     private int totalScore;
 
     public GameModelFindTranslationForVocable(Settings settings, DictionaryDAO dictionary) {
@@ -55,52 +56,47 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
 
     @Override
     public void start() {
-        registerToEventBus();
-        if (!runningState.isPaused()) {
+        BusAttacher.register(this);
+        if (!gameState.isPaused()) {
             initQuizGame();
         }
-        runningState.setStarted();
+        gameState.setStarted();
     }
 
     @Override
     public void pause() {
-        runningState.setPaused();
-        unregisterToEventBus();
+        gameState.setPaused();
+        BusAttacher.unregister(this);
     }
 
     @Override
     public void stop() {
-        runningState.setStopped();
-        unregisterToEventBus();
+        gameState.setStopped();
+        BusAttacher.unregister(this);
     }
 
     private void initQuizGame() {
         quiz = new Quiz();
-        runningState.reset();
+        gameState.reset();
         totalScore = 0;
         dictionary.countDistinctVocablesWithTranslations();
     }
 
     @Subscribe(sticky = true)
     public void onEventCountDistinctVocablesWithTranslations(EventCountDistinctVocablesWithTranslationsCompleted event) {
-        int numberOfVocablesWithATranslation = event.getNumberOfVocablesWithTranslation();
+        int numberOfVocablesWithTranslation = event.getNumberOfVocablesWithTranslation();
 
-        int maxNumberOfQuestions;
-
-        if (numberOfVocablesWithATranslation < settings.getNumberOfQuestions()) {
-            maxNumberOfQuestions = numberOfVocablesWithATranslation;
-        } else {
-            maxNumberOfQuestions = settings.getNumberOfQuestions();
-        }
-
+        int maxNumberOfQuestions = calculateMaxNumberOfQuestions(numberOfVocablesWithTranslation);
         quiz.setTotalNumberOfQuestions(maxNumberOfQuestions);
 
-        int maxQuestionIndex = numberOfVocablesWithATranslation - 1;
-        if (maxQuestionIndex >= 0) {
-            uniqueRandIntGenerator = new UniqueRandomNumbersGenerator(new IntRange(0, maxQuestionIndex), maxNumberOfQuestions);
+        int minIndex = 0;
+        int maxIndex = numberOfVocablesWithTranslation - 1;
+
+        // TODO: evaluate if the condition is >= or strictly =
+        if (maxIndex >= 0) {
+            questionIndexGenerator = new UniqueRandomNumbersGenerator(new IntRange(minIndex, maxIndex), maxNumberOfQuestions);
             EVENT_BUS.post(new EventQuizGameModelInit());
         } else {
-            stop();
             EVENT_BUS.post(new EventQuizGameModelInitException(new ZeroQuestionsException()));
         }
     }
@@ -118,10 +114,10 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     public void generateQuestion() throws NoMoreQuestionsException, ZeroQuestionsException {
         if (quiz.getTotalNumberOfQuestions() <= 0) throw new ZeroQuestionsException();
         try {
-            int uniqueRandNumber = uniqueRandIntGenerator.extractNext();
-            dictionary.asyncSearchDistinctVocableWithTranslationByOffset(uniqueRandNumber);
+            int uniqueQuestionIndex = questionIndexGenerator.extractNext();
+            dictionary.asyncSearchDistinctVocableWithTranslationByOffset(uniqueQuestionIndex);
         } catch (UniqueRandomNumbersGenerator.NoMoreUniqueRandNumberExtractableException ex) {
-            runningState.setStopped();
+            gameState.setStopped();
             throw new NoMoreQuestionsException();
         }
     }
@@ -143,9 +139,8 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
         Word quizVocable = event.getVocable();
         Set<String> rightAnswersForCurrentQuiz = new HashSet<>();
 
-        for (Word translation : event.getTranslations()) {
+        for (Word translation : event.getTranslations())
             rightAnswersForCurrentQuiz.add(translation.getName());
-        }
 
         if (settings.isOnlineTranslationServiceEnabled()) {
             //TODO this code uses hardcoded languages! remove hardcoded translation
@@ -195,19 +190,13 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
 
     @Override
     public int getFinalTotalScore() {
-        if (!runningState.isStopped()) runningState.setStopped();
+        if (!gameState.isStopped()) gameState.setStopped();
         return totalScore;
     }
 
-    private void registerToEventBus() {
-        if (!EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.register(this);
-        }
-    }
-
-    private void unregisterToEventBus() {
-        if (EVENT_BUS.isRegistered(this)) {
-            EVENT_BUS.unregister(this);
-        }
+    private int calculateMaxNumberOfQuestions(int desiredNumberOfQuestions) {
+        return (desiredNumberOfQuestions < settings.getDefaultNumberOfQuestions())
+                ? desiredNumberOfQuestions
+                : settings.getDefaultNumberOfQuestions();
     }
 }

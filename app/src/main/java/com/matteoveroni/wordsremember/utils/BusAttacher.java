@@ -13,17 +13,14 @@ import org.greenrobot.eventbus.EventBusException;
 
 public class BusAttacher {
 
+    public static final EventBus EVENT_BUS = EventBus.getDefault();
+
     private static final String TAG = TagGenerator.tag(BusAttacher.class);
-    private final EventBus eventBus;
 
-    public BusAttacher(EventBus eventBus) {
-        this.eventBus = eventBus;
-    }
-
-    public void registerToEventBus(Object object) {
-        if (!eventBus.isRegistered(object)) {
+    public static void register(Object object) {
+        if (!EVENT_BUS.isRegistered(object)) {
             try {
-                eventBus.register(object);
+                EVENT_BUS.register(object);
             } catch (EventBusException ex) {
                 String warnMessage = "Object (class " + object.getClass() + ") doesn\'t need to be attached to event bus and so it won\'t";
                 Log.w(TAG, warnMessage);
@@ -31,9 +28,9 @@ public class BusAttacher {
         }
     }
 
-    public void unregisterToEventBus(Object object) {
-        if (eventBus.isRegistered(object)) {
-            eventBus.unregister(object);
+    public static void unregister(Object object) {
+        if (EVENT_BUS.isRegistered(object)) {
+            EVENT_BUS.unregister(object);
         }
     }
 }

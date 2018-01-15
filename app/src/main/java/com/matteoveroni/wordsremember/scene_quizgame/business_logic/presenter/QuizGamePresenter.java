@@ -1,7 +1,5 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter;
 
-import android.util.Log;
-
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
@@ -63,22 +61,21 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
 
     @Subscribe
     public void onEventQuizGameModelInit(EventQuizGameModelInit event) {
-        makeNewQuestionOrShowErrorInView();
+        createNewQuestionOrShowError();
     }
 
     @Subscribe
     public void onEventQuizGameModelInitException(EventQuizGameModelInitException event) {
+        gameModel.stop();
         handleNoMoreQuestionsException();
-        view.hideKeyboard();
     }
 
-    private void makeNewQuestionOrShowErrorInView() {
+    private void createNewQuestionOrShowError() {
         view.clearAndHideFields();
         try {
             gameModel.generateQuestion();
         } catch (NoMoreQuestionsException ex) {
             handleNoMoreQuestionsException();
-            view.hideKeyboard();
         } catch (ZeroQuestionsException ex) {
             // TODO: possible bug if the view is being cleared before..
             handleZeroQuestionsException();
@@ -126,7 +123,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
 
     private void playNextQuestion() {
         resetQuestionTimerCount();
-        makeNewQuestionOrShowErrorInView();
+        createNewQuestionOrShowError();
     }
 
     public void onConfirmErrorDialogAction() {
@@ -194,11 +191,13 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
         );
         isDialogShownInView = true;
         view.showGameResultDialog(gameResultMessage);
+        view.hideKeyboard();
     }
 
     private void handleZeroQuestionsException() {
         isDialogShownInView = true;
         view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
+        view.hideKeyboard();
     }
 
     private FormattedString buildCompletedQuestionResultMessage(QuestionCompleted questionCompleted) {

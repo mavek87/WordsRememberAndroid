@@ -5,7 +5,6 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameModelFindTranslationForVocable;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.NoMoreQuestionsException;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.exceptions.ZeroQuestionsException;
@@ -79,7 +78,7 @@ public class GameModelFindTranslationForVocableTest {
     }
 
     private void eventCalculateNumberOfQuestions(int numberOfQuestionsFromSettings, int numberOfVocablesWithTranslations) {
-        when(settings.getNumberOfQuestions()).thenReturn(numberOfQuestionsFromSettings);
+        when(settings.getDefaultNumberOfQuestions()).thenReturn(numberOfQuestionsFromSettings);
 
         model.onEventCountDistinctVocablesWithTranslations(
                 new EventCountDistinctVocablesWithTranslationsCompleted(numberOfVocablesWithTranslations)
@@ -88,7 +87,7 @@ public class GameModelFindTranslationForVocableTest {
 
     @Test(expected = ZeroQuestionsException.class)
     public void test_onStartQuizGeneration_If_getNumberOfQuizzesFromSettingsIsZero_throwZeroQuizzesException() throws NoMoreQuestionsException, ZeroQuestionsException {
-        when(settings.getNumberOfQuestions()).thenReturn(0);
+        when(settings.getDefaultNumberOfQuestions()).thenReturn(0);
 
         model.generateQuestion();
     }
@@ -96,7 +95,7 @@ public class GameModelFindTranslationForVocableTest {
     @Test
     public void test_onStartQuizGeneration_If_getNumberOfQuizzesGreaterThanZero_extractRandomQuiz() throws NoMoreQuestionsException, ZeroQuestionsException {
         model.setNumberOfQuestions(1);
-        when(settings.getNumberOfQuestions()).thenReturn(1);
+        when(settings.getDefaultNumberOfQuestions()).thenReturn(1);
 
         model.generateQuestion();
 

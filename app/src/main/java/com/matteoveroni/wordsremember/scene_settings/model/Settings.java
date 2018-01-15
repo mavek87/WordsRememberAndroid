@@ -94,11 +94,11 @@ public class Settings {
         }
     }
 
-    public int getNumberOfQuestions() {
+    public int getDefaultNumberOfQuestions() {
         return prefs.getInt(GAME_NUMBER_OF_QUESTIONS_KEY, DEFAULT_NUMBER_OF_QUESTIONS);
     }
 
-    public void setNumberOfQuestions(int number) {
+    public void setDefaultNumberOfQuestions(int number) {
         if (number < 0)
             throw new IllegalArgumentException("Number of questions can\'t be negative");
 

@@ -15,20 +15,20 @@ public class SettingsTest {
 //    @Test
 //    public void setPositiveNumberOfQuestionShouldWork() {
 //        int POSITIVE_NUMBER = 1;
-//        settings.setNumberOfQuestions(POSITIVE_NUMBER);
-//        assertEquals(POSITIVE_NUMBER, settings.getNumberOfQuestions());
+//        settings.setDefaultNumberOfQuestions(POSITIVE_NUMBER);
+//        assertEquals(POSITIVE_NUMBER, settings.getDefaultNumberOfQuestions());
 //    }
 //
 //    @Test
 //    public void setZeroNumberOfQuestionsWorks() {
 //        int ZERO = 0;
-//        settings.setNumberOfQuestions(ZERO);
-//        assertEquals(ZERO, settings.getNumberOfQuestions());
+//        settings.setDefaultNumberOfQuestions(ZERO);
+//        assertEquals(ZERO, settings.getDefaultNumberOfQuestions());
 //    }
 //
 //    @Test(expected = IllegalArgumentException.class)
 //    public void setNegativeNumberOfQuestionsThrowsException() {
 //        int NEGATIVE_NUMBER = -1;
-//        settings.setNumberOfQuestions(NEGATIVE_NUMBER);
+//        settings.setDefaultNumberOfQuestions(NEGATIVE_NUMBER);
 //    }
 }
