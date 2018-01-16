@@ -5,81 +5,43 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * @author Matteo Veroni
  */
 
+@NoArgsConstructor
 public class GlosbePojo {
 
     @SerializedName("result")
     @Expose
+    @Getter @Setter
     private String result;
 
     @SerializedName("tuc")
     @Expose
+    @Getter @Setter
     private List<Tuc> tuc = null;
 
     @SerializedName("phrase")
     @Expose
+    @Getter @Setter
     private String phrase;
 
     @SerializedName("from")
     @Expose
+    @Getter @Setter
     private String from;
 
     @SerializedName("dest")
     @Expose
+    @Getter @Setter
     private String dest;
 
 //    @SerializedName("authors")
 //    @Expose
 //    private Authors authors;
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public List<Tuc> getTuc() {
-        return tuc;
-    }
-
-    public void setTuc(List<Tuc> tuc) {
-        this.tuc = tuc;
-    }
-
-    public String getPhrase() {
-        return phrase;
-    }
-
-    public void setPhrase(String phrase) {
-        this.phrase = phrase;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getDest() {
-        return dest;
-    }
-
-    public void setDest(String dest) {
-        this.dest = dest;
-    }
-
-    //    public Authors getAuthors() {
-    //        return authors;
-    //    }
-    //
-    //    public void setAuthors(Authors authors) {
-    //        this.authors = authors;
-    //    }
 }

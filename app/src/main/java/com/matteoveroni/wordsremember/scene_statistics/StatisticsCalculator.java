@@ -13,12 +13,4 @@ import javax.inject.Inject;
  */
 
 public class StatisticsCalculator {
-
-    private final static EventBus EVENT_BUS = EventBus.getDefault();
-
-    @Inject
-    StatisticsDAO dao;
-
-
-
 }

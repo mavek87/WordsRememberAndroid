@@ -22,12 +22,13 @@ public class Quiz {
     private final QuestionAnswerChecker questionAnswerChecker = new QuestionAnswerChecker();
     private final GameDifficulty gameDifficulty;
 
-    private int questionsIndex = 0;
+    private int questionsIndex;
     private int totalNumberOfQuestions;
     private long totalResponseTime;
     private long averageResponseTime;
 
     public Quiz(GameDifficulty gameDifficulty) {
+        this.questionsIndex = -1;
         this.gameDifficulty = gameDifficulty;
         this.totalNumberOfQuestions = this.gameDifficulty.getId() * GameDifficulty.COMPLEXITY_MULTIPLIER;
     }
@@ -69,8 +70,8 @@ public class Quiz {
     }
 
     public void addQuestion(Question question) {
-        questions.put(questionsIndex, question);
         questionsIndex++;
+        questions.put(questionsIndex, question);
     }
 
     public void addTrueAnswerForCurrentQuestion(String answer) {

@@ -62,7 +62,6 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
         }
     }
 
-
     private void storeViewUserProfileInTheModel(UserProfile viewUserProfile) throws Exception {
         final UserProfile modelUserProfile = model.getUserProfile();
 

@@ -1,58 +1,37 @@
 package com.matteoveroni.wordsremember.web.transltr_dictionary_api;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Matteo Veroni
  */
 
+@NoArgsConstructor
 public class WebTranslation {
 
     @SerializedName("from")
     @Expose
+    @Getter @Setter
     private String from;
+
     @SerializedName("to")
     @Expose
+    @Getter @Setter
     private String to;
+
     @SerializedName("text")
     @Expose
+    @Getter @Setter
     private String text;
+
     @SerializedName("translationText")
     @Expose
+    @Getter @Setter
     private String translationText;
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getTranslationText() {
-        return translationText;
-    }
-
-    public void setTranslationText(String translationText) {
-        this.translationText = translationText;
-    }
 
 }

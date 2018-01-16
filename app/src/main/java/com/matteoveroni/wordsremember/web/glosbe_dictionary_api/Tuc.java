@@ -9,54 +9,30 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
 public class Tuc {
 
     @SerializedName("phrase")
     @Expose
+    @Getter @Setter
     private Phrase phrase;
 
     @SerializedName("meaningId")
     @Expose
+    @Getter @Setter
     private long meaningId;
 
     @SerializedName("meanings")
     @Expose
-    private List<Phrase> meanings = null;
+    @Getter @Setter
+    private List<Phrase> meanings;
 
     @SerializedName("authors")
     @Expose
-    private List<Integer> authors = null;
-
-    public Phrase getPhrase() {
-        return phrase;
-    }
-
-    public void setPhrase(Phrase phrase) {
-        this.phrase = phrase;
-    }
-
-    public long getMeaningId() {
-        return meaningId;
-    }
-
-    public void setMeaningId(long meaningId) {
-        this.meaningId = meaningId;
-    }
-
-    public List<Phrase> getMeanings() {
-        return meanings;
-    }
-
-    public void setMeanings(List<Phrase> meanings) {
-        this.meanings = meanings;
-    }
-
-    public List<Integer> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<Integer> authors) {
-        this.authors = authors;
-    }
-
+    @Getter @Setter
+    private List<Integer> authors;
 }

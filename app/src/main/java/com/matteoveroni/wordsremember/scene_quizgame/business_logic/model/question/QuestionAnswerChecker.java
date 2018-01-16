@@ -1,8 +1,5 @@
 package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question;
 
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
-
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 /**

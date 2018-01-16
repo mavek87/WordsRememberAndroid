@@ -2,28 +2,21 @@ package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quest
 
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author Matteo Veroni
  */
 
+@AllArgsConstructor
 public class Question {
+    @Getter
     private final String questionMsg;
-    private Set<String> correctAnswers;
-
-    public Question(String questionMsg, Set<String> correctAnswers) {
-        this.questionMsg = questionMsg;
-        this.correctAnswers = correctAnswers;
-    }
-
-    public String getQuestionMsg() {
-        return questionMsg;
-    }
-
-    public Set<String> getTrueAnswers() {
-        return correctAnswers;
-    }
+    @Getter
+    private final Set<String> trueAnswers;
 
     public void addTrueAnswer(String answer) {
-        correctAnswers.add(answer);
+        trueAnswers.add(answer);
     }
 }
