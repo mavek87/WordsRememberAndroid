@@ -59,6 +59,7 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
         ButterKnife.bind(this);
 
         setupAndShowToolbar("Report");
+        hideAndroidKeyboard();
     }
 
     @Override

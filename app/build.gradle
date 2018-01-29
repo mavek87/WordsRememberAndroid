@@ -63,7 +63,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:1.16.20"
 
     // Apache Commons Lang
-    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'org.apache.commons:commons-lang3:3.7'
 
     // Apache Commons Text
     compile 'org.apache.commons:commons-text:1.1'
@@ -76,7 +76,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
 
     // GreenRobot EventBus
-    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'org.greenrobot:eventbus:3.1.1'
 
     // Joda-Time
     compile 'joda-time:joda-time:2.9.9'
@@ -86,12 +86,12 @@ dependencies {
 //    compile 'io.reactivex:rxjava:1.1.6'
 
     // Butter knife
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Dagger 2
-    compile 'com.google.dagger:dagger:2.9'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Searchable spinner
