@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
-import com.matteoveroni.wordsremember.persistency.contracts.QuizzesStatsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.QuizStatsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 
@@ -22,25 +22,21 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int QUIZZES_STATS_ID = 1;
-    private static final int DATE_ID = 10;
-    private static final int DATE = 11;
+    private static final int QUIZZES = 1;
+    private static final int QUIZ_ID = 2;
 
     static {
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, QuizzesStatsContract.NAME + "/#", QUIZZES_STATS_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE_ID);
-        URI_MATCHER.addURI(CONTENT_AUTHORITY, DatesContract.NAME + "/#", DATE);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, QuizStatsContract.NAME, QUIZZES);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, QuizStatsContract.NAME + "/#", QUIZ_ID);
     }
 
     @Override
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
-            case QUIZZES_STATS_ID:
-                return QuizzesStatsContract.STATISTICS_MYME_TYPE_CONTENT_DIR;
-            case DATE_ID:
-                return DatesContract.STATISTICS_CONTENT_ITEM_MYME_TYPE;
-            case DATE:
-                return DatesContract.STATISTICS_CONTENT_ITEM_MYME_TYPE;
+            case QUIZZES:
+                return QuizStatsContract.CONTENT_DIR_MYME_TYPE;
+            case QUIZ_ID:
+                return QuizStatsContract.CONTENT_ITEM_MYME_TYPE;
             default:
                 return null;
         }
@@ -51,13 +47,12 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
         switch (URI_MATCHER.match(uri)) {
-            case DATE_ID:
-                queryBuilder.setTables(DatesContract.Schema.TABLE_NAME);
-                whereSelection = DatesContract.Schema.COL_ID + "=?";
+            case QUIZZES:
+                queryBuilder.setTables(QuizStatsContract.Schema.TABLE_NAME);
                 break;
-            case DATE:
-                queryBuilder.setTables(DatesContract.Schema.TABLE_NAME);
-                whereSelection = DatesContract.Schema.COL_DATE + "=?";
+            case QUIZ_ID:
+                queryBuilder.setTables(QuizStatsContract.Schema.TABLE_NAME);
+                whereSelection = QuizStatsContract.Schema.COL_ID + "=?";
                 break;
             default:
                 throw new IllegalArgumentException(ExtendedQueriesContentProvider.Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
@@ -88,12 +83,12 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
         long id;
 
         switch (URI_MATCHER.match(uri)) {
-            case DATE:
-                contractUri = DatesContract.STATISTICS_CONTENT_URI;
-                id = db.insertOrThrow(DatesContract.Schema.TABLE_NAME, null, values);
+            case QUIZZES:
+                contractUri = QuizStatsContract.CONTENT_URI;
+                id = db.insertOrThrow(QuizStatsContract.Schema.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 break;
-            case DATE_ID:
+            case QUIZ_ID:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for INSERT");
             default:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for INSERT");
@@ -109,14 +104,14 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
-            case DATE_ID:
+            case QUIZ_ID:
                 String id = uri.getLastPathSegment();
                 updatedRowsCounter = db.update(
                         DatesContract.Schema.TABLE_NAME, values,
                         DatesContract.Schema.COL_ID + "=" + id, whereArgs
                 );
                 break;
-            case DATE:
+            case QUIZZES:
                 String date = uri.getLastPathSegment();
                 updatedRowsCounter = db.update(
                         DatesContract.Schema.TABLE_NAME, values,
@@ -137,14 +132,14 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
-            case DATE_ID:
+            case QUIZ_ID:
                 String id = uri.getLastPathSegment();
                 deletedRowsCounter = db.delete(
                         UserProfilesContract.Schema.TABLE_NAME,
                         DatesContract.Schema.COL_ID + "=" + id, whereArgs
                 );
                 break;
-            case DATE:
+            case QUIZZES:
                 String date = uri.getLastPathSegment();
                 deletedRowsCounter = db.delete(
                         UserProfilesContract.Schema.TABLE_NAME,

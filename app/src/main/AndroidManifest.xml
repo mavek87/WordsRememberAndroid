@@ -26,6 +26,11 @@
             android:authorities="com.matteoveroni.wordsremember.persistency.providers.user_profiles"
             android:exported="false" />
 
+        <provider
+            android:name=".persistency.providers.statistics.StatisticsProvider"
+            android:authorities="com.matteoveroni.wordsremember.persistency.providers.statistics"
+            android:exported="false" />
+
         <receiver
             android:name=".notifications.DeviceBootReceiver"
             android:enabled="true">

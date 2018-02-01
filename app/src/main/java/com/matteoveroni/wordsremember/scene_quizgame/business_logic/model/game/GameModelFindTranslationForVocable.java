@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsync
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventCountDistinctVocablesWithTranslationsCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventAsyncSearchDistinctVocableWithTranslationByOffsetCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.events.EventQuizGameModelInit;
@@ -178,14 +178,14 @@ public class GameModelFindTranslationForVocable implements GameModel, WebTransla
     }
 
     @Override
-    public QuestionCompleted answerCurrentQuestion(String answer, long responseTime) {
-        QuestionCompleted questionCompleted = quiz.answerCurrentQuestion(answer, responseTime);
-        switch (questionCompleted.getAnswerResult()) {
+    public CompletedQuestion answerCurrentQuestion(String answer, long responseTime) {
+        CompletedQuestion completedQuestion = quiz.answerCurrentQuestion(answer, responseTime);
+        switch (completedQuestion.getAnswerResult()) {
             case CORRECT:
                 totalScore++;
                 break;
         }
-        return questionCompleted;
+        return completedQuestion;
     }
 
     @Override

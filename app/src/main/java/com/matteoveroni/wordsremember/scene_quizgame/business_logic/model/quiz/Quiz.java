@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.Question;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionAnswerChecker;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +17,8 @@ import java.util.Map;
 public class Quiz {
 
     private final Map<Integer, Question> questions = new HashMap<>();
-    private final List<QuestionCompleted> correctQuestions = new ArrayList<>();
-    private final List<QuestionCompleted> wrongQuestions = new ArrayList<>();
+    private final List<CompletedQuestion> correctAnswers = new ArrayList<>();
+    private final List<CompletedQuestion> wrongAnswers = new ArrayList<>();
     private final QuestionAnswerChecker questionAnswerChecker = new QuestionAnswerChecker();
     private final GameDifficulty gameDifficulty;
 
@@ -53,12 +53,12 @@ public class Quiz {
         return questions.get(questionsIndex);
     }
 
-    public List<QuestionCompleted> getCorrectQuestions() {
-        return correctQuestions;
+    public List<CompletedQuestion> getCorrectAnswers() {
+        return correctAnswers;
     }
 
-    public List<QuestionCompleted> getWrongQuestions() {
-        return wrongQuestions;
+    public List<CompletedQuestion> getWrongAnswers() {
+        return wrongAnswers;
     }
 
     public long getTotalResponseTime() {
@@ -80,33 +80,33 @@ public class Quiz {
         }
     }
 
-    public QuestionCompleted answerCurrentQuestion(String givenAnswer, long responseTime) {
+    public CompletedQuestion answerCurrentQuestion(String givenAnswer, long responseTime) {
         return answerQuestion(getCurrentQuestion(), givenAnswer, responseTime);
     }
 
-    public QuestionCompleted forceQuestionAnswerResult(QuestionCompleted.AnswerResult result, long responseTime) {
+    public CompletedQuestion forceQuestionAnswerResult(CompletedQuestion.AnswerResult result, long responseTime) {
         return answerQuestion(getCurrentQuestion(), "", result, responseTime);
     }
 
-    private QuestionCompleted answerQuestion(Question question, String givenAnswer, long responseTime) {
-        final QuestionCompleted.AnswerResult result = questionAnswerChecker.checkAnswerResultForQuestion(givenAnswer, question);
+    private CompletedQuestion answerQuestion(Question question, String givenAnswer, long responseTime) {
+        final CompletedQuestion.AnswerResult result = questionAnswerChecker.checkAnswerResultForQuestion(givenAnswer, question);
         return answerQuestion(question, givenAnswer, result, responseTime);
     }
 
-    private QuestionCompleted answerQuestion(Question question, String givenAnswer, QuestionCompleted.AnswerResult result, long responseTime) {
-        QuestionCompleted questionCompleted = new QuestionCompleted(question, givenAnswer, result, responseTime);
+    private CompletedQuestion answerQuestion(Question question, String givenAnswer, CompletedQuestion.AnswerResult result, long responseTime) {
+        CompletedQuestion completedQuestion = new CompletedQuestion(question, givenAnswer, result, responseTime);
 
         totalResponseTime += responseTime;
         averageResponseTime = totalResponseTime / totalNumberOfQuestions;
 
         switch (result) {
             case CORRECT:
-                correctQuestions.add(questionCompleted);
+                correctAnswers.add(completedQuestion);
                 break;
             case WRONG:
-                wrongQuestions.add(questionCompleted);
+                wrongAnswers.add(completedQuestion);
                 break;
         }
-        return questionCompleted;
+        return completedQuestion;
     }
 }

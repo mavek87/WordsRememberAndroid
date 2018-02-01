@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author Matteo Veroni
  */
 
-public class QuestionCompleted extends Question {
+public class CompletedQuestion extends Question {
 
     @Getter
     private final String answer;
@@ -19,7 +19,7 @@ public class QuestionCompleted extends Question {
         CORRECT, WRONG;
     }
 
-    public QuestionCompleted(Question question, String answer, AnswerResult answerResult, long responseTime) {
+    public CompletedQuestion(Question question, String answer, AnswerResult answerResult, long responseTime) {
         super(question.getQuestionMsg(), question.getTrueAnswers());
         this.answer = answer;
         this.answerResult = answerResult;

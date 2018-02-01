@@ -6,7 +6,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameQuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameModel;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameModelFindTranslationForVocable;
@@ -100,11 +100,11 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
         } else {
             stopQuestionTimerCount();
 
-            QuestionCompleted questionCompleted = gameModel.answerCurrentQuestion(answer, calculateResponseTime());
-            FormattedString localizedQuestionResultMessage = buildCompletedQuestionResultMessage(questionCompleted);
+            CompletedQuestion completedQuestion = gameModel.answerCurrentQuestion(answer, calculateResponseTime());
+            FormattedString localizedQuestionResultMessage = buildCompletedQuestionResultMessage(completedQuestion);
 
             isDialogShownInView = true;
-            view.showQuestionResultDialog(questionCompleted.getAnswerResult(), localizedQuestionResultMessage);
+            view.showQuestionResultDialog(completedQuestion.getAnswerResult(), localizedQuestionResultMessage);
         }
     }
 
@@ -112,10 +112,10 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     public void onQuizTimeElapsed() {
         stopQuestionTimerCount();
 
-        gameModel.getQuiz().forceQuestionAnswerResult(QuestionCompleted.AnswerResult.WRONG, settings.getQuizGameQuestionTimerTotalTime());
+        gameModel.getQuiz().forceQuestionAnswerResult(CompletedQuestion.AnswerResult.WRONG, settings.getQuizGameQuestionTimerTotalTime());
 
         isDialogShownInView = true;
-        view.showQuestionResultDialog(QuestionCompleted.AnswerResult.WRONG, new FormattedString("Time elapsed"));
+        view.showQuestionResultDialog(CompletedQuestion.AnswerResult.WRONG, new FormattedString("Time elapsed"));
     }
 
     public void onConfirmQuizResultDialogAction() {
@@ -203,14 +203,14 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
         view.hideKeyboard();
     }
 
-    private FormattedString buildCompletedQuestionResultMessage(QuestionCompleted questionCompleted) {
-        switch (questionCompleted.getAnswerResult()) {
+    private FormattedString buildCompletedQuestionResultMessage(CompletedQuestion completedQuestion) {
+        switch (completedQuestion.getAnswerResult()) {
             case CORRECT:
-                return new FormattedString("%s\n\n" + questionCompleted.getAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
+                return new FormattedString("%s\n\n" + completedQuestion.getAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
             case WRONG:
                 FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
 
-                Set<String> correctAnswers = questionCompleted.getTrueAnswers();
+                Set<String> correctAnswers = completedQuestion.getTrueAnswers();
                 int index = 0;
                 for (String answer : correctAnswers) {
                     quizResultMessage = quizResultMessage.concat(new FormattedString(answer));

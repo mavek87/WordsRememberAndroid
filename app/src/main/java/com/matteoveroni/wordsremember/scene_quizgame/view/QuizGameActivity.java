@@ -20,7 +20,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
-import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.QuestionCompleted;
+import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameQuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenter;
@@ -133,7 +133,7 @@ public class QuizGameActivity extends AbstractPresentedActivityView implements
     }
 
     @Override
-    public void showQuestionResultDialog(QuestionCompleted.AnswerResult questionAnswerResult, FormattedString message) {
+    public void showQuestionResultDialog(CompletedQuestion.AnswerResult questionAnswerResult, FormattedString message) {
         progressBar.setProgress(quiz.getQuestionIndex() + 1);
 
         hideKeyboard();
