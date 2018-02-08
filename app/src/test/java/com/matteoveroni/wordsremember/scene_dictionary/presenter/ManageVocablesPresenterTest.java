@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
@@ -110,7 +110,7 @@ public class ManageVocablesPresenterTest {
 
         presenter.onEvent(new EventAsyncDeleteVocableCompleted(FAKE_NUMBER_OF_ROWS_DELETED));
 
-        verify(view).showMessage(LocaleKey.VOCABLE_REMOVED);
+        verify(view).showMessage(AndroidLocaleKey.VOCABLE_REMOVED);
     }
 
     private class DictionaryVocablesPresenterFactoryForTests implements PresenterFactory {

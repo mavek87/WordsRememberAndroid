@@ -15,6 +15,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationsListFragment;
@@ -132,5 +133,10 @@ public class EditVocableActivity extends AbstractPresentedActivityView implement
     @Override
     public void returnToPreviousView() {
         onBackPressed();
+    }
+
+    @Override
+    public void setHeader(AndroidLocaleKey localeHeaderTextKey) {
+        vocableEditorFragment.setHeader(localeHeaderTextKey);
     }
 }

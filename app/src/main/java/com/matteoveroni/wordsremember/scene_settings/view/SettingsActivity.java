@@ -174,7 +174,7 @@ public class SettingsActivity extends AbstractPresentedActivityView implements S
 
     private void printDeviceLocale() {
         Locale locale = LocaleTranslator.getLocale(getApplicationContext());
-        String str_localeToDisplay = getString(R.string.deviceLocale) + ": " + LocaleTranslator.stringifyLocale(locale);
+        String str_localeToDisplay = getString(R.string.device_locale) + ": " + LocaleTranslator.stringifyLocale(locale);
         lbl_deviceLocale.setText(str_localeToDisplay);
     }
 

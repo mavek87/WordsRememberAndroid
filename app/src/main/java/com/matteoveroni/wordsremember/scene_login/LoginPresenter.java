@@ -10,9 +10,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.users.User;
 
@@ -51,11 +50,11 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
 
             FormattedString message = new FormattedString(
                     "%s, %s\n\n%s: %s\n%s: %s",
-                    LocaleKey.USER_REGISTERED,
-                    LocaleKey.SIGN_IN_SUCCESSFUL,
-                    LocaleKey.NAME,
+                    AndroidLocaleKey.USER_REGISTERED.getKeyName(),
+                    AndroidLocaleKey.SIGN_IN_SUCCESSFUL.getKeyName(),
+                    AndroidLocaleKey.NAME.getKeyName(),
                     google_username,
-                    LocaleKey.EMAIL,
+                    AndroidLocaleKey.EMAIL.getKeyName(),
                     google_email);
 
             doLoginAndShowMessage(message);
@@ -78,10 +77,10 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
 
         FormattedString message = new FormattedString(
                 "%s\n\n%s: %s\n%s: %s",
-                LocaleKey.SIGN_IN_SUCCESSFUL,
-                LocaleKey.NAME,
+                AndroidLocaleKey.SIGN_IN_SUCCESSFUL.getKeyName(),
+                AndroidLocaleKey.NAME.getKeyName(),
                 prefs_user.getUsername(),
-                LocaleKey.EMAIL,
+                AndroidLocaleKey.EMAIL.getKeyName(),
                 prefs_user.getEmail());
 
         doLoginAndShowMessage(message);

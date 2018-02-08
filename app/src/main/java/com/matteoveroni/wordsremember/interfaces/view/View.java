@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.interfaces.view;
 
 import com.matteoveroni.myutils.FormattedString;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.scene_dictionary.view.activities.AddTranslationActivity;
 import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditTranslationActivity;
 import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditVocableActivity;
@@ -21,6 +22,8 @@ import com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity.Us
 public interface View {
 
     void showMessage(String message);
+
+    void showMessage(AndroidLocaleKey localeKey);
 
     void showMessage(FormattedString formattedString);
 

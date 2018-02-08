@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
@@ -141,7 +141,7 @@ public class EditVocablePresenterNew extends BasePresenter<EditVocableView> impl
 
     private void updateModelAndViewForVocable(Word vocable) {
         model.setVocableSelected(vocable);
-        view.showMessage(LocaleKey.VOCABLE_SAVED);
+        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
         view.returnToPreviousView();
     }
 }

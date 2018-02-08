@@ -4,7 +4,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameQuestionTimer;
@@ -96,7 +96,7 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     public void onQuestionAnswerFromView(String answerFromView) {
         String answer = StringUtils.strip(answerFromView);
         if (answer.isEmpty()) {
-            view.showMessage(LocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
+            view.showMessage(AndroidLocaleKey.MSG_ERROR_NO_ANSWER_GIVEN);
         } else {
             stopQuestionTimerCount();
 
@@ -186,11 +186,11 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
     private void handleNoMoreQuestionsException() {
         FormattedString gameResultMessage = new FormattedString(
                 "%s %s %d/%d %s",
-                LocaleKey.MSG_GAME_COMPLETED,
-                LocaleKey.SCORE,
+                AndroidLocaleKey.MSG_GAME_COMPLETED.getKeyName(),
+                AndroidLocaleKey.SCORE.getKeyName(),
                 gameModel.getFinalTotalScore(),
                 gameModel.getNumberOfQuestions(),
-                LocaleKey.POINTS
+                AndroidLocaleKey.POINTS
         );
         isDialogShownInView = true;
         view.showGameResultDialog(gameResultMessage);
@@ -199,16 +199,16 @@ public class QuizGamePresenter extends BasePresenter<QuizGameView> implements Ga
 
     private void handleZeroQuestionsException() {
         isDialogShownInView = true;
-        view.showErrorDialog(LocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
+        view.showErrorDialog(AndroidLocaleKey.MSG_ERROR_INSERT_SOME_VOCABLE);
         view.hideKeyboard();
     }
 
     private FormattedString buildCompletedQuestionResultMessage(CompletedQuestion completedQuestion) {
         switch (completedQuestion.getAnswerResult()) {
             case CORRECT:
-                return new FormattedString("%s\n\n" + completedQuestion.getAnswer(), LocaleKey.MSG_CORRECT_ANSWER);
+                return new FormattedString("%s\n\n" + completedQuestion.getAnswer(), AndroidLocaleKey.MSG_CORRECT_ANSWER.getKeyName());
             case WRONG:
-                FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n\n", LocaleKey.MSG_WRONG_ANSWER, LocaleKey.CORRECT_ANSWERS);
+                FormattedString quizResultMessage = new FormattedString("%s\n\n%s:\n\n", AndroidLocaleKey.MSG_WRONG_ANSWER.getKeyName(), AndroidLocaleKey.CORRECT_ANSWERS.getKeyName());
 
                 Set<String> correctAnswers = completedQuestion.getTrueAnswers();
                 int index = 0;

@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
@@ -39,8 +40,7 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
     public void onSaveProfileAction() {
         final UserProfile viewUserProfile = view.getPojoUsed();
         if (viewUserProfile.getName().trim().isEmpty()) {
-            // TODO: is formatted string
-            view.showMessage("The User profile name can\'t be empty, insert a valid name!");
+            view.showMessage(AndroidLocaleKey.MSG_ERROR_EMPTY_USER_PROFILE_NAME);
             return;
         }
 

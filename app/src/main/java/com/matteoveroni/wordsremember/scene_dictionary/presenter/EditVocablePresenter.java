@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSearchVocableCompleted;
@@ -41,6 +41,12 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
         Word lastVocableSelected = model.getVocableSelected();
         Word lastTranslationSelected = model.getTranslationSelected();
 
+        if (Word.isNotPersisted(lastVocableSelected)) {
+            this.view.setHeader(AndroidLocaleKey.CREATE_VOCABLE);
+        } else {
+            this.view.setHeader(AndroidLocaleKey.EDIT_VOCABLE);
+        }
+
         this.view.setPojoUsed(lastVocableSelected);
 
         // When a translation for a vocable is selected, attach view is called again so
@@ -74,7 +80,7 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     public void onSaveVocableRequest() {
         editedVocableInView = view.getPojoUsed();
         if (Word.isNullOrEmpty(editedVocableInView)) {
-            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+            view.showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
         } else {
             dao.asyncSearchVocableByName(editedVocableInView.getName());
         }
@@ -90,21 +96,21 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
                 dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
             }
         } else {
-            view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+            view.showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
     }
 
     @Subscribe
     public void onEvent(EventAsyncSaveVocableCompleted event) {
         model.setVocableSelected(editedVocableInView);
-        view.showMessage(LocaleKey.VOCABLE_SAVED);
+        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
         view.returnToPreviousView();
     }
 
     @Subscribe
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
         model.setVocableSelected(editedVocableInView);
-        view.showMessage(LocaleKey.VOCABLE_SAVED);
+        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
         view.returnToPreviousView();
     }
 

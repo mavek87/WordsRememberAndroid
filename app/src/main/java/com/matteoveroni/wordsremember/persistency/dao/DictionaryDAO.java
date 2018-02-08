@@ -192,7 +192,7 @@ public class DictionaryDAO {
         Word translation = vocableTranslation.getTranslation();
         Word vocable = vocableTranslation.getVocable();
 
-        if (Word.isNullOrEmpty(translation) || translation.getId() < 1)
+        if (Word.isNullOrEmpty(vocable) || Word.isNotPersisted(translation))
             throw new IllegalArgumentException("AsyncSaveVocableTranslation invalid argument");
 
         ContentValues vocablesTranslationValue = new ContentValues();

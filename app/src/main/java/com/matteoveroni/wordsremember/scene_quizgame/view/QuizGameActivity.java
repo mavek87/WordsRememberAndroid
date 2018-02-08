@@ -20,6 +20,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.question.CompletedQuestion;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameQuestionTimer;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
@@ -166,14 +167,13 @@ public class QuizGameActivity extends AbstractPresentedActivityView implements
     }
 
     @Override
-    public void showErrorDialog(String msgError) {
-        hideKeyboard();
+    public void showErrorDialog(String message) {
+        showDialog(message);
+    }
 
-        String title = getString(R.string.game_result);
-        String message = localize(msgError);
-
-        ErrorDialog dialog = ErrorDialog.newInstance(title, message);
-        dialog.show(fragmentManager, ErrorDialog.TAG);
+    @Override
+    public void showErrorDialog(AndroidLocaleKey localeKeyMessage) {
+        showDialog(localize(localeKeyMessage));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class QuizGameActivity extends AbstractPresentedActivityView implements
     @Override
     public void printTime(long timeRemaining) {
         int time = (int) timeRemaining;
-        lbl_remainingTime.setText(getString(R.string.timeRemaining) + ": " + String.valueOf(time));
+        lbl_remainingTime.setText(getString(R.string.time_remaining) + ": " + String.valueOf(time));
     }
 
     @Override
@@ -216,6 +216,14 @@ public class QuizGameActivity extends AbstractPresentedActivityView implements
         lbl_question.setVisibility(visibility);
         lbl_question_vocable.setVisibility(visibility);
         txt_answer.setVisibility(visibility);
+    }
+
+    private void showDialog(String message) {
+        hideKeyboard();
+
+        String title = getString(R.string.game_result);
+        ErrorDialog dialog = ErrorDialog.newInstance(title, message);
+        dialog.show(fragmentManager, ErrorDialog.TAG);
     }
 
     private void setSoftkeyActionButtonToConfirmQuizAnswer() {

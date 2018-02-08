@@ -57,11 +57,11 @@ public class QuestionResultDialog extends DialogFragment {
         String title;
         switch (result) {
             case CORRECT:
-                title = getString(R.string.correctAnswer);
+                title = getString(R.string.correct_answer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_correct, null);
                 break;
             case WRONG:
-                title = getString(R.string.wrongAnswer);
+                title = getString(R.string.wrong_answer);
                 img_alertDialog = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_wrong, null);
                 break;
             default:

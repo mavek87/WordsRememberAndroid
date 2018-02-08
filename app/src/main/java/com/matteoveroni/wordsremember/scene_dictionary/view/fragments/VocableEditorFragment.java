@@ -1,6 +1,7 @@
 package com.matteoveroni.wordsremember.scene_dictionary.view.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,13 @@ import android.widget.TextView;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
+import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
+import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.interfaces.view.BasePresentedFragmentView;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
+import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 
 import butterknife.BindView;
@@ -23,7 +30,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class VocableEditorFragment extends Fragment implements PojoManipulable<Word> {
+public class VocableEditorFragment extends Fragment implements PojoManipulable<Word>, VocableEditorView {
 
     public static final String TAG = TagGenerator.tag(VocableEditorFragment.class);
 
@@ -54,19 +61,20 @@ public class VocableEditorFragment extends Fragment implements PojoManipulable<W
     }
 
     @Override
+    public void setHeader(AndroidLocaleKey localeHeaderTextKey) {
+        LocaleTranslator translator = WordsRemember.getLocaleTranslator(getActivity().getApplicationContext());
+        lbl_title.setText(translator.localize(localeHeaderTextKey));
+    }
+
+    @Override
     public Word getPojoUsed() {
         return new Word(vocableToEdit.getId(), txt_vocableName.getText().toString());
     }
 
     @Override
     public void setPojoUsed(Word vocable) {
-        if (vocable.getId() <= 0) {
-            lbl_title.setText(getString(R.string.create_vocable));
-        } else {
-            lbl_title.setText(getString(R.string.edit_vocable));
-            if (txt_vocableName.getText().toString().trim().isEmpty()) {
-                txt_vocableName.setText(vocable.getName());
-            }
+        if (txt_vocableName.getText().toString().trim().isEmpty() && vocable != null) {
+            txt_vocableName.setText(vocable.getName());
         }
         vocableToEdit = vocable;
     }

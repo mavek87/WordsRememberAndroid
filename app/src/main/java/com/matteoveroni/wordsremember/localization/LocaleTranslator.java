@@ -8,8 +8,6 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
@@ -32,13 +30,23 @@ public class LocaleTranslator {
         Log.d(TAG, "LocaleTranslator created");
     }
 
-    public String localize(String localeKey) {
+    public String localize(AndroidLocaleKey localeKey) {
         try {
-            int translation_id = androidResources.getIdentifier(localeKey, "string", context.getPackageName());
-            return androidResources.getString(translation_id);
+            return androidResources.getString(localeKey.getKeyCode());
         } catch (Exception ex) {
             Log.w(TAG, "Translation for " + localeKey + " locale keyword not found");
-            return localeKey;
+            return localeKey.name();
+        }
+    }
+
+    public String localize(String localeKeyName) {
+        try {
+            localeKeyName = localeKeyName.toLowerCase();
+            int translation_id = androidResources.getIdentifier(localeKeyName, "string", context.getPackageName());
+            return androidResources.getString(translation_id);
+        } catch (Exception ex) {
+            Log.w(TAG, "Translation for " + localeKeyName + " locale keyword not found");
+            return localeKeyName;
         }
     }
 

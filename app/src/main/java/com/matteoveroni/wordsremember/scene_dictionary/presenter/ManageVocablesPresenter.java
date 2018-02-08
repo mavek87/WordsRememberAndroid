@@ -3,7 +3,7 @@ package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncDeleteVocableCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventVocableManipulationRequest;
@@ -62,6 +62,6 @@ public class ManageVocablesPresenter extends BasePresenter<ManageVocablesView> {
 
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableCompleted event) {
-        view.showMessage(LocaleKey.VOCABLE_REMOVED);
+        view.showMessage(AndroidLocaleKey.VOCABLE_REMOVED);
     }
 }

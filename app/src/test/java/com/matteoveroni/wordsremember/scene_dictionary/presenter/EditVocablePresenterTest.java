@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.TypeOfManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable.EventAsyncSaveVocableCompleted;
@@ -122,7 +122,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class EditVocablePresenterTest {
 
         presenter.onSaveVocableRequest();
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_VOCABLE);
     }
 
     @Test
@@ -174,7 +174,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableCompleted(PERSISTED_VOCABLE_WITH_SAME_NAME_BUT_DIFFERENT_ID));
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncSaveVocable(any(Word.class));
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
     }
@@ -185,7 +185,7 @@ public class EditVocablePresenterTest {
 
         presenter.onEvent(new EventAsyncSearchVocableCompleted(ANOTHER_PERSISTENT_VOCABLE_WITH_SAME_NAME));
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         verify(dao, never()).asyncUpdateVocable(any(Long.class), any(Word.class));
         verify(dao, never()).asyncSaveVocable(any(Word.class));
     }

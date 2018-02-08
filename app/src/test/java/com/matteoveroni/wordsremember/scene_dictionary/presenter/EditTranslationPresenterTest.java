@@ -1,7 +1,7 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSaveTranslationCompleted;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSearchTranslationByNameCompleted;
@@ -70,7 +70,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onSaveTranslationRequest();
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         verify(dao, never()).asyncSearchTranslationByName(anyString());
     }
 
@@ -89,7 +89,7 @@ public class EditTranslationPresenterTest {
 
         presenter.onEvent(new EventAsyncSearchTranslationByNameCompleted(TRANSLATION));
 
-        verify(view).showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
+        verify(view).showMessage(AndroidLocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_TRANSLATION_NAME);
     }
 
     @Test

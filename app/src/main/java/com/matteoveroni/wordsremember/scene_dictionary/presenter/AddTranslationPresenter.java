@@ -4,7 +4,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
-import com.matteoveroni.wordsremember.localization.LocaleKey;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventTranslationSelected;
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
@@ -41,7 +41,7 @@ public class AddTranslationPresenter extends BasePresenter<AddTranslationView> {
     public void onEvent(EventTranslationSelected event) {
         Word translation = event.getSelectedTranslation();
         model.setTranslationSelected(translation);
-        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", LocaleKey.TRANSLATION_ADDED));
+        view.showMessage(new FormattedString("%s (" + translation.getName() + ")", AndroidLocaleKey.TRANSLATION_ADDED.getKeyName()));
         view.returnToPreviousView();
     }
 

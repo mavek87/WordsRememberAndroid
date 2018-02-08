@@ -20,6 +20,7 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterLoader;
+import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.utils.BusAttacher;
 
@@ -115,6 +116,11 @@ public abstract class AbstractPresentedActivityView<V, P extends Presenter<V>> e
     }
 
     @Override
+    public void showMessage(AndroidLocaleKey message) {
+        Toast.makeText(getApplicationContext(), localize(message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showMessage(FormattedString formattedLocaleMessage) {
         Toast.makeText(getApplicationContext(), localize(formattedLocaleMessage), Toast.LENGTH_SHORT).show();
     }
@@ -127,6 +133,10 @@ public abstract class AbstractPresentedActivityView<V, P extends Presenter<V>> e
     @Override
     public void switchToView(View.Name viewName, int requestCode) {
         startActivityForResult(new Intent(getApplicationContext(), viewName.getViewClass()), requestCode);
+    }
+
+    public String localize(AndroidLocaleKey localeKeyMessage) {
+        return getTranslator().localize(localeKeyMessage);
     }
 
     public String localize(String localeStringKey) {
