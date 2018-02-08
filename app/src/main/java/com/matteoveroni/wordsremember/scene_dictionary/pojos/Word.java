@@ -21,9 +21,6 @@ public class Word {
     @Setter
     private String name = "";
 
-    public Word() {
-    }
-
     public Word(String name) {
         this.name = name;
     }

@@ -1,6 +1,5 @@
 package com.matteoveroni.wordsremember.users;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

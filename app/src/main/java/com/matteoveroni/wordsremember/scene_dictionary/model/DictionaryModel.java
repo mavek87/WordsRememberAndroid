@@ -19,6 +19,7 @@ public class DictionaryModel {
     @Getter
     @Setter
     private Word vocableSelected;
+
     @Getter
     @Setter
     private Word translationSelected;
@@ -26,6 +27,6 @@ public class DictionaryModel {
     public void reset() {
         vocableSelected = null;
         translationSelected = null;
-        Log.i(TAG, "Model reset");
+        Log.i(TAG, "Model resetted");
     }
 }

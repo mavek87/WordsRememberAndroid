@@ -83,18 +83,12 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     @Subscribe
     public void onEvent(EventAsyncSearchVocableCompleted event) {
         Word otherStoredVocableWithSameName = event.getVocable();
-        boolean isVocableBeenStored = false;
         if (otherStoredVocableWithSameName == null) {
             if (editedVocableInView.getId() <= 0) {
                 dao.asyncSaveVocable(editedVocableInView);
-                isVocableBeenStored = true;
             } else {
                 dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
-                isVocableBeenStored = true;
             }
-        }
-        if (isVocableBeenStored) {
-            view.showMessage(LocaleKey.VOCABLE_SAVED);
         } else {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_DUPLICATE_VOCABLE_NAME);
         }
@@ -103,12 +97,14 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     @Subscribe
     public void onEvent(EventAsyncSaveVocableCompleted event) {
         model.setVocableSelected(editedVocableInView);
+        view.showMessage(LocaleKey.VOCABLE_SAVED);
         view.returnToPreviousView();
     }
 
     @Subscribe
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
         model.setVocableSelected(editedVocableInView);
+        view.showMessage(LocaleKey.VOCABLE_SAVED);
         view.returnToPreviousView();
     }
 
