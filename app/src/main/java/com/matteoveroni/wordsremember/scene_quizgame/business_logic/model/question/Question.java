@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public class Question {
+
     @Getter
     private final String questionMsg;
     @Getter
