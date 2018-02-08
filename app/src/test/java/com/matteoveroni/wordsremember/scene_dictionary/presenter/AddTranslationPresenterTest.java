@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventT
 import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translations.EventVocableTranslationManipulationRequest;
 import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_dictionary.view.AddTranslationView;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.AddTranslationView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;

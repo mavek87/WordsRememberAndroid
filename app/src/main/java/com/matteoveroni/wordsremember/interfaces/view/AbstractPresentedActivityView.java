@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.R;
@@ -163,9 +162,9 @@ public abstract class AbstractPresentedActivityView<V, P extends Presenter<V>> e
     }
 
     public interface ErrorDialogListener {
-        void errorDialogPositiveButtonPressed();
+        void onErrorDialogPositiveButtonPressed();
 
-        void errorDialogNegativeButtonPressed();
+        void onErrorDialogNegativeButtonPressed();
     }
 
     public AlertDialog buildErrorDialog(String title, String message, final ErrorDialogListener dialogListener) {
@@ -175,12 +174,12 @@ public abstract class AbstractPresentedActivityView<V, P extends Presenter<V>> e
                 .setMessage(message)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialogListener.errorDialogPositiveButtonPressed();
+                        dialogListener.onErrorDialogPositiveButtonPressed();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialogListener.errorDialogNegativeButtonPressed();
+                        dialogListener.onErrorDialogNegativeButtonPressed();
                     }
                 });
         return alertDialogBuilder.create();

@@ -11,7 +11,7 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.vocable_translatio
 import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditVocableView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.junit.After;

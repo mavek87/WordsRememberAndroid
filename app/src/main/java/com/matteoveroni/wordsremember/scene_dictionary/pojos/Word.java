@@ -2,13 +2,23 @@ package com.matteoveroni.wordsremember.scene_dictionary.pojos;
 
 import com.matteoveroni.myutils.Json;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Matteo Veroni
  */
 
+@EqualsAndHashCode
 public class Word {
 
+    @Getter
+    @Setter
     private long id = -1;
+
+    @Getter
+    @Setter
     private String name = "";
 
     public Word() {
@@ -23,22 +33,6 @@ public class Word {
         this.name = name;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String toJson() {
         return Json.getInstance().toJson(this);
     }
@@ -47,28 +41,19 @@ public class Word {
         return Json.getInstance().fromJson(json, Word.class);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Word)) return false;
-
-        Word word = (Word) o;
-
-        return getId() == word.getId() && getName().equals(word.getName());
+    public static boolean isNullOrEmpty(Word word) {
+        return word == null || word.getName().trim().isEmpty();
     }
 
-    @Override
-    public int hashCode() {
-        int result = (int) (getId() ^ (getId() >>> 32));
-        result = 31 * result + getName().hashCode();
-        return result;
+    public static boolean isNotNullNorEmpty(Word word) {
+        return !isNullOrEmpty(word);
     }
 
-    public final boolean isNullOrEmpty() {
-        return name.trim().isEmpty();
+    public static boolean isPersisted(Word vocable) {
+        return Word.isNotNullNorEmpty(vocable) && vocable.getId() > 0;
     }
 
-    public static final boolean isNotNullNorEmpty(Word word) {
-        return word != null && word.getName() != null && !word.getName().trim().isEmpty();
+    public static boolean isNotPersisted(Word vocable) {
+        return Word.isNullOrEmpty(vocable) || vocable.getId() <= 0;
     }
 }

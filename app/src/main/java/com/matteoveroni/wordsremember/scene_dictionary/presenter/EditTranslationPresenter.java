@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.scene_dictionary.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.localization.LocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventAsyncSaveTranslationCompleted;
@@ -9,9 +8,8 @@ import com.matteoveroni.wordsremember.scene_dictionary.events.translation.EventA
 import com.matteoveroni.wordsremember.scene_dictionary.model.DictionaryModel;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
-import com.matteoveroni.wordsremember.scene_dictionary.view.EditTranslationView;
+import com.matteoveroni.wordsremember.scene_dictionary.view.activities.EditTranslationView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 /**
@@ -41,7 +39,7 @@ public class EditTranslationPresenter extends BasePresenter<EditTranslationView>
         final VocableTranslation vocableTranslationInView = view.getPojoUsed();
         editedTranslationInView = vocableTranslationInView.getTranslation();
 
-        if (editedTranslationInView.isNullOrEmpty()) {
+        if (Word.isNullOrEmpty(editedTranslationInView)) {
             view.showMessage(LocaleKey.MSG_ERROR_TRYING_TO_STORE_INVALID_TRANSLATION);
         } else {
             dao.asyncSearchTranslationByName(editedTranslationInView.getName());

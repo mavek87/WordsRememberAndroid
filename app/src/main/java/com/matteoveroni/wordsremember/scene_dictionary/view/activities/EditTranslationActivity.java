@@ -14,7 +14,6 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.VocableTranslation;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditTranslationPresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.view.EditTranslationView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationEditorFragment;
 
 import butterknife.ButterKnife;

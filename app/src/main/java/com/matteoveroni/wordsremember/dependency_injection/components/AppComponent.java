@@ -14,7 +14,6 @@ import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenter;
 import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
-import com.matteoveroni.wordsremember.scene_statistics.StatisticsCalculator;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
 
@@ -58,6 +57,4 @@ public interface AppComponent {
     void inject(SettingsPresenterFactory settingsPresenterFactory);
 
     void inject(Settings settings);
-
-    void inject(StatisticsCalculator statisticsCalculator);
 }

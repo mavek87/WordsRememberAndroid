@@ -17,7 +17,6 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_dictionary.pojos.Word;
 import com.matteoveroni.wordsremember.scene_dictionary.presenter.EditVocablePresenter;
-import com.matteoveroni.wordsremember.scene_dictionary.view.EditVocableView;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.TranslationsListFragment;
 import com.matteoveroni.wordsremember.scene_dictionary.view.fragments.VocableEditorFragment;
 
