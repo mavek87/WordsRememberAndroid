@@ -76,12 +76,14 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
         int numberOfWrongAnswers = quiz.getWrongAnswers().size();
         txt_numberOfWrongAnswers.setText(String.format("%d", numberOfWrongAnswers));
 
-        double correctnessPercentage = ((double) numberOfCorrectAnswers / totalNumberOfQuestions) * 100;
-        txt_correctnessPercentage.setText(
-                Double.isNaN(correctnessPercentage)
-                        ? String.format("%.2f %%", 0f)
-                        : String.format("%.2f %%", correctnessPercentage)
-        );
+        double correctnessPercentage = 0;
+        if (totalNumberOfQuestions > 0) {
+            correctnessPercentage = ((double) numberOfCorrectAnswers / totalNumberOfQuestions) * 100;
+            if (Double.isNaN(correctnessPercentage)) {
+                correctnessPercentage = 0;
+            }
+        }
+        txt_correctnessPercentage.setText(String.format("%.2f %%", correctnessPercentage));
 
         long averageResponseTime = quiz.getAverageResponseTime();
         txt_avgResponseTime.setText(String.format("%.1f sec.", ((double) averageResponseTime / 1000)));

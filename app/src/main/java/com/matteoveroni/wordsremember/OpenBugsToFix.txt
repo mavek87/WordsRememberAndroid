@@ -1,3 +1,2 @@
 -  Error changing game difficulty in settings.
--  When only a word with a translation is added in the dictionary 'correctenss percentage' in stats does not work.
 -  When a game ends if u press two time back a new game is started.
