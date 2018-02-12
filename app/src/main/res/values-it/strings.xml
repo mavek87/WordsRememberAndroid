@@ -52,7 +52,7 @@
     <string name="msg_correct_answer">La risposta è corretta</string>
     <string name="msg_wrong_answer">La risposta è errata</string>
     <string name="version">Versione</string>
-    <string name="wrong_answer">Risposta Errata</string>
+    <string name="wrong_answer">Risposta errata</string>
     <string name="msg_enable_online_translations_check">Abilita controllo traduzioni online</string>
     <string name="disable">Disabilita</string>
     <string name="enable">Abilita</string>
@@ -75,4 +75,5 @@
     <string name="create_user_profile">Crea profilo utente</string>
     <string name="edit_user_profile">Modifica profilo utente</string>
     <string name="msg_error_empty_user_profile_name">Il nome del profilo utente non può essere vuoto. Inserisci un nome utente valido!</string>
+    <string name="wrong_answers">Risposte errate</string>
 </resources>

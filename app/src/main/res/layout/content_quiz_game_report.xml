@@ -182,6 +182,17 @@
             app:layout_constraintStart_toEndOf="@+id/quiz_game_report_lbl_avg_response_time"
             app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_correctness_percentage" />
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/piechart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quiz_game_report_txt_avg_response_time" />
+
     </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

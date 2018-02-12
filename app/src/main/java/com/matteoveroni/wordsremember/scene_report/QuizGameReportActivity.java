@@ -1,8 +1,17 @@
 package com.matteoveroni.wordsremember.scene_report;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.EditText;
 
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.factories.PresenterFactories;
 import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
@@ -11,6 +20,9 @@ import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +52,9 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
 
     @BindView(R.id.quiz_game_report_txt_avg_response_time)
     EditText txt_avgResponseTime;
+
+    @BindView(R.id.piechart)
+    PieChart pieChart;
 
     @Override
     protected PresenterFactory getPresenterFactory() {
@@ -76,6 +91,8 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
         int numberOfWrongAnswers = quiz.getWrongAnswers().size();
         txt_numberOfWrongAnswers.setText(String.format("%d", numberOfWrongAnswers));
 
+        drawPieChart(numberOfCorrectAnswers, numberOfWrongAnswers);
+
         double correctnessPercentage = 0;
         if (totalNumberOfQuestions > 0) {
             correctnessPercentage = ((double) numberOfCorrectAnswers / totalNumberOfQuestions) * 100;
@@ -93,5 +110,28 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
     public void onBackPressed() {
         finish();
         super.switchToView(Name.MAIN_MENU);
+    }
+
+    private void drawPieChart(float numberOfCorrectAnswers, float numberOfWrongAnswers) {
+        pieChart.setDrawHoleEnabled(false);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawEntryLabels(false);
+
+        List<PieEntry> graphYValues = new ArrayList<>();
+        graphYValues.add(new PieEntry(numberOfCorrectAnswers, getString(R.string.correct_answers)));
+        graphYValues.add(new PieEntry(numberOfWrongAnswers, getString(R.string.wrong_answers)));
+
+        PieDataSet dataSet = new PieDataSet(graphYValues, "");
+
+        final int RED_COLOR_CODE = ColorTemplate.rgb("FF0000");
+        final int GREEN_COLOR_CODE = ColorTemplate.rgb("00CC00");
+        dataSet.setColors(RED_COLOR_CODE, GREEN_COLOR_CODE);
+
+        PieData data = new PieData(dataSet);
+        data.setValueFormatter(new PercentFormatter());
+//        data.setValueTextSize(9f);
+        data.setValueTextColor(Color.WHITE);
+        pieChart.setData(data);
     }
 }

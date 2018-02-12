@@ -26,8 +26,9 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     private final DictionaryDAO dao;
     private final DictionaryModel model;
 
-    protected Word editedVocableInView = null;
     protected static final int ADD_TRANSLATION_REQUEST_CODE = 0;
+
+    protected Word editedVocableInView = null;
 
     public EditVocablePresenter(DictionaryModel model, DictionaryDAO dao) {
         this.model = model;
@@ -58,7 +59,7 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     }
 
     public void onAddTranslationRequest() {
-        if (Word.isNullOrEmpty(model.getVocableSelected())) {
+        if (Word.isNotPersisted(model.getVocableSelected())) {
             view.showErrorDialogVocableNotSaved();
         } else {
             view.switchToView(View.Name.ADD_TRANSLATION, ADD_TRANSLATION_REQUEST_CODE);
@@ -90,7 +91,7 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     public void onEvent(EventAsyncSearchVocableCompleted event) {
         Word otherStoredVocableWithSameName = event.getVocable();
         if (otherStoredVocableWithSameName == null) {
-            if (editedVocableInView.getId() <= 0) {
+            if (Word.isNotPersisted(editedVocableInView)) {
                 dao.asyncSaveVocable(editedVocableInView);
             } else {
                 dao.asyncUpdateVocable(editedVocableInView.getId(), editedVocableInView);
@@ -102,16 +103,12 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
 
     @Subscribe
     public void onEvent(EventAsyncSaveVocableCompleted event) {
-        model.setVocableSelected(editedVocableInView);
-        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
-        view.returnToPreviousView();
+        updateModelAndViewForVocable(editedVocableInView);
     }
 
     @Subscribe
     public void onEvent(EventAsyncUpdateVocableCompleted event) {
-        model.setVocableSelected(editedVocableInView);
-        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
-        view.returnToPreviousView();
+        updateModelAndViewForVocable(editedVocableInView);
     }
 
     @Subscribe
@@ -128,5 +125,11 @@ public class EditVocablePresenter extends BasePresenter<EditVocableView> impleme
     @Subscribe
     public void onEvent(EventAsyncDeleteVocableTranslationCompleted event) {
         view.refresh();
+    }
+
+    private void updateModelAndViewForVocable(Word vocable) {
+        model.setVocableSelected(vocable);
+        view.showMessage(AndroidLocaleKey.VOCABLE_SAVED);
+        view.returnToPreviousView();
     }
 }

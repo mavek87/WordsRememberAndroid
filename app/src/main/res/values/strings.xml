@@ -57,6 +57,7 @@
     <string name="correct_answer">Correct answer</string>
     <string name="correct_answers">Correct answers</string>
     <string name="wrong_answer">Wrong answer</string>
+    <string name="wrong_answers">Wrong answers</string>
     <string name="select_profile">Select a profile</string>
     <string name="user_registered">User registered</string>
     <string name="sign_in_successful">Sign in successful</string>
