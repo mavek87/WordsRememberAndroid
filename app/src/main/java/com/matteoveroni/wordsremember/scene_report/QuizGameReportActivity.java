@@ -78,32 +78,18 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
     }
 
     @Override
-    public void showData(Quiz quiz) {
-        GameDifficulty gameDifficulty = quiz.getGameDifficulty();
-        txt_gameDifficulty.setText(gameDifficulty.toString());
+    public void showData(QuizViewAdapter quizViewAdapter) {
+        txt_gameDifficulty.setText(quizViewAdapter.getGameDifficulty());
+        txt_totNumberOfQuestions.setText(quizViewAdapter.getNumberOfQuestions());
+        txt_numberOfCorrectAnswers.setText(quizViewAdapter.getNumberOfCorrectAnswers());
+        txt_numberOfWrongAnswers.setText(quizViewAdapter.getNumberOfWrongAnswers());
+        txt_correctnessPercentage.setText(quizViewAdapter.getCorrectnessPercentage());
+        txt_avgResponseTime.setText(quizViewAdapter.getAvgResponseTime());
 
-        int totalNumberOfQuestions = quiz.getTotalNumberOfQuestions();
-        txt_totNumberOfQuestions.setText(String.format("%d", totalNumberOfQuestions));
-
-        int numberOfCorrectAnswers = quiz.getCorrectAnswers().size();
-        txt_numberOfCorrectAnswers.setText(String.format("%d", numberOfCorrectAnswers));
-
-        int numberOfWrongAnswers = quiz.getWrongAnswers().size();
-        txt_numberOfWrongAnswers.setText(String.format("%d", numberOfWrongAnswers));
-
-        drawPieChart(numberOfCorrectAnswers, numberOfWrongAnswers);
-
-        double correctnessPercentage = 0;
-        if (totalNumberOfQuestions > 0) {
-            correctnessPercentage = ((double) numberOfCorrectAnswers / totalNumberOfQuestions) * 100;
-            if (Double.isNaN(correctnessPercentage)) {
-                correctnessPercentage = 0;
-            }
-        }
-        txt_correctnessPercentage.setText(String.format("%.2f %%", correctnessPercentage));
-
-        long averageResponseTime = quiz.getAverageResponseTime();
-        txt_avgResponseTime.setText(String.format("%.1f sec.", ((double) averageResponseTime / 1000)));
+        drawPieChart(
+                Float.valueOf(quizViewAdapter.getNumberOfCorrectAnswers()),
+                Float.valueOf(quizViewAdapter.getNumberOfWrongAnswers())
+        );
     }
 
     @Override
@@ -126,7 +112,7 @@ public class QuizGameReportActivity extends AbstractPresentedActivityView implem
 
         final int RED_COLOR_CODE = ColorTemplate.rgb("FF0000");
         final int GREEN_COLOR_CODE = ColorTemplate.rgb("00CC00");
-        dataSet.setColors(RED_COLOR_CODE, GREEN_COLOR_CODE);
+        dataSet.setColors(GREEN_COLOR_CODE, RED_COLOR_CODE);
 
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());

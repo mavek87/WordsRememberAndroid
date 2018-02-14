@@ -8,5 +8,5 @@ import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Q
 
 public interface QuizGameReportView {
 
-    void showData(Quiz quiz);
+    void showData(QuizViewAdapter quizViewAdapter);
 }
