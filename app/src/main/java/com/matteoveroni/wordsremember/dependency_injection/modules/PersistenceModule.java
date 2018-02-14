@@ -2,7 +2,7 @@ package com.matteoveroni.wordsremember.dependency_injection.modules;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.persistency.dao.DictionaryDAO;
 import com.matteoveroni.wordsremember.persistency.dao.StatisticsDAO;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
@@ -24,8 +24,8 @@ public class PersistenceModule {
 
     @Provides
     @Singleton
-    public ProfilesDBManager provideProfilesDBManager(Context context) {
-        return ProfilesDBManager.getInstance(context);
+    public DBManager provideProfilesDBManager(Context context) {
+        return DBManager.getInstance(context);
     }
 
     @Provides
@@ -36,13 +36,13 @@ public class PersistenceModule {
 
     @Provides
     @Singleton
-    public UserProfilesDAO provideUserProfileDAO(Context context, ProfilesDBManager profilesDBManager) {
-        return new UserProfilesDAO(context, profilesDBManager);
+    public UserProfilesDAO provideUserProfileDAO(Context context, DBManager dbManager) {
+        return new UserProfilesDAO(context, dbManager);
     }
 
     @Provides
     @Singleton
-    public StatisticsDAO provideStatisticsDAO(Context context, ProfilesDBManager profilesDBManager) {
-        return new StatisticsDAO(context, profilesDBManager);
+    public StatisticsDAO provideStatisticsDAO(Context context, DBManager dbManager) {
+        return new StatisticsDAO(context, dbManager);
     }
 }

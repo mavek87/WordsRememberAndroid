@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.persistency;
+package com.matteoveroni.wordsremember.persistency.dbhelpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

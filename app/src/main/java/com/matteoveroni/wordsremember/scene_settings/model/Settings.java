@@ -6,7 +6,7 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 import com.matteoveroni.wordsremember.users.User;
@@ -24,7 +24,7 @@ public class Settings {
     public static final String TAG = TagGenerator.tag(Settings.class);
 
     private final SharedPreferences prefs;
-    private final ProfilesDBManager dbManager;
+    private final DBManager dbManager;
 
     public static final String IS_STARTED_FOR_THE_FIRST_TIME_KEY = "is_started_for_the_first_time_key";
     public static boolean isAppStartedForTheFirstTime = true;
@@ -46,13 +46,13 @@ public class Settings {
     public class NoRegisteredUserException extends Exception {
     }
 
-    public Settings(SharedPreferences prefs, ProfilesDBManager dbManager) {
+    public Settings(SharedPreferences prefs, DBManager dbManager) {
         WordsRemember.getAppComponent().inject(this);
         this.prefs = prefs;
         this.dbManager = dbManager;
     }
 
-    public Settings(SharedPreferences prefs, ProfilesDBManager dbManager, GameDifficulty difficulty) {
+    public Settings(SharedPreferences prefs, DBManager dbManager, GameDifficulty difficulty) {
         this(prefs, dbManager);
         setDifficulty(difficulty);
     }

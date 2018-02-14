@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.persistency.contracts.QuizStatsContract;
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.quiz.Quiz;
 
 import java.util.Date;
@@ -21,7 +21,7 @@ public class StatisticsDAO {
     private final static String TAG = TagGenerator.tag(StatisticsDAO.class);
     private final ContentResolver contentResolver;
 
-    public StatisticsDAO(Context context, ProfilesDBManager profilesDBManager) {
+    public StatisticsDAO(Context context, DBManager profilesDBManager) {
         this.contentResolver = context.getContentResolver();
     }
 

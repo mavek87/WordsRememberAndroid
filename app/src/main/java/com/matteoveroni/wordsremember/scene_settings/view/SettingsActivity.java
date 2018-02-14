@@ -19,7 +19,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenter;
@@ -148,7 +148,7 @@ public class SettingsActivity extends AbstractPresentedActivityView implements S
     }
 
     private void printDictionary() {
-        UserProfile userProfile = ProfilesDBManager.getInstance(getApplicationContext()).getCurrentUserProfile();
+        UserProfile userProfile = DBManager.getInstance(getApplicationContext()).getCurrentUserProfile();
         lbl_dictionary.setText("Dictionary: " + userProfile.getName());
     }
 

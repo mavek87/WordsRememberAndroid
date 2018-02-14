@@ -5,13 +5,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Abstract class which extends ContentProvider to allow the Content Resolver
@@ -26,7 +23,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-    protected ProfilesDBManager profileDBManager;
+    protected DBManager profileDBManager;
 
     public class Error {
         public static final String UNSUPPORTED_URI = "Unsupported URI";
@@ -34,7 +31,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        profileDBManager = ProfilesDBManager.getInstance(getContext());
+        profileDBManager = DBManager.getInstance(getContext());
         return true;
     }
 

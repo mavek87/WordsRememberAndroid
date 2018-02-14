@@ -12,7 +12,7 @@ import com.matteoveroni.wordsremember.dependency_injection.modules.ModelsModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.PersistenceModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.SettingsModule;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 
 import java.util.Locale;
 
@@ -20,7 +20,7 @@ import java.util.Locale;
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.9.2
+ * @version 0.9.3
  **/
 
 public class WordsRemember extends Application {
@@ -28,7 +28,7 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.9.2";
+    public static final String VERSION = "0.9.3";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
     public static Locale CURRENT_LOCALE;
@@ -54,7 +54,7 @@ public class WordsRemember extends Application {
 
         if (CLEAR_DB_AT_STARTUP) {
             try {
-                ProfilesDBManager.getInstance(getApplicationContext()).deleteCurrentUserDB();
+                DBManager.getInstance(getApplicationContext()).deleteCurrentUserDB();
             } catch (Exception ex) {
                 Log.e(APP_NAME, ex.getMessage());
             }
@@ -74,9 +74,9 @@ public class WordsRemember extends Application {
     private void buildAppModules() {
         APP_COMPONENT = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-//                .persistenceModule(new PersistenceModule())
-//                .settingsModule(new SettingsModule())
-//                .modelsModule(new ModelsModule())
+                .persistenceModule(new PersistenceModule())
+                .settingsModule(new SettingsModule())
+                .modelsModule(new ModelsModule())
                 .build();
     }
 

@@ -3,6 +3,7 @@ package com.matteoveroni.wordsremember.persistency;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.matteoveroni.wordsremember.persistency.dbhelpers.DBHelper;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
 import java.util.HashMap;
@@ -12,29 +13,26 @@ import java.util.Map;
  * @author Matteo Veroni
  */
 
-public class ProfilesDBManager {
+public class DBManager {
 
     private static final int DB_VERSION = 1;
 
+//    private final UserDBHelper userDBHelper;
     private final Map<UserProfile, DBHelper> dbHelpersMap = new HashMap<>();
     //todo: try to inject context
     private final Context context;
     private UserProfile userProfileInUse;
 
-    private volatile static ProfilesDBManager DB_MANAGER_UNIQUE_INSTANCE;
+    private volatile static DBManager DB_MANAGER_UNIQUE_INSTANCE;
 
-    private ProfilesDBManager(Context context) {
+    private DBManager(Context context) {
         this.context = context;
         this.userProfileInUse = UserProfile.USER_PROFILES;
     }
 
-    public static ProfilesDBManager getInstance(Context appContext) {
+    public static synchronized DBManager getInstance(Context appContext) {
         if (DB_MANAGER_UNIQUE_INSTANCE == null) {
-            synchronized (DBHelper.class) {
-                if (DB_MANAGER_UNIQUE_INSTANCE == null) {
-                    DB_MANAGER_UNIQUE_INSTANCE = new ProfilesDBManager(appContext);
-                }
-            }
+            DB_MANAGER_UNIQUE_INSTANCE = new DBManager(appContext);
         }
         return DB_MANAGER_UNIQUE_INSTANCE;
     }

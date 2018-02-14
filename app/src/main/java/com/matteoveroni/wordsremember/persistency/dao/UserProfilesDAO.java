@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 
-import com.matteoveroni.wordsremember.persistency.ProfilesDBManager;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 
@@ -16,9 +16,9 @@ import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
 public class UserProfilesDAO {
 
     private final ContentResolver contentResolver;
-    private final ProfilesDBManager profilesDBManager;
+    private final DBManager profilesDBManager;
 
-    public UserProfilesDAO(Context context, ProfilesDBManager profilesDBManager) {
+    public UserProfilesDAO(Context context, DBManager profilesDBManager) {
         this.contentResolver = context.getContentResolver();
         this.profilesDBManager = profilesDBManager;
     }

@@ -44,7 +44,7 @@ public class PresenterFactories {
             case QUIZ_GAME_REPORT_PRESENTER_FACTORY:
                 return new QuizGameReportPresenterFactory();
             default:
-                throw new RuntimeException("Unknown PresenterFactoryName passed");
+                throw new RuntimeException("Unknown PresenterFactoryName");
         }
     }
 }

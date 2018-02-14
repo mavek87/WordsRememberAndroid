@@ -1,7 +1,6 @@
 package com.matteoveroni.wordsremember.scene_userprofile.editor.presenter;
 
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
-import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
@@ -46,7 +45,7 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
 
         try {
             //TODO: handle the case of dictionary name already used in the db (correct error must be shown in the view!)
-            storeViewUserProfileInTheModel(viewUserProfile);
+            storeUserProfileFromViewToModel(viewUserProfile);
 
             if (settings.isAppStartedForTheFirstTime()) {
                 settings.setUserProfile(model.getUserProfile());
@@ -62,7 +61,7 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
         }
     }
 
-    private void storeViewUserProfileInTheModel(UserProfile viewUserProfile) throws Exception {
+    private void storeUserProfileFromViewToModel(UserProfile viewUserProfile) throws Exception {
         final UserProfile modelUserProfile = model.getUserProfile();
 
         if (modelUserProfile.getId() <= 0) {
