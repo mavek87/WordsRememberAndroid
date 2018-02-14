@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
@@ -113,7 +113,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         int position = contextMenuInfo.position;
         Cursor cursor = profilesListAdapter.getCursor();
 
-        UserProfile selectedUserProfile = getSelectedUserProfile(cursor, position);
+        Profile selectedUserProfile = getSelectedUserProfile(cursor, position);
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_edit:
                 EVENT_BUS.postSticky(new EventEditUserProfile(selectedUserProfile));
@@ -125,10 +125,10 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         return super.onContextItemSelected(item);
     }
 
-    private UserProfile getSelectedUserProfile(Cursor cursor, int position) {
+    private Profile getSelectedUserProfile(Cursor cursor, int position) {
         cursor.moveToPosition(position);
 
-        return new UserProfile(
+        return new Profile(
                 cursor.getLong(cursor.getColumnIndex(UserProfilesContract.Schema.COL_ID)),
                 cursor.getString(cursor.getColumnIndex(UserProfilesContract.Schema.COL_PROFILE_NAME))
         );

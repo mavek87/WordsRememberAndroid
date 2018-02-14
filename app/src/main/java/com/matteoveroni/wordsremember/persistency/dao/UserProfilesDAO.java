@@ -7,7 +7,7 @@ import android.net.Uri;
 
 import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 
 /**
  * @author Matteo Veroni
@@ -23,7 +23,7 @@ public class UserProfilesDAO {
         this.profilesDBManager = profilesDBManager;
     }
 
-    public long saveUserProfile(UserProfile userProfile) throws Exception {
+    public long saveUserProfile(Profile userProfile) throws Exception {
         if (userProfile.getId() > 0)
             throw new Exception("Impossible to save on a already saved user profile. Use the updateUserProfile method.");
 
@@ -43,7 +43,7 @@ public class UserProfilesDAO {
         return id;
     }
 
-    public int updateUserProfile(UserProfile oldUserProfile, UserProfile newUserProfile) throws Exception {
+    public int updateUserProfile(Profile oldUserProfile, Profile newUserProfile) throws Exception {
         checkIfUserProfileIsValidOrThrowException(newUserProfile, new IllegalArgumentException("Invalid new user profile to use for the update"));
 
         if (oldUserProfile.isInvalidProfile()) {
@@ -67,7 +67,7 @@ public class UserProfilesDAO {
         );
     }
 
-    public void deleteUserProfile(UserProfile userProfile) throws Exception {
+    public void deleteUserProfile(Profile userProfile) throws Exception {
         checkIfUserProfileIsValidOrThrowException(userProfile, new IllegalArgumentException("Invalid user profile to delete"));
 
         profilesDBManager.deleteUserProfileDB(userProfile);
@@ -79,12 +79,12 @@ public class UserProfilesDAO {
         );
     }
 
-    private void checkIfUserProfileIsValidOrThrowException(UserProfile userProfile, Exception ex) throws Exception {
+    private void checkIfUserProfileIsValidOrThrowException(Profile userProfile, Exception ex) throws Exception {
         if (userProfile.isInvalidProfile())
             throw ex;
     }
 
-    private ContentValues userProfileToContentValues(UserProfile userProfile) {
+    private ContentValues userProfileToContentValues(Profile userProfile) {
         final ContentValues values = new ContentValues();
         values.put(UserProfilesContract.Schema.COL_PROFILE_NAME, userProfile.getName());
         return values;

@@ -12,13 +12,13 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @EqualsAndHashCode
-public class UserProfile {
+public class Profile {
 
     /**
      * System profile (user profiles) is used in the initial lifecycle of the app for handling UserProfiles.db which
      * contains all the user profiles (profiles table).
      */
-    public static final UserProfile USER_PROFILES = new UserProfile(0L, UserProfilesContract.Schema.TABLE_NAME);
+    public static final Profile USER_PROFILES = new Profile(0L, UserProfilesContract.Schema.TABLE_NAME);
 
     public static final long NO_ID = -1;
     public static final String NO_PROFILE_NAME = "";
@@ -28,8 +28,8 @@ public class UserProfile {
     @Getter
     private final String name;
 
-    public static UserProfile createEmptyProfile() {
-        return new UserProfile(NO_ID, NO_PROFILE_NAME);
+    public static Profile createEmptyProfile() {
+        return new Profile(NO_ID, NO_PROFILE_NAME);
     }
 
     public boolean isInvalidProfile() {

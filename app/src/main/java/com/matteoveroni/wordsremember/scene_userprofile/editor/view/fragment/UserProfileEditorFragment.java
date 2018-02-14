@@ -2,7 +2,6 @@ package com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.Locale;
@@ -30,7 +29,7 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorFragment extends Fragment implements PojoManipulable<UserProfile>, AdapterView.OnItemSelectedListener {
+public class UserProfileEditorFragment extends Fragment implements PojoManipulable<Profile>, AdapterView.OnItemSelectedListener {
     private static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
 
     private static final String VIEW_TITLE_CONTENT_KEY = "view_title_content_key";
@@ -144,16 +143,16 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
     }
 
     @Override
-    public UserProfile getPojoUsed() {
+    public Profile getPojoUsed() {
         return getUserProfileFromView();
     }
 
-    private UserProfile getUserProfileFromView() {
-        return new UserProfile(id_userProfileToEdit, txt_dictionaryName.getText().toString());
+    private Profile getUserProfileFromView() {
+        return new Profile(id_userProfileToEdit, txt_dictionaryName.getText().toString());
     }
 
     @Override
-    public void setPojoUsed(UserProfile userProfile) {
+    public void setPojoUsed(Profile userProfile) {
         id_userProfileToEdit = userProfile.getId();
         if (id_userProfileToEdit <= 0) {
             lbl_title.setText(R.string.create_user_profile);

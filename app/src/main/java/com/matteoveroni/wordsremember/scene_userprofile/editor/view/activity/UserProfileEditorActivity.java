@@ -10,7 +10,7 @@ import com.matteoveroni.wordsremember.factories.PresenterFactoryName;
 import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment;
@@ -39,12 +39,12 @@ public class UserProfileEditorActivity extends AbstractPresentedActivityView imp
     }
 
     @Override
-    public UserProfile getPojoUsed() {
+    public Profile getPojoUsed() {
         return userProfileEditorFragment.getPojoUsed();
     }
 
     @Override
-    public void setPojoUsed(UserProfile pojo) {
+    public void setPojoUsed(Profile pojo) {
         userProfileEditorFragment.setPojoUsed(pojo);
     }
 

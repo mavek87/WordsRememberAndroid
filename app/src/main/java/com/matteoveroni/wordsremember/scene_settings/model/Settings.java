@@ -8,7 +8,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.users.User;
 
 import org.joda.time.DateTime;
@@ -66,10 +66,6 @@ public class Settings {
         prefs.edit().putBoolean(IS_STARTED_FOR_THE_FIRST_TIME_KEY, value).apply();
     }
 
-    public void saveUser(User user) {
-        if (user != null) prefs.edit().putString(USER_KEY, Json.getInstance().toJson(user)).apply();
-    }
-
     public User getUser() throws NoRegisteredUserException {
         String json_user = prefs.getString(USER_KEY, "");
         if (json_user.trim().isEmpty()) {
@@ -79,19 +75,23 @@ public class Settings {
         }
     }
 
-    public void setUserProfile(UserProfile userProfile) {
-        prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, UserProfile.class)).apply();
-        dbManager.setUserProfileInUse(userProfile);
-        Log.d(TAG, "Switch to user profile => " + userProfile.getName());
+    public void saveUser(User user) {
+        if (user != null) prefs.edit().putString(USER_KEY, Json.getInstance().toJson(user)).apply();
     }
 
-    public UserProfile getUserProfile() {
+    public Profile getUserProfile() {
         String json_userProfile = prefs.getString(USER_PROFILE_KEY, "");
         if (json_userProfile.trim().isEmpty()) {
-            return UserProfile.USER_PROFILES;
+            return Profile.USER_PROFILES;
         } else {
-            return Json.getInstance().fromJson(json_userProfile, UserProfile.class);
+            return Json.getInstance().fromJson(json_userProfile, Profile.class);
         }
+    }
+
+    public void setUserProfile(Profile userProfile) {
+        prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, Profile.class)).apply();
+        dbManager.setUserProfileInUse(userProfile);
+        Log.d(TAG, "Switch to user profile => " + userProfile.getName());
     }
 
     public int getDefaultNumberOfQuestions() {
@@ -117,6 +117,10 @@ public class Settings {
                 .apply();
     }
 
+    public static int getNumberOfQuestionsForDifficulty(GameDifficulty difficulty) {
+        return difficulty.getId() * GameDifficulty.COMPLEXITY_MULTIPLIER;
+    }
+
     public long getQuizGameQuestionTimerTotalTime() {
         return prefs.getLong(QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY, DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME);
     }
@@ -133,25 +137,21 @@ public class Settings {
         prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, tick).apply();
     }
 
-    public static int getNumberOfQuestionsForDifficulty(GameDifficulty difficulty) {
-        return difficulty.getId() * GameDifficulty.COMPLEXITY_MULTIPLIER;
-    }
-
-    public void saveLastGameDate() {
-        final DateTime lastGameDate = new DateTime(new Date());
-        prefs.edit().putString(LAST_GAME_DATE_KEY, lastGameDate.toString()).apply();
-    }
-
     public DateTime getLastGameDate() {
         String str_dateTime = prefs.getString(LAST_GAME_DATE_KEY, "");
         return (str_dateTime.trim().isEmpty()) ? null : DateTime.parse(str_dateTime);
     }
 
-    public void setOnlineTranslationServiceEnabled(boolean preference) {
-        prefs.edit().putBoolean(ONLINE_TRANSLATION_SERVICE_KEY, preference).apply();
+    public void saveLastGameDate() {
+        DateTime lastGameDate = new DateTime(new Date());
+        prefs.edit().putString(LAST_GAME_DATE_KEY, lastGameDate.toString()).apply();
     }
 
     public boolean isOnlineTranslationServiceEnabled() {
         return prefs.getBoolean(ONLINE_TRANSLATION_SERVICE_KEY, false);
+    }
+
+    public void setOnlineTranslationServiceEnabled(boolean preference) {
+        prefs.edit().putBoolean(ONLINE_TRANSLATION_SERVICE_KEY, preference).apply();
     }
 }

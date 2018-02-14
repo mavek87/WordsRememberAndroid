@@ -5,7 +5,7 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
 
@@ -37,7 +37,7 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
     }
 
     public void onSaveProfileAction() {
-        final UserProfile viewUserProfile = view.getPojoUsed();
+        final Profile viewUserProfile = view.getPojoUsed();
         if (viewUserProfile.getName().trim().isEmpty()) {
             view.showMessage(AndroidLocaleKey.MSG_ERROR_EMPTY_USER_PROFILE_NAME);
             return;
@@ -61,12 +61,12 @@ public class UserProfileEditorPresenter extends BasePresenter<UserProfileEditorV
         }
     }
 
-    private void storeUserProfileFromViewToModel(UserProfile viewUserProfile) throws Exception {
-        final UserProfile modelUserProfile = model.getUserProfile();
+    private void storeUserProfileFromViewToModel(Profile viewUserProfile) throws Exception {
+        final Profile modelUserProfile = model.getUserProfile();
 
         if (modelUserProfile.getId() <= 0) {
             final long id = dao.saveUserProfile(viewUserProfile);
-            model.setUserProfile(new UserProfile(id, viewUserProfile.getName()));
+            model.setUserProfile(new Profile(id, viewUserProfile.getName()));
         } else {
             dao.updateUserProfile(modelUserProfile, viewUserProfile);
             model.setUserProfile(modelUserProfile);

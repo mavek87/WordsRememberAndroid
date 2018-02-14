@@ -5,13 +5,13 @@ package com.matteoveroni.wordsremember.scene_userprofile;
  */
 
 public class UserProfileModel {
-    private UserProfile userProfile = UserProfile.createEmptyProfile();
+    private Profile userProfile = Profile.createEmptyProfile();
 
-    public UserProfile getUserProfile() {
+    public Profile getUserProfile() {
         return userProfile;
     }
 
-    public void setUserProfile(UserProfile usedUserProfile) {
+    public void setUserProfile(Profile usedUserProfile) {
         this.userProfile = usedUserProfile;
     }
 }

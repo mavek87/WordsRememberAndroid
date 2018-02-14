@@ -23,7 +23,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "LIMIT";
     public static final String QUERY_PARAMETER_OFFSET = "OFFSET";
 
-    protected DBManager profileDBManager;
+    protected DBManager dbManager;
 
     public class Error {
         public static final String UNSUPPORTED_URI = "Unsupported URI";
@@ -31,7 +31,7 @@ public abstract class ExtendedQueriesContentProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        profileDBManager = DBManager.getInstance(getContext());
+        dbManager = DBManager.getInstance(getContext());
         return true;
     }
 

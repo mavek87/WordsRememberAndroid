@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 
 import javax.inject.Singleton;
 
@@ -34,7 +34,7 @@ public class SettingsModule {
                     Settings.DEFAULT_DIFFICULTY
             );
         }
-        settings.setUserProfile(UserProfile.USER_PROFILES);
+        settings.setUserProfile(Profile.USER_PROFILES);
         return settings;
     }
 }

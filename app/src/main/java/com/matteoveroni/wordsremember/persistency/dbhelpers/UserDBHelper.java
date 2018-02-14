@@ -15,9 +15,9 @@ import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslations
  * @author Matteo Veroni
  */
 
-public class UserProfilesDBHelper extends AbstractDBHelper {
+public class UserDBHelper extends AbstractDBHelper {
 
-    public UserProfilesDBHelper(Context context, String name, int version) {
+    public UserDBHelper(Context context, String name, int version) {
         super(context, name, version);
     }
 

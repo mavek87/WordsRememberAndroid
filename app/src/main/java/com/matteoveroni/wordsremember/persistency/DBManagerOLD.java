@@ -14,27 +14,27 @@ import java.util.Map;
  * @author Matteo Veroni
  */
 
-public class DBManager {
+public class DBManagerOLD {
 
     private static final int DB_VERSION = 1;
 
-//    private final UserDBHelper userProfilesDBHelper;
+    private final UserDBHelper userProfilesDBHelper;
     private final Map<Profile, DBHelper> dbHelpersMap = new HashMap<>();
     //todo: try to inject context
     private final Context context;
     private Profile userProfileInUse;
 
-    private volatile static DBManager DB_MANAGER_UNIQUE_INSTANCE;
+    private volatile static DBManagerOLD DB_MANAGER_UNIQUE_INSTANCE;
 
-    private DBManager(Context context) {
+    private DBManagerOLD(Context context) {
         this.context = context;
         this.userProfileInUse = Profile.USER_PROFILES;
-//        this.userProfilesDBHelper = new UserDBHelper(context, "user_profiles", 0);
+        this.userProfilesDBHelper = new UserDBHelper(context, "user_profiles", 0);
     }
 
-    public static synchronized DBManager getInstance(Context appContext) {
+    public static synchronized DBManagerOLD getInstance(Context appContext) {
         if (DB_MANAGER_UNIQUE_INSTANCE == null) {
-            DB_MANAGER_UNIQUE_INSTANCE = new DBManager(appContext);
+            DB_MANAGER_UNIQUE_INSTANCE = new DBManagerOLD(appContext);
         }
         return DB_MANAGER_UNIQUE_INSTANCE;
     }

@@ -24,7 +24,7 @@ public class PersistenceModule {
 
     @Provides
     @Singleton
-    public DBManager provideProfilesDBManager(Context context) {
+    public DBManager provideDBManager(Context context) {
         return DBManager.getInstance(context);
     }
 
