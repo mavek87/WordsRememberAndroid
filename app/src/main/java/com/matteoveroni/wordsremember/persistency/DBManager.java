@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.matteoveroni.wordsremember.persistency.dbhelpers.DBHelper;
-import com.matteoveroni.wordsremember.persistency.dbhelpers.UserDBHelper;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 
 import java.util.HashMap;

@@ -18,7 +18,7 @@ public class DBManagerOLD {
 
     private static final int DB_VERSION = 1;
 
-    private final UserDBHelper userProfilesDBHelper;
+//    private final UserDBHelper userProfilesDBHelper;
     private final Map<Profile, DBHelper> dbHelpersMap = new HashMap<>();
     //todo: try to inject context
     private final Context context;
@@ -29,7 +29,7 @@ public class DBManagerOLD {
     private DBManagerOLD(Context context) {
         this.context = context;
         this.userProfileInUse = Profile.USER_PROFILES;
-        this.userProfilesDBHelper = new UserDBHelper(context, "user_profiles", 0);
+//        this.userProfilesDBHelper = new UserDBHelper(context, "user_profiles", 0);
     }
 
     public static synchronized DBManagerOLD getInstance(Context appContext) {

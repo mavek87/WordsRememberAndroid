@@ -20,7 +20,6 @@ public class DBManagerNew {
     private final Context context;
     private UserDBHelper userDBHelper;
     private UserProfileDBHelper userProfileDBHelper;
-//    private final Map<Profile, UserProfilesDBHelper> userProfilesDBHelpers = new HashMap<>();
 
     private DBManagerNew(Context context) {
         this.context = context;
@@ -33,22 +32,15 @@ public class DBManagerNew {
         return DB_MANAGER_UNIQUE_INSTANCE;
     }
 
-    public void loadUserDBHelper(User user) {
+    public AbstractDBHelper loadUserDBHelper(User user) {
         // TODO: verify and then remove this comment => This should load/create the db for the user
-        userDBHelper = new UserDBHelper(context, "user_" + user.getId() + "_profiles", DB_VERSION);
+        return new UserDBHelper(context, "user_" + user.getId() + "_profiles", DB_VERSION);
     }
 
-    public AbstractDBHelper getUserDBHelper() {
-        return userDBHelper;
-    }
-
-    public void loadUserProfileDBHelper(Profile profile) {
+    public AbstractDBHelper loadUserProfileDBHelper(Profile profile) {
         final String USER_PROFILE_DB_NAME = userDBHelper.getDatabaseName() + "_" + profile.getId();
         userProfileDBHelper = new UserProfileDBHelper(context, USER_PROFILE_DB_NAME, DB_VERSION);
-    }
-
-    public UserProfileDBHelper getUserProfileDBHelper() {
-        return userProfileDBHelper;
+        return userDBHelper;
     }
 
     public void deleteCurrentUserDB() throws Exception {
