@@ -72,9 +72,9 @@ public class LoginActivity extends AbstractPresentedActivityView implements Logi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent signInRequestIntent) {
-        super.onActivityResult(requestCode, resultCode, signInRequestIntent);
-        presenter.handleGoogleSignInRequestResult();
+    protected void onActivityResult(int requestCode, int resultCode, Intent signInRequestResultIntent) {
+        super.onActivityResult(requestCode, resultCode, signInRequestResultIntent);
+        presenter.handleGoogleSignInRequestResult(new GoogleSignInRequestResult(requestCode, signInRequestResultIntent));
     }
 
     @Override

@@ -61,6 +61,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
 
+//        SQLiteDatabase db = dbManager.getUserDBHelper().getReadableDatabase();
         SQLiteDatabase db = dbManager.getReadableDBForCurrentProfile();
         Cursor cursor = queryBuilder.query(
                 db,
@@ -78,8 +79,8 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
+//        SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
         SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
-
         switch (URI_MATCHER.match(uri)) {
             case PROFILES:
                 long id = db.insertOrThrow(UserProfilesContract.Schema.TABLE_NAME, null, values);
@@ -95,7 +96,9 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
+//        SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
         SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -125,6 +128,7 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
+//        SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
         SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
         int deletedRowsCounter;
 

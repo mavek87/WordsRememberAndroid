@@ -90,6 +90,7 @@ public class Settings {
 
     public void setUserProfile(Profile userProfile) {
         prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, Profile.class)).apply();
+//        dbManager.loadUserProfileDBHelper(userProfile);
         dbManager.setUserProfileInUse(userProfile);
         Log.d(TAG, "Switch to user profile => " + userProfile.getName());
     }
