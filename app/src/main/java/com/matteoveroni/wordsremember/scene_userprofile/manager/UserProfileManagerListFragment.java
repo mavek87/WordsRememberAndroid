@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.manager.view.fragment;
+package com.matteoveroni.wordsremember.scene_userprofile.manager;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -19,9 +19,9 @@ import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventDeleteUserProfile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventEditUserProfile;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.events.EventUserProfileSelected;
+import com.matteoveroni.wordsremember.scene_userprofile.events.EventDeleteUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.events.EventRequestToEditUserProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.events.EventUserProfileChosen;
 import com.matteoveroni.wordsremember.ui.listview.adapters.UserProfilesListViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,9 +30,9 @@ import org.greenrobot.eventbus.EventBus;
  * @author Matteo Veroni
  */
 
-public class UserProfileListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class UserProfileManagerListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String TAG = TagGenerator.tag(UserProfileListFragment.class);
+    public static final String TAG = TagGenerator.tag(UserProfileManagerListFragment.class);
 
     private static final EventBus EVENT_BUS = EventBus.getDefault();
     private static final int ID_CURSOR_LOADER = 1;
@@ -90,7 +90,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         Cursor cursor = profilesListAdapter.getCursor();
-        EVENT_BUS.postSticky(new EventUserProfileSelected(getSelectedUserProfile(cursor, position)));
+        EVENT_BUS.postSticky(new EventUserProfileChosen(getSelectedUserProfile(cursor, position)));
         Toast.makeText(getActivity(), cursor.getString(1), Toast.LENGTH_SHORT).show();
     }
 
@@ -116,7 +116,7 @@ public class UserProfileListFragment extends ListFragment implements LoaderManag
         Profile selectedUserProfile = getSelectedUserProfile(cursor, position);
         switch (item.getItemId()) {
             case R.id.menu_dictionary_list_long_press_edit:
-                EVENT_BUS.postSticky(new EventEditUserProfile(selectedUserProfile));
+                EVENT_BUS.postSticky(new EventRequestToEditUserProfile(selectedUserProfile));
                 return true;
             case R.id.menu_dictionary_list_long_press_remove:
                 EVENT_BUS.postSticky(new EventDeleteUserProfile(selectedUserProfile));

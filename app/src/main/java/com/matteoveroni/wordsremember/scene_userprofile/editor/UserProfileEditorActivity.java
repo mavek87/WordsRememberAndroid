@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity;
+package com.matteoveroni.wordsremember.scene_userprofile.editor;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,9 +11,7 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.interfaces.UserProfileEditorExtendedView;
 
 import butterknife.ButterKnife;
 
@@ -23,7 +21,7 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorActivity extends AbstractPresentedActivityView implements UserProfileEditorView {
+public class UserProfileEditorActivity extends AbstractPresentedActivityView implements UserProfileEditorExtendedView {
 
     private UserProfileEditorPresenter presenter;
     private UserProfileEditorFragment userProfileEditorFragment;
@@ -71,6 +69,21 @@ public class UserProfileEditorActivity extends AbstractPresentedActivityView imp
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void setHeader(String headerText) {
+        userProfileEditorFragment.setHeader(headerText);
+    }
+
+    @Override
+    public void setProfileName(String profileName) {
+        userProfileEditorFragment.setProfileName(profileName);
+    }
+
+    @Override
+    public String getProfileName() {
+        return userProfileEditorFragment.getProfileName();
     }
 
     @Override

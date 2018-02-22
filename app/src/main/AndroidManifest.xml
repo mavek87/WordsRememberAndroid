@@ -55,18 +55,18 @@
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".scene_userprofile.creation.view.activity.UserProfileFirstCreationActivity"
+            android:name=".scene_userprofile.creation.UserProfileFirstCreationActivity"
             android:label="@string/user_profile_editor"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".scene_userprofile.manager.view.activity.UserProfileActivity"
+            android:name=".scene_userprofile.manager.UserProfileManagerActivity"
             android:label="@string/user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".scene_userprofile.editor.view.activity.UserProfileEditorActivity"
+            android:name=".scene_userprofile.editor.UserProfileEditorActivity"
             android:label="@string/user_profile_editor"
             android:theme="@style/AppTheme.NoActionBar" />
 

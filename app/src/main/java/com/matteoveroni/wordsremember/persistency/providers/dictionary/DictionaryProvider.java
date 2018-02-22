@@ -166,14 +166,14 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
                 whereArgs = new String[]{uri.getLastPathSegment()};
 
-                Cursor cursor = dbManager.getReadableDBForCurrentProfile().rawQuery(SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID, whereArgs);
+                Cursor cursor = dbManager.getUserProfileDBHelper().getReadableDatabase().rawQuery(SQL_QUERY_NOT_TRANSLATIONS_FOR_VOCABLE_ID, whereArgs);
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             default:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for QUERY");
         }
 
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
 
         Cursor cursor = queryBuilder.query(
                 db,
@@ -191,7 +191,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
 
         Uri contractUri;
         long id;
@@ -219,7 +219,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -249,7 +249,7 @@ public class DictionaryProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereClause, String[] whereArgs) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {

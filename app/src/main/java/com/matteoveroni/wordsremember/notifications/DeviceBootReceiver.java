@@ -32,12 +32,12 @@ public class DeviceBootReceiver extends BroadcastReceiver {
             Log.d(TAG, "DeviceBootReceiver woke up after system boot completed.");
 
             SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), MODE_PRIVATE);
-            if (preferences.contains(Settings.LAST_GAME_DATE_KEY)) {
+            if (preferences.contains(Settings.Key.LAST_GAME_DATE)) {
 
                 DateTime currentDate = new DateTime();
                 Log.d(TAG, "Current date: " + currentDate);
 
-                DateTime lastGameDate = DateTime.parse(preferences.getString(Settings.LAST_GAME_DATE_KEY, ""));
+                DateTime lastGameDate = DateTime.parse(preferences.getString(Settings.Key.LAST_GAME_DATE, ""));
                 Log.d(TAG, "Last played game\'s date: " + lastGameDate);
 
                 // TODO: is localized string resources

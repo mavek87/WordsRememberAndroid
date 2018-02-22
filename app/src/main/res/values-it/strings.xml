@@ -76,4 +76,5 @@
     <string name="edit_user_profile">Modifica profilo utente</string>
     <string name="msg_error_empty_user_profile_name">Il nome del profilo utente non può essere vuoto. Inserisci un nome utente valido!</string>
     <string name="wrong_answers">Risposte errate</string>
+    <string name="select_language">Seleziona lingua</string>
 </resources>

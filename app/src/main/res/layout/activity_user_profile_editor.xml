@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context=".scene_userprofile.editor.view.activity.UserProfileEditorActivity">
+    tools:context=".scene_userprofile.editor.UserProfileEditorActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -30,11 +30,11 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".scene_userprofile.manager.view.activity.UserProfileActivity">
+        tools:context=".scene_userprofile.manager.UserProfileManagerActivity">
 
         <fragment
             android:id="@+id/user_profile_editor_fragment"
-            android:name="com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment"
+            android:name="com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

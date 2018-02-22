@@ -1,5 +1,6 @@
 package com.matteoveroni.wordsremember.dependency_injection.components;
 
+import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.dependency_injection.modules.AppModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.ModelsModule;
 import com.matteoveroni.wordsremember.dependency_injection.modules.PersistenceModule;
@@ -14,8 +15,8 @@ import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenter;
 import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorPresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.UserProfileManagerPresenterFactory;
 
 import javax.inject.Singleton;
 
@@ -48,7 +49,7 @@ public interface AppComponent {
 
     void inject(QuizGameReportPresenter quizGameReportPresenter);
 
-    void inject(UserProfilePresenterFactory userProfilePresenterFactory);
+    void inject(UserProfileManagerPresenterFactory userProfilePresenterFactory);
 
     void inject(UserProfileEditorPresenterFactory userProfilePresenterFactory);
 
@@ -57,4 +58,6 @@ public interface AppComponent {
     void inject(SettingsPresenterFactory settingsPresenterFactory);
 
     void inject(Settings settings);
+
+    void inject(WordsRemember wordsRemember);
 }

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity;
+package com.matteoveroni.wordsremember.scene_userprofile.creation;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,9 +12,9 @@ import com.matteoveroni.wordsremember.interfaces.presenter.Presenter;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
 import com.matteoveroni.wordsremember.interfaces.view.AbstractPresentedActivityView;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenter;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.view.UserProfileEditorView;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment.UserProfileEditorFragment;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorPresenter;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.interfaces.UserProfileEditorExtendedView;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorFragment;
 
 import butterknife.ButterKnife;
 
@@ -24,20 +24,10 @@ import butterknife.ButterKnife;
  * @author Matteo Veroni
  */
 
-public class UserProfileFirstCreationActivity extends AbstractPresentedActivityView implements UserProfileEditorView {
+public class UserProfileFirstCreationActivity extends AbstractPresentedActivityView implements UserProfileEditorExtendedView {
 
     private UserProfileEditorPresenter presenter;
     private UserProfileEditorFragment userProfileEditorFragment;
-
-    @Override
-    protected PresenterFactory getPresenterFactory() {
-        return PresenterFactories.getFactory(PresenterFactoryName.USER_PROFILE_EDITOR_PRESENTER);
-    }
-
-    @Override
-    protected void onPresenterCreatedOrRestored(Presenter presenter) {
-        this.presenter = (UserProfileEditorPresenter) presenter;
-    }
 
     @Override
     public Profile getPojoUsed() {
@@ -47,6 +37,21 @@ public class UserProfileFirstCreationActivity extends AbstractPresentedActivityV
     @Override
     public void setPojoUsed(Profile pojo) {
         userProfileEditorFragment.setPojoUsed(pojo);
+    }
+
+    @Override
+    public void setHeader(String headerText) {
+        userProfileEditorFragment.setHeader(headerText);
+    }
+
+    @Override
+    public void setProfileName(String profileName) {
+        userProfileEditorFragment.setProfileName(profileName);
+    }
+
+    @Override
+    public String getProfileName() {
+        return userProfileEditorFragment.getProfileName();
     }
 
     @Override
@@ -85,6 +90,16 @@ public class UserProfileFirstCreationActivity extends AbstractPresentedActivityV
     public void returnToPreviousView() {
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Override
+    protected PresenterFactory getPresenterFactory() {
+        return PresenterFactories.getFactory(PresenterFactoryName.USER_PROFILE_EDITOR_PRESENTER);
+    }
+
+    @Override
+    protected void onPresenterCreatedOrRestored(Presenter presenter) {
+        this.presenter = (UserProfileEditorPresenter) presenter;
     }
 }
 

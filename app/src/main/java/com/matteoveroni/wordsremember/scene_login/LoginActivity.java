@@ -50,20 +50,20 @@ public class LoginActivity extends AbstractPresentedActivityView implements Logi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupAndShowToolbar(getString(R.string.app_name) + " - Login");
         ButterKnife.bind(this);
         btn_signIn.setSize(SignInButton.SIZE_STANDARD);
-        setupAndShowToolbar(getString(R.string.app_name) + " - Login");
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        presenter.doAutoLogin();
+        presenter.onPostCreateFromView();
     }
 
     @OnClick(R.id.login_btn_signin)
-    public void onSignInButtonPressed() {
-        presenter.onSignInActionFromView();
+    public void onSignInAction() {
+        presenter.onSignInFromView();
     }
 
     @Override
@@ -74,7 +74,8 @@ public class LoginActivity extends AbstractPresentedActivityView implements Logi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent signInRequestResultIntent) {
         super.onActivityResult(requestCode, resultCode, signInRequestResultIntent);
-        presenter.handleGoogleSignInRequestResult(new GoogleSignInRequestResult(requestCode, signInRequestResultIntent));
+        final GoogleSignInRequestResult requestResult = new GoogleSignInRequestResult(requestCode, signInRequestResultIntent);
+        presenter.onGoogleSignInRequestResult(requestResult);
     }
 
     @Override

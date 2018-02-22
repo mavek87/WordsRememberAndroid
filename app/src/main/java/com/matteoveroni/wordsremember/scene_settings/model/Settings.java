@@ -8,6 +8,7 @@ import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
+import com.matteoveroni.wordsremember.scene_userprofile.EmptyProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.users.User;
 
@@ -20,54 +21,52 @@ import java.util.Date;
  */
 
 public class Settings {
-
     public static final String TAG = TagGenerator.tag(Settings.class);
-
-    private final SharedPreferences prefs;
-    private final DBManager dbManager;
-
-    public static final String IS_STARTED_FOR_THE_FIRST_TIME_KEY = "is_started_for_the_first_time_key";
-    public static boolean isAppStartedForTheFirstTime = true;
-
-    public static final String USER_KEY = "user_key";
-    public static final String USER_PROFILE_KEY = "user_profile_key";
-    public static final String GAME_DIFFICULTY_KEY = "game_difficulty_key";
-    public static final String QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY = "quiz_game_question_timer_total_time_key";
-    public static final String QUIZ_GAME_QUESTION_TIMER_TICK_KEY = "quiz_game_question_timer_tick_key";
-    public static final String GAME_NUMBER_OF_QUESTIONS_KEY = "game_number_of_questions_key";
-    public static final String LAST_GAME_DATE_KEY = "last_game_date_key";
-    public static final String ONLINE_TRANSLATION_SERVICE_KEY = "online_translation_service_key";
 
     public static final GameDifficulty DEFAULT_DIFFICULTY = GameDifficulty.EASY;
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
     public static final long DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = 10000;
     public static final long DEFAULT_QUIZ_GAME_TIMER_TICK = 1000;
+//    public static boolean isAppStartedForTheFirstTime = true;
+
+    private final SharedPreferences prefs;
+
+    public class Key {
+        public static final String IS_STARTED_FOR_THE_FIRST_TIME = "is_started_for_the_first_time_key";
+        public static final String USER = "user_key";
+        public static final String USER_PROFILE = "user_profile_key";
+        public static final String GAME_DIFFICULTY = "game_difficulty_key";
+        public static final String QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = "quiz_game_question_timer_total_time_key";
+        public static final String QUIZ_GAME_QUESTION_TIMER_TICK = "quiz_game_question_timer_tick_key";
+        public static final String GAME_NUMBER_OF_QUESTIONS = "game_number_of_questions_key";
+        public static final String LAST_GAME_DATE = "last_game_date_key";
+        public static final String ONLINE_TRANSLATION_SERVICE = "online_translation_service_key";
+    }
 
     public class NoRegisteredUserException extends Exception {
     }
 
-    public Settings(SharedPreferences prefs, DBManager dbManager) {
+    public Settings(SharedPreferences prefs) {
         WordsRemember.getAppComponent().inject(this);
         this.prefs = prefs;
-        this.dbManager = dbManager;
     }
 
-    public Settings(SharedPreferences prefs, DBManager dbManager, GameDifficulty difficulty) {
-        this(prefs, dbManager);
+    public Settings(SharedPreferences prefs, GameDifficulty difficulty) {
+        this(prefs);
         setDifficulty(difficulty);
     }
 
-    public boolean isAppStartedForTheFirstTime() {
-        return prefs.getBoolean(IS_STARTED_FOR_THE_FIRST_TIME_KEY, isAppStartedForTheFirstTime);
-    }
+//    public boolean isAppStartedForTheFirstTime() {
+//        return prefs.getBoolean(Key.IS_STARTED_FOR_THE_FIRST_TIME, isAppStartedForTheFirstTime);
+//    }
 
-    public void setAppStartedForTheFirstTime(boolean value) {
-        isAppStartedForTheFirstTime = value;
-        prefs.edit().putBoolean(IS_STARTED_FOR_THE_FIRST_TIME_KEY, value).apply();
-    }
+//    public void setAppStartedForTheFirstTime(boolean value) {
+//        isAppStartedForTheFirstTime = value;
+//        prefs.edit().putBoolean(Key.IS_STARTED_FOR_THE_FIRST_TIME, value).apply();
+//    }
 
     public User getUser() throws NoRegisteredUserException {
-        String json_user = prefs.getString(USER_KEY, "");
+        String json_user = prefs.getString(Key.USER, "");
         if (json_user.trim().isEmpty()) {
             throw new NoRegisteredUserException();
         } else {
@@ -76,45 +75,54 @@ public class Settings {
     }
 
     public void saveUser(User user) {
-        if (user != null) prefs.edit().putString(USER_KEY, Json.getInstance().toJson(user)).apply();
+        if (user != null) prefs.edit().putString(Key.USER, Json.getInstance().toJson(user)).apply();
     }
 
     public Profile getUserProfile() {
-        String json_userProfile = prefs.getString(USER_PROFILE_KEY, "");
+        String json_userProfile = prefs.getString(Key.USER_PROFILE, "");
+        //TODO: remove user_profiles
         if (json_userProfile.trim().isEmpty()) {
-            return Profile.USER_PROFILES;
+            return new EmptyProfile();
         } else {
             return Json.getInstance().fromJson(json_userProfile, Profile.class);
         }
     }
 
-    public void setUserProfile(Profile userProfile) {
-        prefs.edit().putString(USER_PROFILE_KEY, Json.getInstance().toJson(userProfile, Profile.class)).apply();
-//        dbManager.loadUserProfileDBHelper(userProfile);
-        dbManager.setUserProfileInUse(userProfile);
+    public boolean containsUser() {
+        return containsKey(Key.USER);
+    }
+
+    public void saveUserProfile(Profile userProfile) {
+        prefs.edit().putString(Key.USER_PROFILE, Json.getInstance().toJson(userProfile, Profile.class)).apply();
+//        dbManager.setupUserProfileDBHelper(userProfile);
+//        dbManager.setUserProfileInUse(userProfile);
         Log.d(TAG, "Switch to user profile => " + userProfile.getName());
     }
 
+    public boolean containsUserProfile() {
+        return containsKey(Key.USER_PROFILE);
+    }
+
     public int getDefaultNumberOfQuestions() {
-        return prefs.getInt(GAME_NUMBER_OF_QUESTIONS_KEY, DEFAULT_NUMBER_OF_QUESTIONS);
+        return prefs.getInt(Key.GAME_NUMBER_OF_QUESTIONS, DEFAULT_NUMBER_OF_QUESTIONS);
     }
 
     public void setDefaultNumberOfQuestions(int number) {
         if (number < 0)
             throw new IllegalArgumentException("Number of questions can\'t be negative");
 
-        prefs.edit().putInt(GAME_NUMBER_OF_QUESTIONS_KEY, DEFAULT_NUMBER_OF_QUESTIONS).apply();
+        prefs.edit().putInt(Key.GAME_NUMBER_OF_QUESTIONS, DEFAULT_NUMBER_OF_QUESTIONS).apply();
     }
 
     public GameDifficulty getDifficulty() {
-        String json_difficulty = prefs.getString(GAME_DIFFICULTY_KEY, Json.getInstance().toJson(DEFAULT_DIFFICULTY));
+        String json_difficulty = prefs.getString(Key.GAME_DIFFICULTY, Json.getInstance().toJson(DEFAULT_DIFFICULTY));
         return Json.getInstance().fromJson(json_difficulty, GameDifficulty.class);
     }
 
     public void setDifficulty(GameDifficulty difficulty) {
         prefs.edit()
-                .putString(GAME_DIFFICULTY_KEY, Json.getInstance().toJson(difficulty))
-                .putInt(GAME_NUMBER_OF_QUESTIONS_KEY, getNumberOfQuestionsForDifficulty(difficulty))
+                .putString(Key.GAME_DIFFICULTY, Json.getInstance().toJson(difficulty))
+                .putInt(Key.GAME_NUMBER_OF_QUESTIONS, getNumberOfQuestionsForDifficulty(difficulty))
                 .apply();
     }
 
@@ -123,36 +131,40 @@ public class Settings {
     }
 
     public long getQuizGameQuestionTimerTotalTime() {
-        return prefs.getLong(QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY, DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME);
+        return prefs.getLong(Key.QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME, DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME);
     }
 
     public void setQuizGameQuestionTimerTotalTime(int totalTime) {
-        prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME_KEY, totalTime).apply();
+        prefs.edit().putLong(Key.QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME, totalTime).apply();
     }
 
     public long getQuizGameQuestionTimerTick() {
-        return prefs.getLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, DEFAULT_QUIZ_GAME_TIMER_TICK);
+        return prefs.getLong(Key.QUIZ_GAME_QUESTION_TIMER_TICK, DEFAULT_QUIZ_GAME_TIMER_TICK);
     }
 
     public void setQuizGameQuestionTimerTick(int tick) {
-        prefs.edit().putLong(QUIZ_GAME_QUESTION_TIMER_TICK_KEY, tick).apply();
+        prefs.edit().putLong(Key.QUIZ_GAME_QUESTION_TIMER_TICK, tick).apply();
     }
 
     public DateTime getLastGameDate() {
-        String str_dateTime = prefs.getString(LAST_GAME_DATE_KEY, "");
+        String str_dateTime = prefs.getString(Key.LAST_GAME_DATE, "");
         return (str_dateTime.trim().isEmpty()) ? null : DateTime.parse(str_dateTime);
     }
 
     public void saveLastGameDate() {
         DateTime lastGameDate = new DateTime(new Date());
-        prefs.edit().putString(LAST_GAME_DATE_KEY, lastGameDate.toString()).apply();
+        prefs.edit().putString(Key.LAST_GAME_DATE, lastGameDate.toString()).apply();
     }
 
     public boolean isOnlineTranslationServiceEnabled() {
-        return prefs.getBoolean(ONLINE_TRANSLATION_SERVICE_KEY, false);
+        return prefs.getBoolean(Key.ONLINE_TRANSLATION_SERVICE, false);
     }
 
     public void setOnlineTranslationServiceEnabled(boolean preference) {
-        prefs.edit().putBoolean(ONLINE_TRANSLATION_SERVICE_KEY, preference).apply();
+        prefs.edit().putBoolean(Key.ONLINE_TRANSLATION_SERVICE, preference).apply();
+    }
+
+    private boolean containsKey(String keyCode) {
+        return prefs.contains(keyCode);
     }
 }

@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.editor.view;
+package com.matteoveroni.wordsremember.scene_userprofile.editor.interfaces;
 
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.interfaces.view.View;
@@ -8,7 +8,8 @@ import com.matteoveroni.wordsremember.scene_userprofile.Profile;
  * @author Matteo Veroni
  */
 
-public interface UserProfileEditorView extends View, PojoManipulable<Profile> {
+public interface UserProfileEditorExtendedView extends View, UserProfileEditorView, PojoManipulable<Profile> {
+
     void saveProfileAction();
 
     void returnToPreviousView();

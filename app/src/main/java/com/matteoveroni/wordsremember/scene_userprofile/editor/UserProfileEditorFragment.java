@@ -1,6 +1,7 @@
-package com.matteoveroni.wordsremember.scene_userprofile.editor.view.fragment;
+package com.matteoveroni.wordsremember.scene_userprofile.editor;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.wordsremember.R;
 import com.matteoveroni.wordsremember.interfaces.PojoManipulable;
 import com.matteoveroni.wordsremember.localization.LocaleTranslator;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.interfaces.UserProfileEditorView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.Locale;
@@ -29,34 +30,42 @@ import butterknife.Unbinder;
  * @author Matteo Veroni
  */
 
-public class UserProfileEditorFragment extends Fragment implements PojoManipulable<Profile>, AdapterView.OnItemSelectedListener {
-    private static final String TAG = TagGenerator.tag(UserProfileEditorFragment.class);
-
+public class UserProfileEditorFragment extends Fragment implements PojoManipulable<Profile>, AdapterView.OnItemSelectedListener, UserProfileEditorView {
     private static final String VIEW_TITLE_CONTENT_KEY = "view_title_content_key";
     private static final String VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY = "view_user_profile_name_textview_content_key";
 
-    private Unbinder butterknifeBinder;
-    private long id_userProfileToEdit;
-
     @BindView(R.id.fragment_user_profile_editor_title)
     TextView lbl_title;
-
     @BindView(R.id.fragment_user_profile_editor_spinnerFirstLocale)
     SearchableSpinner spinnerFirstLocale;
-
     @BindView(R.id.fragment_user_profile_editor_spinnerSecondLocale)
     SearchableSpinner spinnerSecondLocale;
-
     @BindView(R.id.fragment_user_profile_editor_txt_dictionary_name)
     EditText txt_dictionaryName;
 
     private Map<String, Locale> availableLocalesStringified;
+    private Unbinder butterknifeBinder;
 
     private int firstSpinnerID;
     private int secondSpinnerID;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void setHeader(String headerText) {
+        lbl_title.setText(headerText);
+    }
+
+    @Override
+    public void setProfileName(String profileName) {
+        txt_dictionaryName.setText(profileName);
+    }
+
+    @Override
+    public String getProfileName() {
+        return txt_dictionaryName.getText().toString();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile_editor, container, false);
         butterknifeBinder = ButterKnife.bind(this, view);
 
@@ -65,26 +74,11 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
 
         availableLocalesStringified = LocaleTranslator.getAvailableLocalesStringified();
         ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, availableLocalesStringified.keySet().toArray());
-        spinnerFirstLocale.setAdapter(adapter);
-        spinnerFirstLocale.setOnItemSelectedListener(this);
-        spinnerFirstLocale.setTitle("Select language");
 
-        spinnerSecondLocale.setAdapter(adapter);
-        spinnerSecondLocale.setOnItemSelectedListener(this);
-        spinnerSecondLocale.setTitle("Select language");
-
-        final String str_EnglishLocale = LocaleTranslator.stringifyLocale(Locale.ENGLISH);
-        int englishPositionInAdapter = adapter.getPosition(str_EnglishLocale);
-        spinnerFirstLocale.setSelection(englishPositionInAdapter);
-
-        final String str_locale = LocaleTranslator.stringifyLocale(LocaleTranslator.getLocale(getContext()));
-        if (str_locale != null && !str_locale.trim().isEmpty()) {
-            int localePositionInAdapter = adapter.getPosition(str_locale);
-            spinnerSecondLocale.setSelection(localePositionInAdapter);
-        }
+        setupSpinner(adapter, spinnerFirstLocale, Locale.ENGLISH);
+        setupSpinner(adapter, spinnerSecondLocale, LocaleTranslator.getLocale(getContext()));
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         return view;
     }
 
@@ -144,24 +138,22 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
 
     @Override
     public Profile getPojoUsed() {
-        return getUserProfileFromView();
-    }
-
-    private Profile getUserProfileFromView() {
-        return new Profile(id_userProfileToEdit, txt_dictionaryName.getText().toString());
+//        return getUserProfileFromView();
+        return null;
     }
 
     @Override
     public void setPojoUsed(Profile userProfile) {
-        id_userProfileToEdit = userProfile.getId();
-        if (id_userProfileToEdit <= 0) {
-            lbl_title.setText(R.string.create_user_profile);
-        } else {
-            lbl_title.setText(R.string.edit_user_profile);
-        }
-        txt_dictionaryName.setText(userProfile.getName());
+//        id_userProfileToEdit = userProfile.getId();
+//        if (id_userProfileToEdit <= 0) {
+//            lbl_title.setText(R.string.create_user_profile);
+//        } else {
+//            lbl_title.setText(R.string.edit_user_profile);
+//        }
+//        txt_dictionaryName.setText(userProfile.getName());
     }
 
+    // TODO: maybe is possible to move onSaveInstance part of the logic of onSaveInstanceState and on viewStateRestored in the fragment superclass
     @Override
     public void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
@@ -179,6 +171,20 @@ public class UserProfileEditorFragment extends Fragment implements PojoManipulab
             if (savedInstanceState.containsKey(VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY)) {
                 txt_dictionaryName.setText(savedInstanceState.getString(VIEW_USER_PROFILE_NAME_TEXTVIEW_CONTENT_KEY));
             }
+        }
+    }
+
+    private void setupSpinner(ArrayAdapter adapter, SearchableSpinner spinner, Locale locale) {
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+        final String title = getString(R.string.select_language);
+        spinner.setTitle(title);
+
+        final String str_locale = LocaleTranslator.stringifyLocale(locale);
+        if (!str_locale.trim().isEmpty()) {
+            int localePositionInAdapter = adapter.getPosition(str_locale);
+            spinner.setSelection(localePositionInAdapter);
         }
     }
 }

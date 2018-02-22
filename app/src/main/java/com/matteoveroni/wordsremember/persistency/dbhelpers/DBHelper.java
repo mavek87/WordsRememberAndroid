@@ -40,11 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        if (dbName.equals(UserProfilesContract.Schema.TABLE_NAME)) {
-//            createUserProfilesTable(db);
-//        } else {
         createAllTables(db);
-//        }
     }
 
     @Override

@@ -35,6 +35,7 @@
     <string name="create_user_profile">Create user profile</string>
     <string name="edit_user_profile">Edit user profile</string>
     <string name="dictionary">Dictionary</string>
+    <string name="select_language">Select language</string>
     <string name="manage_dictionary">Manage dictionary</string>
     <string name="add_word">Add Word</string>
     <string name="create_vocable">Create vocable</string>

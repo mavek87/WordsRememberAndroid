@@ -60,7 +60,7 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
         whereArgs = new String[]{uri.getLastPathSegment()};
 
-        SQLiteDatabase db = dbManager.getReadableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getReadableDatabase();
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
@@ -77,7 +77,7 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
 
         Uri contractUri;
         long id;
@@ -100,7 +100,7 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
@@ -128,7 +128,7 @@ public class StatisticsProvider extends ExtendedQueriesContentProvider {
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't use a placeholder (?)
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
-        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        SQLiteDatabase db = dbManager.getUserProfileDBHelper().getWritableDatabase();
         int deletedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {

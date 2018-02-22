@@ -11,6 +11,7 @@ public class LoginPresenterFactory implements PresenterFactory {
 
     @Inject
     Settings settings;
+
     @Inject
     DBManager dbManager;
 

@@ -16,11 +16,13 @@ import com.matteoveroni.wordsremember.persistency.DBManager;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 /**
  * Class which extends Application. Dagger2 components for dependency injection are built here.
  *
  * @author Matteo Veroni
- * @version 0.9.6
+ * @version 0.9.7
  **/
 
 public class WordsRemember extends Application {
@@ -28,33 +30,36 @@ public class WordsRemember extends Application {
     public static final String APP_NAME = WordsRemember.class.getSimpleName();
     public static final String LOWERCASE_APP_NAME = APP_NAME.toLowerCase();
     public static final String ABBREVIATED_NAME = "WR";
-    public static final String VERSION = "0.9.6";
+    public static final String VERSION = "0.9.7";
     public static final String AUTHOR = "Matteo Veroni";
     public static final String AUTHORITY = WordsRemember.class.getPackage().getName();
-    public static Locale CURRENT_LOCALE;
-
+    private static final boolean CLEAR_SHARED_PREFS_FILE_AT_STARTUP = true;
     private static final boolean CLEAR_DB_AT_STARTUP = false;
-    private static final boolean CLEAR_PREFERENCES_AT_STARTUP = false;
-
-//    private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
+    private static final boolean POPULATE_DB_USING_FAKE_DATA = false;
 
     private static AppComponent APP_COMPONENT;
+
+    private Locale currentLocale;
+
+    @Inject
+    DBManager dbManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        // TODO: move CURRENT_LOCALE after buildAppModules and try to inject needed data
-        CURRENT_LOCALE = LocaleTranslator.getLocale(getApplicationContext());
-        printAppSpecs();
-        buildAppModules();
+        Context context = getApplicationContext();
+        currentLocale = LocaleTranslator.getLocale(context);
 
-        if (CLEAR_PREFERENCES_AT_STARTUP)
-            getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit().clear().apply();
+        printAppSpecs();
+        setupAppComponentModules();
+
+        if (CLEAR_SHARED_PREFS_FILE_AT_STARTUP)
+            context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit().clear().apply();
 
         if (CLEAR_DB_AT_STARTUP) {
             try {
-                DBManager.getInstance(getApplicationContext()).deleteCurrentUserDB();
+                dbManager.deleteCurrentUserDB();
             } catch (Exception ex) {
                 Log.e(APP_NAME, ex.getMessage());
             }
@@ -71,25 +76,16 @@ public class WordsRemember extends Application {
 //        }
     }
 
-    private void buildAppModules() {
-        APP_COMPONENT = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .persistenceModule(new PersistenceModule())
-                .settingsModule(new SettingsModule())
-                .modelsModule(new ModelsModule())
-                .build();
-    }
-
     public static AppComponent getAppComponent() {
         return APP_COMPONENT;
     }
 
-    public static LocaleTranslator getLocaleTranslator(Context context) {
-        return new LocaleTranslator(context);
-    }
-
     public static WordsRemember getInjectorsForApp(Context context) {
         return (WordsRemember) context.getApplicationContext();
+    }
+
+    public static LocaleTranslator getLocaleTranslator(Context context) {
+        return new LocaleTranslator(context);
     }
 
     private void printAppSpecs() {
@@ -99,7 +95,17 @@ public class WordsRemember extends Application {
         Log.d(APP_NAME, "AUTHOR: ".concat(AUTHOR));
         Log.d(APP_NAME, "AUTHORITY: ".concat(AUTHORITY));
         Log.d(APP_NAME, "MYUTILS VERSION: ".concat(MyUtilsVersion.NUMBER));
-        Log.i(APP_NAME, "CURRENT LOCALE: ".concat(CURRENT_LOCALE.toString()));
+        Log.i(APP_NAME, "CURRENT LOCALE: ".concat(currentLocale.toString()));
+    }
+
+    private void setupAppComponentModules() {
+        APP_COMPONENT = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .persistenceModule(new PersistenceModule())
+                .settingsModule(new SettingsModule())
+                .modelsModule(new ModelsModule())
+                .build();
+        APP_COMPONENT.inject(this);
     }
 
 //    private void populateDatabaseUsingFakeData(Context context, int numberOfVocablesToCreate) {

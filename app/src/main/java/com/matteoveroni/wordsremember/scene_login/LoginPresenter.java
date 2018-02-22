@@ -18,7 +18,10 @@ import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.DBManager;
+import com.matteoveroni.wordsremember.persistency.commands.CommandStoreAndSetAppUser;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
+import com.matteoveroni.wordsremember.scene_userprofile.EmptyProfile;
+import com.matteoveroni.wordsremember.scene_userprofile.events.EventEditUserProfile;
 import com.matteoveroni.wordsremember.users.User;
 
 /**
@@ -29,11 +32,11 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
 
     public static final String TAG = TagGenerator.tag(LoginPresenter.class);
     private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
+
     private final Settings settings;
     private final DBManager dbManager;
     private GoogleApiClient googleApiClientComponent;
     private GoogleSignInOptions googleSignInOptionsComponent;
-    private GoogleSignInRequest googleSignInRequest;
 
     public LoginPresenter(Settings settings, DBManager dbManager) {
         this.settings = settings;
@@ -44,62 +47,111 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
     public void attachView(LoginView view) {
         super.attachView(view);
         setupGoogleSignInComponents();
+        view.showMessage(" isAnyUserAlreadySavedInPrefsFile=" + settings.containsUser());
     }
 
-    public void doAutoLogin() {
-        try {
-            doOfflineLoginIfUserAlreadyRegistered();
-        } catch (Settings.NoRegisteredUserException e) {
-            generateAndSendGoogleSignInRequest();
+    public void onPostCreateFromView() {
+        viewMustDoOfflineLoginIfUserAlreadyRegistered();
+    }
+
+    public void onSignInFromView() {
+        if (settings.containsUser()) {
+            viewMustDoOfflineLoginIfUserAlreadyRegistered();
+        } else {
+            viewMustDoGoogleSignInRequestToRegisterTheUser();
         }
     }
 
-    public void onSignInActionFromView() {
-        generateAndSendGoogleSignInRequest();
-    }
-
-    public void handleGoogleSignInRequestResult(GoogleSignInRequestResult signInRequestResult) {
+    // TODO: localize errors
+    public void onGoogleSignInRequestResult(@NonNull GoogleSignInRequestResult signInRequestResult) {
         switch (signInRequestResult.getRequestCode()) {
-
             case GOOGLE_SIGN_IN_REQUEST_CODE:
-                GoogleSignInResult signInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(signInRequestResult.getSignInResultIntent());
+                final GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(signInRequestResult.getSignInResultIntent());
 
-                if (signInResult == null || !signInResult.isSuccess()) {
-                    view.showSignInErrorPopup("Sign in failed");
+                if (googleSignInResult == null || !googleSignInResult.isSuccess()) {
+                    view.showSignInErrorPopup("Google sign in result is failed. Check your network connection!");
                     break;
                 }
 
-                int signInStatusCode = signInResult.getStatus().getStatusCode();
-                String signInStatusName = GoogleSignInStatusCodes.getStatusCodeString(signInStatusCode);
+                final int signInStatusCode = googleSignInResult.getStatus().getStatusCode();
+                final String signInStatusName = GoogleSignInStatusCodes.getStatusCodeString(signInStatusCode);
 
                 try {
-                    User user = getLoginUser(signInResult);
-                    saveLoginUser(user);
-                    FormattedString message = buildSuccessfulLoginMessage(user);
-                    loginAndShowMessage(message);
+                    final User user = getUserFromGoogleSignInResult(googleSignInResult);
+                    final FormattedString loginMessageForUser = buildSuccessfulLoginMessage(user);
+                    loginAndShowMessage(user, loginMessageForUser);
                 } catch (Exception ex) {
-                    view.showSignInErrorPopup(signInStatusName);
-                    Log.e(TAG, ex.getMessage());
+                    final String errorMessage = String.format("%s - %s", signInStatusName, "Error trying to sign in");
+                    view.showSignInErrorPopup(errorMessage);
+                    Log.e(TAG, errorMessage);
                 }
                 break;
-
             default:
-                throw new RuntimeException("Unknown google sign in request code!");
+                view.showSignInErrorPopup("Unknown google sign in request code!");
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        view.showSignInErrorPopup(connectionResult.getErrorMessage());
+        view.showSignInErrorPopup("Connection failed - " + connectionResult.getErrorMessage());
+    }
+
+    private void viewMustDoOfflineLoginIfUserAlreadyRegistered() {
+        try {
+            User user = settings.getUser();
+            FormattedString message = new FormattedString(
+                    "%s\n\n%s: %s\n%s: %s",
+                    AndroidLocaleKey.SIGN_IN_SUCCESSFUL.getKeyName(),
+                    AndroidLocaleKey.NAME.getKeyName(),
+                    user.getUsername(),
+                    AndroidLocaleKey.EMAIL.getKeyName(),
+                    user.getEmail());
+
+            loginAndShowMessage(user, message);
+        } catch (Settings.NoRegisteredUserException ignored) {
+        }
+    }
+
+    private void viewMustDoGoogleSignInRequestToRegisterTheUser() {
+        Intent clientGoogleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClientComponent);
+        view.sendGoogleSignInRequest(new GoogleSignInRequest(GOOGLE_SIGN_IN_REQUEST_CODE, clientGoogleSignInIntent));
+    }
+
+    private void loginAndShowMessage(User user, FormattedString message) {
+        new CommandStoreAndSetAppUser(user, settings, dbManager).execute();
+        view.showSuccessfulSignInPopup(message);
+
+        if (settings.containsUserProfile()) {
+            view.switchToView(View.Name.USER_PROFILES_MANAGEMENT);
+        } else {
+            EVENT_BUS.postSticky(new EventEditUserProfile(new EmptyProfile()));
+            view.switchToView(View.Name.USER_PROFILE_FIRST_CREATION);
+        }
+        view.showMessage(" isAnyUserAlreadySavedInPrefsFile=" + settings.containsUser());
+        view.destroy();
+    }
+
+    private User getUserFromGoogleSignInResult(GoogleSignInResult signInResult) {
+        GoogleSignInAccount google_account = signInResult.getSignInAccount();
+        String google_username = google_account.getDisplayName();
+        String google_email = google_account.getEmail();
+        return new User(google_username, google_email);
     }
 
     private void setupGoogleSignInComponents() {
+        buildGoogleSignInOptionsComponent();
+        buildGoogleApiClientComponent();
+    }
+
+    private void buildGoogleSignInOptionsComponent() {
         if (googleSignInOptionsComponent == null) {
             googleSignInOptionsComponent = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
         }
+    }
 
+    private void buildGoogleApiClientComponent() {
         if (googleApiClientComponent == null) {
             FragmentActivity activityView = (FragmentActivity) this.view;
             googleApiClientComponent = new GoogleApiClient.Builder(activityView)
@@ -107,48 +159,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
                     .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptionsComponent)
                     .build();
         }
-    }
-
-    private void doOfflineLoginIfUserAlreadyRegistered() throws Settings.NoRegisteredUserException {
-        User prefs_user = settings.getUser();
-
-        FormattedString message = new FormattedString(
-                "%s\n\n%s: %s\n%s: %s",
-                AndroidLocaleKey.SIGN_IN_SUCCESSFUL.getKeyName(),
-                AndroidLocaleKey.NAME.getKeyName(),
-                prefs_user.getUsername(),
-                AndroidLocaleKey.EMAIL.getKeyName(),
-                prefs_user.getEmail());
-
-        loginAndShowMessage(message);
-    }
-
-    private void loginAndShowMessage(FormattedString message) {
-        view.showSuccessfulSignInPopup(message);
-        if (settings.isAppStartedForTheFirstTime()) {
-            view.switchToView(View.Name.USER_PROFILE_FIRST_CREATION);
-        } else {
-            view.switchToView(View.Name.USER_PROFILES_MANAGEMENT);
-        }
-        view.destroy();
-    }
-
-    private void generateAndSendGoogleSignInRequest() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClientComponent);
-        googleSignInRequest = new GoogleSignInRequest(GOOGLE_SIGN_IN_REQUEST_CODE, signInIntent);
-        view.sendGoogleSignInRequest(googleSignInRequest);
-    }
-
-    private User getLoginUser(GoogleSignInResult signInResult) {
-        GoogleSignInAccount google_account = signInResult.getSignInAccount();
-        String google_username = google_account.getDisplayName();
-        String google_email = google_account.getEmail();
-        return new User(google_username, google_email);
-    }
-
-    private void saveLoginUser(User user) {
-        settings.saveUser(user);
-//        dbManager.loadUserDBHelper(user);
     }
 
     private FormattedString buildSuccessfulLoginMessage(User user) {

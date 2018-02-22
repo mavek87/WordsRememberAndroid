@@ -39,6 +39,10 @@ public abstract class AbstractDBHelper extends SQLiteOpenHelper {
         createAllTables(db);
     }
 
+    public void createDatabaseIfItDoesntExist() {
+        getReadableDatabase();
+    }
+
     public boolean isDatabaseCreated() {
         final boolean isDatabaseCreated = context.getDatabasePath(dbName).exists();
         Log.d(TAG, "isDatabaseCreated = " + isDatabaseCreated);

@@ -23,18 +23,13 @@ public class SettingsModule {
 
     @Provides
     @Singleton
-    public Settings provideSettings(SharedPreferences preferences, DBManager dbManager) {
+    public Settings provideSettings(SharedPreferences sharedPrefs) {
         Settings settings;
-        if (preferences.contains(Settings.GAME_DIFFICULTY_KEY)) {
-            settings = new Settings(preferences, dbManager);
+        if (sharedPrefs.contains(Settings.Key.GAME_DIFFICULTY)) {
+            settings = new Settings(sharedPrefs);
         } else {
-            settings = new Settings(
-                    preferences,
-                    dbManager,
-                    Settings.DEFAULT_DIFFICULTY
-            );
+            settings = new Settings(sharedPrefs, Settings.DEFAULT_DIFFICULTY);
         }
-        settings.setUserProfile(Profile.USER_PROFILES);
         return settings;
     }
 }

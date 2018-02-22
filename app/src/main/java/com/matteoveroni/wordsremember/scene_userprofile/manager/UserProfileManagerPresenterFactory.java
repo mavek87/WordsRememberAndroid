@@ -1,27 +1,27 @@
-package com.matteoveroni.wordsremember.scene_userprofile.manager.presenter;
+package com.matteoveroni.wordsremember.scene_userprofile.manager;
 
 import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.PresenterFactory;
+import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
-import com.matteoveroni.wordsremember.scene_userprofile.UserProfileModel;
 
 import javax.inject.Inject;
 
-public class UserProfilePresenterFactory implements PresenterFactory {
+public class UserProfileManagerPresenterFactory implements PresenterFactory {
 
     @Inject
     Settings settings;
 
     @Inject
-    UserProfileModel model;
+    DBManager dbManager;
 
     @Inject
     UserProfilesDAO dao;
 
     @Override
-    public UserProfilePresenter create() {
+    public UserProfileManagerPresenter create() {
         WordsRemember.getAppComponent().inject(this);
-        return new UserProfilePresenter(settings, model, dao);
+        return new UserProfileManagerPresenter(settings, dbManager, dao);
     }
 }

@@ -11,9 +11,9 @@ import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuActivity;
 import com.matteoveroni.wordsremember.scene_quizgame.view.QuizGameActivity;
 import com.matteoveroni.wordsremember.scene_report.QuizGameReportActivity;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.creation.view.activity.UserProfileFirstCreationActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.view.activity.UserProfileEditorActivity;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.view.activity.UserProfileActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.creation.UserProfileFirstCreationActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorActivity;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.UserProfileManagerActivity;
 
 /**
  * @author Matteo Veroni
@@ -34,7 +34,7 @@ public interface View {
     enum Name {
         LOGIN(LoginActivity.class),
         USER_PROFILE_FIRST_CREATION(UserProfileFirstCreationActivity.class),
-        USER_PROFILES_MANAGEMENT(UserProfileActivity.class),
+        USER_PROFILES_MANAGEMENT(UserProfileManagerActivity.class),
         USER_PROFILE_EDITOR(UserProfileEditorActivity.class),
         MAIN_MENU(MainMenuActivity.class),
         QUIZ_GAME(QuizGameActivity.class),

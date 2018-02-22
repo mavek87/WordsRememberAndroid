@@ -10,8 +10,8 @@ import com.matteoveroni.wordsremember.scene_mainmenu.MainMenuPresenterFactory;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.presenter.QuizGamePresenterFactory;
 import com.matteoveroni.wordsremember.scene_report.QuizGameReportPresenterFactory;
 import com.matteoveroni.wordsremember.scene_settings.presenter.SettingsPresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.editor.presenter.UserProfileEditorPresenterFactory;
-import com.matteoveroni.wordsremember.scene_userprofile.manager.presenter.UserProfilePresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.editor.UserProfileEditorPresenterFactory;
+import com.matteoveroni.wordsremember.scene_userprofile.manager.UserProfileManagerPresenterFactory;
 
 /**
  * @author Matteo Veroni
@@ -28,7 +28,7 @@ public class PresenterFactories {
             case SETTINGS_PRESENTER_FACTORY:
                 return new SettingsPresenterFactory();
             case USER_PROFILE_PRESENTER:
-                return new UserProfilePresenterFactory();
+                return new UserProfileManagerPresenterFactory();
             case USER_PROFILE_EDITOR_PRESENTER:
                 return new UserProfileEditorPresenterFactory();
             case ADD_TRANSLATION_PRESENTER_FACTORY:

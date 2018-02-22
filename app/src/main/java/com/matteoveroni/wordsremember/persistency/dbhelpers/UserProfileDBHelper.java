@@ -1,14 +1,17 @@
 package com.matteoveroni.wordsremember.persistency.dbhelpers;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.matteoveroni.wordsremember.persistency.contracts.DatesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.QuizStatsContract;
 import com.matteoveroni.wordsremember.persistency.contracts.TranslationsContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesContract;
 import com.matteoveroni.wordsremember.persistency.contracts.VocablesTranslationsContract;
+import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 
 /**
  * @author Matteo Veroni
@@ -18,6 +21,21 @@ public class UserProfileDBHelper extends AbstractDBHelper {
 
     public UserProfileDBHelper(Context context, String name, int version) {
         super(context, name, version);
+    }
+
+    public void registerProfile(Profile profile) { //col, sel, args
+        Cursor c = getWritableDatabase().query(
+                UserProfilesContract.Schema.TABLE_NAME,
+                new String[]{UserProfilesContract.Schema.COL_PROFILE_NAME},
+                UserProfilesContract.Schema.COL_PROFILE_NAME + "=?",
+                new String[]{profile.getName()},
+                null,
+                null,
+                null,
+                null
+        );
+
+
     }
 
     @Override

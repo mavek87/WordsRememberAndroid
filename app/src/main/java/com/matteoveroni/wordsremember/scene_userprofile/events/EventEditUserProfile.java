@@ -1,4 +1,4 @@
-package com.matteoveroni.wordsremember.scene_userprofile.manager.events;
+package com.matteoveroni.wordsremember.scene_userprofile.events;
 
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 
@@ -6,10 +6,10 @@ import com.matteoveroni.wordsremember.scene_userprofile.Profile;
  * @author Matteo Veroni
  */
 
-public class EventDeleteUserProfile {
+public class EventEditUserProfile {
     private final Profile userProfile;
 
-    public EventDeleteUserProfile(Profile userProfile) {
+    public EventEditUserProfile(Profile userProfile) {
         this.userProfile = userProfile;
     }
 
