@@ -2,15 +2,14 @@ package com.matteoveroni.wordsremember.persistency;
 
 import android.content.Context;
 
-import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
+import com.matteoveroni.wordsremember.persistency.dao.UserDAO;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
 import com.matteoveroni.wordsremember.persistency.dbhelpers.AbstractDBHelper;
 import com.matteoveroni.wordsremember.persistency.dbhelpers.UserDBHelper;
 import com.matteoveroni.wordsremember.persistency.dbhelpers.UserProfileDBHelper;
+import com.matteoveroni.wordsremember.persistency.exceptions.DuplicatedUsernameException;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.users.User;
-
-import javax.inject.Inject;
 
 import lombok.Getter;
 
@@ -25,6 +24,7 @@ public class DBManager {
 
     private final Context context;
 
+    private final UserDAO userDAO;
     private final UserProfilesDAO userProfilesDAO;
 
     @Getter
@@ -34,7 +34,8 @@ public class DBManager {
 
     private DBManager(Context context) {
         this.context = context;
-        this.userProfilesDAO = new UserProfilesDAO(this.context, this);
+        this.userDAO = new UserDAO(context, this);
+        this.userProfilesDAO = new UserProfilesDAO(context, this);
     }
 
     public static synchronized DBManager getInstance(Context appContext) {
@@ -46,7 +47,15 @@ public class DBManager {
 
     public AbstractDBHelper setupUserDBHelper(User user) {
         userDBHelper = new UserDBHelper(context, "user_" + user.getId() + "_profiles.db", DB_VERSION);
-        userDBHelper.createDatabaseIfItDoesntExist();
+
+        if (!userDAO.isUserWithSameNameSaved(user.getUsername())) {
+            try {
+                userDAO.saveUser(user);
+            } catch (DuplicatedUsernameException e) {
+                throw new RuntimeException("Unexpected username duplication");
+            }
+        }
+
         return userDBHelper;
     }
 

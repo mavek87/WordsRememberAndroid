@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Str;
 import com.matteoveroni.wordsremember.persistency.contracts.UserProfilesContract;
+import com.matteoveroni.wordsremember.persistency.contracts.UsersContract;
 import com.matteoveroni.wordsremember.persistency.providers.ExtendedQueriesContentProvider;
 
 /**
@@ -25,10 +26,14 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private static final int PROFILES = 1;
-    private static final int PROFILE_ID = 2;
+    private static final int USERS = 1;
+    private static final int USER_ID = 2;
+    private static final int PROFILES = 3;
+    private static final int PROFILE_ID = 4;
 
     static {
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, UsersContract.NAME, USERS);
+        URI_MATCHER.addURI(CONTENT_AUTHORITY, UsersContract.NAME + "/#", USER_ID);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, UserProfilesContract.NAME, PROFILES);
         URI_MATCHER.addURI(CONTENT_AUTHORITY, UserProfilesContract.NAME + "/#", PROFILE_ID);
     }
@@ -36,6 +41,10 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         switch ((URI_MATCHER.match(uri))) {
+            case USERS:
+                return UsersContract.CONTENT_DIR_MYME_TYPE;
+            case USER_ID:
+                return UsersContract.CONTENT_ITEM_MYME_TYPE;
             case PROFILES:
                 return UserProfilesContract.CONTENT_DIR_MYME_TYPE;
             case PROFILE_ID:
@@ -48,12 +57,21 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String whereSelection, String[] whereArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(UserProfilesContract.Schema.TABLE_NAME);
 
         switch (URI_MATCHER.match(uri)) {
+            case USERS:
+                queryBuilder.setTables(UsersContract.Schema.TABLE_NAME);
+                break;
+            case USER_ID:
+                queryBuilder.setTables(UsersContract.Schema.TABLE_NAME);
+                whereSelection = UsersContract.Schema.COL_ID + "=?";
+                whereArgs = new String[]{uri.getLastPathSegment()};
+                break;
             case PROFILES:
+                queryBuilder.setTables(UserProfilesContract.Schema.TABLE_NAME);
                 break;
             case PROFILE_ID:
+                queryBuilder.setTables(UserProfilesContract.Schema.TABLE_NAME);
                 whereSelection = UserProfilesContract.Schema.COL_ID + "=?";
                 whereArgs = new String[]{uri.getLastPathSegment()};
                 break;
@@ -62,7 +80,6 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
         }
 
         SQLiteDatabase db = dbManager.getUserDBHelper().getReadableDatabase();
-//        SQLiteDatabase db = dbManager.getReadableDBForCurrentProfile();
         Cursor cursor = queryBuilder.query(
                 db,
                 projection,
@@ -80,34 +97,57 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
-//        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+        long id;
         switch (URI_MATCHER.match(uri)) {
+            case USERS:
+                id = db.insertOrThrow(UsersContract.Schema.TABLE_NAME, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Uri.parse(UsersContract.CONTENT_URI + "/" + id);
+            case USER_ID:
+                break;
             case PROFILES:
-                long id = db.insertOrThrow(UserProfilesContract.Schema.TABLE_NAME, null, values);
+                id = db.insertOrThrow(UserProfilesContract.Schema.TABLE_NAME, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return Uri.parse(UserProfilesContract.CONTENT_URI + "/" + id);
             case PROFILE_ID:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + uri + " for INSERT");
+                break;
             default:
-                throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for INSERT");
+                break;
         }
+        throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for INSERT");
     }
 
     // TODO: this method is vulnerable to SQL inject attacks. It doesn't uses a placeholder (?)
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String whereSelection, String[] whereArgs) {
         SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
-//        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
-
+        String id;
+        String where;
         int updatedRowsCounter;
 
         switch (URI_MATCHER.match(uri)) {
+            case USERS:
+                updatedRowsCounter = db.update(UsersContract.Schema.TABLE_NAME, values, whereSelection, whereArgs);
+                break;
+            case USER_ID:
+                id = uri.getLastPathSegment();
+                where = UserProfilesContract.Schema.COL_ID + "=" + id;
+                if (Str.isNotNullOrEmpty(whereSelection)) {
+                    where += " AND (" + whereSelection + ")";
+                }
+                updatedRowsCounter = db.update(
+                        UsersContract.Schema.TABLE_NAME,
+                        values,
+                        where,
+                        whereArgs
+                );
+                break;
             case PROFILES:
                 updatedRowsCounter = db.update(UserProfilesContract.Schema.TABLE_NAME, values, whereSelection, whereArgs);
                 break;
             case PROFILE_ID:
-                String id = uri.getLastPathSegment();
-                String where = UserProfilesContract.Schema.COL_ID + "=" + id;
+                id = uri.getLastPathSegment();
+                where = UserProfilesContract.Schema.COL_ID + "=" + id;
                 if (Str.isNotNullOrEmpty(whereSelection)) {
                     where += " AND (" + whereSelection + ")";
                 }
@@ -129,16 +169,37 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String whereSelection, String[] whereArgs) {
         SQLiteDatabase db = dbManager.getUserDBHelper().getWritableDatabase();
-//        SQLiteDatabase db = dbManager.getWritableDBForCurrentProfile();
+
         int deletedRowsCounter;
+        String id;
+        String where;
 
         switch (URI_MATCHER.match(uri)) {
+
+            case USERS:
+                deletedRowsCounter = db.delete(UsersContract.Schema.TABLE_NAME, whereSelection, whereArgs);
+                break;
+
+            case USER_ID:
+                id = uri.getLastPathSegment();
+                where = UsersContract.Schema.COL_ID + "=" + id;
+                if (Str.isNotNullOrEmpty(whereSelection)) {
+                    where += " AND (" + whereSelection + ")";
+                }
+                deletedRowsCounter = db.delete(
+                        UsersContract.Schema.TABLE_NAME,
+                        where,
+                        whereArgs
+                );
+                break;
+
             case PROFILES:
                 deletedRowsCounter = db.delete(UserProfilesContract.Schema.TABLE_NAME, whereSelection, whereArgs);
                 break;
+
             case PROFILE_ID:
-                String profileId = uri.getLastPathSegment();
-                String where = UserProfilesContract.Schema.COL_ID + "=" + profileId;
+                id = uri.getLastPathSegment();
+                where = UserProfilesContract.Schema.COL_ID + "=" + id;
                 if (Str.isNotNullOrEmpty(whereSelection)) {
                     where += " AND (" + whereSelection + ")";
                 }
@@ -148,9 +209,11 @@ public class UserProfilesProvider extends ExtendedQueriesContentProvider {
                         whereArgs
                 );
                 break;
+
             default:
                 throw new IllegalArgumentException(Error.UNSUPPORTED_URI + " " + uri + " for DELETE");
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
         return deletedRowsCounter;
     }

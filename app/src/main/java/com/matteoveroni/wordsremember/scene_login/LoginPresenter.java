@@ -1,13 +1,9 @@
 package com.matteoveroni.wordsremember.scene_login;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
@@ -31,12 +27,10 @@ import com.matteoveroni.wordsremember.users.User;
 public class LoginPresenter extends BasePresenter<LoginView> implements GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = TagGenerator.tag(LoginPresenter.class);
-    private static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
+    public static final int GOOGLE_SIGN_IN_REQUEST_CODE = 1000;
 
     private final Settings settings;
     private final DBManager dbManager;
-    private GoogleApiClient googleApiClientComponent;
-    private GoogleSignInOptions googleSignInOptionsComponent;
 
     public LoginPresenter(Settings settings, DBManager dbManager) {
         this.settings = settings;
@@ -46,8 +40,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
     @Override
     public void attachView(LoginView view) {
         super.attachView(view);
-        setupGoogleSignInComponents();
-        view.showMessage(" isAnyUserAlreadySavedInPrefsFile=" + settings.containsUser());
     }
 
     public void onPostCreateFromView() {
@@ -58,7 +50,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
         if (settings.containsUser()) {
             viewMustDoOfflineLoginIfUserAlreadyRegistered();
         } else {
-            viewMustDoGoogleSignInRequestToRegisterTheUser();
+            view.sendGoogleSignInRequest();
         }
     }
 
@@ -66,7 +58,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
     public void onGoogleSignInRequestResult(@NonNull GoogleSignInRequestResult signInRequestResult) {
         switch (signInRequestResult.getRequestCode()) {
             case GOOGLE_SIGN_IN_REQUEST_CODE:
-                final GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(signInRequestResult.getSignInResultIntent());
+                final GoogleSignInResult googleSignInResult = signInRequestResult.getSignInResult();
 
                 if (googleSignInResult == null || !googleSignInResult.isSuccess()) {
                     view.showSignInErrorPopup("Google sign in result is failed. Check your network connection!");
@@ -77,7 +69,7 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
                 final String signInStatusName = GoogleSignInStatusCodes.getStatusCodeString(signInStatusCode);
 
                 try {
-                    final User user = getUserFromGoogleSignInResult(googleSignInResult);
+                    final User user = createUserFromGoogleSignInResult(googleSignInResult);
                     final FormattedString loginMessageForUser = buildSuccessfulLoginMessage(user);
                     loginAndShowMessage(user, loginMessageForUser);
                 } catch (Exception ex) {
@@ -112,11 +104,6 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
         }
     }
 
-    private void viewMustDoGoogleSignInRequestToRegisterTheUser() {
-        Intent clientGoogleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClientComponent);
-        view.sendGoogleSignInRequest(new GoogleSignInRequest(GOOGLE_SIGN_IN_REQUEST_CODE, clientGoogleSignInIntent));
-    }
-
     private void loginAndShowMessage(User user, FormattedString message) {
         new CommandStoreAndSetAppUser(user, settings, dbManager).execute();
         view.showSuccessfulSignInPopup(message);
@@ -127,38 +114,14 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
             EVENT_BUS.postSticky(new EventEditUserProfile(new EmptyProfile()));
             view.switchToView(View.Name.USER_PROFILE_FIRST_CREATION);
         }
-        view.showMessage(" isAnyUserAlreadySavedInPrefsFile=" + settings.containsUser());
         view.destroy();
     }
 
-    private User getUserFromGoogleSignInResult(GoogleSignInResult signInResult) {
-        GoogleSignInAccount google_account = signInResult.getSignInAccount();
-        String google_username = google_account.getDisplayName();
-        String google_email = google_account.getEmail();
+    private User createUserFromGoogleSignInResult(GoogleSignInResult signInResult) {
+        GoogleSignInAccount googleAccount = signInResult.getSignInAccount();
+        String google_username = googleAccount.getDisplayName();
+        String google_email = googleAccount.getEmail();
         return new User(google_username, google_email);
-    }
-
-    private void setupGoogleSignInComponents() {
-        buildGoogleSignInOptionsComponent();
-        buildGoogleApiClientComponent();
-    }
-
-    private void buildGoogleSignInOptionsComponent() {
-        if (googleSignInOptionsComponent == null) {
-            googleSignInOptionsComponent = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build();
-        }
-    }
-
-    private void buildGoogleApiClientComponent() {
-        if (googleApiClientComponent == null) {
-            FragmentActivity activityView = (FragmentActivity) this.view;
-            googleApiClientComponent = new GoogleApiClient.Builder(activityView)
-                    .enableAutoManage(activityView, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptionsComponent)
-                    .build();
-        }
     }
 
     private FormattedString buildSuccessfulLoginMessage(User user) {

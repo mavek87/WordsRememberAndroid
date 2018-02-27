@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.FormattedString;
 import com.matteoveroni.wordsremember.R;
@@ -18,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.matteoveroni.wordsremember.scene_login.LoginPresenter.GOOGLE_SIGN_IN_REQUEST_CODE;
+
 /**
  * Login Activity
  *
@@ -29,9 +35,11 @@ import butterknife.OnClick;
 
 public class LoginActivity extends AbstractPresentedActivityView implements LoginView {
 
-    public static final String TAG = TagGenerator.tag(LoginActivity.class);
+    public static final String TAG = TagGenerator.tag(com.matteoveroni.wordsremember.scene_login.LoginActivity.class);
 
     private LoginPresenter presenter;
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInOptions googleSignInOptions;
 
     @BindView(R.id.login_btn_signin)
     SignInButton btn_signIn;
@@ -53,6 +61,19 @@ public class LoginActivity extends AbstractPresentedActivityView implements Logi
         setupAndShowToolbar(getString(R.string.app_name) + " - Login");
         ButterKnife.bind(this);
         btn_signIn.setSize(SignInButton.SIZE_STANDARD);
+
+        if (googleSignInOptions == null) {
+            googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+        }
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, presenter)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                    .build();
+        }
     }
 
     @Override
@@ -67,15 +88,16 @@ public class LoginActivity extends AbstractPresentedActivityView implements Logi
     }
 
     @Override
-    public void sendGoogleSignInRequest(GoogleSignInRequest request) {
-        startActivityForResult(request.getSignInIntent(), request.getRequestCode());
+    public void sendGoogleSignInRequest() {
+        Intent clientGoogleSignInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(clientGoogleSignInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent signInRequestResultIntent) {
         super.onActivityResult(requestCode, resultCode, signInRequestResultIntent);
-        final GoogleSignInRequestResult requestResult = new GoogleSignInRequestResult(requestCode, signInRequestResultIntent);
-        presenter.onGoogleSignInRequestResult(requestResult);
+        final GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(signInRequestResultIntent);
+        presenter.onGoogleSignInRequestResult(new GoogleSignInRequestResult(requestCode, googleSignInResult));
     }
 
     @Override

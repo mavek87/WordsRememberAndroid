@@ -47,7 +47,6 @@ public class UsersContract {
                 + Schema.COL_USERNAME + " TEXT NOT NULL, "
                 + Schema.COL_EMAIL + " TEXT NOT NULL, "
                 + "CONSTRAINT UQ_Username UNIQUE (" + Schema.COL_USERNAME + ")"
-                + "CONSTRAINT UQ_Email UNIQUE (" + Schema.COL_EMAIL + ")"
                 + ");";
 
         public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + Schema.TABLE_NAME;

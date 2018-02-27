@@ -9,7 +9,7 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 
 public interface LoginView extends View {
 
-    void sendGoogleSignInRequest(GoogleSignInRequest signInRequest);
+    void sendGoogleSignInRequest();
 
     void showSuccessfulSignInPopup(FormattedString message);
 
