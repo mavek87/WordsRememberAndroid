@@ -6,6 +6,8 @@ import com.matteoveroni.wordsremember.WordsRemember;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.NoRegisteredUserException;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.UnreadableUserInSettingsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_settings.view.SettingsView;
 
@@ -62,9 +64,11 @@ public class SettingsPresenter extends BasePresenter<SettingsView> {
         view.showLastGameDate(calculateLastGameDate());
         view.showDictionaryName(settings.getUserProfile().getName());
         try {
-            view.showUsername(settings.getUser().getUsername());
-        } catch (Settings.NoRegisteredUserException ex) {
+            view.showUsername(settings.getRegisteredUser().getUsername());
+        } catch (NoRegisteredUserException e) {
             view.showUsername(" - ");
+        } catch (UnreadableUserInSettingsException e) {
+            throw new RuntimeException("Unexpected exception. UnreadableUserInSettingsException in the prefs file!");
         }
         view.showGameVersion(WordsRemember.VERSION);
         view.showDeviceLocale();

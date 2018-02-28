@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
@@ -15,9 +14,12 @@ import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.localization.AndroidLocaleKey;
 import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.persistency.commands.CommandStoreAndSetAppUser;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.NoRegisteredUserException;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.UnreadableUserInSettingsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.EmptyProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.events.EventEditUserProfile;
+import com.matteoveroni.wordsremember.users.NotPersistedUser;
 import com.matteoveroni.wordsremember.users.User;
 
 /**
@@ -43,37 +45,40 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
     }
 
     public void onPostCreateFromView() {
+        // Attempt to auto-login
         viewMustDoOfflineLoginIfUserAlreadyRegistered();
     }
 
     public void onSignInFromView() {
-        if (settings.containsUser()) {
-            viewMustDoOfflineLoginIfUserAlreadyRegistered();
-        } else {
+        if (settings.getNumberOfRegisteredUsers() == 0) {
             view.sendGoogleSignInRequest();
+        } else {
+            viewMustDoOfflineLoginIfUserAlreadyRegistered();
         }
     }
 
-    // TODO: localize errors
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        view.showSignInErrorPopup("Connection failed - " + connectionResult.getErrorMessage());
+    }
+
     public void onGoogleSignInRequestResult(@NonNull GoogleSignInRequestResult signInRequestResult) {
         switch (signInRequestResult.getRequestCode()) {
             case GOOGLE_SIGN_IN_REQUEST_CODE:
                 final GoogleSignInResult googleSignInResult = signInRequestResult.getSignInResult();
 
                 if (googleSignInResult == null || !googleSignInResult.isSuccess()) {
-                    view.showSignInErrorPopup("Google sign in result is failed. Check your network connection!");
+                    view.showSignInErrorPopup("Google sign in request result is failed. Check your network connection!");
                     break;
                 }
-
-                final int signInStatusCode = googleSignInResult.getStatus().getStatusCode();
-                final String signInStatusName = GoogleSignInStatusCodes.getStatusCodeString(signInStatusCode);
 
                 try {
                     final User user = createUserFromGoogleSignInResult(googleSignInResult);
                     final FormattedString loginMessageForUser = buildSuccessfulLoginMessage(user);
                     loginAndShowMessage(user, loginMessageForUser);
                 } catch (Exception ex) {
-                    final String errorMessage = String.format("%s - %s", signInStatusName, "Error trying to sign in");
+                    final String signInName = (googleSignInResult.getSignInAccount() != null) ? googleSignInResult.getSignInAccount().getDisplayName() + " - " : " ";
+                    final String errorMessage = signInName + "App error trying to sign in";
                     view.showSignInErrorPopup(errorMessage);
                     Log.e(TAG, errorMessage);
                 }
@@ -83,15 +88,10 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
         }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        view.showSignInErrorPopup("Connection failed - " + connectionResult.getErrorMessage());
-    }
-
     private void viewMustDoOfflineLoginIfUserAlreadyRegistered() {
         try {
-            User user = settings.getUser();
-            FormattedString message = new FormattedString(
+            final User user = settings.getRegisteredUser();
+            final FormattedString message = new FormattedString(
                     "%s\n\n%s: %s\n%s: %s",
                     AndroidLocaleKey.SIGN_IN_SUCCESSFUL.getKeyName(),
                     AndroidLocaleKey.NAME.getKeyName(),
@@ -100,7 +100,9 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
                     user.getEmail());
 
             loginAndShowMessage(user, message);
-        } catch (Settings.NoRegisteredUserException ignored) {
+        } catch (NoRegisteredUserException ignored) {
+        } catch (UnreadableUserInSettingsException ex) {
+            throw new RuntimeException("Unexpected exception, UnreadableUserInSettingsException: " + ex);
         }
     }
 
@@ -117,11 +119,11 @@ public class LoginPresenter extends BasePresenter<LoginView> implements GoogleAp
         view.destroy();
     }
 
-    private User createUserFromGoogleSignInResult(GoogleSignInResult signInResult) {
-        GoogleSignInAccount googleAccount = signInResult.getSignInAccount();
-        String google_username = googleAccount.getDisplayName();
-        String google_email = googleAccount.getEmail();
-        return new User(google_username, google_email);
+    private NotPersistedUser createUserFromGoogleSignInResult(GoogleSignInResult signInResult) {
+        final GoogleSignInAccount googleAccount = signInResult.getSignInAccount();
+        final String google_username = (googleAccount != null) ? googleAccount.getDisplayName() : "User";
+        final String google_email = (googleAccount != null) ? googleAccount.getEmail() : "";
+        return new NotPersistedUser(google_username, google_email);
     }
 
     private FormattedString buildSuccessfulLoginMessage(User user) {

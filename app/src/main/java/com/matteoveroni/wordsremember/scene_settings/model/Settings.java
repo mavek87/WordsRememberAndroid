@@ -6,8 +6,10 @@ import android.util.Log;
 import com.matteoveroni.androidtaggenerator.TagGenerator;
 import com.matteoveroni.myutils.Json;
 import com.matteoveroni.wordsremember.WordsRemember;
-import com.matteoveroni.wordsremember.persistency.DBManager;
 import com.matteoveroni.wordsremember.scene_quizgame.business_logic.model.game.GameDifficulty;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.NoRegisteredUserException;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.UnreadableUserInSettingsException;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.UserRegistrationLimitReachedException;
 import com.matteoveroni.wordsremember.scene_userprofile.EmptyProfile;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.users.User;
@@ -27,13 +29,13 @@ public class Settings {
     public static final int DEFAULT_NUMBER_OF_QUESTIONS = getNumberOfQuestionsForDifficulty(DEFAULT_DIFFICULTY);
     public static final long DEFAULT_QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = 10000;
     public static final long DEFAULT_QUIZ_GAME_TIMER_TICK = 1000;
-//    public static boolean isAppStartedForTheFirstTime = true;
+    private static final int MAX_NUMBER_OF_REGISTRABLE_USERS = 1;
 
     private final SharedPreferences prefs;
 
     public class Key {
-        public static final String IS_STARTED_FOR_THE_FIRST_TIME = "is_started_for_the_first_time_key";
         public static final String USER = "user_key";
+        public static final String NUMBER_OF_REGISTERED_USERS = "number_of_registered_users_key";
         public static final String USER_PROFILE = "user_profile_key";
         public static final String GAME_DIFFICULTY = "game_difficulty_key";
         public static final String QUIZ_GAME_QUESTION_TIMER_TOTAL_TIME = "quiz_game_question_timer_total_time_key";
@@ -41,9 +43,6 @@ public class Settings {
         public static final String GAME_NUMBER_OF_QUESTIONS = "game_number_of_questions_key";
         public static final String LAST_GAME_DATE = "last_game_date_key";
         public static final String ONLINE_TRANSLATION_SERVICE = "online_translation_service_key";
-    }
-
-    public class NoRegisteredUserException extends Exception {
     }
 
     public Settings(SharedPreferences prefs) {
@@ -56,26 +55,36 @@ public class Settings {
         setDifficulty(difficulty);
     }
 
-//    public boolean isAppStartedForTheFirstTime() {
-//        return prefs.getBoolean(Key.IS_STARTED_FOR_THE_FIRST_TIME, isAppStartedForTheFirstTime);
-//    }
-
-//    public void setAppStartedForTheFirstTime(boolean value) {
-//        isAppStartedForTheFirstTime = value;
-//        prefs.edit().putBoolean(Key.IS_STARTED_FOR_THE_FIRST_TIME, value).apply();
-//    }
-
-    public User getUser() throws NoRegisteredUserException {
-        String json_user = prefs.getString(Key.USER, "");
-        if (json_user.trim().isEmpty()) {
-            throw new NoRegisteredUserException();
+    public int getNumberOfRegisteredUsers() {
+        if (prefs.contains(Key.NUMBER_OF_REGISTERED_USERS)) {
+            return prefs.getInt(Key.NUMBER_OF_REGISTERED_USERS, 1);
         } else {
-            return Json.getInstance().fromJson(json_user, User.class);
+            return 0;
         }
     }
 
-    public void saveUser(User user) {
-        if (user != null) prefs.edit().putString(Key.USER, Json.getInstance().toJson(user)).apply();
+    public void registerUser(User user) throws UserRegistrationLimitReachedException {
+        int numberOfRegisteredUsers = getNumberOfRegisteredUsers();
+        if (numberOfRegisteredUsers == 0) {
+            prefs.edit().putString(Key.USER, Json.getInstance().toJson(user)).apply();
+            prefs.edit().putInt(Key.NUMBER_OF_REGISTERED_USERS, ++numberOfRegisteredUsers).apply();
+        } else {
+            throw new UserRegistrationLimitReachedException();
+        }
+    }
+
+    public User getRegisteredUser() throws NoRegisteredUserException, UnreadableUserInSettingsException {
+        int numberOfRegisteredUsers = getNumberOfRegisteredUsers();
+        if (numberOfRegisteredUsers == 0) {
+            throw new NoRegisteredUserException();
+        } else {
+            String json_user = prefs.getString(Key.USER, "");
+            if (json_user.trim().isEmpty()) {
+                throw new UnreadableUserInSettingsException();
+            } else {
+                return Json.getInstance().fromJson(json_user, User.class);
+            }
+        }
     }
 
     public Profile getUserProfile() {
@@ -88,15 +97,9 @@ public class Settings {
         }
     }
 
-    public boolean containsUser() {
-        return containsKey(Key.USER);
-    }
 
     public void saveUserProfile(Profile userProfile) {
         prefs.edit().putString(Key.USER_PROFILE, Json.getInstance().toJson(userProfile, Profile.class)).apply();
-//        dbManager.setupUserProfileDBHelper(userProfile);
-//        dbManager.setUserProfileInUse(userProfile);
-        Log.d(TAG, "Switch to user profile => " + userProfile.getName());
     }
 
     public boolean containsUserProfile() {

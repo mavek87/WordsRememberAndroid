@@ -17,7 +17,7 @@ import com.matteoveroni.wordsremember.scene_userprofile.Profile;
  * @author Matteo Veroni
  */
 
-public class UserProfileDBHelper extends AbstractDBHelper {
+public class UserProfileDBHelper extends DBHelper {
 
     public UserProfileDBHelper(Context context, String name, int version) {
         super(context, name, version);

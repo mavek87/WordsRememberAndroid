@@ -23,6 +23,6 @@ public class CommandStoreAndSetAppUserProfile implements Command {
     @Override
     public void execute() {
         settings.saveUserProfile(userProfile);
-        dbManager.setupUserProfileDBHelper(userProfile);
+        dbManager.loadUserProfileDBHelper(userProfile);
     }
 }

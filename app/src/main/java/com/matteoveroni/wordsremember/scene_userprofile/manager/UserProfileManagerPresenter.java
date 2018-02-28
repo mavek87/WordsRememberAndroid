@@ -3,9 +3,10 @@ package com.matteoveroni.wordsremember.scene_userprofile.manager;
 import com.matteoveroni.wordsremember.interfaces.presenter.BasePresenter;
 import com.matteoveroni.wordsremember.interfaces.view.View;
 import com.matteoveroni.wordsremember.persistency.DBManager;
-import com.matteoveroni.wordsremember.persistency.commands.CommandStoreAndSetAppUser;
 import com.matteoveroni.wordsremember.persistency.commands.CommandStoreAndSetAppUserProfile;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.NoRegisteredUserException;
+import com.matteoveroni.wordsremember.scene_settings.exceptions.UnreadableUserInSettingsException;
 import com.matteoveroni.wordsremember.scene_settings.model.Settings;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
 import com.matteoveroni.wordsremember.scene_userprofile.events.EventDeleteUserProfile;
@@ -59,15 +60,17 @@ public class UserProfileManagerPresenter extends BasePresenter<UserProfileManage
     public void onEvent(EventUserProfileChosen event) {
         //TODO: unify duplicated code in UserProfileEditorPresenter
         try {
-            User currentUser = settings.getUser();
+            User currentUser = settings.getRegisteredUser();
             Profile chosenUserProfile = event.getUserProfile();
             if (chosenUserProfile.getUser() == null)
                 chosenUserProfile.setUser(currentUser);
 
             new CommandStoreAndSetAppUserProfile(chosenUserProfile, settings, dbManager).execute();
 
-        } catch (Settings.NoRegisteredUserException e) {
+        } catch (NoRegisteredUserException e) {
             throw new RuntimeException("Unexpected exception. No registered user in the prefs file!");
+        } catch (UnreadableUserInSettingsException e) {
+            throw new RuntimeException("Unexpected exception. UnreadableUserInSettingsException in the prefs file!");
         }
 
         view.finish();

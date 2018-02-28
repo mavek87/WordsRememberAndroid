@@ -4,12 +4,10 @@ import android.content.Context;
 
 import com.matteoveroni.wordsremember.persistency.dao.UserDAO;
 import com.matteoveroni.wordsremember.persistency.dao.UserProfilesDAO;
-import com.matteoveroni.wordsremember.persistency.dbhelpers.AbstractDBHelper;
+import com.matteoveroni.wordsremember.persistency.dbhelpers.DBHelper;
 import com.matteoveroni.wordsremember.persistency.dbhelpers.UserDBHelper;
 import com.matteoveroni.wordsremember.persistency.dbhelpers.UserProfileDBHelper;
-import com.matteoveroni.wordsremember.persistency.exceptions.DuplicatedUsernameException;
 import com.matteoveroni.wordsremember.scene_userprofile.Profile;
-import com.matteoveroni.wordsremember.users.User;
 
 import lombok.Getter;
 
@@ -24,7 +22,9 @@ public class DBManager {
 
     private final Context context;
 
+    @Getter
     private final UserDAO userDAO;
+    @Getter
     private final UserProfilesDAO userProfilesDAO;
 
     @Getter
@@ -34,7 +34,7 @@ public class DBManager {
 
     private DBManager(Context context) {
         this.context = context;
-        this.userDAO = new UserDAO(context, this);
+        this.userDAO = new UserDAO(context);
         this.userProfilesDAO = new UserProfilesDAO(context, this);
     }
 
@@ -45,21 +45,13 @@ public class DBManager {
         return DB_MANAGER_UNIQUE_INSTANCE;
     }
 
-    public AbstractDBHelper setupUserDBHelper(User user) {
-        userDBHelper = new UserDBHelper(context, "user_" + user.getId() + "_profiles.db", DB_VERSION);
-
-        if (!userDAO.isUserWithSameNameSaved(user.getUsername())) {
-            try {
-                userDAO.saveUser(user);
-            } catch (DuplicatedUsernameException e) {
-                throw new RuntimeException("Unexpected username duplication");
-            }
-        }
-
+    public DBHelper loadUserDBHelper() throws Exception {
+        final String userDBName = "user_profiles" + DBHelper.DB_EXTENSION;
+        userDBHelper = new UserDBHelper(context, userDBName, DB_VERSION);
         return userDBHelper;
     }
 
-    public AbstractDBHelper setupUserProfileDBHelper(Profile profile) {
+    public DBHelper loadUserProfileDBHelper(Profile profile) {
         final String userProfileDbName = "profile_" + profile.getId() + "_of_user_" + profile.getUser().getId() + ".db";
         userProfileDBHelper = new UserProfileDBHelper(context, userProfileDbName, DB_VERSION);
 

@@ -22,7 +22,17 @@ public class CommandStoreAndSetAppUser implements Command {
 
     @Override
     public void execute() {
-        settings.saveUser(user);
-        dbManager.setupUserDBHelper(user);
+        try {
+            dbManager.loadUserDBHelper();
+
+            if (settings.getNumberOfRegisteredUsers() == 0) {
+                User user = new User(1L, this.user.getUsername(), this.user.getEmail());
+                settings.registerUser(user);
+                dbManager.getUserDAO().saveUser(user);
+            }
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Impossible to store and set app user!\n" + ex);
+        }
     }
 }
